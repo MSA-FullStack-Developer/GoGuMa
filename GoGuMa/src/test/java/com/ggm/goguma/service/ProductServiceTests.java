@@ -1,4 +1,4 @@
-package com.ggm.goguma.controller;
+package com.ggm.goguma.service;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -31,7 +31,7 @@ public class ProductServiceTests {
     }
     
 	@Test
-	public void goodsGetListTest() throws Exception {
+	public void getProductListTest() throws Exception {
 		/* 상품 목록 */
 		List<ProductDTO> list = productMapper.getProductList();
 		for(int i = 0; i < list.size(); i++) {

@@ -78,8 +78,8 @@
 
         <h4>총 4개</h4>
 		
-		<c:forEach items="${list}" var="product">
         <div>
+        	<%-- <c:forEach items="${list}" var="product"> --%>
             <div class="product">
                 <p><img src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0" /></p>
                 <h4>${product.productname}</h4>
@@ -100,8 +100,8 @@
                 <h4>트위드 니트 플레어 스커트 [아이보리]</h4>
                 <h3>159,030원</h3>
             </div>
+            <%-- </c:forEach> --%>
         </div>
-        </c:forEach>
     </div>
 </body>
 

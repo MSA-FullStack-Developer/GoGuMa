@@ -14,21 +14,10 @@
 	<context:component-scan base-package="org.zerock.service">
 	</context:component-scan>
 	
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="typeAliasesPackage" value="com.ggm.goguma.mapper" />
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+		p:typeAliasesPackage="com.ggm.goguma.dto">
+		<property name="dataSource" ref="dataSource"></property>
 	</bean>
-	
-	<bean id="sqlSessionTemplate"
-            class="org.mybatis.spring.SqlSessionTemplate">
-        <constructor-arg ref="sqlSessionFactory"></constructor-arg>
-    </bean>
-
-	<!-- boardDAO -->
-	<bean id="productMapper"
-		class="org.mybatis.spring.mapper.MapperFactoryBean"
-		p:sqlSessionTemplate-ref="sqlSessionTemplate"
-		p:mapperInterface="com.ggm.goguma.mapper.ProductMapper"></bean>
 	
 	<mybatis-spring:scan base-package="com.ggm.goguma.mapper" />
 </beans>
