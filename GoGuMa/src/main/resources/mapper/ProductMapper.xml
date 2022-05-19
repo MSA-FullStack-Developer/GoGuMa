@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ggm.goguma.mapper.ProductMapper">
+
+	<!-- 상품 목록 -->
+	<select id="getProductList" parameterType="long" resultType="ProductDTO">
+		SELECT productid, parentpid, categoryid, productname, price, productdetail, compacy, stock
+		FROM product
+	</select>
+	
+	<!-- 상품 개수 -->
+	<select id="getProductCount" resultType="long">
+		SELECT count(*) AS cnt
+		FROM product
+	</select>
+	
+</mapper>
