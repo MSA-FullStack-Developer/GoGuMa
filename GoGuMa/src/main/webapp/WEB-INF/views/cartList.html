@@ -1,0 +1,405 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+    crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+
+<style>
+    .container {
+    width: 100%;
+    min-height: calc(100vh - 369px);
+}
+    .contents {
+    position: relative;
+    width: 1081px;
+    margin: 0 auto;
+}
+.cbody {
+    width: 100%;
+    background: #f8f8f8;
+}
+.csection {
+    width: 800px;
+    margin: 0;
+}
+.cart-area {
+    padding: 50px 0 60px 0;
+}
+.cart-head .cart-top .cart-all strong {
+    font-size: 30px;
+    line-height: 40px;
+    font-weight: 700;
+    vertical-align: sub;
+}
+
+    .cart-head .cart-top {
+    position: relative;
+    padding-bottom: 19px;
+    border-bottom: 1px solid #ddd;
+}
+    .cart-head .cart-top .cart-all {
+    position: relative;
+    color: #333;
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: -0.64px;
+}
+
+.cart-head .cart-top .cart-list-num {
+    position: absolute;
+    top: 6px;
+    right: 0;
+    overflow: hidden;
+}
+ul, ol, menu, li {
+    list-style: none;
+}
+    .cart-list-num li.active {
+        color: #333;
+    }
+
+    .cart-list-num li {
+        display: inline-block;
+        font-size: 15px;
+        line-height: 24px;
+        font-weight: 700;
+        letter-spacing: -0.56px;
+        color: #ccc;
+    }
+    .cart-head .cart-top .cart-list-num li + li {
+    position: relative;
+    padding-left: 40px;
+}
+.cart-head .cart-top .cart-list-num li + li:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    background: url(../../../resources/img/btn-list-arrow.png) no-repeat 0 center;
+    background-size: 20px 20px;
+}
+
+.cart-bottom {
+    margin-left: auto;
+    width: 212px;
+    height: 39px;
+}
+.btngroup {
+    position: relative;
+}
+.cart-bottom .btngroup .btn span {
+    color: #999;
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: -0.52px;
+}
+
+.cart-area .nodata {
+    width: 800px;
+    margin: 3px auto 123px;
+    text-align: center;
+}
+.bgcircle {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    background: #ffffff;
+}
+.icon.nodata-type, .my-event .nodata .icon {
+    width: 72px;
+    height: 72px;
+    background: url(../../../resources/img/ico-nodata.svg) no-repeat 50% 50%;
+    background-size: 72px 72px;
+}
+.nodata p {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+    color: #333;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 22px;
+    letter-spacing: -0.56px;
+}
+.dotlist li {
+    position: relative;
+    padding-left: 8px;
+    font-size: 13px;
+    color: #999;
+    line-height: 21px;
+    letter-spacing: -0.52px;
+    text-align: left;
+}
+.cart-info {
+    width: 800px;
+    margin: 60px 0 100px 0;
+    padding: 0;
+    border: 1px solid #eee;
+    border-radius: 5px;
+}
+.cart-info .major-headings {
+    margin: 0;
+    padding: 20px;
+    border-top: 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: -0.64px;
+}
+.dotlist li:before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 3px;
+    height: 3px;
+    background: #999;
+    border-radius: 50%;
+}
+.cart-info .major-headings.selected {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+.cart-info .cart-infocnt {
+    margin: 0 20px;
+    padding: 30px 0 30px;
+    border-top: 1px solid #eee;
+}
+.cart-info .cart-infocnt h4 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 15px;
+    line-height: 19px;
+    letter-spacing: -0.6px;
+}
+
+.util-option {
+    position: absolute;
+    top: 249px;
+    left: 50%;
+    margin-left: 289px;
+    transform: translateY(-50%);
+    width: 250px;
+    z-index: 1;
+}
+.util-option .sticky-inner {
+    background: #fff;
+    width: 250px;
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+}
+.util-option .result {
+    display: block;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+.util-option .result p:first-child {
+    margin-bottom: 18px;
+}
+.util-option .result .sel-tit span {
+    margin-left: 5px;
+    font-size: 18px;
+    font-weight: 400;
+}
+.util-option .result .sel-tit span em {
+    font-weight: 700;
+}
+.util-option .result p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.util-option .result p strong {
+    display: inline-flex;
+    color: #333;
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: -0.6px;
+}
+.util-option .result p ins {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+.util-option .result p ins em {
+    color: #000;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: -0.64px;
+}
+.util-option .result p ins b {
+    color: #000;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -0.56px;
+}
+.util-option .total-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+.util-option .total-price .btn-total {
+    color: #333;
+}
+.util-option .total-price ins {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+.util-option .total-price ins em {
+    color: #ff5340;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: -0.8px;
+}
+.util-option .total-price ins b {
+    color: #ff5340;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: -0.64px;
+}
+
+.btngroup {
+    position: relative;
+}
+.util-option .btngroup .btn {
+    display: block;
+    min-width: 210px;
+    height: 50px;
+    margin: 0 auto;
+    border-radius: 5px;
+    background: #ff5340;
+}
+.util-option .btngroup .btn span {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+}
+</style>
+
+<div class="container">
+    <!-- 바디 전체-->
+    <div class="cbody">
+        <div class="contents">
+            <div class="csection">
+                <div class="cart-area">
+                    <div class="cart-head">
+                        <div class="cart-top">
+                            <div class="cart-all">
+                                <strong>장바구니</strong>
+                                <sapn>(<em class="cart-count">0</em>)</sapn>
+                            </div>
+                            <ol class="cart-list-num">
+                                <li class="active">
+                                    <strong>01</strong>
+                                    <span>장바구니</span>
+                                </li>
+                                <li>
+                                    <strong>02</strong>
+                                    <span>주문서작성</span>
+                                </li>
+                                <li>
+                                    <strong>03</strong>
+                                    <span>주문완료</span>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="cart-bottom">
+                            <div class="btngroup">
+                                <button type="button" class="btn btn-cart-del" onclick="">
+                                    <i class="bi bi-cart-x"></i>
+                                    <span>장바구니 비우기</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!--장바구니에 담긴 상품-->
+                    <div class="cart-body"></div>
+                    <!-- 장바구니에 담긴 상품이 없는 경우-->
+                    <div class="nodata">
+                        <span class="bgcircle">
+                            <i class="icon nodata-type"></i>
+                        </span>
+                        <p>
+                            <span>장바구니에 담긴 상품이 없습니다.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- 상품리스트에 하나라도 체크되면 활성화됨 -->
+            <div class="util-option sticky" >
+                <div class="sticky-inner">
+                    <div class="result">
+                        <p class="sel-tit">선택한 상품<span>(<em id="selCnt">0</em>)</span></p>
+                        <p><strong>상품금액</strong><ins><em id="selSlitmAmt">0</em><b>원</b></ins></p>
+                        <!-- <p class="sale"><strong>할인</strong><ins><em class="off">0</em><b>원</b></ins></p>--> <!-- 선택한 상품이 없을 경우 em에 class="off" 붙여주세요.  -->
+                    </div>
+                    <div class="total-price">
+                        <a href="javascript:;" class="btn-total"><span>총 주문 금액</span></a>
+                        <ins><em id="selOrdAmt">0</em><b>원</b></ins>
+                    </div>
+                    <div id="uobtnprsnbox" class="btngroup _gift" style="display:none;">
+                        <button class="btn btn-linelgray" onclick="setGiftOrder('Y');orderSelect();"><span>선물하기</span></button>
+                        <button class="btn btn-purchase" onclick="setGiftOrder('N');orderSelect();"><span>바로구매</span></button>
+                    </div>
+                    <div id="uobtnbox" class="btngroup">
+                        <button type="button" class="btn btn-purchase" onclick="setGiftOrder('N');orderSelect();"><span>선택상품 구매하기</span></button>
+                    </div>
+                </div>
+            </div>
+            <!-- //.util-option -->
+        </div>
+    </div>
+
+    <!-- cfoot-->
+    <div class="cfoot">
+        <div class="contents">
+            <div class="cart-info">
+                <h3 class="major-headings">장바구니 이용안내</h3>
+                <div class="cart-infocnt" role="region" aria-label="장바구니 이용안내">
+                    <h4 class="subheadings">장바구니 보관 안내</h4>
+                    <ul class="dotlist">
+                        <li>
+                            장바구니에 담긴 상품은 1달 동안 보관됩니다.
+                        </li>
+                    </ul>
+                    <h4 class="subheadings">
+                        무이자 할부 이용 안내
+                    </h4>
+                    <ul class="dotlist">
+                        <li>상품상세 페이지나 장바구니에 기재된 무이자할부 개월수는 해당상품을 단독 구매할 경우 적용되는 조건입니다.</li>
+                        <li>여러종류의 상품을 함께 구매 할 경우, 보다 낮은 개월 수 의 무이자 할부가 적용됩니다.</li>
+                        <li>무이자할부 대상이 아닌 상품을 함께 구매 할 경우, 무이자 할부가 적용되지 않습니다.</li>
+                        <li>일부 특가상품은 무이자 할부 대상에서 제외되며 또한 각 상품별로 무이자 할부 개월수가 상이하오니, 최종 결제 페이지에서 무이자 할부 개월수를 다시 한번 확인하시기 바랍니다.</li>
+                        <li>상품별로 무이자할부 혜택을 받고 싶으시다면, 개별 주문 부탁드립니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
