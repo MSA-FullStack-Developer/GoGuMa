@@ -34,4 +34,9 @@ public class ProductServiceImpl implements ProductService {
 		return productMapper.getProductInfo(productID);
 	}
 
+	@Override
+	public List<ProductDTO> getOptionList(int productID) throws Exception {
+		return productMapper.getOptionList(productID);
+	}
+
 }

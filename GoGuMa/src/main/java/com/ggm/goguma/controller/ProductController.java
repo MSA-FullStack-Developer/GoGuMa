@@ -91,9 +91,11 @@ public class ProductController {
 			model.addAttribute("categoryID", categoryID);
 			model.addAttribute("categoryName", categoryName);
 			
-			ProductDTO productInfo = productService.getProductInfo(productID);
-			
+			ProductDTO productInfo = productService.getProductInfo(productID); // 상품 정보
 			model.addAttribute("productInfo", productInfo);
+			
+			List<ProductDTO> option = productService.getOptionList(productID); // 상품 옵션 목록
+			model.addAttribute("option", option);
 			
 			return "product";
 		} catch (Exception e) {

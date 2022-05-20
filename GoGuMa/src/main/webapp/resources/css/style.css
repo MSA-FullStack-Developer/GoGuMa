@@ -15,6 +15,10 @@ body {
     margin-right: 22px;
 }
 
+select {
+	height: 30px;
+}
+
 input {
     font-size: 13pt;
 }
@@ -337,10 +341,12 @@ ul.submenu>li:hover {
     width: 170px;
     height: 50px;
     background-color: #F3F3F3;
+    z-index: 10000;
 }
 
 .main1 {
     margin: 0 auto;
+    z-index: 10000;
 }
 
 .main1>li {
@@ -373,6 +379,7 @@ ul.submenu>li:hover {
     position: absolute;
     left: -9999px;
     background: #F3F3F3;
+    z-index: 10000;
 }
 
 .main2>li {
@@ -401,6 +408,7 @@ ul.submenu>li:hover {
     width: 170px;
     height: 50px;
     left: -9999px;
+    z-index: 10000;
 }
 
 .main3>li a:hover {

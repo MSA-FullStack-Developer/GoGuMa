@@ -1,6 +1,7 @@
 package com.ggm.goguma.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -17,4 +18,5 @@ public class ProductDTO {
 	private Date productRegDate;
 	
 	private String prodimgurl;
+	private List<ProductDTO> option;
 }

@@ -26,4 +26,10 @@
 		WHERE p.productid = i.productid AND p.parentpid is null AND p.productid = ${productID}
 	</select>
 	
+	<select id="getOptionList" parameterType="int" resultType="com.ggm.goguma.dto.ProductDTO">
+		SELECT productid, productname
+		FROM product
+		WHERE parentpid = ${parentPID}
+	</select>
+	
 </mapper>

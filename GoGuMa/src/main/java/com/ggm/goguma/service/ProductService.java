@@ -13,4 +13,7 @@ public interface ProductService {
 
 	// 상품 정보
 	public ProductDTO getProductInfo(int productID) throws Exception;
+	
+	// 상품 옵션 정보
+	public List<ProductDTO> getOptionList(int productID) throws Exception;
 }

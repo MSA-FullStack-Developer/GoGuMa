@@ -32,11 +32,13 @@
                 var num = $("#numBox").val();
                 var plusNum = Number(num) + 1;
                 $("#numBox").val(plusNum);
-
-                if(plusNum >= ${productInfo.stock}) {
-                	$(".numBox").val(num);
+                
+                var stock = $("#stock").text();
+                
+                if(plusNum > stock) {
+                	$("#numBox").val(num);
                 } else {
-                	$(".numBox").val(plusNum);          
+                	$("#numBox").val(plusNum);          
                 }
             });
 
@@ -158,7 +160,7 @@
                     <tr>
                         <td>가격</td>
                         <td>
-                            <h2>${productInfo.price}원</h2>
+                            <h2><fmt:formatNumber value="${productInfo.price}" pattern="#,###" />원</h2>
                         </td>
                     </tr>
                     <tr>
@@ -171,17 +173,18 @@
                     </tr>
                     <tr>
                         <td>재고</td>
-                        <td>${productInfo.stock}</td>
+                        <td id="stock">${productInfo.stock}</td>
                     </tr>
                     <tr>
                         <td>옵션</td>
                         <td>
-                            <select name="상품 옵션">
-                                <option value="">상품ID</option>
-                                <option value="">상품ID</option>
-                                <option value="">상품ID</option>
-                                <option value="">상품ID</option>
-                            </select>
+                        	<div class="selectbox">
+	                            <select name="상품 옵션">
+	                            	<c:forEach items="${option}" var="option">
+	                                	<option value="${option.productID}">${option.productName}</option>
+	                                </c:forEach>
+	                            </select>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -199,7 +202,7 @@
                     <tr>
                         <td>총 상품금액</td>
                         <td class="total_price">
-                            <h1>${productInfo.price}원</h1>
+                            <h1><fmt:formatNumber value="${productInfo.price}" pattern="#,###" />원</h1>
                         </td>
                     </tr>
                     <tr>
