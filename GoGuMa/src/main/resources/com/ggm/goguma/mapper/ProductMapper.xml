@@ -4,18 +4,19 @@
 <mapper namespace="com.ggm.goguma.mapper.ProductMapper">
 
 	<!-- 상품 목록 -->
-	<select id="getProductList" resultType="com.ggm.goguma.dto.ProductDTO">
-		SELECT *
-		FROM (SELECT p.productname AS productname, p.price AS price, p.categoryid, i.prodimgurl AS prodimgurl
+	<select id="getProductList" parameterType="int" resultType="com.ggm.goguma.dto.ProductDTO">
+		SELECT DISTINCT A.categoryid, A.productname, A.price, A.prodimgurl
+		FROM (SELECT *
 				FROM product p, productimage i
 				WHERE p.productid = i.productid AND p.parentpid is null) A, category B
-		WHERE A.categoryid = B.categoryid <!-- AND B.categoryid = 22 -->
+		WHERE B.categoryid = A.categoryid AND A.categoryid = ${categoryID}
 	</select>
 	
 	<!-- 상품 개수 -->
-	<select id="getProductCount" resultType="long">
+	<select id="getProductCount" parameterType="int" resultType="long">
 		SELECT count(*) AS cnt
 		FROM product
+		WHERE categoryid = ${categoryID}
 	</select>
 	
 </mapper>

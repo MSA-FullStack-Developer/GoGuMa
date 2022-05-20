@@ -6,8 +6,8 @@ import com.ggm.goguma.dto.ProductDTO;
 
 public interface ProductService {
 	// 상품 목록
-	public List<ProductDTO> getProductList() throws Exception;
+	public List<ProductDTO> getProductList(int categoryID) throws Exception;
 	
 	// 상품 개수
-	long getProductCount() throws Exception;
+	public long getProductCount(int categoryID) throws Exception;
 }

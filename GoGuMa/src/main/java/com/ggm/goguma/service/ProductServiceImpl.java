@@ -18,15 +18,15 @@ public class ProductServiceImpl implements ProductService {
 	private ProductMapper productMapper;
 
 	@Override
-	public List<ProductDTO> getProductList() throws Exception {
+	public List<ProductDTO> getProductList(int categoryID) throws Exception {
 		log.info("getProductList.....");
 		
-		return productMapper.getProductList();
+		return productMapper.getProductList(categoryID);
 	}
 
 	@Override
-	public long getProductCount() throws Exception {
-		return productMapper.getProductCount();
+	public long getProductCount(int categoryID) throws Exception {
+		return productMapper.getProductCount(categoryID);
 	}
 
 }

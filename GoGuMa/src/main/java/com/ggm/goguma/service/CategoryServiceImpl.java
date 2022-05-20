@@ -30,4 +30,9 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryMapper.getCategoryList(parentID);
 	}
 
+	@Override
+	public String getCategoryName(int categoryID) throws Exception {
+		return categoryMapper.getCategoryName(categoryID);
+	}
+
 }

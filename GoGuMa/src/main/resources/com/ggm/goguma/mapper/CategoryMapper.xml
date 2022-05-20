@@ -5,11 +5,15 @@
 
 	<!-- 카테고리 목록 -->
 	<select id="getCategoryParentList" resultType="com.ggm.goguma.dto.CategoryDTO">
-		select categoryID, parentID, categoryname, categoryType, MD from category where parentid is null
+		SELECT categoryID, parentID, categoryname, categoryType, md FROM category WHERE parentid IS NULL
 	</select>
 	
 	<select id="getCategoryList" parameterType="int" resultType="com.ggm.goguma.dto.CategoryDTO">
-		select * from category where parentid = ${categoryID}
+		SELECT * FROM category WHERE parentid = ${categoryID}
+	</select>
+	
+	<select id="getCategoryName" parameterType="int" resultType="String">
+		SELECT categoryname FROM category WHERE categoryid = ${categoryID}
 	</select>
 	
 </mapper>

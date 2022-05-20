@@ -62,7 +62,7 @@
 		                    ${parentCategory.categoryName}
 		                    <ul class="main3">
 	                    	<c:forEach items="${parentCategory.categoryList}" var="category">
-		                        <li><a href="list/${category.categoryID}">${category.categoryName}</a></li>
+		                        <li><a href="./${category.categoryID}">${category.categoryName}</a></li>
 		                    </c:forEach>
 		                    </ul>
 		                </li>
@@ -72,7 +72,7 @@
 		    </ul>
 		</div>
 
-        <h2 style="text-align: center">카테고리ID</h2>
+        <h2 style="text-align: center">${categoryName}</h2>
 
         <hr>
 

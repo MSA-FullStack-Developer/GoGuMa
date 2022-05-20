@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.ProductDTO;
@@ -26,31 +28,33 @@ public class ProductController {
 	@Autowired
 	private CategoryService categoryService;
 	
-	@GetMapping("/list")
-	public String list(Model model) throws Exception {
+	@GetMapping(value = {"/list/{categoryID}", "/list"})
+	public String list(@PathVariable int categoryID, Model model) throws Exception {
 		try {
 			List<CategoryDTO> parentCategory = categoryService.getCategoryParentList();
-
+			
 			parentCategory.forEach(cate -> {
 				try {
 					List<CategoryDTO> categoryList = categoryService.getCategoryList(cate.getCategoryID());
 					cate.setCategoryList(categoryList);
-
-					log.info(cate);
-
-					log.info("----------");
 					
+					log.info(cate);
+					log.info("----------");
 					log.info(categoryList);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			});
 			
 			model.addAttribute("parentCategory", parentCategory); // 부모 카테고리 목록
 			
-			List<ProductDTO> list = productService.getProductList();
-			long count = productService.getProductCount();
+			String categoryName = categoryService.getCategoryName(categoryID);
+			
+			List<ProductDTO> list = productService.getProductList(categoryID);
+			long count = productService.getProductCount(categoryID);
+			
+			model.addAttribute("categoryID", categoryID);
+			model.addAttribute("categoryName", categoryName);
 			
 			model.addAttribute("list", list); // 상품 목록
 			model.addAttribute("count", count); // 상품 총 개수
@@ -58,6 +62,7 @@ public class ProductController {
 			return "list";
 		} catch (Exception e) {
 			model.addAttribute("msg", "list 출력 에러");
+			e.printStackTrace();
 			return "list";
 		}
 	}

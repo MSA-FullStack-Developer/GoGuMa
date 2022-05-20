@@ -8,4 +8,6 @@ public interface CategoryMapper {
 	public List<CategoryDTO> getCategoryParentList() throws Exception;
 	
 	public List<CategoryDTO> getCategoryList(int parentID) throws Exception;
+	
+	public String getCategoryName(int categoryID) throws Exception;
 }
