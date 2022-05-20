@@ -10,7 +10,7 @@
 <script src="https://kit.fontawesome.com/a4f59ea730.js" crossorigin="anonymous"></script>
 
 <head>
-    <title>Category</title>
+    <title>List</title>
     <style>
 	    <%@ include file="/resources/css/style.css" %>
 
@@ -47,7 +47,30 @@
 </head>
 
 <body>
-	<%@ include file="header.jsp" %>
+	<div class="header">
+	    <div class="search">
+	        <input type="text" id="keyword" placeholder="상품명을 검색하세요" autocomplete="off">
+	        <button type="button" class="searchBtn" id="searchBtn"></button>
+	    </div>
+	</div>
+	<div class="prodlist">
+		<div id="menu">
+		    <ul class="main1">
+		        <li><i class="fa-solid fa-bars"></i>카테고리
+		            <ul class="main2">
+		            <c:forEach items="${parentCategory}" var="parentCategory"><li>
+		                    ${parentCategory.categoryName}
+		                    <ul class="main3">
+	                    	<c:forEach items="${parentCategory.categoryList}" var="category">
+		                        <li><a href="list/${category.categoryID}">${category.categoryName}</a></li>
+		                    </c:forEach>
+		                    </ul>
+		                </li>
+		            </c:forEach>
+		            </ul>
+		        </li>
+		    </ul>
+		</div>
 
         <h2 style="text-align: center">카테고리ID</h2>
 

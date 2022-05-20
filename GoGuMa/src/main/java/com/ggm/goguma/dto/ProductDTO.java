@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class ProductDTO {
 	private int productID;
-	private int parentPID; // null 대신 0
+	private int parentPID;
 	private int categoryID;
 	private String productName;
 	private long price;

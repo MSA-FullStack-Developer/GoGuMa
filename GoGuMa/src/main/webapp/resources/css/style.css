@@ -374,6 +374,11 @@ ul.submenu>li:hover {
 
 .main2>li {
     position: relative;
+    background: #F3F3F3;
+}
+
+.main2>li:hover {
+	color: #FF493C;
 }
 
 .main2>li:hover .main3 {

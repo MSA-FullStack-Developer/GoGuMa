@@ -5,9 +5,11 @@
 
 	<!-- 상품 목록 -->
 	<select id="getProductList" resultType="com.ggm.goguma.dto.ProductDTO">
-		SELECT p.productname AS productname, p.price AS price, i.prodimgurl AS prodimgurl
-		FROM product p, productimage i
-		WHERE p.productid = i.productid
+		SELECT *
+		FROM (SELECT p.productname AS productname, p.price AS price, p.categoryid, i.prodimgurl AS prodimgurl
+				FROM product p, productimage i
+				WHERE p.productid = i.productid AND p.parentpid is null) A, category B
+		WHERE A.categoryid = B.categoryid <!-- AND B.categoryid = 22 -->
 	</select>
 	
 	<!-- 상품 개수 -->
