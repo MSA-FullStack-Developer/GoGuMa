@@ -10,4 +10,7 @@ public interface ProductService {
 	
 	// 상품 개수
 	public long getProductCount(int categoryID) throws Exception;
+
+	// 상품 정보
+	public ProductDTO getProductInfo(int productID) throws Exception;
 }

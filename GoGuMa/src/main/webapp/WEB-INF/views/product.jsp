@@ -33,11 +33,11 @@
                 var plusNum = Number(num) + 1;
                 $("#numBox").val(plusNum);
 
-                //   if(plusNum >= ${view.gdsStock}) {
-                //      $(".numBox").val(num);
-                //   } else {
-                //      $(".numBox").val(plusNum);          
-                //   }
+                /* if(plusNum >= ${productInfo.stock}) {
+                	$(".numBox").val(num);
+                } else {
+                	$(".numBox").val(plusNum);          
+                } */
             });
 
             $("#minus").click(function () {
@@ -127,13 +127,13 @@
 	<div class="prodlist">
 		<div id="menu">
 		    <ul class="main1">
-		        <li><a href="#" class="category"><i class="fa-solid fa-bars"></i>카테고리</a> 
+		        <li><i class="fa-solid fa-bars"></i>카테고리
 		            <ul class="main2">
 		            <c:forEach items="${parentCategory}" var="parentCategory"><li>
 		                    ${parentCategory.categoryName}
 		                    <ul class="main3">
 	                    	<c:forEach items="${parentCategory.categoryList}" var="category">
-		                        <li><a href="#">${category.categoryName}</a></li>
+		                        <li><a href="${contextPath}/category/list/${category.categoryID}/">${category.categoryName}</a></li>
 		                    </c:forEach>
 		                    </ul>
 		                </li>
@@ -143,22 +143,22 @@
 		    </ul>
 		</div>
 
-        <h2 style="text-align: center">카테고리ID</h2>
+        <h2 style="text-align: center">${categoryName}</h2>
 
         <hr>
 
         <div class="prodInfo">
-            <img class="thumbnailImg" src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
+            <img class="thumbnailImg" src="${productInfo.prodimgurl}"
                 style="float: left;" />
             <div class="product_detail">
                 <table>
                     <td colspan='2'>
-                        <h1>칼라 라인 가디건</h1>
+                        <h1>${productInfo.productName}</h1>
                     </td>
                     <tr>
                         <td>가격</td>
                         <td>
-                            <h2>158,940원</h2>
+                            <h2>${productInfo.price}원</h2>
                         </td>
                     </tr>
                     <tr>
@@ -182,7 +182,7 @@
                         <td>
                             <p class="cartStock">
                                 <button type="button" class="calc" id="minus">-</button>
-                                <input type="number" id="numBox" min="1" max="${view.gdsStock}" value="1"
+                                <input type="number" id="numBox" min="1" max="${productInfo.stock}" value="1"
                                     readonly="readonly" />
                                 <button type="button" class="calc" id="plus">+</button>
                             </p>

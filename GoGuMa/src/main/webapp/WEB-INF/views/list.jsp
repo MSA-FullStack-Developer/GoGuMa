@@ -62,7 +62,7 @@
 		                    ${parentCategory.categoryName}
 		                    <ul class="main3">
 	                    	<c:forEach items="${parentCategory.categoryList}" var="category">
-		                        <li><a href="./${category.categoryID}">${category.categoryName}</a></li>
+		                        <li><a href="${contextPath}/category/list/${category.categoryID}/">${category.categoryName}</a></li>
 		                    </c:forEach>
 		                    </ul>
 		                </li>
@@ -81,7 +81,7 @@
         <div>
         	<c:forEach items="${list}" var="product">
             <div class="product">
-                <p><img src="${product.prodimgurl}" /></p>
+                <a href="${contextPath}/category/list/${product.categoryID}/detail/${product.productID}"><img src="${product.prodimgurl}" /></a>
                 <h4>${product.productName}</h4>
                 <h3>${product.price}</h3>
             </div>

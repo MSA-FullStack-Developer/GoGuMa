@@ -5,8 +5,8 @@
 
 	<!-- 상품 목록 -->
 	<select id="getProductList" parameterType="int" resultType="com.ggm.goguma.dto.ProductDTO">
-		SELECT DISTINCT A.categoryid, A.productname, A.price, A.prodimgurl
-		FROM (SELECT *
+		SELECT DISTINCT B.categoryid, A.productname, A.price, A.prodimgurl, A.productid
+		FROM (SELECT p.productid, p.productname, p.price, i.prodimgurl, p.categoryid
 				FROM product p, productimage i
 				WHERE p.productid = i.productid AND p.parentpid is null) A, category B
 		WHERE B.categoryid = A.categoryid AND A.categoryid = ${categoryID}
@@ -19,4 +19,9 @@
 		WHERE categoryid = ${categoryID}
 	</select>
 	
+	<select id="getProductInfo" parameterType="int" resultType="com.ggm.goguma.dto.ProductDTO">
+		SELECT p.productid, p.productname, p.price, i.prodimgurl, p.categoryid
+				FROM product p, productimage i
+				WHERE p.productid = i.productid AND p.parentpid is null AND p.productid = ${productID}
+	</select>
 </mapper>

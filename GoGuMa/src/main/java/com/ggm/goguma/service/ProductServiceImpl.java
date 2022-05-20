@@ -29,4 +29,9 @@ public class ProductServiceImpl implements ProductService {
 		return productMapper.getProductCount(categoryID);
 	}
 
+	@Override
+	public ProductDTO getProductInfo(int productID) throws Exception {
+		return productMapper.getProductInfo(productID);
+	}
+
 }
