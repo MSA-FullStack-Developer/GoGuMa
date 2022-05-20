@@ -25,14 +25,17 @@ public class ProductController {
 	public String list(Model model) throws Exception {
 		try {
 			List<ProductDTO> list = productService.getProductList();
+			long count = productService.getProductCount();
 			
-			// 비지니스 로직 수행 
-			model.addAttribute("list", list);
+			model.addAttribute("list", list); // 상품 목록
+			model.addAttribute("count", count); // 상품 총 개수
 			
+			System.out.println(count);
 			return "category";
 		} catch (Exception e) {
 			model.addAttribute("msg", "list 출력 에러");
 			return "category";
 		}
 	}
+	
 }

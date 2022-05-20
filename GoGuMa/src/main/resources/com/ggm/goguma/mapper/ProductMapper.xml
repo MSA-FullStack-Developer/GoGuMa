@@ -4,9 +4,10 @@
 <mapper namespace="com.ggm.goguma.mapper.ProductMapper">
 
 	<!-- 상품 목록 -->
-	<select id="getProductList" parameterType="long" resultType="ProductDTO">
-		SELECT productid, parentpid, categoryid, productname, price, productdetail, compacy, stock
-		FROM product
+	<select id="getProductList" resultType="com.ggm.goguma.dto.ProductDTO">
+		SELECT p.productname AS productname, p.price AS price, i.prodimgurl AS prodimgurl
+		FROM product p, productimage i
+		WHERE p.productid = i.productid
 	</select>
 	
 	<!-- 상품 개수 -->

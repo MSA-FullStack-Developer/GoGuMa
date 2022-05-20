@@ -8,14 +8,13 @@ import org.springframework.stereotype.Service;
 import com.ggm.goguma.dto.ProductDTO;
 import com.ggm.goguma.mapper.ProductMapper;
 
-import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
 @Service
 public class ProductServiceImpl implements ProductService {
 	
-	@Setter(onMethod_ = @Autowired) 
+	@Autowired
 	private ProductMapper productMapper;
 
 	@Override

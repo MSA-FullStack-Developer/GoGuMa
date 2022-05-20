@@ -1,4 +1,4 @@
-package com.ggm.goguma;
+package com.ggm.goguma.mapper;
 
 import static org.junit.Assert.fail;
 

@@ -9,5 +9,5 @@ public interface ProductMapper {
 	public List<ProductDTO> getProductList() throws Exception;
 	
 	// 상품 개수
-	long getProductCount() throws Exception;
+	public long getProductCount() throws Exception;
 }
