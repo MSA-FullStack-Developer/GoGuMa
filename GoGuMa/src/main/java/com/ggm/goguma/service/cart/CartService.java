@@ -1,5 +1,13 @@
 package com.ggm.goguma.service.cart;
 
-public class CartService {
+import java.util.List;
+
+import com.ggm.goguma.dto.cart.CartItemDTO;
+
+public interface CartService {
+
+	List<CartItemDTO> getCartList(int memberId) throws Exception;
+
+	void addCartCount(long cartId) throws Exception;
 
 }

@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="net.developia.goguma">
+	<logger name="com.ggm.goguma">
 		<level value="info" />
 	</logger>
 	

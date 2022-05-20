@@ -13,4 +13,11 @@
 
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<import resource="dataSource-context.xml"/>
+	
+	<bean id="sqlSessionFactoy" class="org.mybatis.spring.SqlSessionFactoryBean"
+		p:typeAliasesPackage="com.ggm.goguma.dto">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<mybatis-spring:scan base-package="com.ggm.goguma.mapper"/>
 </beans>

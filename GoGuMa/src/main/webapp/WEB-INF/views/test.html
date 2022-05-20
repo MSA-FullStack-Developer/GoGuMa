@@ -1,0 +1,25 @@
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.__count_range input[count_range]').click(function(e){
+        e.preventDefault();
+        var type = $(this).attr('count_range');
+        var $count = $(this).parent().children('input.count');
+        var count_val = $count.val(); // min 1
+        if(type=='m'){
+            if(count_val<1){
+                return;
+            }
+            $count.val(parseInt(count_val)-1);
+        }else if(type=='p'){
+            $count.val(parseInt(count_val)+1);
+        }
+    });
+});
+</script>
+
+<div class="__count_range">
+    <input value="-" count_range="m" type="button">
+    <input class="count" value="1" readonly="" name="">
+    <input value="+" count_range="p" type="button">
+  </div>
