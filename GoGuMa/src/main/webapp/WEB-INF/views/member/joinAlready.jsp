@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>  
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -46,7 +48,7 @@
 							<span class="text-secondary">이름</span>
 						</div>
 						<div class="col">
-							<span>이승준</span>
+							<span>${name}</span>
 						</div>
 					</div>
 					<div name="member-email" class="row mt-3">
@@ -54,7 +56,7 @@
 							<span class="text-secondary">아이디</span>
 						</div>
 						<div class="col">
-							<span>tmdwns1101@naver.com</span>
+							<span>${email}</span>
 						</div>
 					</div>
 					<div name="member-regdate" class="row mt-3">
@@ -62,7 +64,9 @@
 							<span class="text-secondary">가입일</span>
 						</div>
 						<div class="col">
-							<span>2022.05.19</span>
+							<span>
+								<fmt:formatDate value="${joinDate}" pattern="yyyy.MM.dd"/>
+							</span>
 						</div>
 					</div>
 				</div>

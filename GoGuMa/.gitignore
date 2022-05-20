@@ -11,6 +11,8 @@ build/
 
 WebContent/upload
 
+system.properties
+
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/eclipse,java,macos,windows

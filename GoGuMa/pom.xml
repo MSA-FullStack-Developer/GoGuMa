@@ -14,6 +14,7 @@
 	<org.aspectj-version>1.8.9</org.aspectj-version>
 	<org.slf4j-version>1.6.6</org.slf4j-version>
 	<security-version>5.0.6.RELEASE</security-version>
+	<jwt-version>0.11.2</jwt-version>
 	</properties>
 	
 	<dependencies>
@@ -244,6 +245,28 @@
 		    <groupId>org.springframework.security</groupId>
 		    <artifactId>spring-security-taglibs</artifactId>
 		    <version>${security-version}</version>
+		</dependency>
+		
+		<!-- Jwt 관련 의존성 -->
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
+		<dependency>
+    		<groupId>io.jsonwebtoken</groupId>
+    		<artifactId>jjwt-api</artifactId>
+    		<version>${jwt-version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl -->
+		<dependency>
+    		<groupId>io.jsonwebtoken</groupId>
+    		<artifactId>jjwt-impl</artifactId>
+    		<version>${jwt-version}</version>
+    		<scope>runtime</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson -->
+		<dependency>
+    		<groupId>io.jsonwebtoken</groupId>
+    		<artifactId>jjwt-jackson</artifactId>
+    		<version>${jwt-version}</version>
+    		<scope>runtime</scope>
 		</dependency>
 	</dependencies>
     <build>

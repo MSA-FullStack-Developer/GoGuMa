@@ -44,24 +44,28 @@
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			
+			console.log(token);
 			var code = "${code}";
 			var merchantUid = "${merchantUid}";
 			
 			$("#certificate-btn").click(function() {
+				
 				IMP.init(code);
 				IMP.certification({
 					merchant_uid: merchantUid
 				}, function(rsp) {
 					if(rsp.success) {
-						var data = JSON.stringify({impUid: rsp.imp_uid});
 						
+						var certificateForm = $("#certificate");
+						certificateForm.find("input[name='impUid']").val(rsp.imp_uid);
+						
+						certificateForm.submit();
 					} else {
 						alert("휴대폰 인증에 실패 하였습니다.");
 					}
-				})
-			})
-			
-		});
+				}); /* end of IMP.certification */
+			}); /* end of click  */
+		}); /* end of document ready*/
 	</script>
 	<section class="container">
 		<div class="d-flex align-items-center min-vh-100">
@@ -87,6 +91,10 @@
 				</div>
 			</div>
 		</div>
+		<form id="certificate" method="post" action="${contextPath}/member/join/form.do">
+			<input type="hidden" name="impUid" />
+			<input type="hidden" name="_csrf" value="${_csrf.token}" />
+		</form>
 	</section>
 </body>
 </html>
