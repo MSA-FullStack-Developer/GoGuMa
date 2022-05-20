@@ -33,11 +33,11 @@
                 var plusNum = Number(num) + 1;
                 $("#numBox").val(plusNum);
 
-                /* if(plusNum >= ${productInfo.stock}) {
+                if(plusNum >= ${productInfo.stock}) {
                 	$(".numBox").val(num);
                 } else {
                 	$(".numBox").val(plusNum);          
-                } */
+                }
             });
 
             $("#minus").click(function () {
@@ -166,6 +166,14 @@
                         <td>3%</td>
                     </tr>
                     <tr>
+                        <td>제조회사</td>
+                        <td>${productInfo.company}</td>
+                    </tr>
+                    <tr>
+                        <td>재고</td>
+                        <td>${productInfo.stock}</td>
+                    </tr>
+                    <tr>
                         <td>옵션</td>
                         <td>
                             <select name="상품 옵션">
@@ -191,7 +199,7 @@
                     <tr>
                         <td>총 상품금액</td>
                         <td class="total_price">
-                            <h1>158,940원</h1>
+                            <h1>${productInfo.price}원</h1>
                         </td>
                     </tr>
                     <tr>
@@ -214,7 +222,7 @@
             </ul>
             <div class="tabcontent">
                 <div id="tab01">
-                    상품상세
+                    <img class="productDetail" src="${productInfo.productDetail}">
                 </div>
                 <div id="tab02">
                     <!-- 상품평 -->

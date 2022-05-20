@@ -19,9 +19,11 @@
 		WHERE categoryid = ${categoryID}
 	</select>
 	
+	<!-- 상품 상세 정보 -->
 	<select id="getProductInfo" parameterType="int" resultType="com.ggm.goguma.dto.ProductDTO">
-		SELECT p.productid, p.productname, p.price, i.prodimgurl, p.categoryid
-				FROM product p, productimage i
-				WHERE p.productid = i.productid AND p.parentpid is null AND p.productid = ${productID}
+		SELECT p.productid, p.parentpid, p.productname, p.price, p.productdetail, i.prodimgurl, p.categoryid, p.stock, p.company
+		FROM product p, productimage i
+		WHERE p.productid = i.productid AND p.parentpid is null AND p.productid = ${productID}
 	</select>
+	
 </mapper>

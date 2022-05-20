@@ -4,6 +4,10 @@ body {
     font-family: 'Noto Sans KR', sans-serif;
 }
 
+.productDetail {
+	width: 100%;
+}
+
 .review-content {
     width: 95%;
     height: 100px;
@@ -142,9 +146,8 @@ img {
 .tabnav li {
     display: inline-block;
     height: 55px;
-    width: 529px;
+    width: 50%;
     text-align: center;
-    border-right: 1px solid #ddd;
 }
 
 .tabnav li a:before {
@@ -254,7 +257,7 @@ table {
 }
 
 td {
-    height: 90px;
+    height: 60px;
 }
 
 .cartBtn {
@@ -294,7 +297,7 @@ td {
 
 #numBox {
     display: inline-flex;
-    border: none;
+/*  border: none; */
     height: 30px;
     text-align: center;
 }
