@@ -133,14 +133,13 @@ public class MemberController {
 
 	@PostMapping("/join/create.do")
 	public String createMember(@Valid CreateMemberDTO input, BindingResult br,
-			@RequestParam("agreement") String agreements, Model model) {
+			@RequestParam( name = "agreement", defaultValue = "") String agreements, Model model) {
 
 		log.info("[createMember] input : " + input);
 		log.info("[createMember] agreements : " + agreements);
 
 		if (br.hasErrors()) {
-			model.addAttribute("error", br.getErrorCount());
-			return "member/joinForm";
+			return "redirect:/member/join/fail.do";
 		}
 
 		//선택한 이용 약관 정보 : ','을 기준으로 나뉘어 있음.

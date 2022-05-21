@@ -29,6 +29,9 @@
 <!-- jquery -->
 <script type="text/javascript"
 	src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.min.js"></script>
+	
+<!-- jquery-validate plug-in -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.min.js"></script>
 </head>
 <body>
 	<style>
@@ -105,11 +108,15 @@
 			
 			
 			$("#submit-btn").click(function(e) {
-				e.preventDefault();
+				
+				var form = $("#joinForm");
+			
 				if(!valid) {
 					alert("이메일 중복 및 필수값 입력을 확인해주세요.");
 				} else {
-					$("#joinForm").submit();
+					form.submit(function(e) {
+						$(this).validate();
+					});
 				}
 			}) 
 		})
