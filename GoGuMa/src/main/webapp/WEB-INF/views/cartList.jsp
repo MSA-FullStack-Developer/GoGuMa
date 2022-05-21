@@ -34,25 +34,30 @@
 	
 <script type="text/javascript">
 	$(document).ready(function() {
+		
 		bindCartList();
 		calculateSellPrice();
-		$('.cart-count button[count_range]').click(function(e) {
+		
+/* 		$('.cart-count button[count_range]').click(function(e) {
 			e.preventDefault();
 			var type = $(this).attr('count_range');
 			var $count = $(this).parent().children('input.ccount');
-			var count_val = $count.val(); // min 1
+			var count_val = $count.val(); // 최소 1 부터 재고수량까지 존재한다.
 			if (type == 'm') {
-				if (count_val < 1) {
+				if (count_val <= 1) {
 					return;
 				}
 				$count.val(parseInt(count_val) - 1);
 			} else if (type == 'p') {
 				$count.val(parseInt(count_val) + 1);
 			}
-		});
+		}); */
 
 		// 카트 수량 증가 버튼을 클릭한 경우 실행되는 함수
-		$("button[name='countUp']").click(function(){
+		$("button[name='countUp']").click(function(e){
+			e.preventDefault();
+			var type = $(this).attr('count_range');
+			
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			
@@ -61,29 +66,52 @@
 			console.log("증가하려는 카트아이디:", cartId);
 			var data1 = JSON.stringify({'cid' : cartId});
 			console.log(data1);
-			$.ajax({
-				type: "POST",
-				url: "${contextPath}/cart/addCartCount?cartId=" + cartId,
-				data: data1,
-				contentType: "application/json; charset=utf-8",
-				beforeSend: function(xhr){
-					xhr.setRequestHeader(header, token);
-				},
-				success: function (response) {
-					console.log("onclick ajax카트수량증가");
-					
-					//현재 가격 계산
-					calculateItemSellPrice(itemObj, this);
-					calculateSellPrice();
-				},
-				error: function(xhr, status, error){
-					var errorResponse = JSON.parse(xhr.responseText);
-				}/*,
-				complete: function(xht, status){
-					
-					$(this).removeAttr("disabled");
-				} */
-			});
+			
+			//현재 카트 수량 체크를 위한 변수
+			var $count = $(this).parent().children('input.ccount');
+			var count_val = parseInt($count.val()); 
+			
+			//현재 재고 변수
+			var $stock = $(this).parent().children('input.prodStock');
+			var stock_val = parseInt($stock.val());
+			console.log("증가 버튼 누름 현재 수량" + count_val + "현재 재고: " + stock_val);
+			
+			//현재 수량이 재고보다 작다면 증가시킬 수 있다.
+			if(count_val < stock_val){
+				$count.val(parseInt(count_val) + 1);
+				count_val = parseInt($count.val());
+			}else{
+				alert("상품 재고가 부족합니다.");
+				return;
+			}
+			var cartId = Number(itemObj.find("input:checkbox[name=itemSelect]").val());
+			if( count_val >= 1 && count_val <= stock_val){
+				$.ajax({
+					type: "POST",
+					url: "${contextPath}/cart/addCartCount?cartId=" + cartId,
+					data: data1,
+					contentType: "application/json; charset=utf-8",
+					beforeSend: function(xhr){
+						xhr.setRequestHeader(header, token);
+					},
+					success: function (response) {
+						console.log("onclick ajax카트수량증가");
+						
+						//현재 가격 계산
+						calculateItemSellPrice(itemObj, this);
+						calculateSellPrice();
+					},
+					error: function(xhr, status, error){
+						var errorResponse = JSON.parse(xhr.responseText);
+					}/*,
+					complete: function(xht, status){
+						
+						$(this).removeAttr("disabled");
+					} */
+				});
+			} else{
+				alert("수량이 올바르지 않습니다.");
+			}
 		});
 		// 카트 수량 감소 버튼을 클릭한 경우 실행되는 함수
 		$("button[name='countDown']").click(function(){
@@ -95,27 +123,51 @@
 			console.log("감소하려는 카트아이디:", cartId);
 			var data1 = JSON.stringify({'cid' : cartId});
 			console.log(data1);
-			$.ajax({
-				type: "POST",
-				url: "${contextPath}/cart/minusCartCount?cartId=" + cartId,
-				data: data1,
-				contentType: "application/json; charset=utf-8",
-				beforeSend: function(xhr){
-					xhr.setRequestHeader(header, token);
-				},
-				success: function (response) {
-					console.log("onclick ajax카트수량감소");
-					
-					calculateItemSellPrice(itemObj, this);
-					calculateSellPrice();
-				},
-				error: function(xhr, status, error){
-					var errorResponse = JSON.parse(xhr.responseText);
-				}/* ,
-				complete: function(xht, status){
-					$(this).removeAttr("disabled");
-				} */
-			});
+			
+			
+			//현재 카트 수량 체크를 위한 변수
+			var $count = $(this).parent().children('input.ccount');
+			var count_val = parseInt($count.val()); 
+			
+			//현재 재고 변수
+			var $stock = $(this).parent().children('input.prodStock');
+			var stock_val = parseInt($stock.val());
+			console.log("감소 버튼 누름 현재 수량" + count_val + "현재 재고: " + stock_val);
+			
+			
+			//현재 수량이 1보다 크다면 감소시킬 수 있다.
+			if(count_val > 1){
+				$count.val(parseInt(count_val) - 1);
+				count_val = parseInt($count.val());
+			}else{
+				alert("상품이 최소 1개 이상 존재해야합니다.");
+				return;
+			}
+			if(count_val >= 1 && count_val <= stock_val){
+				$.ajax({
+					type: "POST",
+					url: "${contextPath}/cart/minusCartCount?cartId=" + cartId,
+					data: data1,
+					contentType: "application/json; charset=utf-8",
+					beforeSend: function(xhr){
+						xhr.setRequestHeader(header, token);
+					},
+					success: function (response) {
+						console.log("onclick ajax카트수량감소");
+						
+						calculateItemSellPrice(itemObj, this);
+						calculateSellPrice();
+					},
+					error: function(xhr, status, error){
+						var errorResponse = JSON.parse(xhr.responseText);
+					}/* ,
+					complete: function(xht, status){
+						$(this).removeAttr("disabled");
+					} */
+				});
+			} else{
+				alert("수량이 올바르지 않습니다.");
+			}
 		});
 	});
 
@@ -310,6 +362,7 @@
 												<button value="-" count_range="m" type="button" name="countDown">-</button> 
 												<input class="ccount" value="${i.cartAmount }" readonly name="ordQty">
 												<button value="+" count_range="p" type="button" name="countUp">+</button>
+												<input class="prodStock" type=hidden name="productStock" value="${i.stock}"/>
 											</div>
 										</td>
 										<td class="cart-price">
@@ -343,8 +396,11 @@
 											</div>
 										</td>
 										<td class="cart-purchase-delete">
-											<button type="button" class="btn-purchase">구매</button>
-											<button type="button" class="btn-delete">삭제</button>
+											<div class="cart-pur-del">
+												<button type="button" class="btn-purchase">구매</button>
+												<button type="button" class="btn-delete">삭제</button>
+											</div>
+
 										</td>
 										
 									</tr>
