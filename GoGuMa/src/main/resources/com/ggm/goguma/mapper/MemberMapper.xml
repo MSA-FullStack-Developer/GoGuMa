@@ -25,7 +25,7 @@
 			name = #{name} and phone = #{phone}
 	</select>
 
-	<select id="findMemberByEmail">
+	<select id="findMemberByEmail" resultMap="MemberResult">
 		SELECT 
 			*
 		FROM 

@@ -31,9 +31,6 @@
 	src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.min.js"></script>
 </head>
 <body>
-	<script type="text/javascript">
-		
-	</script>
 	<style>
 		#submit-btn {
 			background-color: #8540f5;
@@ -51,6 +48,7 @@
 		.modal-body p {
 			white-space: pre-line;
 		}
+		
 	</style>
 	<script type="text/javascript">
 	
@@ -59,6 +57,61 @@
 			if(error) {
 				alert("필수 입력값을 넣어주세요.");
 			}
+			
+			var valid = false;
+			
+			$("input[name=email]").focusout(function(e) {
+				console.log("out");
+				var input = $(this).val();
+				console.log(input);
+				e.preventDefault();
+				var vaildResult = $("#email-check");
+				var testEmail = new RegExp(/^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i);
+		
+				if(input.trim().length != 0 && testEmail.test(input)) {
+					$.ajax({
+						url: "${contextPath}/member/search.do",
+						data: {email: input},
+						method: "GET",
+						dataType: "JSON",
+						success: function(data) {
+							console.log(data);
+							if(data.exist) {
+								vaildResult.removeClass();
+								vaildResult.addClass("text-danger");
+								vaildResult.text("이미 존재하는 이메일 입니다.");
+								valid = false;
+							} else {
+								vaildResult.removeClass();
+								vaildResult.addClass("text-success");
+								vaildResult.text("사용 가능한 이메일 입니다.");
+								valid = true;
+							}
+						},
+						error: function() {
+							console.log("error");
+						}
+					});
+				} else {
+					valid = false;
+					vaildResult.removeClass();
+					vaildResult.addClass("text-danger");
+					vaildResult.text("이메일 형식이 아닙니다.");
+					
+				}
+			
+				
+			}); //end of $("input[name=email]").focusout
+			
+			
+			$("#submit-btn").click(function(e) {
+				e.preventDefault();
+				if(!valid) {
+					alert("이메일 중복 및 필수값 입력을 확인해주세요.");
+				} else {
+					$("#joinForm").submit();
+				}
+			}) 
 		})
 	</script>
 	<section class="container" style="min-width: 970px;">
@@ -66,14 +119,15 @@
 			<h1>고구마 회원가입</h1>
 			<p class="text-secondary">아래 회원 정보를 기입해주세요.</p>
 
-			<form id="joinForm" method="post" action="${contextPath}/member/join/create.do">
+			<form id="joinForm"  method="post" action="${contextPath}/member/join/create.do">
 				<input type="hidden" name="_csrf" value="${_csrf.token}" />
 				<label for="email" class="form-label"> 사용할 이메일 아이디 </label> 
-				<input name="email" type="email" class="form-control" placeholder="example@example.com" required/>
+				<input id="email" name="email" type="email" class="form-control" placeholder="example@example.com" required/>
+				<div>
+					<span id="email-check"></span>
+				</div>
 				<label for="password" class="form-label mt-3" > 비밀번호 </label> 
 				<input name="password" type="password" class="form-control" required/> 
-				<label for="password-repeat" class="form-label mt-3" > 비밀번호 확인 </label> 
-				<input name="password-repeat" type="password" class="form-control" required/> 
 				<label for="name" class="form-label mt-3"> 이름 </label> 
 				<input name="name" type="text" class="form-control" value="${member.name}" readonly />
 				<label for="phone" class="form-label mt-3"> 전화번호 </label> 

@@ -53,13 +53,15 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public MemberDTO getMember(String name, String phone) throws NotFoundMemberExcption {
 		log.info("[getMember] name, phone" + name + " " + phone);
-		Optional<MemberDTO> m = this.memberMapper.findMemberByNameAndPhone(name, phone);
-		System.out.println(m.isPresent());
 		return this.memberMapper.findMemberByNameAndPhone(name, phone).orElseThrow(NotFoundMemberExcption::new);
 	}
 
 
-
+	@Override
+	public MemberDTO getMember(String email) throws NotFoundMemberExcption {
+	
+		return this.memberMapper.findMemberByEmail(email).orElseThrow(NotFoundMemberExcption::new);
+	}
 
 	@Override
 	public MemberDTO getMemberInfoFromIamport(String impUid) {
@@ -157,10 +159,16 @@ public class MemberServiceImpl implements MemberService {
 				this.contractService.createContractHistory(member.getId(), contractId);
 			}
 		}catch(Exception e) {
+			log.error(e.getMessage());
 			throw new CreateMemberFailException("계정 생성 실패하였습니다.");
 		}
 		
 	}
+
+
+
+
+
 	
 	
 

@@ -2,7 +2,6 @@ package com.ggm.goguma.exception;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -22,13 +21,4 @@ public class ControllerExceptionAdvice {
 		return "redirect:/member/join/start.do";
 	}
 	
-	@ExceptionHandler(CreateMemberFailException.class)
-	public String CreateMemberFailExceptionHandler(CreateMemberFailException e, Model model) {
-		
-		log.info(e.getMessage());
-		
-		model.addAttribute("error", e);
-		
-		return "member/joinResult";
-	}
 }

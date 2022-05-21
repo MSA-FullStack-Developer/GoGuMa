@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import com.ggm.goguma.dto.member.CheckMemberResult;
 import com.ggm.goguma.dto.member.ContractDTO;
 import com.ggm.goguma.dto.member.CreateMemberDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
@@ -43,6 +45,22 @@ public class MemberController {
 
 	@Value("${iamport.code}")
 	private String iamportCode;
+	
+	
+	@GetMapping("/search.do")
+	@ResponseBody
+	public CheckMemberResult searchMember(@RequestParam String email) {
+		CheckMemberResult result = new CheckMemberResult();
+		result.setEmail(email);
+		try {
+			MemberDTO member = this.memberService.getMember(email);
+			result.setEmail(member.getEmail());
+			result.setExist(true);
+			return result;
+		}catch(NotFoundMemberExcption e) {
+			return result;
+		}
+	}
 
 	@GetMapping("/join/start.do")
 	public String joinStart(Model model) {
@@ -74,6 +92,17 @@ public class MemberController {
 		
 		return "member/joinAlready";
 	}
+	
+	@GetMapping("/join/success.do")
+	public String joinSuccess() {
+		return "member/joinSuccess";
+	}
+	
+	@GetMapping("/join/fail.do")
+	public String joinFail() {
+		return "member/joinFail";
+	}
+	
 
 	@PostMapping("/join/form.do")
 	public String joinForm(@RequestParam("impUid") String impUid, RedirectAttributes ra, Model model) {
@@ -104,7 +133,7 @@ public class MemberController {
 
 	@PostMapping("/join/create.do")
 	public String createMember(@Valid CreateMemberDTO input, BindingResult br,
-			@RequestParam("agreement") String agreements, Model model) throws CreateMemberFailException {
+			@RequestParam("agreement") String agreements, Model model) {
 
 		log.info("[createMember] input : " + input);
 		log.info("[createMember] agreements : " + agreements);
@@ -114,10 +143,16 @@ public class MemberController {
 			return "member/joinForm";
 		}
 
+		//선택한 이용 약관 정보 : ','을 기준으로 나뉘어 있음.
 		input.setAgreements(Arrays.stream(agreements.split(",")).mapToInt(Integer::parseInt).toArray());
 
-		this.memberService.createMember(input);
-
-		return "member/joinResult";
+		try {
+			this.memberService.createMember(input);
+			return "redirect:/member/join/success.do";
+		} catch (CreateMemberFailException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "redirect:/member/join/fail.do";
+		}		
 	}
 }

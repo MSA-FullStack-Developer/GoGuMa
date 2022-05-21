@@ -48,7 +48,7 @@
 			var code = "${code}";
 			var merchantUid = "${merchantUid}";
 			
-			$("#certificate-btn").click(function() {
+			 /* $("#certificate-btn").click(function() {
 				
 				IMP.init(code);
 				IMP.certification({
@@ -63,9 +63,17 @@
 					} else {
 						alert("휴대폰 인증에 실패 하였습니다.");
 					}
-				}); /* end of IMP.certification */
+				}); // end of IMP.certification 
+			});  // end of click */  
+			
+			$("#certificate-btn").click(function() {
+				
+				var certificateForm = $("#certificate");
+				certificateForm.find("input[name='impUid']").val("imp_476916883301");
+				
+				certificateForm.submit();
 			}); /* end of click  */
-		}); /* end of document ready*/
+		}); // end of document ready
 	</script>
 	<section class="container">
 		<div class="d-flex align-items-center min-vh-100">
