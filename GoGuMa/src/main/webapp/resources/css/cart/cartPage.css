@@ -1,16 +1,17 @@
 .container {
-	width: 100%;
+	width: max-content;
 	min-height: calc(100vh - 369px);
 }
 
 .contents {
 	position: relative;
-	width: 1081px;
-	margin: 0 auto;
+	width: 1200px;
+	margin: 40px 40px;
+    padding: 40px 40px;
 }
 
 .cbody {
-	width: 100%;
+	width: fit-content;
 	background: #f8f8f8;
 }
 
@@ -87,7 +88,9 @@ ul, ol, menu, li {
 .btngroup {
 	position: relative;
 }
-
+.cart-bottom{
+	margin-top: 30px;
+}
 .cart-bottom .btngroup .btn span {
 	color: #999;
 	font-size: 13px;
@@ -150,7 +153,7 @@ ul, ol, menu, li {
 
 .cart-info {
 	width: 800px;
-	margin: 60px 0 100px 0;
+	margin: 80px auto;
 	padding: 0;
 	border: 1px solid #eee;
 	border-radius: 5px;
@@ -307,6 +310,7 @@ ul, ol, menu, li {
 
 .btngroup {
 	position: relative;
+	float: right;
 }
 
 .util-option .btngroup .btn {
@@ -330,27 +334,27 @@ ul, ol, menu, li {
 #th-product-count{
 	text-align: center;
 	vertical-align: middle;
-	width: 500px;
+	width: 12%;
 }
 #th-product-price{
 	text-align: center;
 	vertical-align: middle;
-	width: 200px;
+	width: 12%;
 }
 #th-discount-price{
 	text-align: center;
 	vertical-align: middle;
-	width: 200px;
+	width: 8%;
 }
 #th-total-price{
 	text-align: center;
 	vertical-align: middle;
-	width: 200px;
+	width: 8%;
 }
 #th-order-delete{
 	text-align: center;
 	vertical-align: middle;
-	width: 250px;
+	width: 8%;
 }
 .product-img{
 	float: left;
@@ -390,4 +394,46 @@ ul, ol, menu, li {
 .all-cart-total-price .final-order-price {
     color: #ea0000;
     font-size: 20px;
+}
+.cart-product-discount > span {
+	display: block;
+}
+.continue{
+	border-color: #ddd;
+}
+.order-buttons{
+	position: relative;
+    margin-top: 30px;
+    text-align: center;
+}
+.all-select-event input[type="checkbox"], .product-select-event input[type="checkbox"]{
+	display: none;
+}
+.all-select-event input[type="checkbox"] + label:before, .product-select-event input[type="checkbox"] + label:before{
+  content:"\f00c";/*폰트어썸 유니코드*/
+  font-family:"Font Awesome 5 free"; /*폰트어썸 아이콘 사용*/
+  font-weight:700;/*폰트어썸 설정*/
+  color: #F3F3F3;
+  display:inline-block;
+  width:20px;
+  height:20px;
+  font-size:5px;
+  line-height:17px;
+  border:1px solid #F3F3F3 ;
+  vertical-align:middle;/*체크 전과 체크 후 높이 차이 때문에 설정*/
+  border-radius: 50%;
+  background-color:#FFFFFF;
+}
+
+.all-select-event input[type="checkbox"]:checked + label:before, .product-select-event input[type="checkbox"]:checked + label:before{
+  content:"\f00c";/*폰트어썸 유니코드*/
+  font-family:"Font Awesome 5 free"; /*폰트어썸 아이콘 사용*/
+  font-weight:700;/*폰트어썸 설정*/
+  color:#F3F3F3;
+  background-color:#FF493C;
+  border-color:#000;
+  font-size:5px;
+  text-align:center;
+  border-radius: 50%;
+  border: 1px solid #F3F3F3;
 }

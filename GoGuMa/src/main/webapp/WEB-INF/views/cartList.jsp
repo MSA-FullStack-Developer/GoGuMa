@@ -314,7 +314,7 @@
 							</ol>
 						</div>
 						<div class="cart-bottom">
-							<span>홍길동 고객님의 혜택 정보 회원등급: 실버 적립금: 100000</span>
+							<span> ㅇㅇ </span>고객님의 혜택 정보 회원등급: <span> 실버 </span> 적립금: <span> 100000 </span>
 							<div class="btngroup">
 								<button type="button" class="btn btn-cart-del" onclick="">
 									<i class="bi bi-cart-x"></i> <span>장바구니 비우기</span>
@@ -328,10 +328,11 @@
 							<table class="table table-bordered border-white">
 								<thead>
 									<tr class="head">
-										<th scope="col" class="all-select-event"><label>
-												<input title="모든 상품 전체결제 설정" type="checkbox" checked="checked"
-												class="all-deal-select" name="allItemSelect"> <span>&nbsp;&nbsp;전체선택</span>
-										</label></th>
+										<th scope="col" class="all-select-event">
+												<input id="allSel" title="모든 상품 전체결제 설정" type="checkbox" checked="checked"
+												class="all-deal-select" name="allItemSelect"/>
+												<label for="allSel"><span>&nbsp;&nbsp;전체선택</span></label>
+										</th>
 										<th scope="col" id="th-product-name">상품정보</th>
 										<th scope="col" id="th-product-count">수량</th>
 										<th scope="col" id="th-product-price">상품가격</th>
@@ -341,8 +342,10 @@
 									</tr>
 									<c:forEach var="i" items="${list }" begin="0" step="1" varStatus="status">
 									<tr class="cart-product">
-										<td class="product-select-event"><input type="checkbox"
-											class="selectCheck" name="itemSelect" checked="checked" value="${i.cartId}"></td>
+										<td class="product-select-event">
+											<input id="oneSel${status.count}" type="checkbox" class="selectCheck" name="itemSelect" checked="checked" value="${i.cartId}">
+											<label for="oneSel${status.count}"></label>
+										</td>
 										<td class="cart-product_box">
 											<div class="product-image">
 												<a href="이동할 링크" class="moveProduct"> <img
@@ -371,7 +374,7 @@
 												<!-- 처음 불러올때 보이는 금액 -->
 												<c:set var="proPrice" value="${i.cartPrice * i.cartAmount}"/>
 												<fmt:formatNumber var="pp" value="${proPrice}" type="currency" currencySymbol=""/>
-												<span>${pp }</span>
+												<span>${pp }</span>원
 												
 												<input type=hidden name="nrmPrc" value="${proPrice}"/>
 											</div>
@@ -382,7 +385,7 @@
 												<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
 												<span>${i.discountPercent }%할인</span>
 												<c:set var="disPrice" value="${proPrice  * i.discountPercent / 100 }"/>
-												<em><fmt:formatNumber value="${disPrice}" type="currency" currencySymbol=""/></em>
+												<em><fmt:formatNumber value="${disPrice}" type="currency" currencySymbol=""/></em>원
 												<input type=hidden name="dcAmt" value="${disPrice}"/>
 											</div>
 										</td>
@@ -391,7 +394,7 @@
 												<input type=hidden name="totOriPrc" value="${i.cartPrice - (i.cartPrice * i.discountPercent / 100)}"/>
 												<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
 												<c:set var="totPrice" value="${proPrice - disPrice}"/>
-												<span><fmt:formatNumber value="${totPrice}" type="currency" currencySymbol=""/></span>
+												<span><fmt:formatNumber value="${totPrice}" type="currency" currencySymbol=""/></span>원
 												<input type=hidden name="sellPrc" value="${totPrice}"/>
 											</div>
 										</td>
@@ -423,14 +426,18 @@
 				<div class="all-cart-total-price">
 					<div class="all-price-area">
 						총 상품가격 
-						<em class="final-product-price" id="emPriceFTotNrmlprice">0</em>
+						<em class="final-product-price" id="emPriceFTotNrmlprice">0</em>원
 						<i class="bi bi-dash-square"></i>
 						총 할인가격
-						<em class="final-product-discount" id="emPriceFTotDcAmt">0</em>
+						<em class="final-product-discount" id="emPriceFTotDcAmt">0</em>원
 						<i class="bi bi-arrow-right-square"></i>
 						총 주문금액
-						<em class="final-order-price" id="emPriceFTotPayAmt">0</em>
+						<em class="final-order-price" id="emPriceFTotPayAmt">0</em>원
 					</div>
+				</div>
+				<div class="order-buttons">
+					<button type="button" class="btn text-black continue" style="background-color:#FFFFFF;">쇼핑 계속하기</button>
+					<button type="button" class="btn text-white purchase" style="background-color:#FF493C">구매하기</button>
 				</div>
 			</div>
 

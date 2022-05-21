@@ -43,10 +43,13 @@ public class CartController {
 	public String cartList( Model model) throws Exception{
 		try {
 			int memberId = 1;
+			// 회원이 담은 카트 리스트를 불러온다.
 			List<CartItemDTO> list = cartService.getCartList(memberId);
 			model.addAttribute("list", list);
+			
+			// 로그인한 회원 정보를 가져온다.
+			
 			list.forEach(c -> System.out.println(c));
-			log.info("aa장바구니 상품 가져오는 로그.");
 			return "cartList";
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -59,7 +62,7 @@ public class CartController {
 	@ResponseBody
 	public void addCartCount(@RequestParam String cartId) throws Exception{
 		try {
-			log.info("컨트롤러 장바구니 수량 증가 카트아이디:" + cartId);
+			log.info("컨트롤러 장바구니 수량 증가 카트 아이디:" + cartId);
 			long cartid = Long.parseLong(cartId);
 			cartService.addCartCount(cartid);
 		}catch (Exception e) {
