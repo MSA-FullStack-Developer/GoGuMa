@@ -13,4 +13,6 @@ public interface CartMapper {
 
 	// 카트 수량 증가
 	void addCartCount(@Param("cartId") long cartId) throws Exception;
+
+	void minusCartCount(@Param("cartId") long cartId) throws Exception;
 }

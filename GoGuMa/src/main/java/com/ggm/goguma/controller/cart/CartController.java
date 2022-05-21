@@ -59,10 +59,23 @@ public class CartController {
 	@ResponseBody
 	public void addCartCount(@RequestParam String cartId) throws Exception{
 		try {
-			log.info("컨트롤러에서 장바구니 더하기!!");
-			System.out.println("cid:  " + cartId);
+			log.info("컨트롤러 장바구니 수량 증가 카트아이디:" + cartId);
 			long cartid = Long.parseLong(cartId);
 			cartService.addCartCount(cartid);
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	@PostMapping("minusCartCount")
+	@ResponseBody
+	public void minusCartCount(@RequestParam String cartId) throws Exception{
+		try {
+			log.info("컨트롤러 장바구니 수량 감소 카트아이디:" + cartId);
+			long cartid = Long.parseLong(cartId);
+			cartService.minusCartCount(cartid);
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 			throw e;

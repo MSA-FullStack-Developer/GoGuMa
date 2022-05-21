@@ -10,4 +10,6 @@ public interface CartService {
 
 	void addCartCount(long cartId) throws Exception;
 
+	void minusCartCount(long cartId) throws Exception;
+
 }

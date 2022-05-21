@@ -30,4 +30,10 @@ public class CartServiceImpl implements CartService{
 		
 	}
 
+	@Override
+	public void minusCartCount(long cartId) throws Exception {
+		cartMapper.minusCartCount(cartId);
+		
+	}
+
 }

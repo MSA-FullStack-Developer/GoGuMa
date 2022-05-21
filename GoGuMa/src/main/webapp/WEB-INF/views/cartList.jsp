@@ -34,6 +34,8 @@
 	
 <script type="text/javascript">
 	$(document).ready(function() {
+		bindCartList();
+		calculateSellPrice();
 		$('.cart-count button[count_range]').click(function(e) {
 			e.preventDefault();
 			var type = $(this).attr('count_range');
@@ -48,16 +50,15 @@
 				$count.val(parseInt(count_val) + 1);
 			}
 		});
-		bindCartList();
 
-		// 수량 증가 버튼을 클릭한 경우 실행되는 함수
+		// 카트 수량 증가 버튼을 클릭한 경우 실행되는 함수
 		$("button[name='countUp']").click(function(){
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			
 			var itemObj = $(this).parents("tr");
 			var cartId = Number(itemObj.find("input:checkbox[name=itemSelect]").val());
-			console.log("카트아이디:", cartId);
+			console.log("증가하려는 카트아이디:", cartId);
 			var data1 = JSON.stringify({'cid' : cartId});
 			console.log(data1);
 			$.ajax({
@@ -69,7 +70,44 @@
 					xhr.setRequestHeader(header, token);
 				},
 				success: function (response) {
-					console.log("카트수량증가");
+					console.log("onclick ajax카트수량증가");
+					
+					//현재 가격 계산
+					calculateItemSellPrice(itemObj, this);
+					calculateSellPrice();
+				},
+				error: function(xhr, status, error){
+					var errorResponse = JSON.parse(xhr.responseText);
+				}/*,
+				complete: function(xht, status){
+					
+					$(this).removeAttr("disabled");
+				} */
+			});
+		});
+		// 카트 수량 감소 버튼을 클릭한 경우 실행되는 함수
+		$("button[name='countDown']").click(function(){
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			
+			var itemObj = $(this).parents("tr");
+			var cartId = Number(itemObj.find("input:checkbox[name=itemSelect]").val());
+			console.log("감소하려는 카트아이디:", cartId);
+			var data1 = JSON.stringify({'cid' : cartId});
+			console.log(data1);
+			$.ajax({
+				type: "POST",
+				url: "${contextPath}/cart/minusCartCount?cartId=" + cartId,
+				data: data1,
+				contentType: "application/json; charset=utf-8",
+				beforeSend: function(xhr){
+					xhr.setRequestHeader(header, token);
+				},
+				success: function (response) {
+					console.log("onclick ajax카트수량감소");
+					
+					calculateItemSellPrice(itemObj, this);
+					calculateSellPrice();
 				},
 				error: function(xhr, status, error){
 					var errorResponse = JSON.parse(xhr.responseText);
@@ -80,29 +118,130 @@
 			});
 		});
 	});
+
+	//주문내역 계산(총 상품 금액, 총 할인 금액, 총 주문 금액)
+	function calculateSellPrice(){
+		
+		var totalNormalPrice = 0 //총 상품 금액
+		var totalDcPrice = 0 //총 할인 금액
+		var totalPayPrice = 0 //총 주문 금액
+		var selectedItemCount = 0;
+		var checkedLength = $("input:checkbox[name=itemSelect]:checked").length;
+		
+		console.log("선택한 체크 수: " + checkedLength);
+		$("input:checkbox[name=itemSelect]:checked").each(function(idx){
+			selectedItemCount += 1;
+			//선택된 상품 계산
+			var itemObj = $(this).parents("tr");
+			var ordQty = Number($(itemObj).find("input[name='ordQty']").val());
+			if(!isNaN(ordQty)){
+				//총 상품금액 계산(정상금액)
+				if(!isNaN(Number($(itemObj).find("input[name='nrmOriPrc']").val()))){
+					totalNormalPrice += Number($(itemObj).find("input[name='nrmOriPrc']").val()) * ordQty;
+				}
+				//총 할인금액 계산
+				if(!isNaN(Number($(itemObj).find("input[name='disOriPrc']").val()))){
+					totalDcPrice += Number($(itemObj).find("input[name='disOriPrc']").val()) * ordQty;
+				}
+				//총 결제예상 금액
+				if(!isNaN(Number($(itemObj).find("input[name='totOriPrc']").val()))){
+					totalPayPrice += Number($(itemObj).find("input[name='totOriPrc']").val()) * ordQty;
+				}
+			}
+		});
+		console.log("총 상품 정상 금액: " + totalNormalPrice);
+		$("#emPriceFTotNrmlprice").text(numFormatComma(totalNormalPrice));
+		$("#emPriceFTotDcAmt").text(numFormatComma(totalDcPrice));
+		$("#emPriceFTotPayAmt").text(numFormatComma(totalPayPrice));
+		$("#emTotalItemCnt").text(numFormatComma(selectedItemCount));
+	};
 	
-	// 상품 선택
+	// 변경된 상품 가격 할인금액, 합계 화면에서 보여주는 계산
+	function calculateItemSellPrice(itemObj, obj){
+		var ordQty = Number($("input[name=ordQty]", $(itemObj)).val());
+		//상품 정상 금액
+		var nOP = Number($("input[name=nrmOriPrc]", $(itemObj)).val());
+		//상품 할인 금액
+		var dOP = Number($("input[name=disOriPrc]", $(itemObj)).val());
+		//상품 할인된 금액
+		var tOP = Number($("input[name=totOriPrc]", $(itemObj)).val());
+		
+		$(itemObj).find(".cart-product-price span").text(numFormatComma(nOP * ordQty));
+		$(itemObj).find(".cart-product-discount em").text(numFormatComma(dOP * ordQty));
+		$(itemObj).find(".cart-total-price span").text(numFormatComma(tOP * ordQty));
+	};
+	
+	// 상품 선택 & 선택된 총상품가격 총할인가격, 총 주문 금액 계산
 	function bindCartList(){
 		if($("input:checkbox[name=allItemSelect]")){
 			$("input:checkbox[name=allItemSelect]").click(function(e){
 				var isChecked = $(this).is(":checked");
 				$("input:checkbox[name=itemSelect]").prop("checked", isChecked);
 				//가격 재계산
+				calculateSellPrice();
+				//주문이 가능한 상태인지 체크
 				
-				//선택가능한것 체크
 				
 			});
 		}
-	
-	// 판매가 * 수량을 계산해서 화면에 표시
-	function calculateItemSellPrice(itemObj, obj){
-		var selPrice = Number($("input[name=sellPr]")).val();
-		var ordQty = Number($());
-	}
-	
-	
-}
+		if($("input:checkbox[name=itemSelect]")){
+			$("input:checkbox[name=itemSelect]").click(function(e) {
+				//상품 선택 해제 시 전체선택 체크박스 해제
+				if(!$(this).is(":checked") && $("input:checkbox[name=allItemSelect]").is(":checked")){
+					$("input:checkbox[name=allItemSelect]").prop("checked", false);
+				}
+				//모든 상품이 체크 된 경우 전체 선택 체크박스 선택 (하나라도 체크가 안되어 있다면 false)
+				var isAllCheck = true;
+				$("input:checkbox[name=itemSelect]").each(function(){
+					if(!$(this).is(":checked")){
+						isAllCheck = false;
+						return;
+					}
+				});
+				if(isAllCheck){
+					$("input:checkbox[name=allItemSelect]").prop("checked", true);
+				}
+				//가격 재계산
+				calculateSellPrice();
+				//주문 가능한 상태인지 체크
+			  });
+		}
+	};
 
+	function numFormatComma(nNumber,nDetail) {
+    	if (nNumber == null)    return "";
+    	if (nDetail == null)    nDetail = 0;
+
+    	nNumber             = parseFloat(nNumber);
+    	nNumber             = Math.round(nNumber, nDetail);
+    
+    	var minusFlag = false;
+    	if(nNumber < 0) {
+    		nNumber = nNumber *-1;
+    		minusFlag = true;
+    	}
+    
+    	var strNumber       = new String(nNumber);
+    	var arrNumber       = strNumber.split(".");
+    	var strFormatNum    = "";
+    	var j = 0;
+
+    	for (var i = arrNumber[0].length - 1; i >= 0; i--) {
+        	if (i != strNumber.length && j == 3) {
+            	strFormatNum = arrNumber[0].charAt(i) + "," + strFormatNum;
+            	j = 0;
+        	} else {
+            	strFormatNum = arrNumber[0].charAt(i) + strFormatNum;
+        	}
+        	j++;
+    	}
+
+    	if (arrNumber.length > 1)   strFormatNum = strFormatNum + "." + arrNumber[1];
+    
+    	if (minusFlag) strFormatNum = '-'+strFormatNum ;
+
+    		return strFormatNum;
+	}
 </script>
 <div class="container">
 	<!-- 바디 전체-->
@@ -175,27 +314,39 @@
 										</td>
 										<td class="cart-price">
 											<div class="cart-product-price">
+												<input type=hidden name="nrmOriPrc" value="${i.cartPrice }"/>
+												<!-- 처음 불러올때 보이는 금액 -->
 												<c:set var="proPrice" value="${i.cartPrice * i.cartAmount}"/>
-												<span><fmt:formatNumber value="${proPrice}" type="currency"/></span>
+												<fmt:formatNumber var="pp" value="${proPrice}" type="currency" currencySymbol=""/>
+												<span>${pp }</span>
+												
+												<input type=hidden name="nrmPrc" value="${proPrice}"/>
 											</div>
 										</td>
 										<td class="cart-discount">
 											<div class="cart-product-discount">
-												<span>${i.discountPercent }%할인</span> 
+												<input type=hidden name="disOriPrc" value="${i.cartPrice * i.discountPercent / 100}"/>
+												<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
+												<span>${i.discountPercent }%할인</span>
 												<c:set var="disPrice" value="${proPrice  * i.discountPercent / 100 }"/>
-												<span><fmt:formatNumber value="${disPrice}" type="currency"/></span>
+												<em><fmt:formatNumber value="${disPrice}" type="currency" currencySymbol=""/></em>
+												<input type=hidden name="dcAmt" value="${disPrice}"/>
 											</div>
 										</td>
 										<td class="cart-total">
 											<div class="cart-total-price">
+												<input type=hidden name="totOriPrc" value="${i.cartPrice - (i.cartPrice * i.discountPercent / 100)}"/>
+												<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
 												<c:set var="totPrice" value="${proPrice - disPrice}"/>
-												<span><fmt:formatNumber value="${totPrice}" type="currency"/></span>
+												<span><fmt:formatNumber value="${totPrice}" type="currency" currencySymbol=""/></span>
+												<input type=hidden name="sellPrc" value="${totPrice}"/>
 											</div>
 										</td>
 										<td class="cart-purchase-delete">
 											<button type="button" class="btn-purchase">구매</button>
 											<button type="button" class="btn-delete">삭제</button>
 										</td>
+										
 									</tr>
 									</c:forEach>
 								</thead>
@@ -216,13 +367,13 @@
 				<div class="all-cart-total-price">
 					<div class="all-price-area">
 						총 상품가격 
-						<em class="final-product-price">0원</em>
+						<em class="final-product-price" id="emPriceFTotNrmlprice">0</em>
 						<i class="bi bi-dash-square"></i>
 						총 할인가격
-						<em class="final-product-discount">0원</em>
+						<em class="final-product-discount" id="emPriceFTotDcAmt">0</em>
 						<i class="bi bi-arrow-right-square"></i>
 						총 주문금액
-						<em class="final-order-price">0원</em>
+						<em class="final-order-price" id="emPriceFTotPayAmt">0</em>
 					</div>
 				</div>
 			</div>
