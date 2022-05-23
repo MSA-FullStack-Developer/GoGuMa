@@ -15,4 +15,6 @@ public interface CartMapper {
 	void addCartCount(@Param("cartId") long cartId) throws Exception;
 
 	void minusCartCount(@Param("cartId") long cartId) throws Exception;
+
+	void deleteCart(@Param("cartId") long cartId) throws Exception;
 }

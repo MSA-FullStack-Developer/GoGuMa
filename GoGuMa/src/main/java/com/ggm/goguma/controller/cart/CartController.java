@@ -57,6 +57,10 @@ public class CartController {
 		}
 	}
 	
+	@GetMapping("/order")
+	public String order()throws Exception{
+		return "order";
+	}
 	
 	@PostMapping("addCartCount")
 	@ResponseBody
@@ -79,6 +83,19 @@ public class CartController {
 			long cartid = Long.parseLong(cartId);
 			cartService.minusCartCount(cartid);
 			
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	@PostMapping("delete")
+	@ResponseBody
+	public void delete(@RequestParam("cartId") String cartId) throws Exception{
+		try {
+			log.info("컨트롤러 장바구니 삭제할 카트 아이디:" + cartId);
+			long cartid = Long.parseLong(cartId);
+			cartService.deleteCart(cartid);
 		}catch (Exception e) {
 			e.printStackTrace();
 			throw e;

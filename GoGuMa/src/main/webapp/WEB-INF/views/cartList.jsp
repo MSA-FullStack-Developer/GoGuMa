@@ -23,7 +23,7 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 
 <link rel="stylesheet"
-	href="${contextPath}/resources/css/cart/cartPage.css">
+	href="${contextPath}/resources/css/cart/cartOrder.css">
 
 <link rel="stylesheet"
 	href="${contextPath}/webjars/jquery-ui/1.13.0/jquery-ui.css">
@@ -37,6 +37,7 @@
 		
 		bindCartList();
 		calculateSellPrice();
+		checkOrderable();
 		
 /* 		$('.cart-count button[count_range]').click(function(e) {
 			e.preventDefault();
@@ -171,6 +172,67 @@
 		});
 	});
 
+	/*상품 삭제()*/
+	function cartDel(obj) {
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		
+		var itemObj = $(obj).parents("tr");
+		var cartId = Number(itemObj.find("input:hidden[name=cartId]").val());
+		
+		var data = {"cartId":cartId};
+		$.ajax({
+			type: "POST",
+			url: "${contextPath}/cart/delete",
+			data: data,
+			beforeSend: function(xhr){
+				xhr.setRequestHeader(header, token);
+			},
+			success : function(result) {
+				location.reload();
+				
+			}, 
+			error: function(xhr, status, error) {
+				var errorResponse = JSON.parse(xhr.responseText);
+				var errorCode = errorResponse.code;
+				var message = errorResponse.message;
+		
+				alert(message);
+			}
+		});
+	}
+
+	// 선택한 장바구니를 삭제하기 위한 함수 (다중)
+	function selectedCartDel(){
+		var cartIds = $("#nrmProd").find("input:checkbox[name=itemSelect]:checked");
+		console.log(cartIds);
+		if(cartIds.length == 0) {
+				alert("선택된 장바구니가 없습니다.");
+				return;
+			}
+		var deleted = confirm("선택한 장바구니를 모두 삭제하겠습니까?");
+		
+		if(deleted){
+			cartIds.each(function(){
+				var cartId = $(this).val();
+				console.log(cartId);
+				//단일 장바구니 삭제 함수 호출
+				cartDel(this);
+			});
+			alert("선택한 장바구니를 삭제했습니다.");
+		}
+	}
+	// 단일 장바구니 삭제를 위한 함수
+	function oneCartDel(obj){
+		
+		var deleted = confirm("장바구니를 삭제하겠습니까?");
+		
+		if(deleted){
+			//단일 장바구니 삭제 함수 호출
+			cartDel(obj);
+		}
+		alert("선택한 장바구니를 삭제했습니다.");
+	}
 	//주문내역 계산(총 상품 금액, 총 할인 금액, 총 주문 금액)
 	function calculateSellPrice(){
 		
@@ -232,7 +294,7 @@
 				//가격 재계산
 				calculateSellPrice();
 				//주문이 가능한 상태인지 체크
-				
+				checkOrderable();
 				
 			});
 		}
@@ -256,6 +318,8 @@
 				//가격 재계산
 				calculateSellPrice();
 				//주문 가능한 상태인지 체크
+				checkOrderable();
+				
 			  });
 		}
 	};
@@ -293,7 +357,18 @@
     	if (minusFlag) strFormatNum = '-'+strFormatNum ;
 
     		return strFormatNum;
-	}
+	};
+	//현재 주문 가능하게 선택했는지 확인(장바구니에 상품이 하나 이상 담겨있는지)
+	function checkOrderable(){
+		var selectedItemCount = $("input:checkbox[name=itemSelect]:checked").length;
+		var orderBtn = $("#orderBtn");
+		console.log("체크함수 실행: " + selectedItemCount);
+		if(selectedItemCount > 0){
+			orderBtn.removeAttr("disabled");
+		} else{
+			orderBtn.attr("disabled", "disabled");
+		}
+	};
 </script>
 <div class="container">
 	<!-- 바디 전체-->
@@ -316,7 +391,7 @@
 						<div class="cart-bottom">
 							<span> ㅇㅇ </span>고객님의 혜택 정보 회원등급: <span> 실버 </span> 적립금: <span> 100000 </span>
 							<div class="btngroup">
-								<button type="button" class="btn btn-cart-del" onclick="">
+								<button type="button" class="btn btn-cart-del" name="allCartDelete" onclick="selectedCartDel()">
 									<i class="bi bi-cart-x"></i> <span>장바구니 비우기</span>
 								</button>
 							</div>
@@ -325,7 +400,7 @@
 					<!--장바구니에 담긴 상품이 있는 경우-->
 					<c:if test="${list != null or fn:length(list) != 0}">
 						<div class="cart-body">
-							<table class="table table-bordered border-white">
+							<table class="table table-bordered border-white" id="nrmProd">
 								<thead>
 									<tr class="head">
 										<th scope="col" class="all-select-event">
@@ -343,6 +418,7 @@
 									<c:forEach var="i" items="${list }" begin="0" step="1" varStatus="status">
 									<tr class="cart-product">
 										<td class="product-select-event">
+											<input type="hidden" name="cartId" value="${i.cartId}" />
 											<input id="oneSel${status.count}" type="checkbox" class="selectCheck" name="itemSelect" checked="checked" value="${i.cartId}">
 											<label for="oneSel${status.count}"></label>
 										</td>
@@ -401,7 +477,7 @@
 										<td class="cart-purchase-delete">
 											<div class="cart-pur-del">
 												<button type="button" class="btn-purchase">구매</button>
-												<button type="button" class="btn-delete">삭제</button>
+												<button type="button" class="btn-delete" onclick="oneCartDel(this)">삭제</button>
 											</div>
 
 										</td>
@@ -437,7 +513,7 @@
 				</div>
 				<div class="order-buttons">
 					<button type="button" class="btn text-black continue" style="background-color:#FFFFFF;">쇼핑 계속하기</button>
-					<button type="button" class="btn text-white purchase" style="background-color:#FF493C">구매하기</button>
+					<button type="button" id="orderBtn" class="btn text-white purchase" style="background-color:#FF493C">구매하기</button>
 				</div>
 			</div>
 

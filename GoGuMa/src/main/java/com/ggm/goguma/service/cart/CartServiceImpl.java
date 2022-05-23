@@ -36,4 +36,10 @@ public class CartServiceImpl implements CartService{
 		
 	}
 
+	@Override
+	public void deleteCart(long cartId) throws Exception {
+		cartMapper.deleteCart(cartId);
+		
+	}
+
 }

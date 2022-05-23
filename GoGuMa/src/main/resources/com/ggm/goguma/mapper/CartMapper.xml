@@ -35,4 +35,9 @@
 		SET cartamount = cartamount - 1
 		WHERE cartid = #{cartId}
 	</update>
+	
+	<delete id="deleteCart" parameterType="long">
+		DELETE FROM cart
+		WHERE cartid = #{cartId}
+	</delete>
 </mapper>
