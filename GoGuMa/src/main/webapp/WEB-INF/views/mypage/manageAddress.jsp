@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,8 +11,7 @@
 	<!-- bootstrap css -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 	<!-- bootstrap js -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-    <style>
+	<style>
         a {
             text-decoration: none;
         }
@@ -38,7 +38,7 @@
 		<div class="row">
 			<div class="col-3">
                 <div class="mb-4">
-                    <h3><b>마이페이지</b></h3>
+                    <h3><a href="../"><b>마이페이지</b></a></h3>
                 </div>
                 <div class="mb-4">
                     <div>
@@ -80,7 +80,7 @@
                         비밀번호변경
                     </div>
                     <div>
-                        <a href="manageAddress">배송지관리</a>
+                        배송지관리
                     </div>
                     <div>
                         회원탈퇴
@@ -151,10 +151,10 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>집</td>
-                            <td>송진호</td>
-                            <td>서울특별시 송파구 중대로 135, IT벤처타워</td>
-                            <td>010-4474-8813</td>
+                            <td>${defaultAddress.nickName}</td>
+                            <td>${defaultAddress.recipient}</td>
+                            <td>${defaultAddress.address}</td>
+                            <td>${defaultAddress.contact}</td>
                             <td><button type="button" class="btn btn-outline-danger btn-sm">기본 배송지 해지</button></td>
                         </tr>
                     </tbody>
@@ -173,32 +173,21 @@
                             <th>관리</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>집</td>
-                            <td>송진호</td>
-                            <td>경기도 광주시 오포읍 수레안길41번길 32-6</td>
-                            <td>010-4474-8813</td>
-                            <td>
-                                <button type="button" class="btn btn-outline-dark btn-sm">수정</button>
-                                <button type="button" class="btn btn-outline-dark btn-sm">삭제</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody>
-                        <tr>
-                            <td><input type="checkbox"></td>
-                            <td>KOSA</td>
-                            <td>송진호</td>
-                            <td>서울특별시 송파구 중대로 135, IT벤처타워</td>
-                            <td>010-4474-8813</td>
-                            <td>
-                                <button type="button" class="btn btn-outline-dark btn-sm">수정</button>
-                                <button type="button" class="btn btn-outline-dark btn-sm">삭제</button>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <c:forEach var="addressDTO" items="${addressList}">
+                    	<tbody>
+                    		<tr>
+                    			<td><input type="checkbox"></td>
+                    			<td>${addressDTO.nickName}</td>
+                    			<td>${addressDTO.recipient}</td>
+                    			<td>${addressDTO.address}</td>
+                    			<td>${addressDTO.contact}</td>
+                    			<td>
+	                                <button type="button" class="btn btn-outline-dark btn-sm">수정</button>
+	                                <button type="button" class="btn btn-outline-dark btn-sm">삭제</button>
+	                            </td>
+                    		</tr>
+                    	</tbody>
+                    </c:forEach>
                 </table>
                 <div align="right">
                     <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#addAddressModal">배송지 등록</button>
@@ -242,4 +231,34 @@
         </div>
     </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript">
+	function getPostCode() {
+		new daum.Postcode({
+			oncomplete: function(data) {
+				var addr = '';
+				var extraAddr = '';
+				if(data.userSelectedType === 'R') { // 도로명 주소
+					addr = data.roadAddress;
+				} else { // 지번 주소
+					addr = data.jibunAddress;
+				}
+			}
+			
+			if(data.userSelectedType === 'R') {
+				if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+					extraAddr += data.bname;
+				}
+				if(data.buildingName !== '' && data.apartment === 'Y') {
+					extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+				}
+				if(extraAddr !== '') {
+					extraAddr = ' (' + extraAddr + ')';
+				}
+			}
+		})
+	}
+</script>
 </html>
+    
