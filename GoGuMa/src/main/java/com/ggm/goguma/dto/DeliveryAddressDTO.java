@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class DeliveryAddressDTO {
-	public int addressId;
-	public String nickName;
-	public String recipient;
-	public String address;
-	public String contact;
-	public int isDefault;
-	public int memberId;
+	private int addressId;
+	private String nickName;
+	private String recipient;
+	private String address;
+	private String contact;
+	private int isDefault;
+	private int memberId;
 }
