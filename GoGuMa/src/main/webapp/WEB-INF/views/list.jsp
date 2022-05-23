@@ -36,11 +36,16 @@
                 // 검색 키워드가 존재하지 않는다면 '검색할 상품명을 입력하세요' alert창 띄워주기
                 if (keyword != '') {
                     // 검색 동작 코드 작성하기
-                    alert(keyword);
+                	searchForm.find("#keyword").val("");
+        			searchForm.submit();
+        			return false;
                 } else {
                     alert('검색할 상품명을 입력하세요.');
                 }
-                // 검색 input box "" 초기화하기
+                
+                e.preventDefault();
+        		
+        		searchForm.submit();
             });
         });
     </script>
@@ -48,6 +53,12 @@
 
 <body>
 	<div class="header">
+	    <%-- <div class="search">
+	    	<form id="searchForm" action="${contextPath}/category/1/${categoryID}" autocomplete="off">
+		        <input type="text" id="keyword" name="keyword" value="${keyword}" placeholder="상품명을 검색하세요" autocomplete="off">
+		        <button type="submit" class="searchBtn" id="searchBtn"></button>
+	        </form>
+	    </div> --%>
 	    <div class="search">
 	        <input type="text" id="keyword" placeholder="상품명을 검색하세요" autocomplete="off">
 	        <button type="button" class="searchBtn" id="searchBtn"></button>

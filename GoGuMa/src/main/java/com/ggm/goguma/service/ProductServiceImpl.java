@@ -17,8 +17,7 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductMapper productMapper;
 	
-	private long pageSize = 1;
-	private long blockSize = 4;
+	private long pageSize = 20;
 
 	@Override
 	public List<ProductDTO> getProductList(long pg, long categoryID) throws Exception {

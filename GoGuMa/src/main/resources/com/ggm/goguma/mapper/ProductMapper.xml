@@ -3,6 +3,19 @@
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ggm.goguma.mapper.ProductMapper">
 
+	<!-- 검색 조건 -->
+<!-- 	<sql id="search">
+		<if test="type == 'recent'">
+			ORDER BY productid desc
+		</if>
+		<if test="type == 'expensive'">
+			ORDER BY productprice desc
+		</if>
+		<if test="type == 'cheap'">
+			ORDER BY productprice asc
+		</if>
+	</sql> -->
+
 	<!-- 상품 목록 -->
 	<select id="getProductList" parameterType="long" resultType="com.ggm.goguma.dto.ProductDTO">
 		SELECT C.*
@@ -12,6 +25,7 @@
 						WHERE p.productid = i.productid AND p.parentpid is null) A, category B
 				WHERE B.categoryid = A.categoryid AND A.categoryid = #{categoryID}) C
 		WHERE rnum BETWEEN #{startNum} AND #{endNum}
+<!-- 		<include refid="search"></include> -->
 	</select>
 	
 	<!-- 상품 개수 -->
@@ -19,6 +33,7 @@
 		SELECT count(*) AS cnt
 		FROM product
 		WHERE categoryid = #{categoryID} AND parentpid is null
+<!-- 		<include refid="search"></include> -->
 	</select>
 	
 	<!-- 상품 상세 정보 -->

@@ -25,9 +25,4 @@ public class ProductServiceTests {
     	log.info(productMapper);
     	assertNotNull(productMapper);
     }
-    
-	@Test
-	public void getProductList(int categoryID) throws Exception {
-		productMapper.getProductList(1, 2, 25).forEach(product -> log.info(product));
-	}
 }
