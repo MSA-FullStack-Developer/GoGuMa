@@ -160,7 +160,7 @@
                     <tr>
                         <td>가격</td>
                         <td>
-                            <h2><fmt:formatNumber value="${productInfo.price}" pattern="#,###" />원</h2>
+                            <h2><fmt:formatNumber value="${productInfo.productPrice}" pattern="#,###" />원</h2>
                         </td>
                     </tr>
                     <tr>
@@ -202,7 +202,7 @@
                     <tr>
                         <td>총 상품금액</td>
                         <td class="total_price">
-                            <h1><fmt:formatNumber value="${productInfo.price}" pattern="#,###" />원</h1>
+                            <h1><fmt:formatNumber value="${productInfo.productPrice}" pattern="#,###" />원</h1>
                         </td>
                     </tr>
                     <tr>

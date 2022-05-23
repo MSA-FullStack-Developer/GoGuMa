@@ -11,7 +11,7 @@ public class ProductDTO {
 	private int parentPID;
 	private int categoryID;
 	private String productName;
-	private long price;
+	private long productPrice;
 	private String productDetail;
 	private String company;
 	private long stock;

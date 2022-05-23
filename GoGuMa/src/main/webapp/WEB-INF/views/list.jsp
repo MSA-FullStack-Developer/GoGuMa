@@ -83,7 +83,7 @@
             <div class="product">
                 <a href="${contextPath}/category/list/${product.categoryID}/detail/${product.productID}"><img src="${product.prodimgurl}" /></a>
                 <h4>${product.productName}</h4>
-                <h3><fmt:formatNumber value="${product.price}" pattern="#,###" />원</h3>
+                <h3><fmt:formatNumber value="${product.productPrice}" pattern="#,###" />원</h3>
             </div>
             </c:forEach>
         </div>
