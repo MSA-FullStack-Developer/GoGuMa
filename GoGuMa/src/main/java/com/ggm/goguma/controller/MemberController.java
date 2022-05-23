@@ -61,6 +61,13 @@ public class MemberController {
 			return result;
 		}
 	}
+	
+	@GetMapping("/login.do")
+	public String loginForm() {
+		log.info("hello");
+		return "member/loginForm";
+	}
+	
 
 	@GetMapping("/join/start.do")
 	public String joinStart(Model model) {
@@ -103,6 +110,15 @@ public class MemberController {
 		return "member/joinFail";
 	}
 	
+	@GetMapping("/findId/start.do")
+	public String findIdStart(Model model) {
+		UUID uuid = UUID.randomUUID();
+		String merchantUid = uuid.toString();
+		model.addAttribute("code", this.iamportCode);
+		model.addAttribute("merchantUid", merchantUid);
+		
+		return "member/findIdStart";
+	}
 
 	@PostMapping("/join/form.do")
 	public String joinForm(@RequestParam("impUid") String impUid, RedirectAttributes ra, Model model) {
@@ -154,4 +170,25 @@ public class MemberController {
 			return "redirect:/member/join/fail.do";
 		}		
 	}
+	
+	@PostMapping("/findId/result.do")
+	public String resultFindId(@RequestParam("impUid") String impUid, Model model) {
+		
+		MemberDTO member = this.memberService.getMemberInfoFromIamport(impUid);
+		
+		try {
+			MemberDTO savedMember = this.memberService.getMember(member.getName(), member.getPhone());
+			model.addAttribute("notFound", false);
+			model.addAttribute("email", savedMember.getEmail());
+			model.addAttribute("name", savedMember.getName());
+			model.addAttribute("joinDate", savedMember.getJoinDate());
+			
+			
+		}catch(NotFoundMemberExcption e) {
+			model.addAttribute("notFound", true);
+		}
+		return "member/findIdResult";
+	}
+	
+	
 }
