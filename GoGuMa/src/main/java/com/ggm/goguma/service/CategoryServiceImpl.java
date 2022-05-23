@@ -26,12 +26,12 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public List<CategoryDTO> getCategoryList(@Param(value="parentID") int parentID) throws Exception {
+	public List<CategoryDTO> getCategoryList(@Param(value="parentID") long parentID) throws Exception {
 		return categoryMapper.getCategoryList(parentID);
 	}
 
 	@Override
-	public String getCategoryName(int categoryID) throws Exception {
+	public String getCategoryName(long categoryID) throws Exception {
 		return categoryMapper.getCategoryName(categoryID);
 	}
 

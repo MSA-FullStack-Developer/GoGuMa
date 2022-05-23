@@ -447,3 +447,16 @@ ul .bottom-menu {
     list-style-type: none;
     float: left;
 }
+
+.listBox {
+	width: 100%;
+	height: 80%;
+}
+
+.list_number{padding-top:25px; text-align:center; padding-bottom:100px;}
+.list_n_menu {padding:3px; MARGIN:3px; TEXT-ALIGN: center}
+.list_n_menu A {padding:5px 8px 4px 8px; MARGIN: 2px; BORDER: #ccc 1px solid; COLOR: #999; TEXT-DECORATION: none}
+.list_n_menu A:hover {BORDER:#999 1px solid; COLOR: #6426DD;}
+.list_n_menu A:active {BORDER:#999 1px solid; COLOR: #F3F3F3;}
+.list_n_menu .current {BORDER: #6426DD 1px solid; padding:5px 8px 4px 8px; FONT-WEIGHT: bold; MARGIN: 2px; COLOR: #6426DD;}
+.list_n_menu .disabled {BORDER: #eee 1px solid; padding:5px 8px 4px 8px; MARGIN: 2px; COLOR: #ddd;}

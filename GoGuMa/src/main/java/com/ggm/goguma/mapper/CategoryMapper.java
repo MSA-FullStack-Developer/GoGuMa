@@ -7,7 +7,7 @@ import com.ggm.goguma.dto.CategoryDTO;
 public interface CategoryMapper {
 	public List<CategoryDTO> getCategoryParentList() throws Exception;
 	
-	public List<CategoryDTO> getCategoryList(int parentID) throws Exception;
+	public List<CategoryDTO> getCategoryList(long parentID) throws Exception;
 	
-	public String getCategoryName(int categoryID) throws Exception;
+	public String getCategoryName(long categoryID) throws Exception;
 }

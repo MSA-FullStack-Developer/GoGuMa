@@ -16,26 +16,32 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Autowired
 	private ProductMapper productMapper;
+	
+	private long pageSize = 1;
+	private long blockSize = 4;
 
 	@Override
-	public List<ProductDTO> getProductList(int categoryID) throws Exception {
+	public List<ProductDTO> getProductList(long pg, long categoryID) throws Exception {
 		log.info("getProductList.....");
 		
-		return productMapper.getProductList(categoryID);
+		long startNum = (pg - 1) * pageSize + 1;
+		long endNum = pg * pageSize;
+		
+		return productMapper.getProductList(startNum, endNum, categoryID);
 	}
 
 	@Override
-	public long getProductCount(int categoryID) throws Exception {
+	public long getProductCount(long categoryID) throws Exception {
 		return productMapper.getProductCount(categoryID);
 	}
 
 	@Override
-	public ProductDTO getProductInfo(int productID) throws Exception {
+	public ProductDTO getProductInfo(long productID) throws Exception {
 		return productMapper.getProductInfo(productID);
 	}
 
 	@Override
-	public List<ProductDTO> getOptionList(int productID) throws Exception {
+	public List<ProductDTO> getOptionList(long productID) throws Exception {
 		return productMapper.getOptionList(productID);
 	}
 

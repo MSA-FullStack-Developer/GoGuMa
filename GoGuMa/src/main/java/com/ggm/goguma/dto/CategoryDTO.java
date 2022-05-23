@@ -6,8 +6,8 @@ import lombok.Data;
 
 @Data
 public class CategoryDTO {
-	private int categoryID;
-	private int parentID;
+	private long categoryID;
+	private long parentID;
 	private String categoryName;
 	private String categoryType;
 	private String MD;

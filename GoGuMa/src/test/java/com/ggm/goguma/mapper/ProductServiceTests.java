@@ -28,6 +28,6 @@ public class ProductServiceTests {
     
 	@Test
 	public void getProductList(int categoryID) throws Exception {
-		productMapper.getProductList(25).forEach(product -> log.info(product));
+		productMapper.getProductList(1, 2, 25).forEach(product -> log.info(product));
 	}
 }

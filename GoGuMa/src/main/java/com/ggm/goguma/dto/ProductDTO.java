@@ -7,9 +7,9 @@ import lombok.Data;
 
 @Data
 public class ProductDTO {
-	private int productID;
-	private int parentPID;
-	private int categoryID;
+	private long productID;
+	private long parentPID;
+	private long categoryID;
 	private String productName;
 	private long productPrice;
 	private String productDetail;

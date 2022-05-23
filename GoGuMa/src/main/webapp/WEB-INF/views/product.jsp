@@ -135,7 +135,7 @@
 		                    ${parentCategory.categoryName}
 		                    <ul class="main3">
 	                    	<c:forEach items="${parentCategory.categoryList}" var="category">
-		                        <li><a href="${contextPath}/category/list/${category.categoryID}/">${category.categoryName}</a></li>
+		                        <li><a href="${contextPath}/category/1/${category.categoryID}/">${category.categoryName}</a></li>
 		                    </c:forEach>
 		                    </ul>
 		                </li>

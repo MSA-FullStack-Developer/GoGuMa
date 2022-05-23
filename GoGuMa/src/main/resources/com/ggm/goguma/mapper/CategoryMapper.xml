@@ -8,11 +8,11 @@
 		SELECT categoryID, parentID, categoryname, categoryType, md FROM category WHERE parentid IS NULL
 	</select>
 	
-	<select id="getCategoryList" parameterType="int" resultType="com.ggm.goguma.dto.CategoryDTO">
+	<select id="getCategoryList" parameterType="long" resultType="com.ggm.goguma.dto.CategoryDTO">
 		SELECT * FROM category WHERE parentid = ${categoryID}
 	</select>
 	
-	<select id="getCategoryName" parameterType="int" resultType="String">
+	<select id="getCategoryName" parameterType="long" resultType="String">
 		SELECT categoryname FROM category WHERE categoryid = ${categoryID}
 	</select>
 	

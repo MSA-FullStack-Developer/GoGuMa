@@ -62,7 +62,7 @@
 		                    ${parentCategory.categoryName}
 		                    <ul class="main3">
 	                    	<c:forEach items="${parentCategory.categoryList}" var="category">
-		                        <li><a href="${contextPath}/category/list/${category.categoryID}/">${category.categoryName}</a></li>
+		                        <li><a href="${contextPath}/category/${pg}/${category.categoryID}/">${category.categoryName}</a></li>
 		                    </c:forEach>
 		                    </ul>
 		                </li>
@@ -72,21 +72,43 @@
 		    </ul>
 		</div>
 
-        <h2 style="text-align: center">${categoryName}</h2>
+        <h2 style="text-align: center;">${categoryName}</h2>
 
         <hr>
 
-        <h4>총 ${count}개</h4>
+        <h4>총 ${recordCount}개</h4>
 		
-        <div>
+        <div class="listBox">
         	<c:forEach items="${list}" var="product">
+        	<c:set var="categoryID" value="${product.categoryID}"/>
             <div class="product">
-                <a href="${contextPath}/category/list/${product.categoryID}/detail/${product.productID}"><img src="${product.prodimgurl}" /></a>
+                <a href="${contextPath}/category/${pg}/${product.categoryID}/detail/${product.productID}"><img src="${product.prodimgurl}" /></a>
                 <h4>${product.productName}</h4>
                 <h3><fmt:formatNumber value="${product.productPrice}" pattern="#,###" />원</h3>
             </div>
             </c:forEach>
         </div>
+        
+        <div>
+			<div class="list_number">
+			    <div>
+			    	<p>
+			        	<div class="list_n_menu">
+				        	<c:if test="${startPage != 1}">
+								<a href="${contextPath}/category/${startPage-1}/${categoryID}"><i class="fa-solid fa-caret-left"></i>이전</a>
+							</c:if>
+					        <c:forEach begin="${startPage}" end="${endPage}" var="p">
+								<c:if test="${p == pg}"><span class="current">${p}</span></c:if>
+								<c:if test="${p != pg}"><a href="${contextPath}/category/${p}/${categoryID}">${p}</a></c:if>
+							</c:forEach>
+							<c:if test="${endPage != pageCount}">
+								<a href="${contextPath}/category/${endPage+1}/${categoryID}">다음<i class="fa-solid fa-caret-right"></i></a>
+							</c:if>
+				        </div>
+			        </p>
+			    </div>
+			</div>
+		</div>
     </div>
 </body>
 
