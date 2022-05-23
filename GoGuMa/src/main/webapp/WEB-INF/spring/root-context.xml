@@ -4,5 +4,17 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
+	<import resource="datasource-context.xml"/>
+	
+	<!-- MyBatis -->
+	<bean id="appSqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="com.ggm.goguma.dto" />
+	</bean>
 		
+	<!-- Mapper -->
+	<bean id="myPageMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="appSqlSession" />
+		<property name="mapperInterface" value="com.ggm.goguma.mapper.MyPageMapper" />
+	</bean>
 </beans>
