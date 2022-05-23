@@ -53,12 +53,6 @@
 
 <body>
 	<div class="header">
-	    <%-- <div class="search">
-	    	<form id="searchForm" action="${contextPath}/category/1/${categoryID}" autocomplete="off">
-		        <input type="text" id="keyword" name="keyword" value="${keyword}" placeholder="상품명을 검색하세요" autocomplete="off">
-		        <button type="submit" class="searchBtn" id="searchBtn"></button>
-	        </form>
-	    </div> --%>
 	    <div class="search">
 	        <input type="text" id="keyword" placeholder="상품명을 검색하세요" autocomplete="off">
 	        <button type="button" class="searchBtn" id="searchBtn"></button>
