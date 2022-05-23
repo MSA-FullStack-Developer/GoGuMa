@@ -175,26 +175,30 @@
                         <td>재고</td>
                         <td id="stock">${productInfo.stock}</td>
                     </tr>
-                    <tr>
-                        <td>옵션</td>
-                        <td>
-                        	<div class="selectbox">
-	                            <select name="상품 옵션">
-	                            	<c:forEach items="${option}" var="option">
-	                                	<option value="${option.productID}">${option.productName}</option>
-	                                </c:forEach>
-	                            </select>
-                            </div>
-                        </td>
-                    </tr>
+                    <c:if test="${optionCount > 0}">
+	                    <tr>
+	                        <td>옵션</td>
+	                        <td>
+	                        	<div class="selectbox">
+		                            <select name="상품 옵션">
+		                            	<c:forEach items="${option}" var="option">
+		                                	<option value="${option.productID}">${option.productName}</option>
+		                                </c:forEach>
+		                            </select>
+	                            </div>
+	                        </td>
+	                    </tr>
+                    </c:if>
                     <tr>
                         <td>
                             <span>구입 수량</span>
                         <td>
                             <p class="cartStock">
                                 <button type="button" class="calc" id="minus">-</button>
-                                <input type="number" id="numBox" min="1" max="${productInfo.stock}" value="1"
+                                <span style="text-align: center;">
+                                	<input type="number" id="numBox" min="1" max="${productInfo.stock}" value="1"
                                     readonly="readonly" />
+                                </span>
                                 <button type="button" class="calc" id="plus">+</button>
                             </p>
                         </td>

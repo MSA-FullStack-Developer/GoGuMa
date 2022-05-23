@@ -14,6 +14,9 @@ public interface ProductService {
 	// 상품 정보
 	public ProductDTO getProductInfo(long productID) throws Exception;
 	
-	// 상품 옵션 정보
+	// 상품 옵션 목록
 	public List<ProductDTO> getOptionList(long productID) throws Exception;
+
+	// 상품 옵션 개수
+	public long getOptionCount(long productID) throws Exception;
 }

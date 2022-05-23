@@ -21,8 +21,6 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<ProductDTO> getProductList(long pg, long categoryID) throws Exception {
-		log.info("getProductList.....");
-		
 		long startNum = (pg - 1) * pageSize + 1;
 		long endNum = pg * pageSize;
 		
@@ -42,6 +40,11 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<ProductDTO> getOptionList(long productID) throws Exception {
 		return productMapper.getOptionList(productID);
+	}
+
+	@Override
+	public long getOptionCount(long productID) throws Exception {
+		return productMapper.getOptionCount(productID);
 	}
 
 }
