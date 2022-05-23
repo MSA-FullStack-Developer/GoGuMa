@@ -14,7 +14,12 @@ public class MyPageServiceImpl implements MyPageService {
 	private MyPageMapper mapper;
 	
 	@Override
-	public List<DeliveryAddressDTO> getDeliveryAddressList(int memberid) throws Exception {
-		return mapper.getDeliveryAddressList(memberid);
+	public List<DeliveryAddressDTO> getAddressList(int memberid) throws Exception {
+		return mapper.getAddressList(memberid);
+	}
+
+	@Override
+	public DeliveryAddressDTO getDefaultAddress(int memberid) throws Exception {
+		return mapper.getDefaultAddress(memberid);
 	}
 }

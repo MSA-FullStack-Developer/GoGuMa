@@ -3,7 +3,13 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ggm.goguma.mapper.MyPageMapper">
-	<select id="getDeliveryAddressList" resultType="DeliveryAddressDTO">
-		select nickname, recipient, address, contact from deliveryaddress
+	<select id="getAddressList" resultType="DeliveryAddressDTO">
+		select nickname, recipient, address, contact
+		from deliveryaddress where memberid = #{memberid}
+	</select>
+	<select id="getDefaultAddress" resultType="DeliveryAddressDTO">
+		select nickname, recipient, address, contact
+		from deliveryaddress
+		where memberid = #{memberid} and isdefault = 1
 	</select>
 </mapper>
