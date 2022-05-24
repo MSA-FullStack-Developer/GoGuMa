@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ggm.goguma.mapper.ProductMapper">
+	
+	<!-- 상품 목록 -->
+	<select id="getProductList" parameterType="long" resultType="com.ggm.goguma.dto.ProductDTO">
+		SELECT C.*
+		FROM (SELECT DISTINCT B.categoryid, A.productname, A.productprice, A.prodimgurl, A.productid, rownum AS rnum
+				FROM (SELECT p.productid, p.productname, p.productprice, i.prodimgurl, p.categoryid
+						FROM product p, productimage i
+						WHERE p.productid = i.productid AND p.parentpid is null) A, category B
+				WHERE B.categoryid = A.categoryid AND A.categoryid = #{categoryID}) C
+		WHERE rnum BETWEEN #{startNum} AND #{endNum}
+		ORDER BY productid DESC
+	</select>
+	
+	<!-- 상품 개수 -->
+	<select id="getProductCount" parameterType="long" resultType="long">
+		SELECT count(*) AS cnt
+		FROM product
+		WHERE categoryid = #{categoryID} AND parentpid is null
+	</select>
+	
+	<!-- 상품 상세 정보 -->
+	<select id="getProductInfo" parameterType="long" resultType="com.ggm.goguma.dto.ProductDTO">
+		SELECT p.productid, p.parentpid, p.productname, p.productprice, p.productdetail, i.prodimgurl, p.categoryid, p.stock, p.company
+		FROM product p, productimage i
+		WHERE p.productid = i.productid AND p.parentpid is null AND p.productid = #{productID}
+	</select>
+	
+	<!-- 상품 옵션 목록 -->
+	<select id="getOptionList" parameterType="long" resultType="com.ggm.goguma.dto.ProductDTO">
+		SELECT productid, productname
+		FROM product
+		WHERE parentpid = #{parentPID}
+	</select>
+	
+	<!-- 상품 옵션 개수 -->
+	<select id="getOptionCount" parameterType="long" resultType="long">
+		SELECT count(*) AS cnt
+		FROM product
+		WHERE parentpid = #{parentPID}
+	</select>
+	
+</mapper>
