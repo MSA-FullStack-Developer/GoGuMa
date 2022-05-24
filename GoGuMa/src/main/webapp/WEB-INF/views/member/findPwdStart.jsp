@@ -1,14 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>  
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>아이디 찾기 - 고구마</title>
+<title>비밀번호 찾기 - 고구마</title>
 
 <!-- bootstrap css -->
 <link
@@ -27,9 +26,8 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 
-<!-- jquery -->
-<script type="text/javascript"
-	src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <!-- 아임포트 js 라이브러리 -->
 <script type="text/javascript"
@@ -41,33 +39,54 @@
 			var code = "${code}";
 			var merchantUid = "${merchantUid}";
 			
-			$("#certificate-btn").click(function() {
+			var error = "${error}";
 			
-			IMP.init(code);
-			IMP.certification({
-				merchant_uid: merchantUid
-			}, function(rsp) {
-				if(rsp.success) {
-					
-					var certificateForm = $("#certificate");
-					certificateForm.find("input[name='impUid']").val(rsp.imp_uid);
-					
-					certificateForm.submit();
-				} else {
-					alert("휴대폰 인증에 실패 하였습니다.");
-				}
+			if(error) {
+				alert(error);
+			}
+			
+			 $("#certificate-btn").click(function() {
+				
+				IMP.init(code);
+				IMP.certification({
+					merchant_uid: merchantUid
+				}, function(rsp) {
+					if(rsp.success) {
+						
+						var certificateForm = $("#certificate");
+						certificateForm.find("input[name='impUid']").val(rsp.imp_uid);
+						
+						certificateForm.submit();
+					} else {
+						alert("휴대폰 인증에 실패 하였습니다.");
+					}
 				}); // end of IMP.certification 
-			});  // end of click  
+			});  // end of click    
 			
-		});
-		
+			/* $("#certificate-btn").click(function() {
+				
+				var certificateForm = $("#certificate");
+				certificateForm.find("input[name='impUid']").val("imp_247190538574");
+				
+				certificateForm.submit();
+			});  */
+		})
+	
 	</script>
 	<section class="container">
         <div class="d-flex align-items-center min-vh-100">
             <div class="w-50 m-auto p-5" style="min-width: 650px;">
-                <h1>고구마 회원 아이디 찾기</h1>
-                <h4 class="mt-5">아이디 찾기를 위해 본인 인증을 진행해주세요.</h4>
-                <div id="certificate-btn" class="w-100 p-5 border border-dark rounded-4 mt-5" style="min-height: 100px; cursor: pointer;">
+                <h1>고구마 회원 비밀번호 찾기</h1>
+                <h4 class="mt-5">비밀번호 찾기를 위해 본인 인증을 진행해주세요.</h4>
+                <form id="certificate" class="mt-3" method="post" action="${contextPath}/member/findPwd/temp.do">
+                    <label for="email" class="form-label">
+                        이메일 아이디
+                    </label>
+                    <input id="email" name="email" type="email" class="form-control" placeholder="아이디를 입력해 주세요." />
+                    <input type="hidden" name="impUid" />
+					<input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
+                </form>
+                <div id="certificate-btn" class="w-100 p-5 border border-dark rounded-4 mt-3" style="min-height: 100px; cursor: pointer;">
                     <div class="row flex align-items-center">
                         <div class="col-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-phone" viewBox="0 0 16 16">
@@ -77,11 +96,8 @@
                         </div>
                         <div class="col">
                             <span>휴대폰으로 본인 인증을 진행해주세요.</span>
-                            <form id="certificate" method="post" action="${contextPath}/member/findId/result.do">
-								<input type="hidden" name="impUid" />
-								<input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
-							</form>
                         </div>
+                       
                     </div>
                 </div>
             </div>

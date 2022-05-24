@@ -8,11 +8,14 @@ import com.ggm.goguma.dto.member.MemberDTO;
 
 public interface MemberMapper {
 
-	public Optional<MemberDTO> findMemberByNameAndPhone(@Param("name") String name, @Param("phone") String phone);
+	Optional<MemberDTO> findMemberByNameAndPhone(@Param("name") String name, @Param("phone") String phone);
 	
-	public Optional<MemberDTO> findMemberByEmail(@Param("email") String email);
+	Optional<MemberDTO> findMemberByEmail(@Param("email") String email);
 	
-	public Optional<MemberDTO> findMemberByEmailAndPwd(@Param("email") String email, @Param("password") String password);
+	Optional<MemberDTO> findMemberByEmailAndPwd(@Param("email") String email, @Param("password") String password);
 	
-	public void createMember(MemberDTO member);
+	void createMember(MemberDTO member);
+	
+	void updateMemberPwd(MemberDTO meber);
+	
 }

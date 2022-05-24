@@ -17,4 +17,6 @@ public interface MemberService {
 	MemberDTO getMember(String email) throws NotFoundMemberExcption;
 	
 	void createMember(CreateMemberDTO member) throws CreateMemberFailException;
+	
+	void updateMemberPassword(MemberDTO member);
 }

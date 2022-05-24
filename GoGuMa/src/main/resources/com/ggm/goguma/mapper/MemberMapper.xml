@@ -39,5 +39,14 @@
 			member(email,password,name,age,phone) 
 		VALUES(#{email},#{password},#{name},#{age},#{phone})	
 	</insert>
+	
+	<update id="updateMemberPwd" parameterType="MemberDTO">
+		UPDATE 
+			member
+		SET
+			password = #{password}
+		WHERE
+			memberid = #{id}
+	</update>
 
 </mapper>

@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -62,11 +63,15 @@ public class MemberController {
 		}
 	}
 	
-	@GetMapping("/login.do")
-	public String loginForm() {
+	@RequestMapping(value =  "/login.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public String loginForm(@RequestParam(value = "error", defaultValue = "") String error, Model model) {
 		log.info("hello");
+//		String error = (String) req.getAttribute("error");
+		log.info(error);
+		model.addAttribute("error", error);
 		return "member/loginForm";
 	}
+
 	
 
 	@GetMapping("/join/start.do")
@@ -118,6 +123,16 @@ public class MemberController {
 		model.addAttribute("merchantUid", merchantUid);
 		
 		return "member/findIdStart";
+	}
+	
+	@GetMapping("/findPwd/start.do")
+	public String findPwdStart(@RequestParam(name =  "error", defaultValue = "") String error, Model model) {
+		UUID uuid = UUID.randomUUID();
+		String merchantUid = uuid.toString();
+		model.addAttribute("code", this.iamportCode);
+		model.addAttribute("merchantUid", merchantUid);
+		model.addAttribute("error", error);
+		return "member/findPwdStart";
 	}
 
 	@PostMapping("/join/form.do")
@@ -188,6 +203,43 @@ public class MemberController {
 			model.addAttribute("notFound", true);
 		}
 		return "member/findIdResult";
+	}
+	
+	@PostMapping("/findPwd/temp.do")
+	public String pwdTemp(@RequestParam("impUid") String impUid, @RequestParam(name = "email", defaultValue = "") String email, Model model) {
+		
+		MemberDTO member = this.memberService.getMemberInfoFromIamport(impUid);
+		
+		try {
+			MemberDTO savedMember = this.memberService.getMember(member.getName(), member.getPhone());
+			
+			log.info("[pwdTemp] get email : " + email);
+			if(!savedMember.getEmail().equals(email)) {
+				model.addAttribute("error", "입력하신 아이디와 가입된 정보가 다릅니다.");
+				return "redirect:/member/findPwd/start.do";
+			}
+			
+			model.addAttribute("memberId", savedMember.getId());
+			
+			return "member/findPwdTemp";
+			
+		}catch(NotFoundMemberExcption e) {
+			model.addAttribute("error", "존재하지 않는 회원입니다");
+			return "redirect:/member/findPwd/start.do";
+		}	
+	}
+	
+	@PostMapping("/findPwd/rewrite.do")
+	public String reWritePwd(@RequestParam("password") String pwd, @RequestParam("memberId") int id) {
+		
+		MemberDTO member = MemberDTO
+				.builder()
+				.id(id)
+				.password(pwd)
+				.build();
+		this.memberService.updateMemberPassword(member);
+		
+		return "redirect:/member/login.do";
 	}
 	
 	

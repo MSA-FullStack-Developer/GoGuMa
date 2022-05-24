@@ -34,31 +34,33 @@
                 <h1>아이디 찾기</h1>
                 <h4 class="mt-5">아이디 찾기 결과</h4>
                 <p class="text-secondary">아래 회원 정보를 확인해주세요.</p>
-                <div name="memberInfo" class="w-100 p-4 border border-dark rounded-4 mt-3" style="min-height: 100px;">
+                <div id="memberInfo" class="w-100 p-4 border border-dark rounded-4 mt-3" style="min-height: 100px;">
                 	<c:if test="${not notFound}">
 	                    <h4 class="border-bottom pb-3">고구마 회원</h4>
-	                    <div name="member-name" class="row mt-4">
+	                    <div id="member-name" class="row mt-4">
 	                        <div class="col-2">
 	                            <span class="text-secondary">이름</span>
 	                        </div>
 	                        <div class="col">
-	                            <span>이승준</span>
+	                            <span>${name}</span>
 	                        </div>
 	                    </div>
-	                    <div name="member-email" class="row mt-3">
+	                    <div id="member-email" class="row mt-3">
 	                        <div class="col-2">
 	                            <span class="text-secondary">아이디</span>
 	                        </div>
 	                        <div class="col">
-	                            <span>tmdwns1101@naver.com</span>
+	                            <span>${email}</span>
 	                        </div>
 	                    </div>
-	                    <div name="member-regdate" class="row mt-3">
+	                    <div id="member-regdate" class="row mt-3">
 	                        <div class="col-2">
 	                            <span class="text-secondary">가입일</span>
 	                        </div>
 	                        <div class="col">
-	                            <span>2022.05.19</span>
+	                            <span>
+	                            	<fmt:formatDate value="${joinDate}" pattern="yyyy.MM.dd"/>
+	                            </span>
 	                        </div>
 	                    </div>
                     </c:if>

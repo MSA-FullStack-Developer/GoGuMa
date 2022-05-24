@@ -48,8 +48,6 @@ public class MemberServiceImpl implements MemberService {
 	private String baseAPIURL;
 	
 	
-	
-
 	@Override
 	public MemberDTO getMember(String name, String phone) throws NotFoundMemberExcption {
 		log.info("[getMember] name, phone" + name + " " + phone);
@@ -166,10 +164,12 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 
-
-
-
-	
-	
+	@Override
+	public void updateMemberPassword(MemberDTO member) {
+		
+		member.setPassword(this.passwordEncoder.encode(member.getPassword()));
+		
+		this.memberMapper.updateMemberPwd(member);
+	}
 
 }

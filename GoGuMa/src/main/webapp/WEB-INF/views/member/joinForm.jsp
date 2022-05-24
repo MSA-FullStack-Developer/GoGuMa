@@ -36,7 +36,7 @@
 <body>
 	<style>
 		#submit-btn {
-			background-color: #8540f5;
+			background-color: #6426DD;
 			color: white;
 		}
 		
@@ -127,7 +127,7 @@
 			<p class="text-secondary">아래 회원 정보를 기입해주세요.</p>
 
 			<form id="joinForm"  method="post" action="${contextPath}/member/join/create.do">
-				<input type="hidden" name="_csrf" value="${_csrf.token}" />
+				<input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
 				<label for="email" class="form-label"> 사용할 이메일 아이디 </label> 
 				<input id="email" name="email" type="email" class="form-control" placeholder="example@example.com" required/>
 				<div>

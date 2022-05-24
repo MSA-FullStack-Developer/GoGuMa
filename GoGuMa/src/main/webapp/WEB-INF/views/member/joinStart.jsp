@@ -48,7 +48,7 @@
 			var code = "${code}";
 			var merchantUid = "${merchantUid}";
 			
-			 /* $("#certificate-btn").click(function() {
+			 $("#certificate-btn").click(function() {
 				
 				IMP.init(code);
 				IMP.certification({
@@ -64,15 +64,15 @@
 						alert("휴대폰 인증에 실패 하였습니다.");
 					}
 				}); // end of IMP.certification 
-			});  // end of click */  
+			});  // end of click   
 			
-			$("#certificate-btn").click(function() {
+			/* $("#certificate-btn").click(function() {
 				
 				var certificateForm = $("#certificate");
 				certificateForm.find("input[name='impUid']").val("imp_476916883301");
 				
 				certificateForm.submit();
-			}); /* end of click  */
+			}); // end of click   */
 		}); // end of document ready
 	</script>
 	<section class="container">
@@ -101,7 +101,7 @@
 		</div>
 		<form id="certificate" method="post" action="${contextPath}/member/join/form.do">
 			<input type="hidden" name="impUid" />
-			<input type="hidden" name="_csrf" value="${_csrf.token}" />
+			<input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
 		</form>
 	</section>
 </body>

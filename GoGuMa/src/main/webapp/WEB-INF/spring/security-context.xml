@@ -10,9 +10,13 @@
 
 
 	<bean id="customUserDetailsService" class="com.ggm.goguma.security.CustomUserDetailsService" />
-	
+	<bean id="loginFailHandler" class="com.ggm.goguma.security.UserLoginFailHandler"/>
+
 	<security:http>
-		<security:form-login />
+	
+		<security:form-login login-page="/member/login.do" default-target-url="/"  authentication-failure-handler-ref="loginFailHandler"/>
+		<security:logout delete-cookies="JSESSIONID" logout-success-url="/"/>
+		
 		<security:intercept-url pattern="member/join/*" access="permitAll" />
 	</security:http>
 	<security:authentication-manager>

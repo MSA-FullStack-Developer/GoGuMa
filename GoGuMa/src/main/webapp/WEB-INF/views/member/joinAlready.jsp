@@ -25,7 +25,7 @@
 <body>
 <style>
 	#go-login-btn {
-		background-color: #8540f5;
+		background-color: #6426DD;
 		color: white;
 	}
 
