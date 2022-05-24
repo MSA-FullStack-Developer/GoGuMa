@@ -30,22 +30,17 @@
     </style>
     <script>
         $(document).ready(function () {
-            $('#searchBtn').click(function () {
-                var keyword = $("#keyword").val();
-                // 검색 키워드가 존재하지 않는다면 '검색할 상품명을 입력하세요' alert창 띄워주기
-                if (keyword != '') {
-                    // 검색 동작 코드 작성하기
-                	searchForm.find("#keyword").val("");
-        			searchForm.submit();
-        			return false;
-                } else {
-                    alert('검색할 상품명을 입력하세요.');
-                }
-                
-                e.preventDefault();
+        	var searchForm = $("#searchForm");
+        	
+        	$('#searchBtn').on("click", function() {
+        		if(!searchForm.find("#keyword").val()){
+        			alert("검색 내용을 입력하세요.");
+        		}
+        		
+        		e.preventDefault();
         		
         		searchForm.submit();
-            });
+        	});
         });
     </script>
 </head>
@@ -53,8 +48,10 @@
 <body>
 	<div class="header">
 	    <div class="search">
-	        <input type="text" id="keyword" placeholder="상품명을 검색하세요" autocomplete="off">
-	        <button type="button" class="searchBtn" id="searchBtn"></button>
+	    	<form id="searchForm" action="${contextPath}/category/1/search/" autocomplete="off">
+				<input type="text" id="keyword" name="keyword" placeholder="상품명을 검색하세요" autocomplete="off" value="${keyword}"></input>
+				<button type="submit" class="searchBtn" id="searchBtn"></button>
+			</form>
 	    </div>
 	</div>
 	<div class="prodlist">
@@ -66,7 +63,7 @@
 		                    ${parentCategory.categoryName}
 		                    <ul class="main3">
 	                    	<c:forEach items="${parentCategory.categoryList}" var="category">
-		                        <li><a href="${contextPath}/category/${pg}/${category.categoryID}/">${category.categoryName}</a></li>
+		                        <li><a href="${contextPath}/category/1/${category.categoryID}/">${category.categoryName}</a></li>
 		                    </c:forEach>
 		                    </ul>
 		                </li>
@@ -76,13 +73,20 @@
 		    </ul>
 		</div>
 
-        <h2 style="text-align: center;">${categoryName}</h2>
+		<c:if test="${keyword != ''}">
+			<h1 style="text-align: center;">"<strong>${keyword}</strong>" 검색결과</h1>
+		</c:if>
+		<c:if test="${keyword == ''}">
+        	<h1 style="text-align: center;">${categoryName}</h1>
+		</c:if>
 
         <hr>
 
-        <h4>총 ${recordCount}개
-        	<input type="button" class="sortBtn" id="recentBtn" value="최신순">
-        </h4>
+		<c:if test="${recordCount != 0}">
+	        <h4>총 <span style="color: red;">${recordCount}</span>개
+	        	<input type="button" class="sortBtn" id="recentBtn" value="최신순">
+	        </h4>
+        </c:if>
 		
         <div class="listBox">
         	<c:forEach items="${list}" var="product">
@@ -95,22 +99,24 @@
             </c:forEach>
         </div>
         
-        <div class="list_number">
-		    <div>
-		    	<div class="list_n_menu">
-		        	<c:if test="${startPage != 1}">
-						<a href="${contextPath}/category/${startPage-1}/${categoryID}"><i class="fa-solid fa-caret-left"></i>이전</a>
-					</c:if>
-			        <c:forEach begin="${startPage}" end="${endPage}" var="p">
-						<c:if test="${p == pg}"><span class="current">${p}</span></c:if>
-						<c:if test="${p != pg}"><a href="${contextPath}/category/${p}/${categoryID}">${p}</a></c:if>
-					</c:forEach>
-					<c:if test="${endPage != pageCount}">
-						<a href="${contextPath}/category/${endPage+1}/${categoryID}">다음<i class="fa-solid fa-caret-right"></i></a>
-					</c:if>
-		        </div>
-		    </div>
-		</div>
+        <c:if test="${keyword == ''}">
+	        <div class="list_number">
+			    <div>
+			    	<div class="list_n_menu">
+			        	<c:if test="${startPage != 1}">
+							<a href="${contextPath}/category/${startPage-1}/${categoryID}"><i class="fa-solid fa-caret-left"></i>이전</a>
+						</c:if>
+				        <c:forEach begin="${startPage}" end="${endPage}" var="p">
+							<c:if test="${p == pg}"><span class="current">${p}</span></c:if>
+							<c:if test="${p != pg}"><a href="${contextPath}/category/${p}/${categoryID}">${p}</a></c:if>
+						</c:forEach>
+						<c:if test="${endPage != pageCount}">
+							<a href="${contextPath}/category/${endPage+1}/${categoryID}">다음<i class="fa-solid fa-caret-right"></i></a>
+						</c:if>
+			        </div>
+			    </div>
+			</div>
+		</c:if>
     </div>
 </body>
 

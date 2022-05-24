@@ -23,4 +23,9 @@ public interface ProductMapper {
 	
 	// 상품 옵션 개수
 	public long getOptionCount(long productID) throws Exception;
+
+	// 상품 검색
+	public List<ProductDTO> getSearchList(@Param("keyword") String keyword) throws Exception;
+
+	public long getSearchCount(@Param("keyword") String keyword) throws Exception;
 }

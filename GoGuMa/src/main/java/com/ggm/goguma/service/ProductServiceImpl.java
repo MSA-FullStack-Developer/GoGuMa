@@ -18,7 +18,7 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductMapper productMapper;
 	
-	private long pageSize = 4;
+	private int pageSize = 4;
 
 	@Override
 	public List<ProductDTO> getProductList(long pg, long categoryID) throws Exception {
@@ -46,6 +46,16 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public long getOptionCount(long productID) throws Exception {
 		return productMapper.getOptionCount(productID);
+	}
+
+	@Override
+	public List<ProductDTO> getSearchList(String keyword) throws Exception {
+		return productMapper.getSearchList(keyword);
+	}
+
+	@Override
+	public long getSearchCount(String keyword) throws Exception {
+		return productMapper.getSearchCount(keyword);
 	}
 
 }

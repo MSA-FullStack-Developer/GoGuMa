@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.ProductDTO;
@@ -27,13 +28,13 @@ public class ProductController {
 	@Autowired
 	private CategoryService categoryService;
 	
-	private long pageSize = 4;
-	private long blockSize = 8;
+	private int pageSize = 4;
+	private int blockSize = 2;
 	
 	@GetMapping("/{categoryID}")
 	public String list(@PathVariable long pg, @PathVariable long categoryID, Model model) throws Exception {
 		try {
-			showCategoryMenu(categoryID, model);
+			showCategoryMenu(model);
 			
 			// 페이징
 			long recordCount = productService.getProductCount(categoryID); // 카테고리별 상품 개수
@@ -45,8 +46,12 @@ public class ProductController {
 			long endPage = startPage + blockSize - 1; 
 			if (endPage > pageCount) endPage = pageCount;
 			
+			String categoryName = categoryService.getCategoryName(categoryID); // 카테고리 이름
 			List<ProductDTO> list = productService.getProductList(pg, categoryID); // 카테고리별 상품 목록
 
+			model.addAttribute("keyword", ""); // 검색 키워드 null
+			model.addAttribute("categoryID", categoryID);
+			model.addAttribute("categoryName", categoryName);
 			model.addAttribute("pg", pg);
 			model.addAttribute("recordCount", recordCount);
 			model.addAttribute("pageSize", pageSize);
@@ -65,12 +70,15 @@ public class ProductController {
 	@GetMapping("/{categoryID}/detail/{productID}")
 	public String detail(@PathVariable long categoryID, @PathVariable long productID, Model model) throws Exception {
 		try {
-			showCategoryMenu(categoryID, model);
-			
+			showCategoryMenu(model);
+
+			String categoryName = categoryService.getCategoryName(categoryID); // 카테고리 이름
 			ProductDTO productInfo = productService.getProductInfo(productID); // 상품 정보
 			List<ProductDTO> option = productService.getOptionList(productID); // 상품 옵션 목록
 			long optionCount = productService.getOptionCount(productID); // 상품 옵션 개수
 
+			model.addAttribute("categoryID", categoryID);
+			model.addAttribute("categoryName", categoryName);
 			model.addAttribute("productInfo", productInfo);
 			model.addAttribute("option", option);
 			model.addAttribute("optionCount", optionCount);
@@ -82,25 +90,39 @@ public class ProductController {
 		}
 	}
 	
+	@GetMapping("/search/")
+	public String search(@RequestParam(defaultValue="") String keyword, Model model) throws Exception {
+		try {
+			showCategoryMenu(model);
+			
+			List<ProductDTO> list = productService.getSearchList(keyword);
+			long searchCount = productService.getSearchCount(keyword);
+
+			model.addAttribute("keyword", keyword);
+			model.addAttribute("list", list);
+			model.addAttribute("recordCount", searchCount);
+			model.addAttribute("pg", 1);
+			
+			return "list";
+		} catch (Exception e) {
+			model.addAttribute("msg", "list 출력 에러");
+			return "list";
+		}
+	}
+	
 	// 카테고리 메뉴
-	public void showCategoryMenu(long categoryID, Model model) throws Exception {
-		String categoryName = categoryService.getCategoryName(categoryID);
+	public void showCategoryMenu(Model model) throws Exception {
 		List<CategoryDTO> parentCategory = categoryService.getCategoryParentList(); // 부모 카테고리 목록
 		
 		parentCategory.forEach(cate -> {
 			try {
 				List<CategoryDTO> categoryList = categoryService.getCategoryList(cate.getCategoryID());
 				cate.setCategoryList(categoryList);
-				
-				log.info(cate);
-				log.info(categoryList);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		});
-
-		model.addAttribute("categoryID", categoryID);
-		model.addAttribute("categoryName", categoryName);
+		
 		model.addAttribute("parentCategory", parentCategory);
 	}
 	

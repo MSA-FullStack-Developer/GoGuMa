@@ -115,6 +115,18 @@
                     }
                 });
             });
+            
+			var searchForm = $("#searchForm");
+        	
+        	$('#searchBtn').on("click", function() {
+        		if(!searchForm.find("#keyword").val()){
+        			alert("검색 내용을 입력하세요.");
+        		}
+        		
+        		e.preventDefault();
+        		
+        		searchForm.submit();
+        	});
         });
     </script>
 </head>
@@ -122,8 +134,10 @@
 <body>
 	<div class="header">
 	    <div class="search">
-	        <input type="text" id="keyword" placeholder="상품명을 검색하세요" autocomplete="off">
-	        <button type="button" class="searchBtn" id="searchBtn"></button>
+	    	<form id="searchForm" action="${contextPath}/category/1/search/" autocomplete="off">
+				<input type="text" id="keyword" name="keyword" placeholder="상품명을 검색하세요" autocomplete="off" value="${keyword}"></input>
+				<button type="submit" class="searchBtn" id="searchBtn"></button>
+			</form>
 	    </div>
 	</div>
 	<div class="prodlist">
@@ -145,7 +159,7 @@
 		    </ul>
 		</div>
 
-        <h2 style="text-align: center">${categoryName}</h2>
+        <h1 style="text-align: center">${categoryName}</h1>
 
         <hr>
 

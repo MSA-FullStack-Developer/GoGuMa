@@ -43,4 +43,17 @@
 		WHERE parentpid = #{parentPID}
 	</select>
 	
+	<!-- 상품 검색 -->
+	<select id="getSearchList" resultType="com.ggm.goguma.dto.ProductDTO">
+		SELECT p.productid, p.productname, p.productprice, i.prodimgurl, p.categoryid
+		FROM product p, productimage i
+		WHERE p.productid = i.productid AND p.parentpid is null
+		AND productname LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	<select id="getSearchCount" parameterType="String" resultType="long">
+		SELECT count(*) AS cnt
+		FROM product
+		WHERE parentpid is null AND productname LIKE '%'||#{keyword}||'%'
+	</select>
 </mapper>
