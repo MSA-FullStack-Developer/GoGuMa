@@ -32,71 +32,69 @@ public class CartController {
 
 	@Autowired
 	private CartService cartService;
-	
 
 	public CartController(CartService cartService) {
 		this.cartService = cartService;
 	}
-	
-	
+
 	@GetMapping("/")
-	public String cartList( Model model) throws Exception{
+	public String cartList(Model model) throws Exception {
 		try {
 			int memberId = 1;
 			// 회원이 담은 카트 리스트를 불러온다.
 			List<CartItemDTO> list = cartService.getCartList(memberId);
 			model.addAttribute("list", list);
-			
+
 			// 로그인한 회원 정보를 가져온다.
-			
+
 			list.forEach(c -> System.out.println(c));
 			return "cartList";
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
 	}
-	
-	@GetMapping("/order")
-	public String order()throws Exception{
-		return "order";
+
+	@GetMapping("goToOrder")
+	public String order() throws Exception {
+		return "redirect:/order/";
 	}
-	
+
 	@PostMapping("addCartCount")
 	@ResponseBody
-	public void addCartCount(@RequestParam String cartId) throws Exception{
+	public void addCartCount(@RequestParam("cartId") String cartId) throws Exception {
 		try {
 			log.info("컨트롤러 장바구니 수량 증가 카트 아이디:" + cartId);
 			long cartid = Long.parseLong(cartId);
 			cartService.addCartCount(cartid);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
 	}
-	
+
 	@PostMapping("minusCartCount")
 	@ResponseBody
-	public void minusCartCount(@RequestParam String cartId) throws Exception{
+	public void minusCartCount(@RequestParam("cartId") String cartId) throws Exception {
 		try {
 			log.info("컨트롤러 장바구니 수량 감소 카트아이디:" + cartId);
 			long cartid = Long.parseLong(cartId);
 			cartService.minusCartCount(cartid);
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
 	}
-	
+
 	@PostMapping("delete")
 	@ResponseBody
-	public void delete(@RequestParam("cartId") String cartId) throws Exception{
+	public void delete(@RequestParam("cartId") String cartId) throws Exception {
 		try {
 			log.info("컨트롤러 장바구니 삭제할 카트 아이디:" + cartId);
 			long cartid = Long.parseLong(cartId);
 			cartService.deleteCart(cartid);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}

@@ -221,9 +221,7 @@
 								aria-labelledby="flush-headingOne">
 								<div class="accordion-body">
 									<ul>
-										<li name="orderItem">
-											아아
-										</li>
+										<li name="orderItem">아아</li>
 									</ul>
 								</div>
 							</div>
