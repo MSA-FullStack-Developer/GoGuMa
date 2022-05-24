@@ -22,8 +22,7 @@
         }
 
         .product {
-            position: relative;
-            width: 265px;
+            width: 25%;
             height: 380px;
             margin: auto;
             float: left;
@@ -81,7 +80,9 @@
 
         <hr>
 
-        <h4>총 ${recordCount}개</h4>
+        <h4>총 ${recordCount}개
+        	<input type="button" class="sortBtn" id="recentBtn" value="최신순">
+        </h4>
 		
         <div class="listBox">
         	<c:forEach items="${list}" var="product">
@@ -94,25 +95,21 @@
             </c:forEach>
         </div>
         
-        <div>
-			<div class="list_number">
-			    <div>
-			    	<p>
-			        	<div class="list_n_menu">
-				        	<c:if test="${startPage != 1}">
-								<a href="${contextPath}/category/${startPage-1}/${categoryID}"><i class="fa-solid fa-caret-left"></i>이전</a>
-							</c:if>
-					        <c:forEach begin="${startPage}" end="${endPage}" var="p">
-								<c:if test="${p == pg}"><span class="current">${p}</span></c:if>
-								<c:if test="${p != pg}"><a href="${contextPath}/category/${p}/${categoryID}">${p}</a></c:if>
-							</c:forEach>
-							<c:if test="${endPage != pageCount}">
-								<a href="${contextPath}/category/${endPage+1}/${categoryID}">다음<i class="fa-solid fa-caret-right"></i></a>
-							</c:if>
-				        </div>
-			        </p>
-			    </div>
-			</div>
+        <div class="list_number">
+		    <div>
+		    	<div class="list_n_menu">
+		        	<c:if test="${startPage != 1}">
+						<a href="${contextPath}/category/${startPage-1}/${categoryID}"><i class="fa-solid fa-caret-left"></i>이전</a>
+					</c:if>
+			        <c:forEach begin="${startPage}" end="${endPage}" var="p">
+						<c:if test="${p == pg}"><span class="current">${p}</span></c:if>
+						<c:if test="${p != pg}"><a href="${contextPath}/category/${p}/${categoryID}">${p}</a></c:if>
+					</c:forEach>
+					<c:if test="${endPage != pageCount}">
+						<a href="${contextPath}/category/${endPage+1}/${categoryID}">다음<i class="fa-solid fa-caret-right"></i></a>
+					</c:if>
+		        </div>
+		    </div>
 		</div>
     </div>
 </body>

@@ -12,6 +12,7 @@
 						WHERE p.productid = i.productid AND p.parentpid is null) A, category B
 				WHERE B.categoryid = A.categoryid AND A.categoryid = #{categoryID}) C
 		WHERE rnum BETWEEN #{startNum} AND #{endNum}
+		ORDER BY productid DESC
 	</select>
 	
 	<!-- 상품 개수 -->

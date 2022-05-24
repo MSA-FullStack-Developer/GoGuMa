@@ -236,12 +236,14 @@
                     <div>
                         <button class="writeBtn" id="writeBtn">상품평 작성하기</button>
                     </div>
+                    
                     <div class="write-modal">
                         <h4 class="membername">회원 이름</h4>
                         <p><input class="review-content" placeholder="상품평을 입력하세요.">
                             <button class="finishBtn" id="finishBtn">작성 완료</button>
                             <button class="cancleBtn" id="cancleBtn" style="color: black">취소</button>
                     </div>
+                    
                     <div class="review" id="review">
                         <div>
                             <p>

@@ -8,7 +8,8 @@ import com.ggm.goguma.dto.ProductDTO;
 
 public interface ProductMapper {
 	// 상품 목록
-	public List<ProductDTO> getProductList(@Param("startNum") long startNum, @Param("endNum") long endNum, 
+	public List<ProductDTO> getProductList(@Param("startNum") long startNum,
+											@Param("endNum") long endNum, 
 											@Param("categoryID") long categoryID) throws Exception;
 	
 	// 상품 개수

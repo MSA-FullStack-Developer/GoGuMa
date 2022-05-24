@@ -3,6 +3,7 @@ package com.ggm.goguma.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ggm.goguma.dto.ProductDTO;
@@ -17,7 +18,8 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductMapper productMapper;
 	
-	private long pageSize = 4;
+	@Value("${pageSize}")
+	private long pageSize;
 
 	@Override
 	public List<ProductDTO> getProductList(long pg, long categoryID) throws Exception {

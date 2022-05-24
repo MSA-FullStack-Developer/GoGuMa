@@ -4,6 +4,16 @@ body {
     font-family: 'Noto Sans KR', sans-serif;
 }
 
+.sortBtn {
+	float: right;
+	margin-right: 10px;
+	border:#ccc 1px solid;
+	color: #6426DD;
+	background-color: #f3f3f3;
+	border-radius: 10pt;
+	font-size: 11pt;
+}
+
 .productDetail {
 	width: 100%;
 }
@@ -245,7 +255,7 @@ h5 {
 .prodlist {
     position: relative;
     width: 1060px;
-    height: 1000px;
+    height: auto;
     margin: auto;
     padding-top: 30px;
 }
@@ -450,10 +460,11 @@ ul .bottom-menu {
 
 .listBox {
 	width: 100%;
-	height: 80%;
+	height: 100%;
+	float: left;
 }
 
-.list_number{padding-top:25px; text-align:center; padding-bottom:100px;}
+.list_number{padding-top:100px; text-align:center; padding-bottom:100px;}
 .list_n_menu {padding:3px; MARGIN:3px; TEXT-ALIGN: center}
 .list_n_menu A {padding:5px 8px 4px 8px; MARGIN: 2px; BORDER: #ccc 1px solid; COLOR: #999; TEXT-DECORATION: none}
 .list_n_menu A:hover {BORDER:#999 1px solid; COLOR: #6426DD;}

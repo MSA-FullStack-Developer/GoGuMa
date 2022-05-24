@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.ProductDTO;
@@ -19,7 +20,7 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 @Controller
-@RequestMapping("/category/{pg}/")
+@RequestMapping("/category/{pg}")
 public class ProductController {
 	
 	@Autowired
@@ -34,9 +35,11 @@ public class ProductController {
 	@Value("${blockSize}")
 	private long blockSize;
 	
-	@GetMapping(value = {"/{categoryID}"})
+	@GetMapping("/{categoryID}")
 	public String list(@PathVariable long pg, @PathVariable long categoryID, Model model) throws Exception {
 		try {
+			showCategoryMenu(categoryID, model);
+			
 			// 페이징
 			long recordCount = productService.getProductCount(categoryID); // 카테고리별 상품 개수
 			long pageCount = recordCount / pageSize; // 총 페이지 수
@@ -46,8 +49,6 @@ public class ProductController {
 			long startPage = (pg - 1) / blockSize * blockSize + 1;
 			long endPage = startPage + blockSize - 1; 
 			if (endPage > pageCount) endPage = pageCount;
-			
-			showCategoryMenu(categoryID, model);
 			
 			List<ProductDTO> list = productService.getProductList(pg, categoryID); // 카테고리별 상품 목록
 
@@ -95,6 +96,9 @@ public class ProductController {
 			try {
 				List<CategoryDTO> categoryList = categoryService.getCategoryList(cate.getCategoryID());
 				cate.setCategoryList(categoryList);
+				
+				log.info(cate);
+				log.info(categoryList);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
