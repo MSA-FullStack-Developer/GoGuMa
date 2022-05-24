@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ggm.goguma.mapper.CategoryMapper">
+
+	<!-- 카테고리 목록 -->
+	<select id="getCategoryParentList" resultType="com.ggm.goguma.dto.CategoryDTO">
+		SELECT categoryID, parentID, categoryname, categoryType, md FROM category WHERE parentid IS NULL
+	</select>
+	
+	<select id="getCategoryList" parameterType="long" resultType="com.ggm.goguma.dto.CategoryDTO">
+		SELECT * FROM category WHERE parentid = ${categoryID}
+	</select>
+	
+	<select id="getCategoryName" parameterType="long" resultType="String">
+		SELECT categoryname FROM category WHERE categoryid = ${categoryID}
+	</select>
+	
+</mapper>
