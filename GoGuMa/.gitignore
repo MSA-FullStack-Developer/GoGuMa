@@ -15,7 +15,7 @@ build/
 WebContent/upload
 
 
-/src/main/main/webapp/WEB-INF/system.properties
+system.properties
 
 
 
