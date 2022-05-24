@@ -10,5 +10,5 @@ public interface ContractMapper {
 	
 	List<ContractDTO> findAll();
 	
-	void createContractHistory(@Param("memberId") int memberId, @Param("contractId") int contractId);
+	void createContractHistory(@Param("memberId") long memberId, @Param("contractId") long contractId);
 }

@@ -230,7 +230,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("/findPwd/rewrite.do")
-	public String reWritePwd(@RequestParam("password") String pwd, @RequestParam("memberId") int id) {
+	public String reWritePwd(@RequestParam("password") String pwd, @RequestParam("memberId") long id) {
 		
 		MemberDTO member = MemberDTO
 				.builder()

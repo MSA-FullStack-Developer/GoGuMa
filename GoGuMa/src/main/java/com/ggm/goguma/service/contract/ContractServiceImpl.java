@@ -25,7 +25,7 @@ public class ContractServiceImpl implements ContractService {
 
 	@Override
 	@Transactional
-	public void createContractHistory(int memberId, int contractId) {
+	public void createContractHistory(long memberId, long contractId) {
 		this.contractMapper.createContractHistory(memberId, contractId);
 	}
 	
