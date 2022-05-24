@@ -35,5 +35,4 @@
 
 	<context:property-placeholder location="/WEB-INF/system.properties" />
 
-	
 </beans:beans>

@@ -3,13 +3,11 @@ package com.ggm.goguma.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.ProductDTO;
@@ -29,11 +27,8 @@ public class ProductController {
 	@Autowired
 	private CategoryService categoryService;
 	
-	@Value("${pageSize}")
-	private long pageSize;
-	
-	@Value("${blockSize}")
-	private long blockSize;
+	private long pageSize = 4;
+	private long blockSize = 8;
 	
 	@GetMapping("/{categoryID}")
 	public String list(@PathVariable long pg, @PathVariable long categoryID, Model model) throws Exception {
