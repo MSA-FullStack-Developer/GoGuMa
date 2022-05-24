@@ -2,14 +2,18 @@
 
 datasource-context.xml
 
+src/test/java
 .classpath
 .project
+
+dataSource-context.xml
 
 WebContent/META-INF/context.xml
 
 build/
 
 WebContent/upload
+
 
 
 
@@ -312,5 +316,25 @@ $RECYCLE.BIN/
 *.lnk
 
 
+### Maven ###
+target
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+# https://github.com/takari/maven-wrapper#usage-without-binary-jar
+.mvn/wrapper/maven-wrapper.jar
+
+# Eclipse m2e generated files
+# Eclipse Core
+.project
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+# End of https://www.toptal.com/developers/gitignore/api/maven
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse,java,macos,windows
