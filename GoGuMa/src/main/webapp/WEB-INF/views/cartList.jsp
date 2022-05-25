@@ -478,8 +478,8 @@
 								</ol>
 							</div>
 							<div class="cart-bottom">
-								<span> ㅇㅇ </span>고객님의 혜택 정보 회원등급: <span> 실버 </span> 적립금: <span>
-									100000 </span>
+								<span>${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> H.Point: <span>
+									 포인트 조회해야함</span>
 								<div class="btngroup">
 									<button type="button" class="btn btn-cart-del"
 										name="allCartDelete" onclick="selectedCartDel()">
