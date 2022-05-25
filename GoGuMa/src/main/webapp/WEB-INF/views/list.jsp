@@ -22,7 +22,7 @@
         	
         	$('#searchBtn').on("click", function() {
         		if(!searchForm.find("#keyword").val()){
-        			alert("검색 내용을 입력하세요.");
+        			alert("검색할 상품을 입력하세요.");
         		}
         		
         		e.preventDefault();
@@ -97,6 +97,10 @@
             </div>
             </c:forEach>
         </div>
+        
+        <c:if test="${isSearch == true && recordCount == 0}">
+        	<h3 class="no_result">해당하는 상품이 없습니다.</h3>
+        </c:if>
         
         <c:if test="${isSearch == false}">
 	        <div class="list_number">

@@ -45,7 +45,7 @@
 	
 	<!-- 상품 옵션 목록 -->
 	<select id="getOptionList" parameterType="long" resultType="com.ggm.goguma.dto.ProductDTO">
-		SELECT productid, productname
+		SELECT productid, productname, stock, productprice
 		FROM product
 		WHERE parentpid = #{parentPID}
 	</select>

@@ -13,6 +13,16 @@ select {
 	margin-right: 15px;
 }
 
+.option {
+	width: 60%;
+}
+
+.no_result {
+	text-align: center;
+	margin-top: 100px;
+	color: #FF493C;
+}
+
 .sortBtn {
 	float: right;
 	margin-right: 10px;
@@ -268,7 +278,30 @@ h5 {
 }
 
 .prodInfo {
-    height: 650px;
+    height: 600px
+}
+
+.productName {
+	font-size: x-large;
+}
+
+.cartStock {
+	margin-left: 10px;
+	margin-right: 40px;
+	text-align: right;
+	padding-top: 2%;
+}
+
+.selectedOption {
+    margin-top: 1%;
+    margin-left: 30px;
+    width: auto;
+    float: left;
+}
+
+.addOptionInfo {
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 .searchBtn::before {
@@ -297,19 +330,24 @@ td {
     height: 60px;
 }
 
+.btnDiv {
+	margin-top: 10px;
+	margin-bottom: 50px;
+}
+
 .cartBtn {
-    width: 100%;
+    width: 30%;
     height: 55px;
     background-color: #F3F3F3;
     border-color: #F3F3F3;
     border-radius: 0px;
-    color: white;
-    font-size: 16pt;
+    font-size: 15pt;
     border: none;
+    float: left;
 }
 
 .buyBtn {
-    width: 100%;
+    width: 70%;
     height: 55px;
     background-color: #FF493C;
     border-color: #FF493C;
@@ -317,6 +355,7 @@ td {
     color: white;
     font-size: 15pt;
     border: none;
+    float: left;
 }
 
 .calc {
@@ -334,9 +373,16 @@ td {
 
 #numBox {
     display: inline-flex;
-/*  border: none; */
     height: 30px;
-    text-align: center;
+    border: none;
+	text-align: -webkit-right;
+	width: 40px;
+}
+
+.selectedInfo {
+	border: 0.5px solid #F3F3F3;
+	height: 90px;
+	margin-bottom: 10px;
 }
 
 ul,

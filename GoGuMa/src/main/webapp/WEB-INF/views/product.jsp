@@ -17,30 +17,60 @@
     </style>
     
     <script>
-        $(document).ready(function () {
-            $('#searchBtn').click(function () {
-                var keyword = $("#keyword").val();
-                // 검색 키워드가 존재하지 않는다면 '검색할 상품명을 입력하세요' alert창 띄워주기
-                if (keyword != '') {
-                    // 검색 동작 코드 작성하기
-                    alert(keyword);
-                } else {
-                    alert('검색할 상품명을 입력하세요.');
-                }
-                // 검색 input box "" 초기화하기
-            });
+ 		// 가격 format() 함수
+ 		Number.prototype.format = function() {
+	 		if(this==0) return 0;     
+ 			var reg = /(^[+-]?\d+)(\d{3})/;    
+ 			var n = (this + '');     
+ 			
+ 			while (reg.test(n))
+ 				n = n.replace(reg, '$1' + ',' + '$2');     
+ 				
+			return n;
+		};
+    
+	    function selectOption(option) { // 옵션을 변경한 경우 구매 수량 초기화
+	    	document.getElementById("numBox").value = 1;
 
+	    	var optionName = $("#option option:selected").text(); // 옵션 상품 이름
+	    	var optionID = $("#option option:selected").data("id"); // 옵션 상품 번호
+	    	var optionPrice = $("#option option:selected").data("price"); // 옵션 상품 가격
+	    	
+	    	$('.selectedOption').text(optionName);
+	    	
+	    	if (optionName != "선택 없음") {
+	    		$('.total_price').text(optionPrice.format() + "원");	
+	    	} else {
+	    		$('.total_price').text(optionPrice.format() + "원");
+	    	}
+	    }
+	    
+        $(document).ready(function () {
+        	$('#searchBtn').on("click", function() {
+        		if(!searchForm.find("#keyword").val()){
+        			alert("검색할 상품을 입력하세요.");
+        		}
+        		
+        		e.preventDefault();
+        		searchForm.submit();
+        	});
+            
             $("#plus").click(function () {
                 var num = $("#numBox").val();
                 var plusNum = Number(num) + 1;
-                $("#numBox").val(plusNum);
                 
-                var stock = $("#stock").text();
+    	    	var optionName = $("#option option:selected").text(); // 옵션 상품 이름
+                var stock = $("#option option:selected").val(); // 선택한 옵션의 최대 수량까지 증가 가능
+                var optionPrice = $("#option option:selected").data("price"); // 옵션 상품 가격
                 
-                if(plusNum > stock) {
-                	$("#numBox").val(num);
-                } else {
-                	$("#numBox").val(plusNum);          
+                if (optionName != "선택 없음") {
+	                if(plusNum > stock) {
+	                	$("#numBox").val(num);
+	                	$('.total_price').text((optionPrice * num).format() + "원");
+	                } else {
+	                	$("#numBox").val(plusNum);        
+	                	$('.total_price').text((optionPrice * plusNum).format() + "원");
+	                }
                 }
             });
 
@@ -48,11 +78,18 @@
                 var num = $("#numBox").val();
                 var minusNum = Number(num) - 1;
 
-                if (minusNum <= 0) {
-                    $("#numBox").val(num);
-                } else {
-                    $("#numBox").val(minusNum);
-                }
+    	    	var optionName = $("#option option:selected").text(); // 옵션 상품 이름
+            	var optionPrice = $("#option option:selected").data("price"); // 옵션 상품 가격
+				
+            	if (optionName != "선택 없음") {
+            		if (minusNum <= 0) {
+                        $("#numBox").val(num);
+                        $('.total_price').text((optionPrice * num).format() + "원");
+                    } else {
+                        $("#numBox").val(minusNum);
+                        $('.total_price').text((optionPrice * minusNum).format() + "원");
+                    }
+            	}
             });
 
             $(function () {
@@ -126,7 +163,6 @@
         		}
         		
         		e.preventDefault();
-        		
         		searchForm.submit();
         	});
         });
@@ -166,78 +202,77 @@
         <hr>
 
         <div class="prodInfo">
-            <img class="thumbnailImg" src="${productInfo.prodimgurl}"
-                style="float: left;" />
-            <div class="product_detail">
-                <table>
-                    <td colspan='2'>
-                        <h1>${productInfo.productName}</h1>
-                    </td>
-                    <tr>
-                        <td>가격</td>
-                        <td>
-                            <h2><fmt:formatNumber value="${productInfo.productPrice}" pattern="#,###" />원</h2>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>적립금</td>
-                        <td>3%</td>
-                    </tr>
-                    <tr>
-                        <td>제조회사</td>
-                        <td>${productInfo.company}</td>
-                    </tr>
-                    <tr>
-                        <td>재고</td>
-                        <td id="stock">${productInfo.stock}</td>
-                    </tr>
-                    <c:if test="${optionCount > 0}">
+        	<div class="topInfo" style="height: auto;">
+	            <img class="thumbnailImg" src="${productInfo.prodimgurl}" style="float: left;" />
+	            <div class="product_detail">
+	                <table>
+	                	<tr>
+		                    <td colspan='2'>
+		                        <h1>${productInfo.productName}</h1>
+		                    </td>
+	                    </tr>
 	                    <tr>
-	                        <td>옵션</td>
-	                        <td>
-	                        	<div class="selectbox">
-		                            <select name="상품 옵션">
-		                            	<c:forEach items="${option}" var="option">
-		                                	<option value="${option.productID}">${option.productName}</option>
-		                                </c:forEach>
-		                            </select>
-	                            </div>
+	                    	<td width="30%">가격</td>
+	                    	<td width="70%">
+	                            <h2><fmt:formatNumber value="${productInfo.productPrice}" pattern="#,###" />원</h2>
 	                        </td>
 	                    </tr>
-                    </c:if>
-                    <tr>
-                        <td>
-                            <span>구입 수량</span>
-                        <td>
-                            <p class="cartStock">
-                                <button type="button" class="calc" id="minus">-</button>
-                                <span style="text-align: center;">
-                                	<input type="number" id="numBox" min="1" max="${productInfo.stock}" value="1"
-                                    readonly="readonly" />
-                                </span>
-                                <button type="button" class="calc" id="plus">+</button>
-                            </p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>총 상품금액</td>
-                        <td class="total_price">
-                            <h1><fmt:formatNumber value="${productInfo.productPrice}" pattern="#,###" />원</h1>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button class="cartBtn" id="cartBtn"><i class="fa-solid fa-cart-plus"
-                                    style="color: black"></i></button>
-                        </td>
-                        <td>
-                            <button class="buyBtn" id="buyBtn">바로구매</button>
-                        </td>
-                    </tr>
-                </table>
+	                    <tr>
+	                        <td>적립금</td>
+	                        <td>3%</td>
+	                    </tr>
+	                    <tr>
+	                        <td>제조회사</td>
+	                        <td>${productInfo.company}</td>
+	                    </tr>
+	                    <c:if test="${optionCount > 0}">
+		                    <tr>
+		                        <td>옵션</td>
+		                        <td>
+		                        	<div class="selectbox">
+			                            <select class="option" id="option" name="option" style="float: left;" onchange="javascript:selectOption(this.options[this.selectedIndex].value);">
+			                            	<option value="">선택 없음</option>
+			                            	<c:forEach items="${option}" var="option">
+			                                	<option value="${option.stock}" 
+			                                			data-id="${option.productID}" 
+			                                			data-price="${option.productPrice}">
+			                                			${option.productName}
+	                                			</option>
+			                                </c:forEach>
+			                            </select>
+		                            </div>
+		                        </td>
+		                    </tr>
+	                    </c:if>
+	                    <tr>
+	                    	<td><strong>상품금액 합계</strong></td>
+	                    	<td>
+	                    		<h1 class="total_price">
+	                    			<fmt:formatNumber value="${productInfo.productPrice}" pattern="#,###" />원
+                    			</h1>
+	                    	</td>
+	                    </tr>
+	                </table>
+	                
+	                <div class="selectedInfo">
+	                	<p class="cartStock">
+	                		<strong class="selectedOption">선택없음</strong>
+                            <button type="button" class="calc" id="minus">-</button>
+                            <span style="text-align: center;">
+                            	<input type="number" id="numBox" min="1" max="${productInfo.stock}" value="1" readonly="readonly" />
+                            </span>
+                            <button type="button" class="calc" id="plus">+</button>
+                        </p>
+	                </div>
+	                
+	                <div class="btnDiv">
+	                	<button class="cartBtn" id="cartBtn">장바구니</button>
+                        <button class="buyBtn" id="buyBtn">바로구매</button>
+	                </div>
+	            </div>
             </div>
         </div>
-
+        
         <div class="tab">
             <ul class="tabnav">
                 <li class="bottom-menu"><a href="#tab01">상품상세</a></li>
