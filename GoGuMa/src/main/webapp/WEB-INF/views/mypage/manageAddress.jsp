@@ -304,13 +304,6 @@
 			isDefault = 1;
 		}
 
-		console.log(addressId);
-		console.log($('#nickName'+addressId).val());
-		console.log($('#recipient'+addressId).val());
-		console.log($('#address'+addressId).val());
-		console.log($('#contact'+addressId).val());
-		console.log(isDefault);
-
 		let token = $("meta[name='_csrf']").attr("content");
 	    let header = $("meta[name='_csrf_header']").attr("content");
 	    let data = {
@@ -493,6 +486,12 @@
 					}
 				});
 			}
+		});
+		
+		// 체크박스 전체 선택/해제 기능
+		$('#checkAll').on('click', function() {
+			if($('#checkAll').prop('checked')) $('input[name=check]').prop('checked', true);
+			else $('input[name=check]').prop('checked', false);
 		});
 		
 		// 모달 창 내용 초기화
