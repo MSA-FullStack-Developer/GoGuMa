@@ -82,7 +82,7 @@
                         비밀번호변경
                     </div>
                     <div>
-                        <a href="${contextPath}/mypage/manageAddress/1">배송지관리</a>
+                        <a href="${contextPath}/mypage/manageAddress">배송지관리</a>
                     </div>
                     <div>
                         회원탈퇴
