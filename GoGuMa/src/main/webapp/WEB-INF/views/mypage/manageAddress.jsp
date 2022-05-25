@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,7 +41,7 @@
 		<div class="row">
 			<div class="col-3">
                 <div class="mb-4">
-                    <h3><a href="../"><b>마이페이지</b></a></h3>
+                    <h3><a href="${contextPath}/mypage"><b>마이페이지</b></a></h3>
                 </div>
                 <div class="mb-4">
                     <div>
@@ -151,15 +152,17 @@
                             <th>관리</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>${defaultAddress.nickName}</td>
-                            <td>${defaultAddress.recipient}</td>
-                            <td>${defaultAddress.address}</td>
-                            <td>${defaultAddress.contact}</td>
-                            <td><button type="button" class="btn btn-outline-danger btn-sm">기본 배송지 해지</button></td>
-                        </tr>
-                    </tbody>
+                    <c:if test="${defaultAddress ne null}">
+	                    <tbody>
+	                        <tr>
+	                            <td>${defaultAddress.nickName}</td>
+	                            <td>${defaultAddress.recipient}</td>
+	                            <td>${defaultAddress.address}</td>
+	                            <td>${defaultAddress.contact}</td>
+	                            <td><button type="button" id="${defaultAddress.addressId}" class="btn btn-outline-danger btn-sm" onClick="cancelDefault(this.id)">기본 배송지 해지</button></td>
+	                        </tr>
+	                    </tbody>
+                    </c:if>
                 </table>
                 <div>
                     <h5>배송지 목록</h5>
@@ -237,13 +240,35 @@
 <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
+	function cancelDefault(addressId) {
+		let token = $("meta[name='_csrf']").attr("content");
+	    let header = $("meta[name='_csrf_header']").attr("content");
+		$.ajax({
+			url : '${contextPath}/mypage/manageAddress/cancelDefault',
+			type : 'POST',
+			data : {
+				addressId : addressId
+			},
+			beforeSend : function(xhr) {
+	            xhr.setRequestHeader(header, token);
+	        },
+	        success:function(result) {
+				if(result==1) {
+					alert('기본배송지 해지 완료');
+					window.location.href = "${contextPath}/mypage/manageAddress";
+				} else {
+					alert('기본배송지 해지 오류');
+				}
+			}
+		});
+	}
 	function deleteAddress(addressId) {
 		let arr = new Array();
 		arr.push(Number(addressId));
 		let token = $("meta[name='_csrf']").attr("content");
 	    let header = $("meta[name='_csrf_header']").attr("content");
 		$.ajax({ // checked된 checkbox의 value만 배열에 넣어서 전송
-			url : '',
+			url : '${contextPath}/mypage/manageAddress/delete',
 			type : 'POST',
 			data : JSON.stringify(arr),
 			contentType : "application/json; charset=utf-8;",
@@ -253,7 +278,7 @@
 			success:function(result) {
 				if(result==1) {
 					alert('배송지 삭제 완료');
-					window.location.href = "./1/";
+					window.location.href = "${contextPath}/mypage/manageAddress";
 				} else {
 					alert('삭제 오류');
 				}
@@ -272,7 +297,7 @@
 			let token = $("meta[name='_csrf']").attr("content");
 		    let header = $("meta[name='_csrf_header']").attr("content");
 			$.ajax({ // checked된 checkbox의 value만 배열에 넣어서 전송
-				url : '',
+				url : '${contextPath}/mypage/manageAddress/delete',
 				type : 'POST',
 				data : JSON.stringify(checkBoxArray),
 				contentType : "application/json; charset=utf-8;",
@@ -282,7 +307,7 @@
 				success:function(result) {
 					if(result==1) {
 						alert('배송지 삭제 완료');
-						window.location.href = "../1/";
+						window.location.href = "${contextPath}/mypage/manageAddress";
 					} else {
 						alert('삭제 오류');
 					}
