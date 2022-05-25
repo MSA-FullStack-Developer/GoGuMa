@@ -19,4 +19,11 @@ public interface ProductService {
 
 	// 상품 옵션 개수
 	public long getOptionCount(long productID) throws Exception;
+	
+	/**
+	 * 작성자 : 이승준
+	 * 작업일 : 22.05.25
+	 * */
+	// 대분류 카테고리에 속한 상품 목록 조회
+	public List<ProductDTO> getSameParentCategoryProductList(long categoryID);
 }

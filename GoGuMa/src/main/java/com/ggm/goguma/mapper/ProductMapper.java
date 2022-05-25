@@ -23,4 +23,12 @@ public interface ProductMapper {
 	
 	// 상품 옵션 개수
 	public long getOptionCount(long productID) throws Exception;
+	
+	
+	/**
+	 * 작성자 : 이승준
+	 * 작업일 : 22.05.25
+	 * */
+	//대분류 카테고리 아이디로 해당 카테고리에 속한 최신 상품 목록 조회
+	public List<ProductDTO> findProductListByParentCategoryId(@Param("categoryID") long categoryID, @Param("offset") long offset, @Param("limit") long limit);
 }

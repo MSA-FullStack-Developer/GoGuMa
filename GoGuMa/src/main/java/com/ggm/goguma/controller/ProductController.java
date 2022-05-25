@@ -30,8 +30,8 @@ public class ProductController {
 	private CategoryService categoryService;
 
 	private long pageSize  = 8; 
-
 	private long blockSize = 10;
+	
 	
 	@GetMapping("/{categoryID}")
 	public String list(@PathVariable long pg, @PathVariable long categoryID, Model model) throws Exception {

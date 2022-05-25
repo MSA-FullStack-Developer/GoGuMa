@@ -20,6 +20,7 @@ public class ProductServiceImpl implements ProductService {
 	
 	
 	private long pageSize = 8;
+	
 
 	@Override
 	public List<ProductDTO> getProductList(long pg, long categoryID) throws Exception {
@@ -49,4 +50,14 @@ public class ProductServiceImpl implements ProductService {
 		return productMapper.getOptionCount(productID);
 	}
 
+	@Override
+	public List<ProductDTO> getSameParentCategoryProductList(long categoryID) {
+		
+		long offset = 0;
+		long limit = 8;
+	
+		return this.productMapper.findProductListByParentCategoryId(categoryID, offset, limit);
+	}
+
+	
 }
