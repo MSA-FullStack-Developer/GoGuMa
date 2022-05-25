@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
 <meta name="_csrf" content="${_csrf.token}">
 <meta name="_csrf_header" content="${_csrf.headerName}">
 <link
@@ -266,11 +267,10 @@
 												<th scope="col" id="th-total-price">합계</th>
 											</tr>
 											<tr class="order-product">
-												<td class="cart-product_box">
+												<td class="order-product_box">
 													<div class="product-image">
-														<a href="이동할 링크" class="moveProduct"> <img
-															src="이미지 링크" width="78" height="78"
-															class="product-img" alt="">
+														<a href="이동할 링크" class="moveProduct"> 
+														<img src="뭔데 링크" width="78" height="78" class="product-img" alt="">
 														</a>
 													</div>
 													<div class="product-name">

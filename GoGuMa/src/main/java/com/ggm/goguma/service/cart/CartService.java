@@ -14,6 +14,6 @@ public interface CartService {
 
 	void deleteCart(long cartid) throws Exception;
 
-	void insertCart(long productId, int cartAmount) throws Exception;
+	void insertCart(long productId, int cartAmount, long memberId) throws Exception;
 
 }
