@@ -200,7 +200,7 @@
                 	</div>
                 	<div class="col" align="right">
 	                    <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#addAddressModal">배송지 등록</button>
-	                    <button type="button" id="deleteBtn" class="btn btn-danger btn-sm">선택 삭제</button>
+	                    <button type="button" id="deleteAddressBtn" class="btn btn-danger btn-sm">선택 삭제</button>
 	                </div>
                 </div>
             </div>
@@ -213,28 +213,30 @@
                     <h5 class="modal-title" id="exampleModalLabel"><b>배송지 등록</b></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form action="" method="POST">
-                        <div class="mb-1">
-                            <label for="nickName" class="col-form-label">배송지 별칭</label>
-                            <input type="text" class="form-control" id="nickName">
-                        </div>
-                        <div class="mb-1">
-                            <label for="recipient" class="col-form-label">받는 분</label>
-                            <input type="text" class="form-control" id="recipient">
-                        </div>
-                        <div class="mb-1">
-                            <label for="deliveryAddress" class="col-form-label">배송지 주소</label>
-                            <input type="text" class="form-control" id="deliveryAddress">
-                        </div>
-                        <div class="mb-1">
-                            <label for="deliveryContact" class="col-form-label">연락처</label>
-                            <input type="text" class="form-control" id="deliveryContact">
-                        </div>
-                    </form>
+                <div id="addressModal" class="modal-body">
+                	<div class="mb-1">
+                		<label for="nickName" class="col-form-label">배송지 별칭</label>
+                		<input type="text" class="form-control" id="nickName">
+               		</div>
+               		<div class="mb-1">
+               			<label for="recipient" class="col-form-label">받는 분</label>
+               			<input type="text" class="form-control" id="recipient">
+              		</div>
+              		<div class="mb-1">
+              			<label for="address" class="col-form-label">배송지 주소</label>
+              			<input type="text" class="form-control" id="address">
+             		</div>
+             		<div class="mb-3">
+             			<label for="contact" class="col-form-label">연락처</label>
+             			<input type="text" class="form-control" id="contact">
+            		</div>
+            		<div class="">
+            			<label for="checkDefault" class="col-form-label">기본 배송지 설정</label>
+            			<input type="checkbox" id="isDefault">
+            		</div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-dark">확인</button>
+                    <button type="button" id="addAddressBtn" class="btn btn-dark">확인</button>
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">취소</button>
                 </div>
             </div>
@@ -245,6 +247,30 @@
 <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
+	function deleteAddress(addressId) {
+		let arr = new Array();
+		arr.push(Number(addressId));
+		let token = $("meta[name='_csrf']").attr("content");
+	    let header = $("meta[name='_csrf_header']").attr("content");
+		$.ajax({
+			url : '${contextPath}/mypage/manageAddress/deleteAddress',
+			type : 'POST',
+			data : JSON.stringify(arr),
+			contentType : "application/json; charset=utf-8;",
+			beforeSend : function(xhr) {
+	            xhr.setRequestHeader(header, token);
+	        },
+			success:function(result) {
+				if(result==1) {
+					alert('배송지 삭제 완료');
+					window.location.href = "${contextPath}/mypage/manageAddress";
+				} else {
+					alert('삭제 오류');
+				}
+			}
+		});
+	}
+	
 	function cancelDefault(addressId) {
 		let token = $("meta[name='_csrf']").attr("content");
 	    let header = $("meta[name='_csrf_header']").attr("content");
@@ -267,29 +293,7 @@
 			}
 		});
 	}
-	function deleteAddress(addressId) {
-		let arr = new Array();
-		arr.push(Number(addressId));
-		let token = $("meta[name='_csrf']").attr("content");
-	    let header = $("meta[name='_csrf_header']").attr("content");
-		$.ajax({
-			url : '${contextPath}/mypage/manageAddress/delete',
-			type : 'POST',
-			data : JSON.stringify(arr),
-			contentType : "application/json; charset=utf-8;",
-			beforeSend : function(xhr) {
-	            xhr.setRequestHeader(header, token);
-	        },
-			success:function(result) {
-				if(result==1) {
-					alert('배송지 삭제 완료');
-					window.location.href = "${contextPath}/mypage/manageAddress";
-				} else {
-					alert('삭제 오류');
-				}
-			}
-		});
-	}
+	
 	$(document).ready(function() {
 		$('#setDefaultBtn').on('click', function() {
 			let checked = 0;
@@ -325,7 +329,38 @@
 			}
 		});
 		
-		$('#deleteBtn').on('click', function() {
+		$('#addAddressBtn').on('click', function() {
+			let isDefault = 0;
+			if($('#isDefault').prop('checked')) isDefault = 1;
+			let token = $("meta[name='_csrf']").attr("content");
+		    let header = $("meta[name='_csrf_header']").attr("content");
+		    let data = {
+	    		nickName : $('#addressModal').find('#nickName').val(),
+				recipient : $('#addressModal').find('#recipient').val(),
+				address : $('#addressModal').find('#address').val(),
+				contact : $('#addressModal').find('#contact').val(),
+				isDefault : isDefault
+		    }
+			$.ajax({
+				url : '${contextPath}/mypage/manageAddress/addAddress',
+				type : 'POST',
+				data : JSON.stringify(data),
+				contentType : 'application/json; charset=utf-8;',
+				beforeSend : function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
+		        success:function(result) {
+		        	if(result==1) {
+		        		alert('배송지 추가 완료');
+		        		window.location.href = "${contextPath}/mypage/manageAddress";
+		        	} else {
+						alert('삭제 오류');
+					}
+		        }
+			});
+		});
+		
+		$('#deleteAddressBtn').on('click', function() {
 			let checkBoxArray = new Array();
 			for(let i=0; i<$('input[name=check]').length; i++) {
 				if($('input[name=check]').eq(i).prop('checked')) {
@@ -336,7 +371,7 @@
 			let token = $("meta[name='_csrf']").attr("content");
 		    let header = $("meta[name='_csrf_header']").attr("content");
 			$.ajax({ // checked된 checkbox의 value만 배열에 넣어서 전송
-				url : '${contextPath}/mypage/manageAddress/delete',
+				url : '${contextPath}/mypage/manageAddress/deleteAddress',
 				type : 'POST',
 				data : JSON.stringify(checkBoxArray),
 				contentType : "application/json; charset=utf-8;",
