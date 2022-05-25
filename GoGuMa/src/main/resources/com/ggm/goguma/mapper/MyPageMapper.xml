@@ -4,7 +4,7 @@
 
 <mapper namespace="com.ggm.goguma.mapper.MyPageMapper">
 	<select id="getAddressList" resultType="DeliveryAddressDTO">
-		select addressId, nickname, recipient, address, contact
+		select addressId, nickname, recipient, address, contact, isdefault
 		from deliveryaddress where memberId = #{memberId}
 		order by addressId
 	</select>
@@ -19,6 +19,12 @@
 		values(#{memberId}, #{nickName}, #{recipient}, #{address}, #{contact}, #{isDefault})
 	</insert>
 	
+	<update id="updateAddress" parameterType="DeliveryAddressDTO">
+		update deliveryaddress set nickname = #{nickName}, recipient = #{recipient},
+		address = #{address}, contact = #{contact}, isdefault = #{isDefault}
+		where memberid = #{memberId} and addressid = #{addressId}
+	</update>
+	
 	<delete id="deleteAddress">
 		delete from deliveryaddress
 		where memberId = #{memberId} and addressid = #{addressId}
@@ -28,6 +34,7 @@
 		update deliveryaddress set isdefault = 1
 		where memberId = #{memberId} and addressId = #{addressId}
 	</update>
+	
 	<update id="cancelDefault">
 		update deliveryaddress set isdefault = 0 where memberId = #{memberId}
 	</update>

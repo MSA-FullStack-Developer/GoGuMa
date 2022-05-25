@@ -11,6 +11,8 @@ public interface MyPageService {
 
 	void addAddress(DeliveryAddressDTO dto) throws Exception;
 	
+	void updateAddress(DeliveryAddressDTO dto) throws Exception;
+	
 	void deleteAddress(long memberId, long addressId) throws Exception;
 	
 	void setDefault(long memberId, long addressId) throws Exception;

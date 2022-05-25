@@ -28,6 +28,12 @@ public class MyPageServiceImpl implements MyPageService {
 		if(dto.getIsDefault()==1) mapper.cancelDefault(dto.getMemberId()); // 기본 배송지가 설정돼있으면 제거
 		mapper.addAddress(dto);
 	}
+
+	@Override
+	public void updateAddress(DeliveryAddressDTO dto) throws Exception {
+		if(dto.getIsDefault()==1) mapper.cancelDefault(dto.getMemberId()); // 기본 배송지가 설정돼있으면 제거
+		mapper.updateAddress(dto);
+	}
 	
 	@Override
 	public void deleteAddress(long memberId, long addressId) throws Exception {

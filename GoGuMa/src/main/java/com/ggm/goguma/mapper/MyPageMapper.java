@@ -15,10 +15,13 @@ public interface MyPageMapper {
 	DeliveryAddressDTO getDefaultAddress(long memberid) throws Exception;
 	
 	void addAddress(DeliveryAddressDTO dto) throws Exception;
+
+	void updateAddress(DeliveryAddressDTO dto) throws Exception;
 	
 	void deleteAddress(@Param("memberId") long memberId, @Param("addressId") long addressId) throws Exception;
 	
 	void setDefault(@Param("memberId") long memberId, @Param("addressId") long addressId) throws Exception;
 
 	void cancelDefault(@Param("memberId") long memberId) throws Exception;
+
 }

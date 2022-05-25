@@ -50,13 +50,26 @@ public class MyPageController {
 	
 	@ResponseBody
 	@RequestMapping(value="/manageAddress/addAddress", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String addAddress(@RequestBody DeliveryAddressDTO dto, Model model) throws Exception {
+	public String addAddress(@RequestBody DeliveryAddressDTO dto) throws Exception {
 		try {
 			log.info(dto);
 			dto.setMemberId(1);
 			service.addAddress(dto);
 		} catch(Exception e) {
 			log.info(e.getMessage());
+			return "2";
+		}
+		return "1";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/manageAddress/updateAddress", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public String updateAddress(@RequestBody DeliveryAddressDTO dto) throws Exception {
+		try {
+			log.info("테스트 : " +dto);
+			dto.setMemberId(1);
+			service.updateAddress(dto);
+		} catch (Exception e) {
 			return "2";
 		}
 		return "1";
