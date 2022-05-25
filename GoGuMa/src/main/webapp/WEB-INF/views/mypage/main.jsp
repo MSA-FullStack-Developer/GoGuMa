@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -80,7 +82,7 @@
                         비밀번호변경
                     </div>
                     <div>
-                        <a href="./manageAddress/1">배송지관리</a>
+                        <a href="${contextPath}/mypage/manageAddress/1">배송지관리</a>
                     </div>
                     <div>
                         회원탈퇴
