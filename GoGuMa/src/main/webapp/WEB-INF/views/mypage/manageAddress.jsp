@@ -170,7 +170,7 @@
                 <table class="table table-hover mb-2" style="margin: auto; text-align: center">
                     <thead class="table-secondary table-group-divider">
                         <tr>
-                            <th><input type="checkbox"></th>
+                            <th><input type="checkbox" id="checkAll"></th>
                             <th>배송지 별칭</th>
                             <th>받는 분</th>
                             <th>배송지 주소</th>
@@ -194,9 +194,14 @@
                     	</tbody>
                     </c:forEach>
                 </table>
-                <div align="right">
-                    <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#addAddressModal">배송지 등록</button>
-                    <button type="button" id="deleteBtn" class="btn btn-danger btn-sm">선택 삭제</button>
+                <div class="row">
+                	<div class="col" align="left">
+                		<button type="button" id="setDefaultBtn" class="btn btn-primary btn-sm">기본 배송지 설정</button>
+                	</div>
+                	<div class="col" align="right">
+	                    <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#addAddressModal">배송지 등록</button>
+	                    <button type="button" id="deleteBtn" class="btn btn-danger btn-sm">선택 삭제</button>
+	                </div>
                 </div>
             </div>
 		</div>
@@ -267,7 +272,7 @@
 		arr.push(Number(addressId));
 		let token = $("meta[name='_csrf']").attr("content");
 	    let header = $("meta[name='_csrf_header']").attr("content");
-		$.ajax({ // checked된 checkbox의 value만 배열에 넣어서 전송
+		$.ajax({
 			url : '${contextPath}/mypage/manageAddress/delete',
 			type : 'POST',
 			data : JSON.stringify(arr),
@@ -286,6 +291,40 @@
 		});
 	}
 	$(document).ready(function() {
+		$('#setDefaultBtn').on('click', function() {
+			let checked = 0;
+			let checkBoxArray = new Array();
+			for(let i=0; i<$('input[name=check]').length; i++) {
+				if($('input[name=check]').eq(i).prop('checked')) checked++;
+			}
+			if(checked==0) alert('기본 배송지로 설정할 배송지를 체크해주세요.');
+			else if(checked>=2) alert('기본 배송지는 하나만 설정할 수 있습니다.');
+			else {
+				$("input[name=check]:checked").each(function() {
+					let token = $("meta[name='_csrf']").attr("content");
+				    let header = $("meta[name='_csrf_header']").attr("content");
+					$.ajax({
+						url : '${contextPath}/mypage/manageAddress/setDefault',
+						type : 'POST',
+						data : {
+							addressId : $(this).val()
+						},
+						beforeSend : function(xhr) {
+				            xhr.setRequestHeader(header, token);
+				        },
+				        success:function(result) {
+				        	if(result==1) {
+				        		alert('기본 배송지 설정 완료');
+				        		window.location.href = "${contextPath}/mypage/manageAddress";
+				        	} else {
+								alert('삭제 오류');
+							}
+				        }
+					});
+				});
+			}
+		});
+		
 		$('#deleteBtn').on('click', function() {
 			let checkBoxArray = new Array();
 			for(let i=0; i<$('input[name=check]').length; i++) {
