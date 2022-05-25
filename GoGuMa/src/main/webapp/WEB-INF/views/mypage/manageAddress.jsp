@@ -5,6 +5,8 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<meta name="_csrf" content="${_csrf.token}">
+	<meta name="_csrf_header" content="${_csrf.headerName}">
 	<title>Insert title here</title>
     <!-- bootstrap icon -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
@@ -176,14 +178,14 @@
                     <c:forEach var="addressDTO" items="${addressList}">
                     	<tbody>
                     		<tr>
-                    			<td><input type="checkbox"></td>
+                    			<td><input type="checkbox" name="check" value="${addressDTO.addressId}"></td>
                     			<td>${addressDTO.nickName}</td>
                     			<td>${addressDTO.recipient}</td>
                     			<td>${addressDTO.address}</td>
                     			<td>${addressDTO.contact}</td>
                     			<td>
 	                                <button type="button" class="btn btn-outline-dark btn-sm">수정</button>
-	                                <button type="button" class="btn btn-outline-dark btn-sm">삭제</button>
+	                                <button type="button" id="${addressDTO.addressId}" class="btn btn-outline-dark btn-sm" onClick="deleteAddress(this.id)">삭제</button>
 	                            </td>
                     		</tr>
                     	</tbody>
@@ -191,7 +193,7 @@
                 </table>
                 <div align="right">
                     <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#addAddressModal">배송지 등록</button>
-                    <button type="button" class="btn btn-danger btn-sm">선택 삭제</button>
+                    <button type="button" id="deleteBtn" class="btn btn-danger btn-sm">선택 삭제</button>
                 </div>
             </div>
 		</div>
@@ -204,7 +206,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="" method="POST">
                         <div class="mb-1">
                             <label for="nickName" class="col-form-label">배송지 별칭</label>
                             <input type="text" class="form-control" id="nickName">
@@ -232,33 +234,62 @@
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
-	function getPostCode() {
-		new daum.Postcode({
-			oncomplete: function(data) {
-				var addr = '';
-				var extraAddr = '';
-				if(data.userSelectedType === 'R') { // 도로명 주소
-					addr = data.roadAddress;
-				} else { // 지번 주소
-					addr = data.jibunAddress;
+	function deleteAddress(addressId) {
+		let arr = new Array();
+		arr.push(Number(addressId));
+		let token = $("meta[name='_csrf']").attr("content");
+	    let header = $("meta[name='_csrf_header']").attr("content");
+		$.ajax({ // checked된 checkbox의 value만 배열에 넣어서 전송
+			url : '',
+			type : 'POST',
+			data : JSON.stringify(arr),
+			contentType : "application/json; charset=utf-8;",
+			beforeSend : function(xhr) {
+	            xhr.setRequestHeader(header, token);
+	        },
+			success:function(result) {
+				if(result==1) {
+					alert('배송지 삭제 완료');
+					window.location.href = "./1/";
+				} else {
+					alert('삭제 오류');
+				}
+			}
+		});
+	}
+	$(document).ready(function() {
+		$('#deleteBtn').on('click', function() {
+			let checkBoxArray = new Array();
+			for(let i=0; i<$('input[name=check]').length; i++) {
+				if($('input[name=check]').eq(i).prop('checked')) {
+					checkBoxArray.push(Number($('input[name=check]').eq(i).val()));
 				}
 			}
 			
-			if(data.userSelectedType === 'R') {
-				if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-					extraAddr += data.bname;
+			let token = $("meta[name='_csrf']").attr("content");
+		    let header = $("meta[name='_csrf_header']").attr("content");
+			$.ajax({ // checked된 checkbox의 value만 배열에 넣어서 전송
+				url : '',
+				type : 'POST',
+				data : JSON.stringify(checkBoxArray),
+				contentType : "application/json; charset=utf-8;",
+				beforeSend : function(xhr) {
+		            xhr.setRequestHeader(header, token);
+	            },
+				success:function(result) {
+					if(result==1) {
+						alert('배송지 삭제 완료');
+						window.location.href = "../1/";
+					} else {
+						alert('삭제 오류');
+					}
 				}
-				if(data.buildingName !== '' && data.apartment === 'Y') {
-					extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-				}
-				if(extraAddr !== '') {
-					extraAddr = ' (' + extraAddr + ')';
-				}
-			}
-		})
-	}
+			});
+		});
+	});
 </script>
 </html>
     
