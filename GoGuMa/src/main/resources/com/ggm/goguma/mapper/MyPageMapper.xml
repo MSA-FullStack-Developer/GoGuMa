@@ -5,15 +5,20 @@
 <mapper namespace="com.ggm.goguma.mapper.MyPageMapper">
 	<select id="getAddressList" resultType="DeliveryAddressDTO">
 		select addressId, nickname, recipient, address, contact
-		from deliveryaddress where memberid = #{memberid}
+		from deliveryaddress where memberId = #{memberId}
 		order by addressId
 	</select>
 	<select id="getDefaultAddress" resultType="DeliveryAddressDTO">
-		select nickname, recipient, address, contact
+		select addressId, nickname, recipient, address, contact
 		from deliveryaddress
-		where memberid = #{memberid} and isdefault = 1
+		where memberId = #{memberId} and isdefault = 1
 	</select>
+	<update id="cancelDefault">
+		update deliveryaddress set isdefault = 0
+		where memberId = #{memberId} and addressId = #{addressId}
+	</update>
 	<delete id="deleteAddress">
-		delete from deliveryaddress where addressId = #{addressId}
+		delete from deliveryaddress
+		where memberId = #{memberId} and addressid = #{addressId}
 	</delete>
 </mapper>

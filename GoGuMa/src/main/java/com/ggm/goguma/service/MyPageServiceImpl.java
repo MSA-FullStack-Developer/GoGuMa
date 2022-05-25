@@ -24,7 +24,14 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 
 	@Override
-	public void deleteAddress(int addressId) throws Exception {
-		mapper.deleteAddress(addressId);
+	public void cancelDefault(int memberId, int addressId) throws Exception {
+		mapper.cancelDefault(memberId, addressId);		
 	}
+	
+	@Override
+	public void deleteAddress(int memberId, int addressId) throws Exception {
+		mapper.deleteAddress(memberId, addressId);
+	}
+
+
 }

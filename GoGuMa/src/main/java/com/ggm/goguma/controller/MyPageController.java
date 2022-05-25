@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ggm.goguma.dto.DeliveryAddressDTO;
@@ -30,17 +31,17 @@ public class MyPageController {
 		return "mypage/main";
 	}
 	
-	@RequestMapping(value="/manageAddress/{memberid}", method=RequestMethod.GET)
-	public String getAddressList(@PathVariable("memberid") int memberid, Model model) {
+	@RequestMapping(value="/manageAddress", method=RequestMethod.GET)
+	public String getAddressList(Model model) {
 		try {
-			DeliveryAddressDTO defaultAddress = service.getDefaultAddress(memberid);
+			DeliveryAddressDTO defaultAddress = service.getDefaultAddress(1);
 			log.info(defaultAddress);
-			List<DeliveryAddressDTO> addressList = service.getAddressList(memberid);
+			List<DeliveryAddressDTO> addressList = service.getAddressList(1);
 			for(DeliveryAddressDTO dto : addressList) {
-				log.info(dto.getAddressId()+" "+dto.getNickName()+" "+dto.getRecipient()+" "+dto.getAddress()+" "+dto.getContact());
+				log.info(dto);
 			}
-			model.addAttribute("addressList", addressList);
 			model.addAttribute("defaultAddress", defaultAddress);
+			model.addAttribute("addressList", addressList);
 		} catch (Exception e) {
 			log.info(e.getMessage());
 		}
@@ -48,14 +49,26 @@ public class MyPageController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/manageAddress/{memberId}", method=RequestMethod.POST,
-		consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String getDeleteAddressId(@PathVariable("memberId") int memberId, 
-		@RequestBody List<Integer> list, Model model) throws Exception {
+	@RequestMapping(value="/manageAddress/cancelDefault", method=RequestMethod.POST)
+	public String cancelDefault(@RequestParam int addressId) throws Exception {
+		try {
+			log.info(addressId);
+			service.cancelDefault(1, addressId);			
+		} catch(Exception e) {
+			log.info(e.getMessage());
+			return "2";
+		}
+		return "1";
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/manageAddress/delete", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public String deleteAddress(@RequestBody List<Integer> list) throws Exception {
 		try {
 			log.info(list);
 			for(int addressId : list) {
-				service.deleteAddress(addressId);
+				service.deleteAddress(1, addressId);
 			}
 		} catch (Exception e) {
 			log.info(e.getMessage());

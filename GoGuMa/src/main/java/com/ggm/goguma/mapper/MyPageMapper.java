@@ -2,6 +2,8 @@ package com.ggm.goguma.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 
 public interface MyPageMapper {
@@ -12,5 +14,7 @@ public interface MyPageMapper {
 
 	DeliveryAddressDTO getDefaultAddress(int memberid) throws Exception;
 
-	int deleteAddress(int addressId);
+	void cancelDefault(@Param("memberId") int memberId, @Param("addressId") int addressId) throws Exception;
+	
+	void deleteAddress(@Param("memberId") int memberId, @Param("addressId") int addressId) throws Exception;
 }
