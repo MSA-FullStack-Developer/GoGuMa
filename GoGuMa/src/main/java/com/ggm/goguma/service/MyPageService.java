@@ -9,7 +9,9 @@ public interface MyPageService {
 
 	DeliveryAddressDTO getDefaultAddress(int memberid) throws Exception;
 
-	void cancelDefault(int memberId, int addressId) throws Exception;
-	
 	void deleteAddress(int memberId, int addressId) throws Exception;
+	
+	void setDefault(int memberId, int addressId) throws Exception;
+
+	void cancelDefault(int memberId) throws Exception;
 }

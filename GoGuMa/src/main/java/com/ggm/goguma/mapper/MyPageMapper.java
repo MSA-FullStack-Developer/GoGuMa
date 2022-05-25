@@ -13,8 +13,10 @@ public interface MyPageMapper {
 	List<DeliveryAddressDTO> getAddressList(int memberid) throws Exception;
 
 	DeliveryAddressDTO getDefaultAddress(int memberid) throws Exception;
-
-	void cancelDefault(@Param("memberId") int memberId, @Param("addressId") int addressId) throws Exception;
 	
 	void deleteAddress(@Param("memberId") int memberId, @Param("addressId") int addressId) throws Exception;
+	
+	void setDefault(@Param("memberId") int memberId, @Param("addressId") int addressId) throws Exception;
+
+	void cancelDefault(@Param("memberId") int memberId) throws Exception;
 }

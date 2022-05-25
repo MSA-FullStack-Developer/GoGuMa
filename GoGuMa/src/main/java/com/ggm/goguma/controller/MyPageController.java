@@ -49,20 +49,6 @@ public class MyPageController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/manageAddress/cancelDefault", method=RequestMethod.POST)
-	public String cancelDefault(@RequestParam int addressId) throws Exception {
-		try {
-			log.info(addressId);
-			service.cancelDefault(1, addressId);			
-		} catch(Exception e) {
-			log.info(e.getMessage());
-			return "2";
-		}
-		return "1";
-	}
-	
-	
-	@ResponseBody
 	@RequestMapping(value="/manageAddress/delete", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public String deleteAddress(@RequestBody List<Integer> list) throws Exception {
 		try {
@@ -71,6 +57,32 @@ public class MyPageController {
 				service.deleteAddress(1, addressId);
 			}
 		} catch (Exception e) {
+			log.info(e.getMessage());
+			return "2";
+		}
+		return "1";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/manageAddress/setDefault", method=RequestMethod.POST)
+	public String setDefault(@RequestParam int addressId) throws Exception {
+		try {
+			log.info(addressId);
+			service.setDefault(1, addressId);
+		} catch(Exception e) {
+			log.info(e.getMessage());
+			return "2";
+		}
+		return "1";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/manageAddress/cancelDefault", method=RequestMethod.POST)
+	public String cancelDefault(@RequestParam int addressId) throws Exception {
+		try {
+			log.info(addressId);
+			service.cancelDefault(1);			
+		} catch(Exception e) {
 			log.info(e.getMessage());
 			return "2";
 		}

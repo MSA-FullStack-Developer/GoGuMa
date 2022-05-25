@@ -13,12 +13,17 @@
 		from deliveryaddress
 		where memberId = #{memberId} and isdefault = 1
 	</select>
-	<update id="cancelDefault">
-		update deliveryaddress set isdefault = 0
-		where memberId = #{memberId} and addressId = #{addressId}
-	</update>
+	
 	<delete id="deleteAddress">
 		delete from deliveryaddress
 		where memberId = #{memberId} and addressid = #{addressId}
 	</delete>
+	
+	<update id="setDefault">
+		update deliveryaddress set isdefault = 1
+		where memberId = #{memberId} and addressId = #{addressId}
+	</update>
+	<update id="cancelDefault">
+		update deliveryaddress set isdefault = 0 where memberId = #{memberId}
+	</update>
 </mapper>
