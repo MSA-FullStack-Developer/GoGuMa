@@ -10,13 +10,15 @@ public interface MyPageMapper {
 //	@Select("SELECT nickname, recipient, address, contact FROM deliveryaddress")
 //	public List<DeliveryAddressDTO> testWithAnnotation();
 	
-	List<DeliveryAddressDTO> getAddressList(int memberid) throws Exception;
+	List<DeliveryAddressDTO> getAddressList(long memberid) throws Exception;
 
-	DeliveryAddressDTO getDefaultAddress(int memberid) throws Exception;
+	DeliveryAddressDTO getDefaultAddress(long memberid) throws Exception;
 	
-	void deleteAddress(@Param("memberId") int memberId, @Param("addressId") int addressId) throws Exception;
+	void addAddress(DeliveryAddressDTO dto) throws Exception;
 	
-	void setDefault(@Param("memberId") int memberId, @Param("addressId") int addressId) throws Exception;
+	void deleteAddress(@Param("memberId") long memberId, @Param("addressId") long addressId) throws Exception;
+	
+	void setDefault(@Param("memberId") long memberId, @Param("addressId") long addressId) throws Exception;
 
-	void cancelDefault(@Param("memberId") int memberId) throws Exception;
+	void cancelDefault(@Param("memberId") long memberId) throws Exception;
 }

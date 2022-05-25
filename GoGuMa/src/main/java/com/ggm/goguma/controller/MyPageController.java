@@ -49,11 +49,25 @@ public class MyPageController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/manageAddress/delete", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(value="/manageAddress/addAddress", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public String addAddress(@RequestBody DeliveryAddressDTO dto, Model model) throws Exception {
+		try {
+			log.info(dto);
+			dto.setMemberId(1);
+			service.addAddress(dto);
+		} catch(Exception e) {
+			log.info(e.getMessage());
+			return "2";
+		}
+		return "1";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/manageAddress/deleteAddress", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public String deleteAddress(@RequestBody List<Integer> list) throws Exception {
 		try {
 			log.info(list);
-			for(int addressId : list) {
+			for(long addressId : list) {
 				service.deleteAddress(1, addressId);
 			}
 		} catch (Exception e) {
@@ -65,7 +79,7 @@ public class MyPageController {
 	
 	@ResponseBody
 	@RequestMapping(value="/manageAddress/setDefault", method=RequestMethod.POST)
-	public String setDefault(@RequestParam int addressId) throws Exception {
+	public String setDefault(@RequestParam long addressId) throws Exception {
 		try {
 			log.info(addressId);
 			service.setDefault(1, addressId);
@@ -78,7 +92,7 @@ public class MyPageController {
 	
 	@ResponseBody
 	@RequestMapping(value="/manageAddress/cancelDefault", method=RequestMethod.POST)
-	public String cancelDefault(@RequestParam int addressId) throws Exception {
+	public String cancelDefault(@RequestParam long addressId) throws Exception {
 		try {
 			log.info(addressId);
 			service.cancelDefault(1);			

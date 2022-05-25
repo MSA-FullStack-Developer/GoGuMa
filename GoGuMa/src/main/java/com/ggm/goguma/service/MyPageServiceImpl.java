@@ -14,28 +14,34 @@ public class MyPageServiceImpl implements MyPageService {
 	private MyPageMapper mapper;
 	
 	@Override
-	public List<DeliveryAddressDTO> getAddressList(int memberid) throws Exception {
+	public List<DeliveryAddressDTO> getAddressList(long memberid) throws Exception {
 		return mapper.getAddressList(memberid);
 	}
 
 	@Override
-	public DeliveryAddressDTO getDefaultAddress(int memberid) throws Exception {
+	public DeliveryAddressDTO getDefaultAddress(long memberid) throws Exception {
 		return mapper.getDefaultAddress(memberid);
+	}
+
+	@Override
+	public void addAddress(DeliveryAddressDTO dto) throws Exception {
+		if(dto.getIsDefault()==1) mapper.cancelDefault(dto.getMemberId()); // 기본 배송지가 설정돼있으면 제거
+		mapper.addAddress(dto);
 	}
 	
 	@Override
-	public void setDefault(int memberId, int addressId) throws Exception {
+	public void deleteAddress(long memberId, long addressId) throws Exception {
+		mapper.deleteAddress(memberId, addressId);
+	}
+	
+	@Override
+	public void setDefault(long memberId, long addressId) throws Exception {
 		mapper.cancelDefault(memberId);
 		mapper.setDefault(memberId, addressId);
 	}
 
 	@Override
-	public void cancelDefault(int memberId) throws Exception {
+	public void cancelDefault(long memberId) throws Exception {
 		mapper.cancelDefault(memberId);
-	}
-	
-	@Override
-	public void deleteAddress(int memberId, int addressId) throws Exception {
-		mapper.deleteAddress(memberId, addressId);
 	}
 }

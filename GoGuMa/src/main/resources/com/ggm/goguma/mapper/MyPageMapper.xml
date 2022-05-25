@@ -14,6 +14,11 @@
 		where memberId = #{memberId} and isdefault = 1
 	</select>
 	
+	<insert id="addAddress" parameterType="DeliveryAddressDTO">
+		insert into deliveryaddress(memberid, nickname, recipient, address, contact, isdefault)
+		values(#{memberId}, #{nickName}, #{recipient}, #{address}, #{contact}, #{isDefault})
+	</insert>
+	
 	<delete id="deleteAddress">
 		delete from deliveryaddress
 		where memberId = #{memberId} and addressid = #{addressId}

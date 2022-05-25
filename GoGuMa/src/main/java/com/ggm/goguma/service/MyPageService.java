@@ -5,13 +5,15 @@ import java.util.List;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 
 public interface MyPageService {
-	List<DeliveryAddressDTO> getAddressList(int memberid) throws Exception;
+	List<DeliveryAddressDTO> getAddressList(long memberid) throws Exception;
 
-	DeliveryAddressDTO getDefaultAddress(int memberid) throws Exception;
+	DeliveryAddressDTO getDefaultAddress(long memberid) throws Exception;
 
-	void deleteAddress(int memberId, int addressId) throws Exception;
+	void addAddress(DeliveryAddressDTO dto) throws Exception;
 	
-	void setDefault(int memberId, int addressId) throws Exception;
+	void deleteAddress(long memberId, long addressId) throws Exception;
+	
+	void setDefault(long memberId, long addressId) throws Exception;
 
-	void cancelDefault(int memberId) throws Exception;
+	void cancelDefault(long memberId) throws Exception;
 }
