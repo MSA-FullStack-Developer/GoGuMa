@@ -49,7 +49,7 @@
 											var header = $("meta[name='_csrf_header']").attr("content");
 
 											var itemObj = $(this).parents("tr");
-											var cartId = Number(itemObj.find("input:hidden[name=cartId]").val());
+											var cartId = Number(itemObj.find("input:hidden[id=cartId]").val());
 											console.log("증가하려는 카트아이디:", cartId);
 											var data1 = {
 												"cartId" : cartId
@@ -121,7 +121,7 @@
 													.attr("content");
 
 											var itemObj = $(this).parents("tr");
-											var cartId = Number(itemObj.find("input:hidden[name=cartId]").val());
+											var cartId = Number(itemObj.find("input:hidden[id=cartId]").val());
 											console.log("감소하려는 카트아이디:", cartId);
 											var data1 = {
 												"cartId" : cartId
@@ -182,21 +182,6 @@
 												alert("수량이 올바르지 않습니다.");
 											}
 										});
-						$("button[name='btn-purchase']").click(function() {
-							var token = $("meta[name='_csrf']").attr("content");
-							var header = $("meta[name='_csrf_header']").attr("content");
-
-							var cartIds = $("#nrmProd").find("input:checkbox[name=itemSelect]:checked");
-							var params = {};
-							
-							cartIds.each(function() {
-								params['cartId'] = $(this).val();
-								
-							});
-							postToUrl("${contextPath}/order/orderResult", params);
-							
-							
-						});
 					});
 	
 	/* POST 요청 */
@@ -207,7 +192,7 @@
 		var header = $("meta[name='_csrf_header']").attr("content");
 
 		var itemObj = $(obj).parents("tr");
-		var cartId = Number(itemObj.find("input:hidden[name=cartId]").val());
+		var cartId = Number(itemObj.find("input:hidden[id=cartId]").val());
 
 		var data = {
 			"cartId" : cartId
@@ -262,8 +247,9 @@
 		if (deleted) {
 			//단일 장바구니 삭제 함수 호출
 			cartDel(obj);
+			alert("선택한 장바구니를 삭제했습니다.");
 		}
-		alert("선택한 장바구니를 삭제했습니다.");
+		
 	}
 	//주문내역 계산(총 상품 금액, 총 할인 금액, 총 주문 금액)
 	function calculateSellPrice() {
@@ -440,21 +426,6 @@
 			orderBtn.attr("disabled", "disabled");
 		}
 	};
-	function postToUrl(path, params, method) {
-		method = method || "post";
-		var form = document.createElement("form");    
-		form.setAttribute("method", method);    
-		form.setAttribute("action", path);    
-		for(var key in params) {        
-			var hiddenField = document.createElement("input");        
-			hiddenField.setAttribute("type", "hidden");        
-			hiddenField.setAttribute("name", key);
-			hiddenField.setAttribute("value", params[key]);        
-			form.appendChild(hiddenField);    
-			}    
-			document.body.appendChild(form);    
-			form.submit();
-	}
 	
 </script>
 <div class="container">
@@ -462,7 +433,8 @@
 	<div class="cbody">
 		<div class="contents">
 			<div class="csection">
-				<form id="frmCartInfo" action="/orderResult" method="post" enctype="multipart/form-data">
+				<form id="frmCartInfo" action="${contextPath}/order/" method="get">
+				<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					<div class="cart-area">
 						<div class="cart-head">
 							<div class="cart-top">
@@ -477,8 +449,8 @@
 								</ol>
 							</div>
 							<div class="cart-bottom">
-								<span> ㅇㅇ </span>고객님의 혜택 정보 회원등급: <span> 실버 </span> 적립금: <span>
-									100000 </span>
+								<span>${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> H.Point: <span>
+									 포인트 조회해야함</span>
 								<div class="btngroup">
 									<button type="button" class="btn btn-cart-del"
 										name="allCartDelete" onclick="selectedCartDel()">
@@ -508,12 +480,14 @@
 										<c:forEach var="i" items="${list }" begin="0" step="1"
 											varStatus="status">
 											<tr class="cart-product">
-												<td class="product-select-event"><input type="hidden"
-													name="cartId" value="${i.cartId}" /> <input
-													id="oneSel${status.count}" type="checkbox"
+												<td class="product-select-event">
+												<input type="hidden" name="cartOrderListDTO[${status.index}].cartId" id="cartId" value="${i.cartId}" />
+												 
+												<input id="oneSel${status.count}" type="checkbox"
 													class="selectCheck" name="itemSelect" checked="checked"
-													value="${i.cartId}"> <label
-													for="oneSel${status.count}"></label></td>
+													value="${i.cartId}"> 
+													
+													<label for="oneSel${status.count}"></label></td>
 												<td class="cart-product_box">
 													<div class="product-image">
 														<a href="이동할 링크" class="moveProduct"> <img
@@ -616,8 +590,7 @@
 					<div class="order-buttons">
 						<button type="button" class="btn text-black continue"
 							style="background-color: #FFFFFF;">쇼핑 계속하기</button>
-						<button type="button" id="orderBtn" name="btn-purchase"
-							class="btn text-white purchase" style="background-color: #FF493C">구매하기</button>
+						<button type="submit" id="orderBtn" class="btn text-white purchase" style="background-color: #6426DD">구매하기</button>
 					</div>
 				</form>
 			</div>

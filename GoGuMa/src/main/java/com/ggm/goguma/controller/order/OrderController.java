@@ -6,14 +6,17 @@ import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.ggm.goguma.controller.cart.CartController;
 import com.ggm.goguma.dto.cart.CartItemDTO;
+import com.ggm.goguma.dto.cart.CartOrderDTO;
 
 import lombok.extern.log4j.Log4j;
 
@@ -22,10 +25,11 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping("order")
 public class OrderController {
 
-	@GetMapping("/")
-	public void showOrderList(Model model) throws Exception{
+	@RequestMapping(value =  "/", method = {RequestMethod.GET, RequestMethod.POST})
+	public void showOrderList(@ModelAttribute CartOrderDTO cartOrderDTO, Model model) throws Exception{
 		try {
 			log.info("하하");
+			log.info(cartOrderDTO);
 		}catch (Exception e) {
 			e.printStackTrace();
 			throw e;

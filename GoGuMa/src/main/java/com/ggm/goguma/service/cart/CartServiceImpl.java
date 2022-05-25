@@ -20,7 +20,7 @@ public class CartServiceImpl implements CartService{
 	private CartMapper cartMapper;
 	
 	@Override
-	public List<CartItemDTO> getCartList(int memberId) throws Exception {
+	public List<CartItemDTO> getCartList(long memberId) throws Exception {
 		return cartMapper.getCartList(memberId);
 	}
 
@@ -40,6 +40,12 @@ public class CartServiceImpl implements CartService{
 	public void deleteCart(long cartId) throws Exception {
 		cartMapper.deleteCart(cartId);
 		
+	}
+
+	@Override
+	public void insertCart(long productId, int cartAmount) throws Exception {
+		// TODO Auto-generated method stub
+		cartMapper.insertCart(productId);
 	}
 
 }

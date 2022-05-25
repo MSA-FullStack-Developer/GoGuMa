@@ -40,4 +40,10 @@
 		DELETE FROM cart
 		WHERE cartid = #{cartId}
 	</delete>
+	
+	<insert id="insertCart" parameterType="long">
+		INSERT INTO cart(productid, memberid, cartamount, cartprice)
+		VALUES (#{productId}, 121, #{cartamount}, )
+		
+	</insert>
 </mapper>

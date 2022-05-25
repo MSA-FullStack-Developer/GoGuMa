@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.ProductDTO;
-import com.ggm.goguma.service.CategoryService;
-import com.ggm.goguma.service.ProductService;
+import com.ggm.goguma.service.category.CategoryService;
+import com.ggm.goguma.service.product.ProductService;
 
 import lombok.extern.log4j.Log4j;
 
