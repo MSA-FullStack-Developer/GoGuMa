@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.ProductDTO;
-import com.ggm.goguma.service.CategoryService;
-import com.ggm.goguma.service.ProductService;
+import com.ggm.goguma.service.category.CategoryService;
+import com.ggm.goguma.service.product.ProductService;
 
 import lombok.extern.log4j.Log4j;
 
@@ -29,11 +29,11 @@ public class ProductController {
 	@Autowired
 	private CategoryService categoryService;
 	
-	@Value("${pageSize}")
-	private long pageSize;
+	//@Value("${pageSize}")
+	private long pageSize = 8;
 	
-	@Value("${blockSize}")
-	private long blockSize;
+	//@Value("${blockSize}")
+	private long blockSize = 10;
 	
 	@GetMapping("/{categoryID}")
 	public String list(@PathVariable long pg, @PathVariable long categoryID, Model model) throws Exception {

@@ -262,8 +262,9 @@
 		if (deleted) {
 			//단일 장바구니 삭제 함수 호출
 			cartDel(obj);
+			alert("선택한 장바구니를 삭제했습니다.");
 		}
-		alert("선택한 장바구니를 삭제했습니다.");
+		
 	}
 	//주문내역 계산(총 상품 금액, 총 할인 금액, 총 주문 금액)
 	function calculateSellPrice() {
@@ -617,7 +618,7 @@
 						<button type="button" class="btn text-black continue"
 							style="background-color: #FFFFFF;">쇼핑 계속하기</button>
 						<button type="button" id="orderBtn" name="btn-purchase"
-							class="btn text-white purchase" style="background-color: #FF493C">구매하기</button>
+							class="btn text-white purchase" style="background-color: #6426DD">구매하기</button>
 					</div>
 				</form>
 			</div>

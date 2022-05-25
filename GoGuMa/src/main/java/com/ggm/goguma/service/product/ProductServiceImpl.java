@@ -1,4 +1,4 @@
-package com.ggm.goguma.service;
+package com.ggm.goguma.service.product;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductMapper productMapper;
 	
-	@Value("${pageSize}")
-	private long pageSize;
+	//@Value("${pageSize}")
+	private long pageSize = 8;
 
 	@Override
 	public List<ProductDTO> getProductList(long pg, long categoryID) throws Exception {

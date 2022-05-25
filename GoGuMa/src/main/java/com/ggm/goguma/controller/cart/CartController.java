@@ -99,4 +99,16 @@ public class CartController {
 			throw e;
 		}
 	}
+	
+	// 장바구니 담기
+	@PostMapping("insertCart")
+	@ResponseBody
+	public void insertCart(@RequestParam("productId") long productId, @RequestParam("cartAmount") int cartAmount)throws Exception{
+		try {
+			cartService.insertCart(productId, cartAmount);
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 }
