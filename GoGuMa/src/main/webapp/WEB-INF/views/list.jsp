@@ -31,9 +31,9 @@
         });
         
         function sortList(sort) {
-        	if (${keyword == ''}) {
+        	if (${isSearch == false}) {
         		location.href="${contextPath}/category/1/${categoryID}/?sortType="+sort;
-        	} else if (${keyword != ''}) { // list.jsp가 검색 화면에서 사용된 경우
+        	} else if (${isSearch == true}) { // list.jsp가 검색 화면에서 사용된 경우
         		location.href="${contextPath}/category/1/search/?keyword=${keyword}&sortType="+sort;
         	}
         }
@@ -68,10 +68,10 @@
 		    </ul>
 		</div>
 
-		<c:if test="${keyword != ''}">
+		<c:if test="${isSearch == true}">
 			<h1 style="text-align: center;">"<strong>${keyword}</strong>" 검색결과</h1>
 		</c:if>
-		<c:if test="${keyword == ''}">
+		<c:if test="${isSearch == false}">
         	<h1 style="text-align: center;">${categoryName}</h1>
 		</c:if>
 
@@ -98,7 +98,7 @@
             </c:forEach>
         </div>
         
-        <c:if test="${keyword == ''}">
+        <c:if test="${isSearch == false}">
 	        <div class="list_number">
 			    <div>
 			    	<div class="list_n_menu">

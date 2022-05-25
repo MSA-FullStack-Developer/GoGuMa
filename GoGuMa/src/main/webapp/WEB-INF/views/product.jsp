@@ -10,7 +10,7 @@
 <script src="https://kit.fontawesome.com/985c0d22bf.js" crossorigin="anonymous"></script>
 
 <head>
-    <title>List</title>
+    <title>Product</title>
     
     <style>
     	<%@ include file="/resources/css/style.css" %>

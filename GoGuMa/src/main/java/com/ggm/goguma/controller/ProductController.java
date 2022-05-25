@@ -49,7 +49,7 @@ public class ProductController {
 			String categoryName = categoryService.getCategoryName(categoryID); // 카테고리 이름
 			List<ProductDTO> list = productService.getProductList(pg, categoryID, sortType); // 카테고리별 상품 목록
 
-			model.addAttribute("keyword", ""); // 검색 키워드 null
+			model.addAttribute("keyword", ""); // 검색 키워드를 빈 문자열로 지정
 			model.addAttribute("categoryID", categoryID);
 			model.addAttribute("categoryName", categoryName);
 			model.addAttribute("pg", pg);
@@ -60,6 +60,7 @@ public class ProductController {
 			model.addAttribute("endPage", endPage);
 			model.addAttribute("list", list);
 			model.addAttribute("sortType", sortType);
+			model.addAttribute("isSearch", false);
 			
 			return "list";
 		} catch (Exception e) {
@@ -104,6 +105,7 @@ public class ProductController {
 			model.addAttribute("recordCount", searchCount);
 			model.addAttribute("pg", 1);
 			model.addAttribute("sortType", sortType);
+			model.addAttribute("isSearch", true);
 			
 			return "list";
 		} catch (Exception e) {
