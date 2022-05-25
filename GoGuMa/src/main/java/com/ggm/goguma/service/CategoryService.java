@@ -10,4 +10,10 @@ public interface CategoryService {
 	public List<CategoryDTO> getCategoryList(long parentID) throws Exception;
 	
 	public String getCategoryName(long categoryID) throws Exception;
+	
+	/**
+	 * 작성자 : 이승준
+	 * 작업 날짜 : 22.05.25
+	 * */
+	public List<CategoryDTO> getMdsCategoryParentList();
 }
