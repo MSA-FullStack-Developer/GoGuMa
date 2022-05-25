@@ -11,4 +11,6 @@ public interface MyPageMapper {
 	List<DeliveryAddressDTO> getAddressList(int memberid) throws Exception;
 
 	DeliveryAddressDTO getDefaultAddress(int memberid) throws Exception;
+
+	int deleteAddress(int addressId);
 }

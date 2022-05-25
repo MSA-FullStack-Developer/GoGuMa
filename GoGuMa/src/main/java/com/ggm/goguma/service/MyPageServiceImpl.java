@@ -22,4 +22,9 @@ public class MyPageServiceImpl implements MyPageService {
 	public DeliveryAddressDTO getDefaultAddress(int memberid) throws Exception {
 		return mapper.getDefaultAddress(memberid);
 	}
+
+	@Override
+	public void deleteAddress(int addressId) throws Exception {
+		mapper.deleteAddress(addressId);
+	}
 }

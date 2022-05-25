@@ -8,4 +8,6 @@ public interface MyPageService {
 	List<DeliveryAddressDTO> getAddressList(int memberid) throws Exception;
 
 	DeliveryAddressDTO getDefaultAddress(int memberid) throws Exception;
+
+	void deleteAddress(int addressId) throws Exception;
 }
