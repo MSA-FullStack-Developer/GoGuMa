@@ -11,9 +11,11 @@
 
 <head>
     <title>List</title>
+    
     <style>
     	<%@ include file="/resources/css/style.css" %>
     </style>
+    
     <script>
         $(document).ready(function () {
             $('#searchBtn').click(function () {
@@ -266,15 +268,15 @@
                             <h3>상품평 내용</h3>
                             <div class="imgList">
                                 <div class="imgC">
-                                    <img src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
+                                    <img class="reviewImg" src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
                                         alt="모달할 이미지">
                                 </div>
                                 <div class="imgC">
-                                    <img src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
+                                    <img class="reviewImg" src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
                                         alt="모달할 이미지">
                                 </div>
                                 <div class="imgC">
-                                    <img src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
+                                    <img class="reviewImg" src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
                                         alt="모달할 이미지">
                                 </div>
                             </div>

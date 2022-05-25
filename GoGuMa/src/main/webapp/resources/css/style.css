@@ -4,6 +4,15 @@ body {
     font-family: 'Noto Sans KR', sans-serif;
 }
 
+select {
+	width: 100px; 
+	border: 1px solid #999;
+	border-radius: 30px;
+	float: right;
+	padding-left: 10px;
+	margin-right: 15px;
+}
+
 .sortBtn {
 	float: right;
 	margin-right: 10px;
@@ -16,6 +25,13 @@ body {
 
 .productDetail {
 	width: 100%;
+}
+
+.product {
+    width: 25%;
+    height: 380px;
+    margin: auto;
+    float: left;
 }
 
 .review-content {
@@ -95,9 +111,16 @@ input {
 	align-items: center;
 }
 
-img {
+.reviewImg {
     width: 180px;
     margin-right: 20px;
+}
+
+.listImg {
+    width: 220px;
+    height: 220px;
+    margin-left: 17.5px;
+    margin-right: 17.5px;
 }
   
 .modal {

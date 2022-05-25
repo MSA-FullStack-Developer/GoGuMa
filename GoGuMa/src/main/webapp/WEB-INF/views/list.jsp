@@ -11,23 +11,11 @@
 
 <head>
     <title>List</title>
+    
     <style>
 	    <%@ include file="/resources/css/style.css" %>
-
-        img {
-            width: 220px;
-            height: 220px;
-            margin-left: 17.5px;
-            margin-right: 17.5px;
-        }
-
-        .product {
-            width: 25%;
-            height: 380px;
-            margin: auto;
-            float: left;
-        }
     </style>
+    
     <script>
         $(document).ready(function () {
         	var searchForm = $("#searchForm");
@@ -38,10 +26,17 @@
         		}
         		
         		e.preventDefault();
-        		
         		searchForm.submit();
         	});
         });
+        
+        function sortList(sort) {
+        	if (${keyword == ''}) {
+        		location.href="${contextPath}/category/1/${categoryID}/?sortType="+sort;
+        	} else if (${keyword != ''}) { // list.jsp가 검색 화면에서 사용된 경우
+        		location.href="${contextPath}/category/1/search/?keyword=${keyword}&sortType="+sort;
+        	}
+        }
     </script>
 </head>
 
@@ -84,7 +79,11 @@
 
 		<c:if test="${recordCount != 0}">
 	        <h4>총 <span style="color: red;">${recordCount}</span>개
-	        	<input type="button" class="sortBtn" id="recentBtn" value="최신순">
+		        <select name="sortType" name="type" onchange="javascript:sortList(this.options[this.selectedIndex].value);">
+		        	<option value="recent" <c:if test="${sortType eq 'recent'}">selected</c:if>>최신순</option>
+		        	<option value="expensive" <c:if test="${sortType eq 'expensive'}">selected</c:if>>높은 가격순</option>
+		        	<option value="cheap" <c:if test="${sortType eq 'cheap'}">selected</c:if>>낮은 가격순</option>
+	        	</select>
 	        </h4>
         </c:if>
 		
@@ -92,7 +91,7 @@
         	<c:forEach items="${list}" var="product">
         	<c:set var="categoryID" value="${product.categoryID}"/>
             <div class="product">
-                <a href="${contextPath}/category/${pg}/${product.categoryID}/detail/${product.productID}"><img src="${product.prodimgurl}" /></a>
+                <a href="${contextPath}/category/${pg}/${product.categoryID}/detail/${product.productID}"><img class="listImg" src="${product.prodimgurl}" /></a>
                 <h4>${product.productName}</h4>
                 <h3><fmt:formatNumber value="${product.productPrice}" pattern="#,###" />원</h3>
             </div>
@@ -104,14 +103,14 @@
 			    <div>
 			    	<div class="list_n_menu">
 			        	<c:if test="${startPage != 1}">
-							<a href="${contextPath}/category/${startPage-1}/${categoryID}"><i class="fa-solid fa-caret-left"></i>이전</a>
+							<a href="${contextPath}/category/${startPage-1}/${categoryID}/?sortType=${sortType}"><i class="fa-solid fa-caret-left"></i>이전</a>
 						</c:if>
 				        <c:forEach begin="${startPage}" end="${endPage}" var="p">
 							<c:if test="${p == pg}"><span class="current">${p}</span></c:if>
-							<c:if test="${p != pg}"><a href="${contextPath}/category/${p}/${categoryID}">${p}</a></c:if>
+							<c:if test="${p != pg}"><a href="${contextPath}/category/${p}/${categoryID}?sortType=${sortType}">${p}</a></c:if>
 						</c:forEach>
 						<c:if test="${endPage != pageCount}">
-							<a href="${contextPath}/category/${endPage+1}/${categoryID}">다음<i class="fa-solid fa-caret-right"></i></a>
+							<a href="${contextPath}/category/${endPage+1}/${categoryID}/?sortType=${sortType}">다음<i class="fa-solid fa-caret-right"></i></a>
 						</c:if>
 			        </div>
 			    </div>

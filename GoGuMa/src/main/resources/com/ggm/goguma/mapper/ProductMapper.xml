@@ -2,6 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ggm.goguma.mapper.ProductMapper">
+
+	<!-- 정렬 조건 -->
+	<sql id="sort">
+		<if test="sortType == 'recent'">
+			ORDER BY productid DESC
+		</if>
+		<if test="sortType == 'expensive'">
+			ORDER BY productprice DESC
+		</if>
+		<if test="sortType == 'cheap'">
+			ORDER BY productprice ASC
+		</if>
+	</sql>
 	
 	<!-- 상품 목록 -->
 	<select id="getProductList" parameterType="long" resultType="com.ggm.goguma.dto.ProductDTO">
@@ -9,10 +22,11 @@
 		FROM (SELECT DISTINCT B.categoryid, A.productname, A.productprice, A.prodimgurl, A.productid, rownum AS rnum
 				FROM (SELECT p.productid, p.productname, p.productprice, i.prodimgurl, p.categoryid
 						FROM product p, productimage i
-						WHERE p.productid = i.productid AND p.parentpid is null) A, category B
-				WHERE B.categoryid = A.categoryid AND A.categoryid = #{categoryID}) C
+						WHERE p.productid = i.productid AND p.parentpid is null
+						<include refid="sort"></include>) A, category B
+				WHERE B.categoryid = A.categoryid AND A.categoryid = #{categoryID}
+				<include refid="sort"></include>) C
 		WHERE rnum BETWEEN #{startNum} AND #{endNum}
-		ORDER BY productid DESC
 	</select>
 	
 	<!-- 상품 개수 -->
@@ -48,7 +62,8 @@
 		SELECT p.productid, p.productname, p.productprice, i.prodimgurl, p.categoryid
 		FROM product p, productimage i
 		WHERE p.productid = i.productid AND p.parentpid is null
-		AND productname LIKE '%'||#{keyword}||'%'
+		AND p.productname LIKE '%'||#{keyword}||'%'
+		<include refid="sort"></include>
 	</select>
 	
 	<select id="getSearchCount" parameterType="String" resultType="long">
@@ -56,4 +71,5 @@
 		FROM product
 		WHERE parentpid is null AND productname LIKE '%'||#{keyword}||'%'
 	</select>
+	
 </mapper>

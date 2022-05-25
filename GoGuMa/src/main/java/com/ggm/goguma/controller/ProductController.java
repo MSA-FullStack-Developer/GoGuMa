@@ -28,11 +28,11 @@ public class ProductController {
 	@Autowired
 	private CategoryService categoryService;
 	
-	private int pageSize = 4;
-	private int blockSize = 2;
+	private int pageSize = 8;
+	private int blockSize = 10;
 	
 	@GetMapping("/{categoryID}")
-	public String list(@PathVariable long pg, @PathVariable long categoryID, Model model) throws Exception {
+	public String list(@PathVariable long pg, @PathVariable long categoryID, @RequestParam(defaultValue="recent") String sortType, Model model) throws Exception {
 		try {
 			showCategoryMenu(model);
 			
@@ -47,7 +47,7 @@ public class ProductController {
 			if (endPage > pageCount) endPage = pageCount;
 			
 			String categoryName = categoryService.getCategoryName(categoryID); // 카테고리 이름
-			List<ProductDTO> list = productService.getProductList(pg, categoryID); // 카테고리별 상품 목록
+			List<ProductDTO> list = productService.getProductList(pg, categoryID, sortType); // 카테고리별 상품 목록
 
 			model.addAttribute("keyword", ""); // 검색 키워드 null
 			model.addAttribute("categoryID", categoryID);
@@ -59,6 +59,7 @@ public class ProductController {
 			model.addAttribute("startPage", startPage);
 			model.addAttribute("endPage", endPage);
 			model.addAttribute("list", list);
+			model.addAttribute("sortType", sortType);
 			
 			return "list";
 		} catch (Exception e) {
@@ -91,17 +92,18 @@ public class ProductController {
 	}
 	
 	@GetMapping("/search/")
-	public String search(@RequestParam(defaultValue="") String keyword, Model model) throws Exception {
+	public String search(@RequestParam(defaultValue="") String keyword, @RequestParam(defaultValue="recent") String sortType, Model model) throws Exception {
 		try {
 			showCategoryMenu(model);
 			
-			List<ProductDTO> list = productService.getSearchList(keyword);
+			List<ProductDTO> list = productService.getSearchList(keyword, sortType);
 			long searchCount = productService.getSearchCount(keyword);
 
 			model.addAttribute("keyword", keyword);
 			model.addAttribute("list", list);
 			model.addAttribute("recordCount", searchCount);
 			model.addAttribute("pg", 1);
+			model.addAttribute("sortType", sortType);
 			
 			return "list";
 		} catch (Exception e) {
