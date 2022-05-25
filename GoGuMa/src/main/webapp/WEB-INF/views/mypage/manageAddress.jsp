@@ -214,26 +214,28 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div id="addressModal" class="modal-body">
-                	<div class="mb-1">
-                		<label for="nickName" class="col-form-label">배송지 별칭</label>
-                		<input type="text" class="form-control" id="nickName">
-               		</div>
-               		<div class="mb-1">
-               			<label for="recipient" class="col-form-label">받는 분</label>
-               			<input type="text" class="form-control" id="recipient">
-              		</div>
-              		<div class="mb-1">
-              			<label for="address" class="col-form-label">배송지 주소</label>
-              			<input type="text" class="form-control" id="address">
-             		</div>
-             		<div class="mb-3">
-             			<label for="contact" class="col-form-label">연락처</label>
-             			<input type="text" class="form-control" id="contact">
-            		</div>
-            		<div class="">
-            			<label for="checkDefault" class="col-form-label">기본 배송지 설정</label>
-            			<input type="checkbox" id="isDefault">
-            		</div>
+                	<form>
+	                	<div class="mb-1">
+	                		<label for="nickName" class="col-form-label">배송지 별칭</label>
+	                		<input type="text" class="form-control" id="nickName">
+	               		</div>
+	               		<div class="mb-1">
+	               			<label for="recipient" class="col-form-label">받는 분</label>
+	               			<input type="text" class="form-control" id="recipient">
+	              		</div>
+	              		<div class="mb-1">
+	              			<label for="address" class="col-form-label">배송지 주소</label>
+	              			<input type="text" class="form-control" id="address">
+	             		</div>
+	             		<div class="mb-3">
+	             			<label for="contact" class="col-form-label">연락처</label>
+	             			<input type="text" class="form-control" id="contact">
+	            		</div>
+	            		<div class="">
+	            			<label for="checkDefault" class="col-form-label">기본 배송지 설정</label>
+	            			<input type="checkbox" id="isDefault">
+	            		</div>
+	            	</form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="addAddressBtn" class="btn btn-dark">확인</button>
@@ -388,7 +390,10 @@
 				}
 			});
 		});
+		
+		$('.modal').on('hidden.bs.modal', function(e) {
+			$(this).find('form')[0].reset();
+		});
 	});
 </script>
 </html>
-    
