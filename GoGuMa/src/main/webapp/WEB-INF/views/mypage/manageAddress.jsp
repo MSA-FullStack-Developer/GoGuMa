@@ -187,11 +187,58 @@
                     			<td>${addressDTO.address}</td>
                     			<td>${addressDTO.contact}</td>
                     			<td>
-	                                <button type="button" class="btn btn-outline-dark btn-sm">수정</button>
-	                                <button type="button" id="${addressDTO.addressId}" class="btn btn-outline-dark btn-sm" onClick="deleteAddress(this.id)">삭제</button>
+	                                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#modal${addressDTO.addressId}">수정</button>
+	                                <button type="button" class="btn btn-outline-dark btn-sm" onclick="deleteAddress(this)">삭제</button>
+	                                <input type="hidden" value="${addressDTO.addressId}" />
 	                            </td>
                     		</tr>
                     	</tbody>
+                    	<div class="modal fade" id="modal${addressDTO.addressId}" tabindex="-1">
+					        <div class="modal-dialog modal-dialog-centered">
+					            <div class="modal-content">
+					                <div class="modal-header">
+					                    <h5 class="modal-title" id="exampleModalLabel"><b>배송지 수정</b></h5>
+					                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					                </div>
+					                <div class="modal-body" id="body${addressDTO.addressId}">
+					                	<form>
+						                	<div class="mb-1">
+						                		<label for="nickName" class="col-form-label">배송지 별칭</label>
+						                		<input type="text" class="form-control" id="nickName${addressDTO.addressId}" value="${addressDTO.nickName}">
+						               		</div>
+						               		<div class="mb-1">
+						               			<label for="recipient" class="col-form-label">받는 분</label>
+						               			<input type="text" class="form-control" id="recipient${addressDTO.addressId}" value="${addressDTO.recipient}">
+						              		</div>
+						              		<div class="mb-1">
+						              			<label for="address" class="col-form-label">배송지 주소</label>
+						              			<input type="text" class="form-control" id="address${addressDTO.addressId}" value="${addressDTO.address}">
+						             		</div>
+						             		<div class="mb-3">
+						             			<label for="contact" class="col-form-label">연락처</label>
+						             			<input type="text" class="form-control" id="contact${addressDTO.addressId}" value="${addressDTO.contact}">
+						            		</div>
+						            		<div class="">
+						            			<label for="checkDefault" class="col-form-label">기본 배송지 설정</label>
+						            			<c:choose>
+						            				<c:when test="${addressDTO.isDefault eq 1 }">
+						            					<input type="checkbox" id="isDefault${addressDTO.addressId}" checked>
+						            				</c:when>
+						            				<c:otherwise>
+						            					<input type="checkbox" id="isDefault${addressDTO.addressId}">
+					            					</c:otherwise>
+						            			</c:choose>
+						            		</div>
+						            	</form>
+					                </div>
+					                <div class="modal-footer">
+					                    <button type="button" class="btn btn-dark" onclick="updateAddress(this)">확인</button>
+					                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">취소</button>
+					                    <input type="hidden" value="${addressDTO.addressId}" />
+					                </div>
+					            </div>
+					        </div>
+					    </div>
                     </c:forEach>
                 </table>
                 <div class="row">
@@ -199,21 +246,21 @@
                 		<button type="button" id="setDefaultBtn" class="btn btn-primary btn-sm">기본 배송지 설정</button>
                 	</div>
                 	<div class="col" align="right">
-	                    <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#addAddressModal">배송지 등록</button>
+	                    <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#deliveryAddressModal">배송지 등록</button>
 	                    <button type="button" id="deleteAddressBtn" class="btn btn-danger btn-sm">선택 삭제</button>
 	                </div>
                 </div>
             </div>
 		</div>
 	</div>
-    <div class="modal fade" id="addAddressModal" tabindex="-1">
+    <div class="modal fade" id="deliveryAddressModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel"><b>배송지 등록</b></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div id="addressModal" class="modal-body">
+                <div id="addressBody" class="modal-body">
                 	<form>
 	                	<div class="mb-1">
 	                		<label for="nickName" class="col-form-label">배송지 별칭</label>
@@ -249,9 +296,55 @@
 <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
-	function deleteAddress(addressId) {
+	// 수정 버튼 이벤트
+	function updateAddress(event) {
+		let isDefault = 0;
+		let addressId = $(event).siblings('input').val();
+		if($('#isDefault'+addressId).prop('checked')) {
+			isDefault = 1;
+		}
+
+		console.log(addressId);
+		console.log($('#nickName'+addressId).val());
+		console.log($('#recipient'+addressId).val());
+		console.log($('#address'+addressId).val());
+		console.log($('#contact'+addressId).val());
+		console.log(isDefault);
+
+		let token = $("meta[name='_csrf']").attr("content");
+	    let header = $("meta[name='_csrf_header']").attr("content");
+	    let data = {
+	    	addressId : addressId,
+    		nickName : $('#nickName'+addressId).val(),
+			recipient : $('#recipient'+addressId).val(),
+			address : $('#address'+addressId).val(),
+			contact : $('#contact'+addressId).val(),
+			isDefault : isDefault
+	    }
+	    
+	    $.ajax({
+	    	url : '${contextPath}/mypage/manageAddress/updateAddress',
+	    	type : 'POST',
+	    	data : JSON.stringify(data),
+			contentType : 'application/json; charset=utf-8;',
+			beforeSend : function(xhr) {
+	            xhr.setRequestHeader(header, token);
+	        },
+	        success:function(result) {
+	        	if(result==1) {
+	        		alert('배송지 수정 완료');
+	        		window.location.href = "${contextPath}/mypage/manageAddress";
+	        	} else {
+					alert('배송지 수정 오류');
+				}
+	        }
+	    });
+	}
+	
+	// 삭제 버튼 이벤트
+	function deleteAddress(event) {
 		let arr = new Array();
-		arr.push(Number(addressId));
+		arr.push(Number($(event).siblings('input').val()));
 		let token = $("meta[name='_csrf']").attr("content");
 	    let header = $("meta[name='_csrf_header']").attr("content");
 		$.ajax({
@@ -273,6 +366,7 @@
 		});
 	}
 	
+	// 기본 배송지 해지 버튼 이벤트
 	function cancelDefault(addressId) {
 		let token = $("meta[name='_csrf']").attr("content");
 	    let header = $("meta[name='_csrf_header']").attr("content");
@@ -297,6 +391,7 @@
 	}
 	
 	$(document).ready(function() {
+		// 기본 배송지 설정 이벤트
 		$('#setDefaultBtn').on('click', function() {
 			let checked = 0;
 			let checkBoxArray = new Array();
@@ -331,18 +426,23 @@
 			}
 		});
 		
+		// 배송지 등록 이벤트
 		$('#addAddressBtn').on('click', function() {
 			let isDefault = 0;
-			if($('#isDefault').prop('checked')) isDefault = 1;
+			if($('#isDefault').prop('checked')) {
+				isDefault = 1;
+			}
+			
 			let token = $("meta[name='_csrf']").attr("content");
 		    let header = $("meta[name='_csrf_header']").attr("content");
 		    let data = {
-	    		nickName : $('#addressModal').find('#nickName').val(),
-				recipient : $('#addressModal').find('#recipient').val(),
-				address : $('#addressModal').find('#address').val(),
-				contact : $('#addressModal').find('#contact').val(),
+	    		nickName : $('#addressBody').find('#nickName').val(),
+				recipient : $('#addressBody').find('#recipient').val(),
+				address : $('#addressBody').find('#address').val(),
+				contact : $('#addressBody').find('#contact').val(),
 				isDefault : isDefault
 		    }
+		    
 			$.ajax({
 				url : '${contextPath}/mypage/manageAddress/addAddress',
 				type : 'POST',
@@ -356,12 +456,13 @@
 		        		alert('배송지 추가 완료');
 		        		window.location.href = "${contextPath}/mypage/manageAddress";
 		        	} else {
-						alert('삭제 오류');
+						alert('배송지 추가 오류');
 					}
 		        }
 			});
 		});
 		
+		// 선택 삭제 이벤트
 		$('#deleteAddressBtn').on('click', function() {
 			let checkBoxArray = new Array();
 			for(let i=0; i<$('input[name=check]').length; i++) {
@@ -370,27 +471,31 @@
 				}
 			}
 			
-			let token = $("meta[name='_csrf']").attr("content");
-		    let header = $("meta[name='_csrf_header']").attr("content");
-			$.ajax({ // checked된 checkbox의 value만 배열에 넣어서 전송
-				url : '${contextPath}/mypage/manageAddress/deleteAddress',
-				type : 'POST',
-				data : JSON.stringify(checkBoxArray),
-				contentType : "application/json; charset=utf-8;",
-				beforeSend : function(xhr) {
-		            xhr.setRequestHeader(header, token);
-	            },
-				success:function(result) {
-					if(result==1) {
-						alert('배송지 삭제 완료');
-						window.location.href = "${contextPath}/mypage/manageAddress";
-					} else {
-						alert('삭제 오류');
+			if(checkBoxArray.length<1) alert('삭제하려는 배송지를 선택해주세요.');
+			else {
+				let token = $("meta[name='_csrf']").attr("content");
+			    let header = $("meta[name='_csrf_header']").attr("content");
+				$.ajax({ // checked된 checkbox의 value만 배열에 넣어서 전송
+					url : '${contextPath}/mypage/manageAddress/deleteAddress',
+					type : 'POST',
+					data : JSON.stringify(checkBoxArray),
+					contentType : "application/json; charset=utf-8;",
+					beforeSend : function(xhr) {
+			            xhr.setRequestHeader(header, token);
+		            },
+					success:function(result) {
+						if(result==1) {
+							alert('배송지 삭제 완료');
+							window.location.href = "${contextPath}/mypage/manageAddress";
+						} else {
+							alert('삭제 오류');
+						}
 					}
-				}
-			});
+				});
+			}
 		});
 		
+		// 모달 창 내용 초기화
 		$('.modal').on('hidden.bs.modal', function(e) {
 			$(this).find('form')[0].reset();
 		});
