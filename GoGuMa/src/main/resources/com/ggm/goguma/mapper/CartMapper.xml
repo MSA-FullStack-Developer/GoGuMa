@@ -43,8 +43,8 @@
 	
 	<insert id="insertCart">
 		INSERT INTO cart(productid, memberid, cartamount, cartprice)
-		VALUES (#{productId}, #{memberId}, #{cartamount}, (SELECT productPrice
+		VALUES (#{productId}, #{memberId}, #{cartAmount}, (SELECT productPrice
 															FROM product
-															WHERE productid = #{productId})) AS productprice
+															WHERE productid = #{productId}) ) 
 	</insert>
 </mapper>
