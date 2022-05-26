@@ -16,19 +16,6 @@
     </style>
     
     <script>
-        $(document).ready(function () {
-        	var searchForm = $("#searchForm");
-        	
-        	$('#searchBtn').on("click", function() {
-        		if(!searchForm.find("#keyword").val()){
-        			alert("검색할 상품을 입력하세요.");
-        		}
-        		
-        		e.preventDefault();
-        		searchForm.submit();
-        	});
-        });
-        
         function sortList(sort) {
         	if (${isSearch == false}) {
         		location.href="${contextPath}/category/1/${categoryID}/?sortType="+sort;

@@ -14,19 +14,25 @@ select {
 }
 
 .headerCategory {
-    width: 1320px;
+    width: 210px;
     height: 60px;
-    margin: 0 auto;
     padding-top: 20px;
 }
 
 .option {
 	width: 60%;
+	float: left;
+	height: 45px;
 }
 
 .no_result {
 	text-align: center;
 	margin-top: 100px;
+	color: #FF493C;
+}
+
+.no_keyword {
+	text-align: center;
 	color: #FF493C;
 }
 
@@ -46,7 +52,7 @@ select {
 
 .product {
     width: 25%;
-    height: auto;
+    height: 420px;
     margin: auto;
     float: left;
     padding-bottom: 65px;
@@ -227,7 +233,7 @@ input {
     padding: 0 50px;
     line-height: 55px;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 15pt
 }
 
 .tabnav li a.active {
@@ -243,6 +249,9 @@ input {
 
 .header {
     height: auto;
+    width: 1320px;
+    text-align: center;
+    margin: 0 auto;
 }
 
 .thumbnailImg {
@@ -274,18 +283,17 @@ h5 {
 }
 
 .searchBtn {
-    font-weight: 900;
+	font-weight: 900;
     font-family: "Font Awesome 5 Free";
     background-color: transparent;
     border: none;
     cursor: pointer;
     position: absolute;
     width: 60px;
-    top: 40px;
+    height: 58px;
     right: 2px;
     margin: 0;
     font-size: 20px;
-    margin-top: 1.5%;
 }
 
 .prodInfo {

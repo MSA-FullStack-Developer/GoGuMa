@@ -17,6 +17,9 @@
     	<%@ include file="/resources/css/style.css" %>
     </style>
     
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/jquery/1.10.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/resources/js/jquery.zoom.js" ></script>
+
     <script>
  		// 가격 format() 함수
  		Number.prototype.format = function() {
@@ -42,17 +45,6 @@
 	    }
 	    
         $(document).ready(function () {
-			var searchForm = $("#searchForm");
-        	
-        	$('#searchBtn').on("click", function() {
-        		if(!searchForm.find("#keyword").val()){
-        			alert("검색 내용을 입력하세요.");
-        		}
-        		
-        		e.preventDefault();
-        		searchForm.submit();
-        	});
-        	
         	$('.option-img').click(function() {
         		var src = $(this).data("src");
         		
@@ -76,6 +68,8 @@
 	                	$("#numBox").val(plusNum);        
 	                	$('.total_price').text((optionPrice * plusNum).format() + "원");
 	                }
+                } else {
+                	alert("옵션을 선택하세요.");
                 }
             });
 
@@ -94,7 +88,9 @@
                         $("#numBox").val(minusNum);
                         $('.total_price').text((optionPrice * minusNum).format() + "원");
                     }
-            	}
+            	} else {
+                	alert("옵션을 선택하세요.");
+                }
             });
 
             $(function () {
@@ -185,7 +181,7 @@
 	        				if(result){
 	        					alert("장바구니에 상품이 담겼습니다.");
 	        				}else{
-	        					alert("로그인 후 이용가능합니다.")
+	        					alert("로그인 후 이용가능한 서비스입니다.")
 	        				}
 	        				
 	        			},
@@ -197,7 +193,9 @@
 	        				alert(message);
 	        			}
 	        		});
-            	}
+            	} else {
+                	alert("옵션을 선택하세요.");
+                }
         	});
             
             $('#buyBtn').on("click", function() {
@@ -216,8 +214,8 @@
         <hr>
 
         <div class="prodInfo">
-            <img class="thumbnailImg" id="thumbnailImg" src="${productInfo.prodimgurl}" style="float: left;" />
-            
+           	<img class="thumbnailImg" id="thumbnailImg" src="${productInfo.prodimgurl}" style="float: left;" />
+
             <div class="product_detail">
                 <table>
                 	<tr>
@@ -240,7 +238,7 @@
 	                        <td>옵션</td>
 	                        <td>
 	                        	<div class="selectbox">
-		                            <select class="option" id="option" name="option" style="float: left;" onchange="javascript:selectOption(this.options[this.selectedIndex].value);">
+		                            <select class="option" id="option" name="option" onchange="javascript:selectOption(this.options[this.selectedIndex].value);">
 		                            	<option value="" data-price="${productInfo.productPrice}">선택 없음</option>
 		                            	<c:forEach items="${option}" var="option">
 		                                	<option value="${option.stock}" 
