@@ -6,7 +6,7 @@ import com.ggm.goguma.dto.ProductDTO;
 
 public interface ProductService {
 	// 상품 목록
-	public List<ProductDTO> getProductList(long pg, long categoryID) throws Exception;
+	public List<ProductDTO> getProductList(long pg, long categoryID, String sortType) throws Exception;
 	
 	// 상품 개수
 	public long getProductCount(long categoryID) throws Exception;
@@ -19,6 +19,7 @@ public interface ProductService {
 
 	// 상품 옵션 개수
 	public long getOptionCount(long productID) throws Exception;
+
 	
 	/**
 	 * 작성자 : 이승준
@@ -26,4 +27,11 @@ public interface ProductService {
 	 * */
 	// 대분류 카테고리에 속한 상품 목록 조회
 	public List<ProductDTO> getSameParentCategoryProductList(long categoryID);
+
+
+	// 상품 검색
+	public List<ProductDTO> getSearchList(String keyword, String sortType) throws Exception;
+
+	public long getSearchCount(String keyword) throws Exception;
 }
+

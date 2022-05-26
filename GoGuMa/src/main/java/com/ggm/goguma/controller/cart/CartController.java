@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +22,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ggm.goguma.dto.cart.CartDTO;
 import com.ggm.goguma.dto.cart.CartItemDTO;
+import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.mapper.CartMapper;
 import com.ggm.goguma.service.cart.CartService;
+import com.ggm.goguma.service.member.MemberService;
 
 import lombok.extern.log4j.Log4j;
 
@@ -32,22 +36,37 @@ public class CartController {
 
 	@Autowired
 	private CartService cartService;
+	
+	@Autowired
+	private MemberService memberService;
 
-	public CartController(CartService cartService) {
-		this.cartService = cartService;
-	}
+	/*
+	 * public CartController(CartService cartService) { this.cartService =
+	 * cartService; }
+	 */
 
 	@GetMapping("/")
-	public String cartList(Model model) throws Exception {
+	public String cartList(Model model, Authentication authentication) throws Exception {
 		try {
-			int memberId = 1;
-			// 회원이 담은 카트 리스트를 불러온다.
-			List<CartItemDTO> list = cartService.getCartList(memberId);
-			model.addAttribute("list", list);
-
-			// 로그인한 회원 정보를 가져온다.
-
-			list.forEach(c -> System.out.println(c));
+			String memberEmail = "";
+			// 사용자가 권한이 있는 경우
+			if (authentication != null){
+				UserDetails user = (UserDetails)authentication.getPrincipal();
+				//사용자 이메일정보를 가져온다.
+				memberEmail = user.getUsername();
+				//사용자 정보 가져오기
+				MemberDTO memberDTO = memberService.getMember(memberEmail);
+				log.info("장바구니에서 사용될 사용자 정보: " + memberDTO);
+				// 회원이 담은 카트 리스트를 불러온다.
+				long memberId = memberDTO.getId();
+				List<CartItemDTO> list = cartService.getCartList(memberId);
+				
+				model.addAttribute("list", list); // 회원이 담은 카트 정보를 저장한다.
+				model.addAttribute("memberDTO", memberDTO); // 회원이 담은 카트 정보를 저장한다.
+				//출력 테스트
+				list.forEach(c -> System.out.println("카트 컨트롤러:" + c));
+			}	
+			
 			return "cartList";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -55,11 +74,10 @@ public class CartController {
 		}
 	}
 
-	@GetMapping("goToOrder")
-	public String order() throws Exception {
-		return "redirect:/order/";
-	}
-
+	/*
+	 * @GetMapping("goToOrder") public String order() throws Exception { return
+	 * "redirect:/order/"; }
+	 */
 	@PostMapping("addCartCount")
 	@ResponseBody
 	public void addCartCount(@RequestParam("cartId") String cartId) throws Exception {
@@ -95,6 +113,34 @@ public class CartController {
 			long cartid = Long.parseLong(cartId);
 			cartService.deleteCart(cartid);
 		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	// 장바구니 담기
+	@PostMapping("insertCart")
+	@ResponseBody
+	public void insertCart(@RequestParam("productId") long productId, @RequestParam("cartAmount") int cartAmount, Authentication authentication)throws Exception{
+		try {
+			String memberEmail = "";
+			if (authentication != null){
+				
+				UserDetails user = (UserDetails)authentication.getPrincipal();
+				//사용자 이메일정보를 가져온다.
+				memberEmail = user.getUsername();
+				//사용자 정보 가져오기
+				MemberDTO memberDTO = memberService.getMember(memberEmail);
+				log.info("장바구니에서 사용될 사용자 정보: " + memberDTO);
+				long memberId = memberDTO.getId();
+				
+				// 회원이 카트에 담는다.
+				cartService.insertCart(productId, cartAmount, memberId);
+			
+			} else {
+				log.info("장바구니에 담을 회원 정보 없음");
+			}
+		}catch(Exception e) {
 			e.printStackTrace();
 			throw e;
 		}

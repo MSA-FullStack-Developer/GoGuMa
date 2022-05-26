@@ -15,7 +15,9 @@
 	background: #f8f8f8;
 }
 
-
+.order-content{
+	width: 800px;
+}
 .cart-area, .order-content {
 	padding: 50px 0 60px 0;
 }
@@ -50,6 +52,7 @@
 
 ul, ol, menu, li {
 	list-style: none;
+	padding: 0;
 }
 
 .cart-list-num li.active {
@@ -200,23 +203,6 @@ ul, ol, menu, li {
 	letter-spacing: -0.6px;
 }
 
-.util-option {
-	position: absolute;
-	top: 249px;
-	left: 50%;
-	margin-left: 289px;
-	transform: translateY(-50%);
-	width: 250px;
-	z-index: 1;
-}
-
-.util-option .sticky-inner {
-	background: #fff;
-	width: 250px;
-	padding: 20px;
-	border: 1px solid #eee;
-	border-radius: 5px;
-}
 
 .util-option .result {
 	display: block;
@@ -319,7 +305,7 @@ ul, ol, menu, li {
 	height: 50px;
 	margin: 0 auto;
 	border-radius: 5px;
-	background: #ff5340;
+	background: #6426DD;
 }
 .all-select-event{
 	text-align: center;
@@ -392,7 +378,7 @@ ul, ol, menu, li {
     color: #111;
 }
 .all-cart-total-price .final-order-price {
-    color: #ea0000;
+    color: #6117f5;
     font-size: 20px;
 }
 .cart-product-discount > span {
@@ -430,7 +416,7 @@ ul, ol, menu, li {
   font-family:"Font Awesome 5 free"; /*폰트어썸 아이콘 사용*/
   font-weight:700;/*폰트어썸 설정*/
   color:#F3F3F3;
-  background-color:#FF493C;
+  background-color:#6426DD ;
   border-color:#000;
   font-size:5px;
   text-align:center;
@@ -476,4 +462,77 @@ ul, ol, menu, li {
 .accordion-button:not(.collapsed){
 	color: #000;
 	--bs-accordion-active-bg: #f8f8f8;
+}
+.sticky{
+	position: sticky;
+	top:48px;
+}
+.util-option{
+	left: 30%;
+    margin-left: 50%;
+    top: 20%;
+}
+
+.sticky-inner {
+	position: absolute;
+    left: 50%;
+	padding: 20px;
+	width: 250px;
+	border: 1px solid #eee;
+	border-radius: 5px;
+	background-color: #fff;
+}
+
+.st-title {
+    color: #333;
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 700;
+    letter-spacing: -0.8px;
+}
+.sticky-inner > .payment-list li {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+.sticky-inner > .payment-list li div {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    margin-top: 8px;
+}
+.sticky-inner > .payment-list li div .txt strong {
+    font-size: 17px;
+    vertical-align: baseline;
+}
+
+.sticky-inner > .payment-list li div .tit {
+    width: 100px;
+    line-height: 25px;
+    color: #333;
+    font-size: 13px;
+    letter-spacing: -1.2px;
+}
+.sticky-inner > .payment-list li div .txt {
+    width: 140px;
+    color: #000;
+    font-size: 14px;
+    text-align: right;
+}
+.sticky-inner > .payment-list li div.total .tit {
+    line-height: 32px;
+    font-weight: 700;
+    letter-spacing: -0.56px;
+}
+.sticky-inner > .payment-list li div.total .txt {
+    color: #6426DD;
+    font-size: 17px;
+    letter-spacing: -0.6px;
+}
+.btn-default span {
+    color: #fff;
+}
+.btn.medium span {
+    font-size: 16px;
+    letter-spacing: -0.64px;
 }

@@ -13,7 +13,9 @@
 	</select>
 	
 	<select id="getCategoryName" parameterType="long" resultType="String">
-		SELECT categoryname FROM category WHERE categoryid = ${categoryID}
+		SELECT categoryname
+		FROM category
+		WHERE categoryid = ${categoryID}
 	</select>
 	
 	<!--  
