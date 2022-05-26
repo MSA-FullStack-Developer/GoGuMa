@@ -14,7 +14,7 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	
-	<import resource="datasource-context.xml"/>
+	<import resource="datasource-context.xml" />
 	
 	<bean id="sqlSession" 
 		class="org.mybatis.spring.SqlSessionFactoryBean" 
@@ -31,7 +31,6 @@
 	<context:component-scan base-package="com.ggm.goguma" />
 	
 	<mybatis-spring:scan base-package="com.ggm.goguma.mapper" />
-		<aop:aspectj-autoproxy />
-		<mvc:annotation-driven />
-	 
+	<aop:aspectj-autoproxy />
+	<mvc:annotation-driven />
 </beans>
