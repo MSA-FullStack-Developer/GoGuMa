@@ -74,11 +74,10 @@ public class CartController {
 		}
 	}
 
-	@GetMapping("goToOrder")
-	public String order() throws Exception {
-		return "redirect:/order/";
-	}
-
+	/*
+	 * @GetMapping("goToOrder") public String order() throws Exception { return
+	 * "redirect:/order/"; }
+	 */
 	@PostMapping("addCartCount")
 	@ResponseBody
 	public void addCartCount(@RequestParam("cartId") String cartId) throws Exception {

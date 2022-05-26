@@ -238,7 +238,7 @@
 							</ol>
 						</div>
 						<div class="cart-bottom">
-							<span> ㅇㅇ </span>고객님의 혜택 정보 회원등급: <span> 실버 </span> 적립금: <span>
+							<span> ${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> 적립금: <span>
 								100000 </span>
 						</div>
 					</div>
@@ -266,46 +266,46 @@
 												<th scope="col" id="th-discount-price">할인금액</th>
 												<th scope="col" id="th-total-price">합계</th>
 											</tr>
+											<c:forEach var="i" items="${list }" begin="0" step="1" varStatus="status">
 											<tr class="order-product">
 												<td class="order-product_box">
 													<div class="product-image">
 														<a href="이동할 링크" class="moveProduct"> 
-														<img src="뭔데 링크" width="78" height="78" class="product-img" alt="">
+														<img src="${i.prodImgUrl }" width="78" height="78" class="product-img" alt="">
 														</a>
 													</div>
 													<div class="product-name">
-														<a href="이동할 링크" class="moveProduct">부모 상품이름</a>
+														<a href="이동할 링크" class="moveProduct">${i.parentProductName }</a>
 													</div>
 													<div class="product-option">
 														<span class="product-option-name"> 옵션:
-															자식 상품이름 </span>
+															${i.productName } </span>
 													</div>
 												</td>
 												<td class="cart-product-count">
 													<div class="cart-count">
-														<span class="c" readonly
-															name="ordQty">11</span>
+														<span class="c" readonly name="ordQty">${i.cartAmount }</span>
 													</div>
 												</td>
 												<td class="cart-price">
 													<div class="cart-product-price">
-														<span>상품가격 000</span>원
+														<span>상품가격 ${dtoList[status.index].nrmOriPrc }</span>원
 													</div>
 												</td>
 												<td class="cart-discount">
 													<div class="cart-product-discount">
 														<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
-														<span>몇%할인</span>
-														<em>0</em>원
+														<em>${dtoList[status.index].disOriPrc }</em>원
 													</div>
 												</td>
 												<td class="cart-total">
 													<div class="cart-total-price">
 														<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
-														<span>00</span>원
+														<span>${dtoList[status.index].totOriPrc }</span>원
 													</div>
 												</td>
 											</tr>
+											</c:forEach>
 										</thead>
 									</table>
 								</div>

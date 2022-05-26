@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.ggm.goguma.mapper.OrderMapper">
+
+	<select id="getOrderList" parameterType="java.util.List" resultType="CartItemDTO">
+		SELECT 
+			C.cartid, 
+			C.productid, 
+			C.cartamount, 
+			P.productname, 
+			P.parentproductname, 
+			C.cartprice, 
+			P.productprice, 
+			P.company, 
+			P.stock,
+			P.prodimgurl,
+			P.isthumbnail
+			FROM cart C JOIN productoriginal P
+			ON C.productid = P.productid
+			WHERE C.cartId IN 
+			<foreach collection="list" item="arr" open="(" close=")" separator=",">
+			#{arr.cartId}
+			</foreach>
+	</select>
+	
+</mapper>
