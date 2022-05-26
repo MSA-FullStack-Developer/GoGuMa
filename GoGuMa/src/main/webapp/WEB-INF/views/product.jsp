@@ -53,6 +53,13 @@
         		searchForm.submit();
         	});
         	
+        	$('.option-img').click(function() {
+        		var src = $(this).data("src");
+        		
+        		// 선택한 옵션 이미지로 썸네일 이미지 변경
+        		$('.thumbnailImg').attr("src", src);
+         	});
+        	
             $("#plus").click(function () {
                 var num = $("#numBox").val();
                 var plusNum = Number(num) + 1;
@@ -205,11 +212,12 @@
 	
 	<div class="prodlist">
         <h1 style="text-align: center">${categoryName}</h1>
-
+		
         <hr>
 
         <div class="prodInfo">
-            <img class="thumbnailImg" src="${productInfo.prodimgurl}" style="float: left;" />
+            <img class="thumbnailImg" id="thumbnailImg" src="${productInfo.prodimgurl}" style="float: left;" />
+            
             <div class="product_detail">
                 <table>
                 	<tr>
@@ -272,6 +280,14 @@
                        <button class="buyBtn" id="buyBtn">바로구매</button>
                 </div>
             </div>
+            
+            <div class="optionImg">
+	            <c:forEach items="${optionImgList}" var="optionImgUrl">
+	            	<li class="option-img" data-src="${optionImgUrl.prodimgurl}">
+	            		<img src="${optionImgUrl.prodimgurl}" />
+            		</li>
+	            </c:forEach>
+            </div>
         </div>
         
         <div class="tab">
@@ -293,9 +309,11 @@
                     
                     <div class="write-modal">
                         <h4 class="membername">회원 이름</h4>
-                        <p><input class="review-content" placeholder="상품평을 입력하세요.">
+                        <p>
+                        	<input class="review-content" placeholder="상품평을 입력하세요.">
                             <button class="finishBtn" id="finishBtn">작성 완료</button>
                             <button class="cancleBtn" id="cancleBtn" style="color: black">취소</button>
+                        </p>
                     </div>
                     
                     <div class="review" id="review">

@@ -289,7 +289,7 @@ h5 {
 }
 
 .prodInfo {
-	height: 600px
+    height: 680px;
 }
 
 .tabBtns {
@@ -316,6 +316,7 @@ h5 {
     margin-right: 30px;
     width: auto;
     font-size: larger;
+    height: 16px
 }
 
 .addOptionInfo {
@@ -526,6 +527,30 @@ a {
 
 a:hover {
     color: white;
+}
+
+.optionImg>li {
+	padding-top: 20px;
+	margin-left: 20px;
+	float: left;
+}
+
+.optionImg>li>img {
+    float: left;
+    margin-top: 16px;
+    margin-right: 16px;
+    border-radius: 8px;
+    BORDER: #F3F3F3 1px solid;
+    width: 100px;
+}
+
+.optionImg>li>img:hover {
+    float: left;
+    margin-top: 16px;
+    margin-right: 16px;
+    border-radius: 8px;
+    BORDER: #FF493C 1px solid;
+    width: 100px;
 }
 
 .category {
