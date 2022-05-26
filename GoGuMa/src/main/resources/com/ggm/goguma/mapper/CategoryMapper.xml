@@ -12,8 +12,10 @@
 		SELECT * FROM category WHERE parentid = ${categoryID}
 	</select>
 	
- 	<select id="getCategoryName" parameterType="long" resultType="String">
-		SELECT categoryname FROM category WHERE categoryid = ${categoryID}
+	<select id="getCategoryName" parameterType="long" resultType="String">
+		SELECT categoryname
+		FROM category
+		WHERE categoryid = ${categoryID}
 	</select>
 	
 </mapper>
