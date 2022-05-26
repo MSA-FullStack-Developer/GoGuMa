@@ -163,9 +163,6 @@
 	                var optionID = $("#option option:selected").data("id");
 	                var cartAmount = $("#numBox").val();
 	                
-	                alert(optionID);
-	                alert(cartAmount);
-	                
 	        		var data = {
 	        			"productId" : optionID,
 	        			"cartAmount" : cartAmount
@@ -178,7 +175,12 @@
 	        				xhr.setRequestHeader(header, token);
 	        			},
 	        			success : function(result) {
-	        				alert("장바구니에 상품이 담겼습니다.");
+	        				if(result){
+	        					alert("장바구니에 상품이 담겼습니다.");
+	        				}else{
+	        					alert("로그인 후 이용가능합니다.")
+	        				}
+	        				
 	        			},
 	        			error : function(xhr, status, error) {
 	        				var errorResponse = JSON.parse(xhr.responseText);

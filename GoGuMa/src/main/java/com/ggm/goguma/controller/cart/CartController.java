@@ -121,7 +121,7 @@ public class CartController {
 	// 장바구니 담기
 	@PostMapping("insertCart")
 	@ResponseBody
-	public void insertCart(@RequestParam("productId") long productId, @RequestParam("cartAmount") int cartAmount, Authentication authentication)throws Exception{
+	public Boolean insertCart(@RequestParam("productId") long productId, @RequestParam("cartAmount") int cartAmount, Authentication authentication)throws Exception{
 		try {
 			String memberEmail = "";
 			if (authentication != null){
@@ -136,9 +136,10 @@ public class CartController {
 				
 				// 회원이 카트에 담는다.
 				cartService.insertCart(productId, cartAmount, memberId);
-			
+				return true;
 			} else {
 				log.info("장바구니에 담을 회원 정보 없음");
+				return false;
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
