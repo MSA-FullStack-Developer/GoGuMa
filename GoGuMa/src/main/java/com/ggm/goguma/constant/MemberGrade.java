@@ -16,5 +16,4 @@ public enum MemberGrade {
 		return this.value;
 	}
 	
-	
 }

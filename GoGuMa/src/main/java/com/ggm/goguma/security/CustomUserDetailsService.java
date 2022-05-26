@@ -1,5 +1,6 @@
 package com.ggm.goguma.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,15 +10,16 @@ import org.springframework.stereotype.Service;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.mapper.MemberMapper;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
-@Service
-@RequiredArgsConstructor
+
 @Log4j
 public class CustomUserDetailsService implements UserDetailsService {
 
-	private final MemberMapper memberMapper;
+	@Autowired
+	private MemberMapper memberMapper;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -43,9 +43,9 @@ public class CartServiceImpl implements CartService{
 	}
 
 	@Override
-	public void insertCart(long productId, int cartAmount) throws Exception {
+	public void insertCart(long productId, int cartAmount, long memberId) throws Exception {
 		// TODO Auto-generated method stub
-		cartMapper.insertCart(productId);
+		cartMapper.insertCart(productId, cartAmount, memberId);
 	}
 
 }

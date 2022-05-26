@@ -22,7 +22,8 @@
                               FROM member
                               WHERE memberid = #{memberId})) AS discountpercent
 			FROM cart C JOIN productoriginal P
-			ON C.productid = P.productid
+			ON C.cartid = P.cartid
+			WHERE P.memberid = #{memberId}
 	</select>
 	
 	<update id="addCartCount" parameterType="long">
@@ -41,9 +42,10 @@
 		WHERE cartid = #{cartId}
 	</delete>
 	
-	<insert id="insertCart" parameterType="long">
+	<insert id="insertCart">
 		INSERT INTO cart(productid, memberid, cartamount, cartprice)
-		VALUES (#{productId}, 121, #{cartamount}, )
-		
+		VALUES (#{productId}, #{memberId}, #{cartAmount}, (SELECT productPrice
+															FROM product
+															WHERE productid = #{productId}) ) 
 	</insert>
 </mapper>

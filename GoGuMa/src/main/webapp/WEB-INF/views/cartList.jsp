@@ -77,7 +77,7 @@
 											}
 											var cartId = Number(itemObj
 													.find(
-															"input:checkbox[name=itemSelect]")
+															"input:checkbox[class=selectCheck]")
 													.val());
 											if (count_val >= 1 && count_val <= stock_val) {
 												$.ajax({
@@ -221,7 +221,7 @@
 	// 선택한 장바구니를 삭제하기 위한 함수 (다중)
 	function selectedCartDel() {
 		var cartIds = $("#nrmProd").find(
-				"input:checkbox[name=itemSelect]:checked");
+				"input:checkbox[class=selectCheck]:checked");
 		console.log(cartIds);
 		if (cartIds.length == 0) {
 			alert("선택된 장바구니가 없습니다.");
@@ -236,7 +236,7 @@
 				//단일 장바구니 삭제 함수 호출
 				cartDel(this);
 			});
-			alert("선택한 장바구니를 삭제했습니다.");
+			alert("장바구니를 삭제했습니다.");
 		}
 	}
 	// 단일 장바구니 삭제를 위한 함수
@@ -247,7 +247,7 @@
 		if (deleted) {
 			//단일 장바구니 삭제 함수 호출
 			cartDel(obj);
-			alert("선택한 장바구니를 삭제했습니다.");
+			alert("장바구니를 삭제했습니다.");
 		}
 		
 	}
@@ -258,36 +258,36 @@
 		var totalDcPrice = 0 //총 할인 금액
 		var totalPayPrice = 0 //총 주문 금액
 		var selectedItemCount = 0;
-		var checkedLength = $("input:checkbox[name=itemSelect]:checked").length;
+		var checkedLength = $("input:checkbox[class=selectCheck]:checked").length;
 
 		console.log("선택한 체크 수: " + checkedLength);
-		$("input:checkbox[name=itemSelect]:checked").each(
+		$("input:checkbox[class=selectCheck]:checked").each(
 				function(idx) {
 					selectedItemCount += 1;
 					//선택된 상품 계산
 					var itemObj = $(this).parents("tr");
-					var ordQty = Number($(itemObj).find("input[name='ordQty']")
+					var ordQty = Number($(itemObj).find("input[id='ordQty']")
 							.val());
 					if (!isNaN(ordQty)) {
 						//총 상품금액 계산(정상금액)
 						if (!isNaN(Number($(itemObj).find(
-								"input[name='nrmOriPrc']").val()))) {
+								"input[id='nrmOriPrc']").val()))) {
 							totalNormalPrice += Number($(itemObj).find(
-									"input[name='nrmOriPrc']").val())
+									"input[id='nrmOriPrc']").val())
 									* ordQty;
 						}
 						//총 할인금액 계산
 						if (!isNaN(Number($(itemObj).find(
-								"input[name='disOriPrc']").val()))) {
+								"input[id='disOriPrc']").val()))) {
 							totalDcPrice += Number($(itemObj).find(
-									"input[name='disOriPrc']").val())
+									"input[id='disOriPrc']").val())
 									* ordQty;
 						}
 						//총 결제예상 금액
 						if (!isNaN(Number($(itemObj).find(
-								"input[name='totOriPrc']").val()))) {
+								"input[id='totOriPrc']").val()))) {
 							totalPayPrice += Number($(itemObj).find(
-									"input[name='totOriPrc']").val())
+									"input[id='totOriPrc']").val())
 									* ordQty;
 						}
 					}
@@ -311,13 +311,13 @@
 	// 변경된 상품 가격 할인금액, 합계 화면에서 보여주는 계산
 	function calculateItemSellPrice(itemObj, obj) {
 		
-		var ordQty = Number($("input[name=ordQty]", $(itemObj)).val());
+		var ordQty = Number($("input[id=ordQty]", $(itemObj)).val());
 		//상품 정상 금액
-		var nOP = Number($("input[name=nrmOriPrc]", $(itemObj)).val());
+		var nOP = Number($("input[id=nrmOriPrc]", $(itemObj)).val());
 		//상품 할인 금액
-		var dOP = Number($("input[name=disOriPrc]", $(itemObj)).val());
+		var dOP = Number($("input[id=disOriPrc]", $(itemObj)).val());
 		//상품 할인된 금액
-		var tOP = Number($("input[name=totOriPrc]", $(itemObj)).val());
+		var tOP = Number($("input[id=totOriPrc]", $(itemObj)).val());
 		
 		console.log(nOP, dOP, tOP);
 		$(itemObj).find(".cart-product-price span").text(
@@ -337,7 +337,7 @@
 			$("input:checkbox[name=allItemSelect]").click(
 					function(e) {
 						var isChecked = $(this).is(":checked");
-						$("input:checkbox[name=itemSelect]").prop("checked",
+						$("input:checkbox[class=selectCheck]").prop("checked",
 								isChecked);
 						//가격 재계산
 						calculateSellPrice();
@@ -346,8 +346,8 @@
 
 					});
 		}
-		if ($("input:checkbox[name=itemSelect]")) {
-			$("input:checkbox[name=itemSelect]").click(
+		if ($("input:checkbox[class=selectCheck]")) {
+			$("input:checkbox[class=selectCheck]").click(
 					function(e) {
 						//상품 선택 해제 시 전체선택 체크박스 해제
 						if (!$(this).is(":checked")
@@ -358,7 +358,7 @@
 						}
 						//모든 상품이 체크 된 경우 전체 선택 체크박스 선택 (하나라도 체크가 안되어 있다면 false)
 						var isAllCheck = true;
-						$("input:checkbox[name=itemSelect]").each(function() {
+						$("input:checkbox[class=selectCheck]").each(function() {
 							if (!$(this).is(":checked")) {
 								isAllCheck = false;
 								return;
@@ -417,7 +417,7 @@
 	};
 	//현재 주문 가능하게 선택했는지 확인(장바구니에 상품이 하나 이상 담겨있는지)
 	function checkOrderable() {
-		var selectedItemCount = $("input:checkbox[name=itemSelect]:checked").length;
+		var selectedItemCount = $("input:checkbox[class=selectCheck]:checked").length;
 		var orderBtn = $("#orderBtn");
 		console.log("체크함수 실행: " + selectedItemCount);
 		if (selectedItemCount > 0) {
@@ -433,9 +433,9 @@
 	<div class="cbody">
 		<div class="contents">
 			<div class="csection">
-				<form id="frmCartInfo" action="${contextPath}/order/" method="get">
-				<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				<form id="frmCartInfo" action="${contextPath}/order/" method="post">
 					<div class="cart-area">
+						<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<div class="cart-head">
 							<div class="cart-top">
 								<div class="cart-all">
@@ -449,7 +449,7 @@
 								</ol>
 							</div>
 							<div class="cart-bottom">
-								<span>${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> H.Point: <span>
+								<span>${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> G.Point: <span>
 									 포인트 조회해야함</span>
 								<div class="btngroup">
 									<button type="button" class="btn btn-cart-del"
@@ -484,7 +484,7 @@
 												<input type="hidden" name="cartOrderListDTO[${status.index}].cartId" id="cartId" value="${i.cartId}" />
 												 
 												<input id="oneSel${status.count}" type="checkbox"
-													class="selectCheck" name="itemSelect" checked="checked"
+													class="selectCheck" name="cartOrderListDTO[${status.index}].itemSelect" checked="checked"
 													value="${i.cartId}"> 
 													
 													<label for="oneSel${status.count}"></label></td>
@@ -507,17 +507,17 @@
 													<div class="cart-count">
 														<button value="-" count_range="m" type="button"
 															name="countDown">-</button>
-														<input class="ccount" value="${i.cartAmount }" readonly
-															name="ordQty">
+														<input class="ccount" id="ordQty" value="${i.cartAmount }" readonly
+															name="cartOrderListDTO[${status.index}].ordQty">
 														<button value="+" count_range="p" type="button"
 															name="countUp">+</button>
-														<input class="prodStock" type=hidden name="productStock"
+														<input class="prodStock" type=hidden name="cartOrderListDTO[${status.index}].productStock"
 															value="${i.stock}" />
 													</div>
 												</td>
 												<td class="cart-price">
 													<div class="cart-product-price">
-														<input type=hidden name="nrmOriPrc"
+														<input type=hidden id="nrmOriPrc" name="cartOrderListDTO[${status.index}].nrmOriPrc"
 															value="${i.cartPrice }" />
 														<!-- 처음 불러올때 보이는 금액 -->
 														<c:set var="proPrice"
@@ -529,7 +529,7 @@
 												</td>
 												<td class="cart-discount">
 													<div class="cart-product-discount">
-														<input type=hidden name="disOriPrc"
+														<input type=hidden id="disOriPrc" name="cartOrderListDTO[${status.index}].disOriPrc"
 															value="${i.cartPrice * i.discountPercent / 100}" />
 														<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
 														<span>${i.discountPercent }%할인</span>
@@ -541,7 +541,7 @@
 												</td>
 												<td class="cart-total">
 													<div class="cart-total-price">
-														<input type=hidden name="totOriPrc"
+														<input type=hidden id="totOriPrc" name="cartOrderListDTO[${status.index}].totOriPrc"
 															value="${i.cartPrice - (i.cartPrice * i.discountPercent / 100)}" />
 														<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
 														<c:set var="totPrice" value="${proPrice - disPrice}" />

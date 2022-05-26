@@ -12,8 +12,24 @@
 		SELECT * FROM category WHERE parentid = ${categoryID}
 	</select>
 	
-<!-- 	<select id="getCategoryName" parameterType="long" resultType="String">
-		SELECT categoryname FROM category WHERE categoryid = ${categoryID}
-	</select> -->
+	<select id="getCategoryName" parameterType="long" resultType="String">
+		SELECT categoryname
+		FROM category
+		WHERE categoryid = ${categoryID}
+	</select>
+	
+	<!--  
+		작성자 : 이승준
+		작업일 : 22.05.25
+		md 추천 된 대분류 카테고리 목록 조회
+	-->
+	<select id="findCategoryByMd" resultType="com.ggm.goguma.dto.CategoryDTO">
+		SELECT 
+			*
+		FROM
+			category
+		WHERE
+			parentid IS NULL AND categorytype = 'M' AND md = 1
+	</select>
 	
 </mapper>

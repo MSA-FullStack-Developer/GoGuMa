@@ -71,9 +71,9 @@
 					</div>
 				</div>
 				<div class="d-flex justify-content-between mt-5">
-					<button id="find-pw-btn" type="button"
-						class="btn btn-outline-dark btn-lg">비밀번호 찾기</button>
-					<button id="go-login-btn" type="button" class="btn btn-lg">로그인하기</button>
+					<a id="find-pw-btn" type="button"
+						class="btn btn-outline-dark btn-lg" href="${contextPath}/member/findPwd/start.do">비밀번호 찾기</a>
+					<a id="go-login-btn" type="button" class="btn btn-lg" href="${contextPath}/member/login.do">로그인하기</a>
 				</div>
 
 			</div>

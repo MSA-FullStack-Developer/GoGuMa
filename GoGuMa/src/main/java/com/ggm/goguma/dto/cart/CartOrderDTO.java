@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartOrderDTO {
+public class CartOrderDTO{
 	
 	private String _csrf;
 	
