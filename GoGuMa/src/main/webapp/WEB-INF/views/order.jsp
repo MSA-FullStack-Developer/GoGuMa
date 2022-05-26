@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
 <meta name="_csrf" content="${_csrf.token}">
 <meta name="_csrf_header" content="${_csrf.headerName}">
 <link
@@ -190,6 +191,40 @@
 	<div class="cbody">
 		<div class="contents">
 			<div class="csection">
+				<div class="util-option sticky">
+					<div class="sticky-inner">
+						<h4 class=st-title>총 결제 금액</h4>
+						<ul class="payment-list">
+							<li>
+								<div id="orderAmt">
+									<span class="tit">총 판매 금액</span> <span class="txt"><strong>151,730</strong>원</span>
+								</div>
+								<div id="copnDcAmtDiv">
+									<span class="tit">쿠폰 할인</span> <span class="txt"><strong>-4,770</strong>원</span>
+								</div>
+								<div id="totDcAmtDiv">
+									<span class="tit">할인 합계금액</span> <span class="txt"><strong>-4,770</strong>원</span>
+								</div>
+							</li>
+							<li>
+								<div class="total">
+									<span class="tit">최종 결제금액</span> <span class="txt"
+										id="lastStlAmtDd"><strong>146,960</strong>원</span>
+								</div>
+							</li>
+							<li>
+								<div id="calculateList_upoint" class="hpoint">
+									<span class="tit">적립예정 H.Point</span> <span class="txt"><strong>0</strong>p</span>
+								</div>
+							</li>
+						</ul>
+						<div class="btngroup agreeCheck">
+							<button type="button" class="btn btn-default medium">
+								<span>결제</span>
+							</button>
+						</div>
+					</div>
+				</div>
 				<div class="order-content">
 					<div class="cart-head">
 						<div class="cart-top">
@@ -210,40 +245,148 @@
 
 					<div class="accordion accordion-flush">
 						<div class="accordion-item">
-							<h3 class="accordion-header order-selected" id="flush-headingOne">
+							<h3 class="accordion-header order-products"
+								id="panelsStayOpen-headingOne">
 								<button class="accordion-button" type="button"
-									data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
-									aria-expanded="false" aria-controls="flush-collapseOne">
-									상품정보</button>
+									data-bs-toggle="collapse"
+									data-bs-target="#panelsStayOpen-collapseOne"
+									aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+									주문 상품정보</button>
 							</h3>
-							<div id="flush-collapseOne"
+							<div id="panelsStayOpen-collapseOne"
 								class="accordion-collapse collapse show"
-								aria-labelledby="flush-headingOne">
+								aria-labelledby="panelsStayOpen-headingOne">
 								<div class="accordion-body">
-									<ul>
-										<li name="orderItem">아아</li>
-									</ul>
+									<table class="table table-bordered border-white" id="nrmProd">
+										<thead>
+											<tr class="head">
+												<th scope="col" id="th-product-name">상품정보</th>
+												<th scope="col" id="th-product-count">수량</th>
+												<th scope="col" id="th-product-price">상품가격</th>
+												<th scope="col" id="th-discount-price">할인금액</th>
+												<th scope="col" id="th-total-price">합계</th>
+											</tr>
+											<tr class="order-product">
+												<td class="order-product_box">
+													<div class="product-image">
+														<a href="이동할 링크" class="moveProduct"> 
+														<img src="뭔데 링크" width="78" height="78" class="product-img" alt="">
+														</a>
+													</div>
+													<div class="product-name">
+														<a href="이동할 링크" class="moveProduct">부모 상품이름</a>
+													</div>
+													<div class="product-option">
+														<span class="product-option-name"> 옵션:
+															자식 상품이름 </span>
+													</div>
+												</td>
+												<td class="cart-product-count">
+													<div class="cart-count">
+														<span class="c" readonly
+															name="ordQty">11</span>
+													</div>
+												</td>
+												<td class="cart-price">
+													<div class="cart-product-price">
+														<span>상품가격 000</span>원
+													</div>
+												</td>
+												<td class="cart-discount">
+													<div class="cart-product-discount">
+														<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
+														<span>몇%할인</span>
+														<em>0</em>원
+													</div>
+												</td>
+												<td class="cart-total">
+													<div class="cart-total-price">
+														<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
+														<span>00</span>원
+													</div>
+												</td>
+											</tr>
+										</thead>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="accordion-item">
+							<h3 class="accordion-header discount-info"
+								id="panelsStayOpen-headingTwo">
+								<button class="accordion-button" type="button"
+									data-bs-toggle="collapse"
+									data-bs-target="#panelsStayOpen-collapseTwo"
+									aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">
+									할인 혜택 선택</button>
+							</h3>
+							<div id="panelsStayOpen-collapseTwo"
+								class="accordion-collapse collapse show"
+								aria-labelledby="panelsStayOpen-headingTwo">
+								<div class="accordion-body">
+									<table>
+										<tr>
+											<td class="cart-price">
+												<div class="cart-product-price">아아아아아아</div>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="accordion-item">
+							<h3 class="accordion-header member-info"
+								id="panelsStayOpen-headingThree">
+								<button class="accordion-button" type="button"
+									data-bs-toggle="collapse"
+									data-bs-target="#panelsStayOpen-collapseThree"
+									aria-expanded="true"
+									aria-controls="panelsStayOpen-collapseThree">주문고객 /
+									배송지 정보 입력</button>
+							</h3>
+							<div id="panelsStayOpen-collapseThree"
+								class="accordion-collapse collapse show"
+								aria-labelledby="panelsStayOpen-headingThree">
+								<div class="accordion-body">
+									<table>
+										<tr>
+											<td class="cart-price">
+												<div class="cart-product-price">아아아아아아</div>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="accordion-item">
+							<h3 class="accordion-header pay-info" id="panelsStayOpen-headine">
+								<button class="accordion-button" type="button"
+									data-bs-toggle="collapse"
+									data-bs-target="#panelsStayOpen-collapseFour"
+									aria-expanded="true"
+									aria-controls="panelsStayOpen-collapseFour">결제 정보 선택</button>
+							</h3>
+							<div id="panelsStayOpen-collapseFour"
+								class="accordion-collapse collapse show"
+								aria-labelledby="panelsStayOpen-headingFour">
+								<div class="accordion-body">
+									<table>
+										<tr>
+											<td class="cart-price">
+												<div class="cart-product-price">아아아아아아</div>
+											</td>
+										</tr>
+									</table>
 								</div>
 							</div>
 						</div>
 					</div>
 
 				</div>
-				<div class="all-cart-total-price">
-					<div class="all-price-area">
-						총 상품가격 <em class="final-product-price" id="emPriceFTotNrmlprice">0</em>원
-						<i class="bi bi-dash-square"></i> 총 할인가격 <em
-							class="final-product-discount" id="emPriceFTotDcAmt">0</em>원 <i
-							class="bi bi-arrow-right-square"></i> 총 주문금액 <em
-							class="final-order-price" id="emPriceFTotPayAmt">0</em>원
-					</div>
-				</div>
-				<div class="order-buttons">
-					<button type="button" class="btn text-black continue"
-						style="background-color: #FFFFFF;">쇼핑 계속하기</button>
-					<button type="button" class="btn text-white purchase"
-						style="background-color: #FF493C">구매하기</button>
-				</div>
+
+
+
+
 			</div>
 
 		</div>
