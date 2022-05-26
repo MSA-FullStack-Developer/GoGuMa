@@ -57,6 +57,14 @@
 		WHERE parentpid = #{parentPID}
 	</select>
 	
+	<!-- 상품 옵션 이미지 -->
+	<select id="getOptionImg" parameterType="long" resultType="com.ggm.goguma.dto.ProductDTO">
+		SELECT DISTINCT i.prodimgurl
+		FROM product p, productimage i
+		WHERE p.productid = i.productid
+		AND parentpid = #{parentPID}
+	</select>
+	
 	<!-- 
 		작성자 : 이승준
 		작업일 : 22.05.25

@@ -79,6 +79,9 @@ public class ProductController {
 			ProductDTO productInfo = productService.getProductInfo(productID); // 상품 정보
 			List<ProductDTO> option = productService.getOptionList(productID); // 상품 옵션 목록
 			long optionCount = productService.getOptionCount(productID); // 상품 옵션 개수
+			
+			// 옵션 이미지
+			List<CategoryDTO> optionImgList = productService.getOptionImg(productID);
 
 			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("categoryID", categoryID);
@@ -86,6 +89,9 @@ public class ProductController {
 			model.addAttribute("productInfo", productInfo);
 			model.addAttribute("option", option);
 			model.addAttribute("optionCount", optionCount);
+			model.addAttribute("optionImgList", optionImgList);
+			
+			log.info(optionImgList);
 			
 			return "product";
 		} catch (Exception e) {
