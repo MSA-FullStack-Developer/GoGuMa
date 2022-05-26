@@ -2,6 +2,7 @@ package com.ggm.goguma;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.slf4j.Logger;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.ggm.goguma.dto.CategoryDTO;
 
 import lombok.extern.log4j.Log4j;
 
@@ -31,7 +34,6 @@ public class HomeController {
 	
 	public String home(Locale locale, Model model, Authentication authentication) {
 	
-	
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
 		
@@ -45,9 +47,6 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		
-		
 		return "redirect:/main.do";
 	}
-	
 }
