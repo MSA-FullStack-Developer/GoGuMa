@@ -7,10 +7,27 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
+	<bean id="bcryptPasswordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
+
+	<bean id="customUserDetailsService" class="com.ggm.goguma.security.CustomUserDetailsService" />
+	<bean id="loginFailHandler" class="com.ggm.goguma.security.UserLoginFailHandler"/>
+
 	<security:http>
-		<security:form-login/>
+	
+		<security:form-login login-page="/member/login.do" default-target-url="/"  authentication-failure-handler-ref="loginFailHandler"/>
+		<security:logout delete-cookies="JSESSIONID" logout-success-url="/"/>
+		
+		<security:intercept-url pattern="member/join/*" access="permitAll" />
 	</security:http>
 	<security:authentication-manager>
+		<security:authentication-provider
+			user-service-ref="customUserDetailsService">
+			<security:password-encoder
+				ref="bcryptPasswordEncoder" />
+		</security:authentication-provider>
+
 	</security:authentication-manager>
 	
 </beans>

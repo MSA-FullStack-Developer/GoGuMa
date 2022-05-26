@@ -19,4 +19,6 @@ public class ProductDTO {
 	
 	private String prodimgurl;
 	private List<ProductDTO> option;
+	
+	private String keyword; // 상품 검색 키워드
 }

@@ -10,7 +10,8 @@ public interface ProductMapper {
 	// 상품 목록
 	public List<ProductDTO> getProductList(@Param("startNum") long startNum,
 											@Param("endNum") long endNum, 
-											@Param("categoryID") long categoryID) throws Exception;
+											@Param("categoryID") long categoryID,
+											@Param("sortType") String sortType) throws Exception;
 	
 	// 상품 개수
 	public long getProductCount(long categoryID) throws Exception;
@@ -23,4 +24,9 @@ public interface ProductMapper {
 	
 	// 상품 옵션 개수
 	public long getOptionCount(long productID) throws Exception;
+
+	// 상품 검색
+	public List<ProductDTO> getSearchList(@Param("keyword") String keyword, @Param("sortType") String sortType) throws Exception;
+
+	public long getSearchCount(@Param("keyword") String keyword) throws Exception;
 }

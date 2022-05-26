@@ -3,7 +3,6 @@ package com.ggm.goguma.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,16 +28,13 @@ public class ProductController {
 	@Autowired
 	private CategoryService categoryService;
 	
-	@Value("${pageSize}")
-	private long pageSize;
-	
-	@Value("${blockSize}")
-	private long blockSize;
+	private int pageSize = 8;
+	private int blockSize = 10;
 	
 	@GetMapping("/{categoryID}")
-	public String list(@PathVariable long pg, @PathVariable long categoryID, Model model) throws Exception {
+	public String list(@PathVariable long pg, @PathVariable long categoryID, @RequestParam(defaultValue="recent") String sortType, Model model) throws Exception {
 		try {
-			showCategoryMenu(categoryID, model);
+			showCategoryMenu(model);
 			
 			// 페이징
 			long recordCount = productService.getProductCount(categoryID); // 카테고리별 상품 개수
@@ -50,8 +46,12 @@ public class ProductController {
 			long endPage = startPage + blockSize - 1; 
 			if (endPage > pageCount) endPage = pageCount;
 			
-			List<ProductDTO> list = productService.getProductList(pg, categoryID); // 카테고리별 상품 목록
+			String categoryName = categoryService.getCategoryName(categoryID); // 카테고리 이름
+			List<ProductDTO> list = productService.getProductList(pg, categoryID, sortType); // 카테고리별 상품 목록
 
+			model.addAttribute("keyword", ""); // 검색 키워드를 빈 문자열로 지정
+			model.addAttribute("categoryID", categoryID);
+			model.addAttribute("categoryName", categoryName);
 			model.addAttribute("pg", pg);
 			model.addAttribute("recordCount", recordCount);
 			model.addAttribute("pageSize", pageSize);
@@ -59,6 +59,8 @@ public class ProductController {
 			model.addAttribute("startPage", startPage);
 			model.addAttribute("endPage", endPage);
 			model.addAttribute("list", list);
+			model.addAttribute("sortType", sortType);
+			model.addAttribute("isSearch", false);
 			
 			return "list";
 		} catch (Exception e) {
@@ -70,12 +72,15 @@ public class ProductController {
 	@GetMapping("/{categoryID}/detail/{productID}")
 	public String detail(@PathVariable long categoryID, @PathVariable long productID, Model model) throws Exception {
 		try {
-			showCategoryMenu(categoryID, model);
-			
+			showCategoryMenu(model);
+
+			String categoryName = categoryService.getCategoryName(categoryID); // 카테고리 이름
 			ProductDTO productInfo = productService.getProductInfo(productID); // 상품 정보
 			List<ProductDTO> option = productService.getOptionList(productID); // 상품 옵션 목록
 			long optionCount = productService.getOptionCount(productID); // 상품 옵션 개수
 
+			model.addAttribute("categoryID", categoryID);
+			model.addAttribute("categoryName", categoryName);
 			model.addAttribute("productInfo", productInfo);
 			model.addAttribute("option", option);
 			model.addAttribute("optionCount", optionCount);
@@ -87,25 +92,41 @@ public class ProductController {
 		}
 	}
 	
+	@GetMapping("/search/")
+	public String search(@RequestParam(defaultValue="") String keyword, @RequestParam(defaultValue="recent") String sortType, Model model) throws Exception {
+		try {
+			showCategoryMenu(model);
+			
+			List<ProductDTO> list = productService.getSearchList(keyword, sortType);
+			long searchCount = productService.getSearchCount(keyword);
+
+			model.addAttribute("keyword", keyword);
+			model.addAttribute("list", list);
+			model.addAttribute("recordCount", searchCount);
+			model.addAttribute("pg", 1);
+			model.addAttribute("sortType", sortType);
+			model.addAttribute("isSearch", true);
+			
+			return "list";
+		} catch (Exception e) {
+			model.addAttribute("msg", "list 출력 에러");
+			return "list";
+		}
+	}
+	
 	// 카테고리 메뉴
-	public void showCategoryMenu(long categoryID, Model model) throws Exception {
-		String categoryName = categoryService.getCategoryName(categoryID);
+	public void showCategoryMenu(Model model) throws Exception {
 		List<CategoryDTO> parentCategory = categoryService.getCategoryParentList(); // 부모 카테고리 목록
 		
 		parentCategory.forEach(cate -> {
 			try {
 				List<CategoryDTO> categoryList = categoryService.getCategoryList(cate.getCategoryID());
 				cate.setCategoryList(categoryList);
-				
-				log.info(cate);
-				log.info(categoryList);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		});
-
-		model.addAttribute("categoryID", categoryID);
-		model.addAttribute("categoryName", categoryName);
+		
 		model.addAttribute("parentCategory", parentCategory);
 	}
 	
