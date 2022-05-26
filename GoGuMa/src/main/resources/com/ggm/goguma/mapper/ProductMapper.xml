@@ -57,6 +57,19 @@
 		WHERE parentpid = #{parentPID}
 	</select>
 	
+	<!-- 
+		작성자 : 이승준
+		작업일 : 22.05.25
+		대분류 카테고리 아이디로 해당 카테고리에 속한 최신 상품 목록 조회
+	 -->
+	<select id="findProductListByParentCategoryId" parameterType="long" resultType="ProductDTO">
+		SELECT c.CATEGORYID, p.PRODUCTID, p.PRODUCTNAME, p.PRODUCTPRICE, pm.PRODIMGURL FROM 
+			(SELECT cc.CATEGORYID  FROM CATEGORY pc, CATEGORY cc WHERE pc.CATEGORYID = cc.PARENTID AND pc.CATEGORYID  = #{categoryID}) c, PRODUCT p, PRODUCTIMAGE pm
+			WHERE  c.CATEGORYID = p.CATEGORYID AND p.PARENTPID IS NULL AND p.PRODUCTID = pm.PRODUCTID AND pm.ISTHUMBNAIL = 1
+			ORDER BY p.PRODUCTID DESC
+			OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+	</select>
+	
 	<!-- 상품 검색 -->
 	<select id="getSearchList" resultType="com.ggm.goguma.dto.ProductDTO">
 		SELECT p.productid, p.productname, p.productprice, i.prodimgurl, p.categoryid

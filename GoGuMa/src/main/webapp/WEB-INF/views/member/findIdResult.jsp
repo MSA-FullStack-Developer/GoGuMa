@@ -75,7 +75,7 @@
                 </div>
                 <div class="d-flex justify-content-between mt-5">
                 	<c:if test="${not notFound}">
-                    	<a role="button" class="btn btn-outline-dark btn-lg" style="width: 45%;"  href="#">비밀번호 찾기</a>
+                    	<a role="button" class="btn btn-outline-dark btn-lg" style="width: 45%;"  href="${contextPath}/member/findPwd/start.do">비밀번호 찾기</a>
                     	<a role="button" class="btn btn-lg" style="width: 45%; background-color: #6426DD; color: white;" href="${contextPath}/member/login.do">로그인하기</a>
                 	</c:if>
                 	<c:if test="${notFound}">

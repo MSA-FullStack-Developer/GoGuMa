@@ -17,8 +17,8 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductMapper productMapper;
 	
-	private int pageSize = 8;
-
+	private long pageSize = 8;
+	
 	@Override
 	public List<ProductDTO> getProductList(long pg, long categoryID, String sortType) throws Exception {
 		long startNum = (pg - 1) * pageSize + 1;
@@ -48,6 +48,15 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public List<ProductDTO> getSameParentCategoryProductList(long categoryID) {
+		
+		long offset = 0;
+		long limit = 8;
+	
+		return this.productMapper.findProductListByParentCategoryId(categoryID, offset, limit);
+	}
+
+	@Override
 	public List<ProductDTO> getSearchList(String keyword, String sortType) throws Exception {
 		return productMapper.getSearchList(keyword, sortType);
 	}
@@ -56,5 +65,6 @@ public class ProductServiceImpl implements ProductService {
 	public long getSearchCount(String keyword) throws Exception {
 		return productMapper.getSearchCount(keyword);
 	}
+
 
 }

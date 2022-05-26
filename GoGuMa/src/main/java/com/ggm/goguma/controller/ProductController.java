@@ -27,9 +27,9 @@ public class ProductController {
 	
 	@Autowired
 	private CategoryService categoryService;
-	
-	private int pageSize = 8;
-	private int blockSize = 10;
+
+	private long pageSize  = 8; 
+	private long blockSize = 10;
 	
 	@GetMapping("/{categoryID}")
 	public String list(@PathVariable long pg, @PathVariable long categoryID, @RequestParam(defaultValue="recent") String sortType, Model model) throws Exception {

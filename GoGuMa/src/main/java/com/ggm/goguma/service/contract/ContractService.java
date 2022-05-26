@@ -8,5 +8,5 @@ public interface ContractService {
 
 	List<ContractDTO> getAllContracts();
 	
-	void createContractHistory(int memberId, int contractId);
+	void createContractHistory(long memberId, long contractId);
 }

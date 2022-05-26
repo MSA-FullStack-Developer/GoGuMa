@@ -180,7 +180,7 @@ public class MemberController {
 			this.memberService.createMember(input);
 			return "redirect:/member/join/success.do";
 		} catch (CreateMemberFailException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 			return "redirect:/member/join/fail.do";
 		}		
@@ -230,7 +230,7 @@ public class MemberController {
 	}
 	
 	@PostMapping("/findPwd/rewrite.do")
-	public String reWritePwd(@RequestParam("password") String pwd, @RequestParam("memberId") int id) {
+	public String reWritePwd(@RequestParam("password") String pwd, @RequestParam("memberId") long id) {
 		
 		MemberDTO member = MemberDTO
 				.builder()
