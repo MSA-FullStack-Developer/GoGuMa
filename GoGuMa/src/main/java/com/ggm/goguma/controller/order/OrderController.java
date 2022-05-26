@@ -43,8 +43,7 @@ public class OrderController {
 	private MemberService memberService;
 	
 	@RequestMapping(value="/", method = {RequestMethod.POST, RequestMethod.GET})
-	public void showOrderList(@ModelAttribute CartOrderDTO cartOrderDTO, Model model, Authentication authentication) throws Exception{
-		try {
+	public String showOrderList(@ModelAttribute CartOrderDTO cartOrderDTO, Model model, Authentication authentication) throws Exception{
 			String memberEmail = "";
 			// 사용자가 권한이 있는 경우
 			if (authentication != null){
@@ -57,9 +56,9 @@ public class OrderController {
 				// 회원이 담은 카트 리스트를 불러온다.
 				long memberId = memberDTO.getId();
 				
-				
-				
-				
+				if(cartOrderDTO.getCartOrderListDTO() == null) {
+					return "redirect:/";
+				}
 				List<CartOrderListDTO> dtoList = new ArrayList<CartOrderListDTO>();
 				//상품 주문 dto에서 선택한 상품만 추려내기 위한 작업
 				for(int i = 0; i < cartOrderDTO.getCartOrderListDTO().size(); i++) {
@@ -84,11 +83,10 @@ public class OrderController {
 				System.out.println("회원의 정보 : " + memberDTO);
 				System.out.println("주문할 상품들의 정보 : " + list);
 				System.out.println("주문할 상품 리스트 dtoList : " + dtoList);
+				return "order";
+			}else {
+				return "redirect:/";
 			}
-		}catch (Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
 	}
 	
 	@PostMapping("/orderResult")
