@@ -10,6 +10,7 @@
 	Hello world!  
 </h1>
 
+ <button onclick="requestPay()">결제하기</button>
 <P>  The time on the server is ${serverTime}. </P>
 </body>
 </html>
