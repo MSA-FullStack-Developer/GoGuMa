@@ -32,5 +32,6 @@
 		        </li>
 		    </ul>
 		</div>
+		<a href="${contextPath}/cart/">장바구니</a>
 	</div>
 </div>
