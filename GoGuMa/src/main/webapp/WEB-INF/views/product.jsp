@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="productPrice" value="${productInfo.productPrice}" />
 <!DOCTYPE html>
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -37,12 +38,7 @@
 	    	var optionPrice = $("#option option:selected").data("price"); // 옵션 상품 가격
 	    	
 	    	$('.selectedOption').text(optionName);
-	    	
-	    	if (optionName != "선택 없음") {
-	    		$('.total_price').text(optionPrice.format() + "원");	
-	    	} else {
-	    		$('.total_price').text(optionPrice.format() + "원");
-	    	}
+	    	$('.total_price').text(optionPrice.format() + "원"); // 상품금액 합계 초기화
 	    }
 	    
         $(document).ready(function () {
@@ -231,7 +227,7 @@
 		                        <td>
 		                        	<div class="selectbox">
 			                            <select class="option" id="option" name="option" style="float: left;" onchange="javascript:selectOption(this.options[this.selectedIndex].value);">
-			                            	<option value="">선택 없음</option>
+			                            	<option value="" data-price="${productInfo.productPrice}">선택 없음</option>
 			                            	<c:forEach items="${option}" var="option">
 			                                	<option value="${option.stock}" 
 			                                			data-id="${option.productID}" 
