@@ -94,7 +94,7 @@
                 <div>
                     <h5><b>👨‍💻 송진호님</b></h5>
                 </div>
-                <div class="d-flex flex-row justify-content-evenly border rounded">
+                <div class="d-flex flex-row justify-content-evenly border border-2 rounded">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
                             회원등급
