@@ -138,6 +138,8 @@ public class CartController {
 				// 회원이 카트에 담는다.
 				cartService.insertCart(productId, cartAmount, memberId);
 			
+			} else {
+				log.info("장바구니에 담을 회원 정보 없음");
 			}
 		}catch(Exception e) {
 			e.printStackTrace();

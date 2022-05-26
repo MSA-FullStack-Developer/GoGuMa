@@ -1,4 +1,4 @@
-package com.ggm.goguma.service.product;
+package com.ggm.goguma.service;
 
 import java.util.List;
 
