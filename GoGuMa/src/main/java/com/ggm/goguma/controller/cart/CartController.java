@@ -64,7 +64,7 @@ public class CartController {
 				model.addAttribute("list", list); // 회원이 담은 카트 정보를 저장한다.
 				model.addAttribute("memberDTO", memberDTO); // 회원이 담은 카트 정보를 저장한다.
 				//출력 테스트
-				list.forEach(c -> System.out.println(c));
+				list.forEach(c -> System.out.println("카트 컨트롤러:" + c));
 			}	
 			
 			return "cartList";
@@ -122,9 +122,25 @@ public class CartController {
 	// 장바구니 담기
 	@PostMapping("insertCart")
 	@ResponseBody
-	public void insertCart(@RequestParam("productId") long productId, @RequestParam("cartAmount") int cartAmount)throws Exception{
+	public void insertCart(@RequestParam("productId") long productId, @RequestParam("cartAmount") int cartAmount, Authentication authentication)throws Exception{
 		try {
-			cartService.insertCart(productId, cartAmount);
+			String memberEmail = "";
+			if (authentication != null){
+				
+				UserDetails user = (UserDetails)authentication.getPrincipal();
+				//사용자 이메일정보를 가져온다.
+				memberEmail = user.getUsername();
+				//사용자 정보 가져오기
+				MemberDTO memberDTO = memberService.getMember(memberEmail);
+				log.info("장바구니에서 사용될 사용자 정보: " + memberDTO);
+				long memberId = memberDTO.getId();
+				
+				// 회원이 카트에 담는다.
+				cartService.insertCart(productId, cartAmount, memberId);
+			
+			} else {
+				log.info("장바구니에 담을 회원 정보 없음");
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw e;

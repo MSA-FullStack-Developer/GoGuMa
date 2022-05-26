@@ -41,9 +41,10 @@
 		WHERE cartid = #{cartId}
 	</delete>
 	
-	<insert id="insertCart" parameterType="long">
+	<insert id="insertCart">
 		INSERT INTO cart(productid, memberid, cartamount, cartprice)
-		VALUES (#{productId}, 121, #{cartamount}, )
-		
+		VALUES (#{productId}, #{memberId}, #{cartamount}, (SELECT productPrice
+															FROM product
+															WHERE productid = #{productId})) AS productprice
 	</insert>
 </mapper>

@@ -4,6 +4,25 @@ body {
     font-family: 'Noto Sans KR', sans-serif;
 }
 
+select {
+	width: 100px; 
+	border: 1px solid #999;
+	border-radius: 30px;
+	float: right;
+	padding-left: 10px;
+	margin-right: 15px;
+}
+
+.option {
+	width: 60%;
+}
+
+.no_result {
+	text-align: center;
+	margin-top: 100px;
+	color: #FF493C;
+}
+
 .sortBtn {
 	float: right;
 	margin-right: 10px;
@@ -16,6 +35,13 @@ body {
 
 .productDetail {
 	width: 100%;
+}
+
+.product {
+    width: 25%;
+    height: 380px;
+    margin: auto;
+    float: left;
 }
 
 .review-content {
@@ -95,9 +121,16 @@ input {
 	align-items: center;
 }
 
-img {
+.reviewImg {
     width: 180px;
     margin-right: 20px;
+}
+
+.listImg {
+    width: 220px;
+    height: 220px;
+    margin-left: 17.5px;
+    margin-right: 17.5px;
 }
   
 .modal {
@@ -144,10 +177,11 @@ img {
 
 .tab {
     width: 100%;
-    height: 1000px;
+    height: auto;
     /* 상품상세, 상품평 tab */
     margin: 0px auto;
-    padding-top: 80px;
+    margin-top: 40px;
+    padding-top: 80px
 }
 
 .tabnav {
@@ -194,7 +228,8 @@ img {
 }
 
 .tabcontent {
-    padding: 20px;
+	margin-top: 20px;
+	margin-bottom: 100px;
     height: auto;
 }
 
@@ -245,7 +280,38 @@ h5 {
 }
 
 .prodInfo {
-    height: 650px;
+	height: 600px
+}
+
+.tabBtns {
+	width: 1060px;
+	margin: 0 auto;
+	margin-top: 100;
+}
+
+.productName {
+	font-size: x-large;
+}
+
+.cartStock {
+	margin-left: 10px;
+	margin-right: 40px;
+	text-align: left;
+	padding-top: -2%;
+    padding-left: 4%;
+}
+
+.selectedOption {
+    margin-top: 4%;
+    margin-left: 30px;
+    margin-right: 30px;
+    width: auto;
+    font-size: larger;
+}
+
+.addOptionInfo {
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 .searchBtn::before {
@@ -267,26 +333,31 @@ h5 {
 
 table {
     width: 100%;
-    height: 100%;
+    height: 80%;
 }
 
 td {
     height: 60px;
 }
 
+.btnDiv {
+	margin-top: 20px;
+	margin-bottom: 40px;
+}
+
 .cartBtn {
-    width: 100%;
+    width: 30%;
     height: 55px;
     background-color: #F3F3F3;
     border-color: #F3F3F3;
     border-radius: 0px;
-    color: white;
-    font-size: 16pt;
+    font-size: 15pt;
     border: none;
+    float: left;
 }
 
 .buyBtn {
-    width: 100%;
+    width: 70%;
     height: 55px;
     background-color: #FF493C;
     border-color: #FF493C;
@@ -294,6 +365,7 @@ td {
     color: white;
     font-size: 15pt;
     border: none;
+    float: left;
 }
 
 .calc {
@@ -311,9 +383,16 @@ td {
 
 #numBox {
     display: inline-flex;
-/*  border: none; */
     height: 30px;
-    text-align: center;
+    border: none;
+	text-align: -webkit-right;
+	width: 40px;
+}
+
+.selectedInfo {
+	border: 0.5px solid #F3F3F3;
+	height: auto;
+	margin-bottom: 10px;
 }
 
 ul,
