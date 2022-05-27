@@ -32,7 +32,7 @@ public class ProductController {
 	
 	private final ReviewService reviewService;
 
-	private long pageSize  = 8; 
+	private long pageSize  = 12; 
 	private long blockSize = 10;
 	
 	@GetMapping("/{categoryID}")

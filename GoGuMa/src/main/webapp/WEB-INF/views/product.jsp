@@ -24,11 +24,8 @@
     	<%@ include file="/resources/css/product.css" %>
     </style>
     
-    
-    
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/jquery/1.10.2/jquery.min.js"></script>
 	<script type="text/javascript" src="/resources/js/jquery.zoom.js" ></script>
-
 
     <script>
  		// 가격 format() 함수
@@ -245,25 +242,6 @@
                         <td>제조회사</td>
                         <td>${productInfo.company}</td>
                     </tr>
-                    <c:if test="${optionCount > 0}">
-	                    <tr>
-	                        <td>옵션</td>
-	                        <td>
-	                        	<div class="selectbox">
-		                            <select class="option" id="option" name="option" onchange="javascript:selectOption(this.options[this.selectedIndex].value);">
-		                            	<option value="" data-price="${productInfo.productPrice}">선택 없음</option>
-		                            	<c:forEach items="${optionList}" var="option">
-		                                	<option value="${option.stock}" 
-		                                			data-id="${option.productID}" 
-		                                			data-price="${option.productPrice}">
-		                                			${option.productName}
-                                			</option>
-		                                </c:forEach>
-		                            </select>
-	                            </div>
-	                        </td>
-	                    </tr>
-                    </c:if>
                     <tr>
                     	<td><strong>상품금액 합계</strong></td>
                     	<td>
@@ -272,6 +250,24 @@
                    			</h1>
                     	</td>
                     </tr>
+                    <c:if test="${optionCount > 0}">
+                    <tr>
+                    	<td colspan='2'>
+                        	<div class="selectbox">
+	                            <select class="option" id="option" name="option" onchange="javascript:selectOption(this.options[this.selectedIndex].value);">
+	                            	<option value="" data-price="${productInfo.productPrice}">선택 없음</option>
+	                            	<c:forEach items="${optionList}" var="option">
+                                	<option value="${option.stock}" 
+                                			data-id="${option.productID}" 
+                                			data-price="${option.productPrice}">
+                                			${option.productName}
+                              			</option>
+	                                </c:forEach>
+	                            </select>
+                            </div>
+                        </td>
+                    </tr>
+                    </c:if>
                 </table>
                 
                 <div class="selectedInfo">

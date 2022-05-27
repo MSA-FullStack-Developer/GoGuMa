@@ -119,11 +119,10 @@
             <div class="m-auto" style="width: 1240px;">
                 <div id="banner-slide" class="carousel slide carousel-fade" data-bs-ride="carousel">
                     <div class="carousel-inner">
-
                         <div class="carousel-item active">
                         	<a href="${contextPath}/event/event1.do">
                             <img src="${contextPath}/resources/img/web_banner_001.png"
-                                class="d-block w-100" alt="이벤트1 배너" />
+                                class="d-block w-80" alt="이벤트1 배너" />
                                 </a>
                         </div>
 
