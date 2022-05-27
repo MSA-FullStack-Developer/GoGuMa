@@ -35,157 +35,26 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
+		$("button[class='btn-change-address']").click(function() {
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
 
+			$.ajax({
+				type : "POST",
+				url : "${contextPath}/mypage",
+				data : "data",
+				dataType : "dataType",
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+				success : function(response) {
+
+				}
+			});
+		});
 	});
-
-	//주문내역 계산(총 상품 금액, 총 할인 금액, 총 주문 금액)
-	function calculateSellPrice() {
-
-		var totalNormalPrice = 0 //총 상품 금액
-		var totalDcPrice = 0 //총 할인 금액
-		var totalPayPrice = 0 //총 주문 금액
-		var selectedItemCount = 0;
-		var checkedLength = $("input:checkbox[name=itemSelect]:checked").length;
-
-		console.log("선택한 체크 수: " + checkedLength);
-		$("input:checkbox[name=itemSelect]:checked").each(
-				function(idx) {
-					selectedItemCount += 1;
-					//선택된 상품 계산
-					var itemObj = $(this).parents("tr");
-					var ordQty = Number($(itemObj).find("input[name='ordQty']")
-							.val());
-					if (!isNaN(ordQty)) {
-						//총 상품금액 계산(정상금액)
-						if (!isNaN(Number($(itemObj).find(
-								"input[name='nrmOriPrc']").val()))) {
-							totalNormalPrice += Number($(itemObj).find(
-									"input[name='nrmOriPrc']").val())
-									* ordQty;
-						}
-						//총 할인금액 계산
-						if (!isNaN(Number($(itemObj).find(
-								"input[name='disOriPrc']").val()))) {
-							totalDcPrice += Number($(itemObj).find(
-									"input[name='disOriPrc']").val())
-									* ordQty;
-						}
-						//총 결제예상 금액
-						if (!isNaN(Number($(itemObj).find(
-								"input[name='totOriPrc']").val()))) {
-							totalPayPrice += Number($(itemObj).find(
-									"input[name='totOriPrc']").val())
-									* ordQty;
-						}
-					}
-				});
-		console.log("총 상품 정상 금액: " + totalNormalPrice);
-		$("#emPriceFTotNrmlprice").text(numFormatComma(totalNormalPrice));
-		$("#emPriceFTotDcAmt").text(numFormatComma(totalDcPrice));
-		$("#emPriceFTotPayAmt").text(numFormatComma(totalPayPrice));
-		$("#emTotalItemCnt").text(numFormatComma(selectedItemCount));
-	};
-
-	// 변경된 상품 가격 할인금액, 합계 화면에서 보여주는 계산
-	function calculateItemSellPrice(itemObj, obj) {
-		var ordQty = Number($("input[name=ordQty]", $(itemObj)).val());
-		//상품 정상 금액
-		var nOP = Number($("input[name=nrmOriPrc]", $(itemObj)).val());
-		//상품 할인 금액
-		var dOP = Number($("input[name=disOriPrc]", $(itemObj)).val());
-		//상품 할인된 금액
-		var tOP = Number($("input[name=totOriPrc]", $(itemObj)).val());
-
-		$(itemObj).find(".cart-product-price span").text(
-				numFormatComma(nOP * ordQty));
-		$(itemObj).find(".cart-product-discount em").text(
-				numFormatComma(dOP * ordQty));
-		$(itemObj).find(".cart-total-price span").text(
-				numFormatComma(tOP * ordQty));
-	};
-
-	// 상품 선택 & 선택된 총상품가격 총할인가격, 총 주문 금액 계산
-	function bindCartList() {
-		if ($("input:checkbox[name=allItemSelect]")) {
-			$("input:checkbox[name=allItemSelect]").click(
-					function(e) {
-						var isChecked = $(this).is(":checked");
-						$("input:checkbox[name=itemSelect]").prop("checked",
-								isChecked);
-						//가격 재계산
-						calculateSellPrice();
-						//주문이 가능한 상태인지 체크
-
-					});
-		}
-		if ($("input:checkbox[name=itemSelect]")) {
-			$("input:checkbox[name=itemSelect]").click(
-					function(e) {
-						//상품 선택 해제 시 전체선택 체크박스 해제
-						if (!$(this).is(":checked")
-								&& $("input:checkbox[name=allItemSelect]").is(
-										":checked")) {
-							$("input:checkbox[name=allItemSelect]").prop(
-									"checked", false);
-						}
-						//모든 상품이 체크 된 경우 전체 선택 체크박스 선택 (하나라도 체크가 안되어 있다면 false)
-						var isAllCheck = true;
-						$("input:checkbox[name=itemSelect]").each(function() {
-							if (!$(this).is(":checked")) {
-								isAllCheck = false;
-								return;
-							}
-						});
-						if (isAllCheck) {
-							$("input:checkbox[name=allItemSelect]").prop(
-									"checked", true);
-						}
-						//가격 재계산
-						calculateSellPrice();
-						//주문 가능한 상태인지 체크
-					});
-		}
-	};
-
-	function numFormatComma(nNumber, nDetail) {
-		if (nNumber == null)
-			return "";
-		if (nDetail == null)
-			nDetail = 0;
-
-		nNumber = parseFloat(nNumber);
-		nNumber = Math.round(nNumber, nDetail);
-
-		var minusFlag = false;
-		if (nNumber < 0) {
-			nNumber = nNumber * -1;
-			minusFlag = true;
-		}
-
-		var strNumber = new String(nNumber);
-		var arrNumber = strNumber.split(".");
-		var strFormatNum = "";
-		var j = 0;
-
-		for (var i = arrNumber[0].length - 1; i >= 0; i--) {
-			if (i != strNumber.length && j == 3) {
-				strFormatNum = arrNumber[0].charAt(i) + "," + strFormatNum;
-				j = 0;
-			} else {
-				strFormatNum = arrNumber[0].charAt(i) + strFormatNum;
-			}
-			j++;
-		}
-
-		if (arrNumber.length > 1)
-			strFormatNum = strFormatNum + "." + arrNumber[1];
-
-		if (minusFlag)
-			strFormatNum = '-' + strFormatNum;
-
-		return strFormatNum;
-	}
 </script>
+
 <div class="container">
 	<!-- 바디 전체-->
 	<div class="cbody">
@@ -238,8 +107,8 @@
 							</ol>
 						</div>
 						<div class="cart-bottom">
-							<span> ${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> 적립금: <span>
-								100000 </span>
+							<span> ${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span>
+								${memberDTO.grade.name } </span> 적립금: <span> 100000 </span>
 						</div>
 					</div>
 
@@ -266,45 +135,47 @@
 												<th scope="col" id="th-discount-price">할인금액</th>
 												<th scope="col" id="th-total-price">합계</th>
 											</tr>
-											<c:forEach var="i" items="${list }" begin="0" step="1" varStatus="status">
-											<tr class="order-product">
-												<td class="order-product_box">
-													<div class="product-image">
-														<a href="이동할 링크" class="moveProduct"> 
-														<img src="${i.prodImgUrl }" width="78" height="78" class="product-img" alt="">
-														</a>
-													</div>
-													<div class="product-name">
-														<a href="이동할 링크" class="moveProduct">${i.parentProductName }</a>
-													</div>
-													<div class="product-option">
-														<span class="product-option-name"> 옵션:
-															${i.productName } </span>
-													</div>
-												</td>
-												<td class="cart-product-count">
-													<div class="cart-count">
-														<span class="c" readonly name="ordQty">${i.cartAmount }</span>
-													</div>
-												</td>
-												<td class="cart-price">
-													<div class="cart-product-price">
-														<span>상품가격 ${dtoList[status.index].nrmOriPrc }</span>원
-													</div>
-												</td>
-												<td class="cart-discount">
-													<div class="cart-product-discount">
-														<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
-														<em>${dtoList[status.index].disOriPrc }</em>원
-													</div>
-												</td>
-												<td class="cart-total">
-													<div class="cart-total-price">
-														<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
-														<span>${dtoList[status.index].totOriPrc }</span>원
-													</div>
-												</td>
-											</tr>
+											<c:forEach var="i" items="${list }" begin="0" step="1"
+												varStatus="status">
+												<tr class="order-product">
+													<td class="order-product_box">
+														<div class="product-image">
+															<a href="이동할 링크" class="moveProduct"> <img
+																src="${i.prodImgUrl }" width="78" height="78"
+																class="product-img" alt="">
+															</a>
+														</div>
+														<div class="product-name">
+															<a href="이동할 링크" class="moveProduct">${i.parentProductName }</a>
+														</div>
+														<div class="product-option">
+															<span class="product-option-name"> 옵션:
+																${i.productName } </span>
+														</div>
+													</td>
+													<td class="cart-product-count">
+														<div class="cart-count">
+															<span class="c" readonly name="ordQty">${i.cartAmount }</span>
+														</div>
+													</td>
+													<td class="cart-price">
+														<div class="cart-product-price">
+															<span>상품가격 ${dtoList[status.index].nrmOriPrc }</span>원
+														</div>
+													</td>
+													<td class="cart-discount">
+														<div class="cart-product-discount">
+															<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
+															<em>${dtoList[status.index].disOriPrc }</em>원
+														</div>
+													</td>
+													<td class="cart-total">
+														<div class="cart-total-price">
+															<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
+															<span>${dtoList[status.index].totOriPrc }</span>원
+														</div>
+													</td>
+												</tr>
 											</c:forEach>
 										</thead>
 									</table>
@@ -337,23 +208,111 @@
 						<div class="accordion-item">
 							<h3 class="accordion-header member-info"
 								id="panelsStayOpen-headingThree">
+								<button type="button" class="btn text-white btn-change-address"
+									id="btn-change-address" data-toggle="modal"
+									data-target="#myModal">배송지변경</button>
 								<button class="accordion-button" type="button"
 									data-bs-toggle="collapse"
 									data-bs-target="#panelsStayOpen-collapseThree"
 									aria-expanded="true"
-									aria-controls="panelsStayOpen-collapseThree">주문고객 /
-									배송지 정보 입력</button>
+									aria-controls="panelsStayOpen-collapseThree">받는사람정보</button>
 							</h3>
+							<!-- 회원가입 확인 Modal-->
+							<!-- Modal -->
+							<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+								aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="exampleModalLabel">모달 제목</h4>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<div class="delivery-All-address">
+												<c:forEach var="i" items="${addressList }" begin="0"
+													step="1" varStatus="status">
+													<div class="row">
+														<div class="row">
+															<div class="col-md-4 delivery-address-th">이름</div>
+															<div class="col-md-8 delivery-address-td">
+																<span class="delivery-address-name">${i.recipient }</span>
+															</div>
+															<c:if test="${i.isDefault == 1}">
+																<div class="col-md-4">
+																	<span class="delivery-address-alias">기본배송지</span>
+																</div>
+															</c:if>
+														</div>
+														<div class="row">
+															<div class="col-md-4 delivery-address-th">배송지이름</div>
+															<div class="col-md-8 delivery-address-td">
+																<span class="delivery-address-nickname">${i.nickName }</span>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-4 delivery-address-th">배송주소</div>
+															<div class="col-md-8 delivery-address-td">${i.address }</div>
+														</div>
+														<div class="row">
+															<div
+																class="col-md-4 delivery-address-th delivery-phone-num-th">연락처</div>
+															<div
+																class="col-md-8 delivery-address-td delivery-phone-num-td">${i.contact }</div>
+														</div>
+													</div>
+												</c:forEach>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary"
+												data-dismiss="modal">Close</button>
+											<button type="button" class="btn btn-primary">Save
+												changes</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<script>
+								$('#btn-change-address').click(function(e) {
+									e.preventDefault();
+									$('#myModal').modal("show");
+								});
+							</script>
 							<div id="panelsStayOpen-collapseThree"
 								class="accordion-collapse collapse show"
 								aria-labelledby="panelsStayOpen-headingThree">
-								<div class="accordion-body">
-									<table>
-										<tr>
-											<td class="cart-price">
-												<div class="cart-product-price">아아아아아아</div>
-											</td>
-										</tr>
+								<div class="accordion-body address-info">
+									<table class="delivery-address">
+										<tbody>
+											<tr>
+												<th class="delivery-address-th">이름</th>
+												<td class="delivery-address-td"><span
+													class="delivery-address-name">${defaultAddress.recipient }</span>
+													<c:if test="${defaultAddress.isDefault == 1}">
+														<span class="delivery-address-alias">기본배송지</span>
+													</c:if></td>
+											</tr>
+											<tr>
+												<th class="delivery-address-th">배송지이름</th>
+												<td class="delivery-address-td"><span
+													class="delivery-address-nickname">${defaultAddress.nickName }</span>
+												</td>
+											</tr>
+											<tr>
+												<th class="delivery-address-th">배송주소</th>
+												<td class="delivery-address-td">
+													${defaultAddress.address }</td>
+											</tr>
+											<tr>
+												<th class="delivery-address-th delivery-phone-num-th">연락처</th>
+												<td class="delivery-address-td delivery-phone-num-td">
+													${defaultAddress.contact }</td>
+											</tr>
+										</tbody>
 									</table>
 								</div>
 							</div>
