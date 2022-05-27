@@ -6,12 +6,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ggm.goguma.dto.DeliveryAddressDTO;
+import com.ggm.goguma.dto.OrderDTO;
+import com.ggm.goguma.dto.ReceiptDTO;
 import com.ggm.goguma.mapper.MyPageMapper;
 
 @Service
 public class MyPageServiceImpl implements MyPageService {
 	@Autowired
 	private MyPageMapper mapper;
+
+	@Override
+	public List<ReceiptDTO> getReceiptHistory(long memberId) throws Exception {
+		List<ReceiptDTO> receiptList = getReceiptList(memberId);
+		for(ReceiptDTO receipt : receiptList) {
+			try {
+				List<OrderDTO> orderList = getOrderList(receipt.getReceiptId());
+				receipt.setOrderList(orderList);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return receiptList;
+	}
+	
+	@Override
+	public List<ReceiptDTO> getReceiptList(long memberId) throws Exception {
+		return mapper.getReceiptList(memberId);
+	}
+	
+	@Override
+	public List<OrderDTO> getOrderList(long receiptId) throws Exception {
+		return mapper.getOrderList(receiptId);
+	}
+	
+	
 	
 	@Override
 	public List<DeliveryAddressDTO> getAddressList(long memberid) throws Exception {

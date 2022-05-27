@@ -3,11 +3,22 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ggm.goguma.mapper.MyPageMapper">
+	<select id="getReceiptList" resultType="ReceiptDTO">
+		select receiptid, orderdate, memberid from receiptlistview where memberid = #{memberId}
+	</select>
+
+	<select id="getOrderList" resultType="OrderDTO">
+		select orderid, name, price, image, count, status, receiptid
+		from orderlistview where receiptId = #{receiptId}
+		order by name
+	</select>
+
 	<select id="getAddressList" resultType="DeliveryAddressDTO">
 		select addressId, nickname, recipient, address, contact, isdefault
 		from deliveryaddress where memberId = #{memberId}
 		order by addressId
 	</select>
+	
 	<select id="getDefaultAddress" resultType="DeliveryAddressDTO">
 		select addressId, nickname, recipient, address, contact
 		from deliveryaddress

@@ -3,11 +3,19 @@ package com.ggm.goguma.service;
 import java.util.List;
 
 import com.ggm.goguma.dto.DeliveryAddressDTO;
+import com.ggm.goguma.dto.OrderDTO;
+import com.ggm.goguma.dto.ReceiptDTO;
 
 public interface MyPageService {
-	List<DeliveryAddressDTO> getAddressList(long memberid) throws Exception;
+	List<ReceiptDTO> getReceiptHistory(long memberId) throws Exception;
+	
+	List<ReceiptDTO> getReceiptList(long memberId) throws Exception;
+	
+	List<OrderDTO> getOrderList(long receiptId) throws Exception;
 
-	DeliveryAddressDTO getDefaultAddress(long memberid) throws Exception;
+	List<DeliveryAddressDTO> getAddressList(long memberId) throws Exception;
+
+	DeliveryAddressDTO getDefaultAddress(long memberId) throws Exception;
 
 	void addAddress(DeliveryAddressDTO dto) throws Exception;
 	
