@@ -82,7 +82,7 @@
 											if (count_val >= 1 && count_val <= stock_val) {
 												$.ajax({
 															type : "POST",
-															url : "${contextPath}/cart/addCartCount",
+															url : "${contextPath}/cart/api/addCartCount",
 															data : data1,
 															beforeSend : function(xhr) {
 																xhr.setRequestHeader(header,token);
@@ -157,7 +157,7 @@
 											if (count_val >= 1 && count_val <= stock_val) {
 												$.ajax({
 															type : "POST",
-															url : "${contextPath}/cart/minusCartCount",
+															url : "${contextPath}/cart/api/minusCartCount",
 															data : data1,
 															beforeSend : function(xhr) {
 																xhr.setRequestHeader(header,token);
@@ -199,7 +199,7 @@
 		};
 		$.ajax({
 			type : "POST",
-			url : "${contextPath}/cart/delete",
+			url : "${contextPath}/cart/api/delete",
 			data : data,
 			beforeSend : function(xhr) {
 				xhr.setRequestHeader(header, token);
@@ -551,8 +551,8 @@
 												</td>
 												<td class="cart-purchase-delete">
 													<div class="cart-pur-del">
-														<button type="button" class="btn-purchase">구매</button>
-														<button type="button" class="btn-delete"
+														<button type="button" class="btn text-white btn-purchase">구매</button>
+														<button type="button" class="btn text-black btn-delete"
 															onclick="oneCartDel(this)">삭제</button>
 													</div>
 
@@ -588,9 +588,8 @@
 						</div>
 					</div>
 					<div class="order-buttons">
-						<button type="button" class="btn text-black continue"
-							style="background-color: #FFFFFF;">쇼핑 계속하기</button>
-						<button type="submit" id="orderBtn" class="btn text-white purchase" style="background-color: #6426DD">구매하기</button>
+						<button type="button" class="btn text-black continue">쇼핑 계속하기</button>
+						<button type="submit" id="orderBtn" class="btn text-white purchase">구매하기</button>
 					</div>
 				</form>
 			</div>

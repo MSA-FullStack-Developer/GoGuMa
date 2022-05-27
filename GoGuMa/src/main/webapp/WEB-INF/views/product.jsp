@@ -169,7 +169,7 @@
 	        		};
 	        		$.ajax({
 	        			type : "POST",
-	        			url : "${contextPath}/cart/insertCart",
+	        			url : "${contextPath}/cart/api/insertCart",
 	        			data : data,
 	        			beforeSend : function(xhr) {
 	        				xhr.setRequestHeader(header, token);

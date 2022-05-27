@@ -78,7 +78,7 @@ public class CartController {
 	 * @GetMapping("goToOrder") public String order() throws Exception { return
 	 * "redirect:/order/"; }
 	 */
-	@PostMapping("addCartCount")
+	@PostMapping("api/addCartCount")
 	@ResponseBody
 	public void addCartCount(@RequestParam("cartId") String cartId) throws Exception {
 		try {
@@ -91,7 +91,7 @@ public class CartController {
 		}
 	}
 
-	@PostMapping("minusCartCount")
+	@PostMapping("api/minusCartCount")
 	@ResponseBody
 	public void minusCartCount(@RequestParam("cartId") String cartId) throws Exception {
 		try {
@@ -105,7 +105,7 @@ public class CartController {
 		}
 	}
 
-	@PostMapping("delete")
+	@PostMapping("api/delete")
 	@ResponseBody
 	public void delete(@RequestParam("cartId") String cartId) throws Exception {
 		try {
@@ -119,7 +119,7 @@ public class CartController {
 	}
 	
 	// 장바구니 담기
-	@PostMapping("insertCart")
+	@PostMapping("api/insertCart")
 	@ResponseBody
 	public Boolean insertCart(@RequestParam("productId") long productId, @RequestParam("cartAmount") int cartAmount, Authentication authentication)throws Exception{
 		try {
