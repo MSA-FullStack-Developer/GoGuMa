@@ -428,7 +428,12 @@
 	};
 	
 </script>
+<style>
+	<%@ include file="/resources/css/header.css" %>
+</style>
 <div class="container">
+	<%@ include file="header.jsp" %>
+	
 	<!-- 바디 전체-->
 	<div class="cbody">
 		<div class="contents">

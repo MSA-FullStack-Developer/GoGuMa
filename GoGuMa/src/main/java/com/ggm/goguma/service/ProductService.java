@@ -2,6 +2,7 @@ package com.ggm.goguma.service;
 
 import java.util.List;
 
+import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.ProductDTO;
 
 public interface ProductService {
@@ -33,5 +34,8 @@ public interface ProductService {
 	public List<ProductDTO> getSearchList(String keyword, String sortType) throws Exception;
 
 	public long getSearchCount(String keyword) throws Exception;
+
+	// 상품 옵션 이미지
+	public List<CategoryDTO> getOptionImg(long productID) throws Exception;
 }
 

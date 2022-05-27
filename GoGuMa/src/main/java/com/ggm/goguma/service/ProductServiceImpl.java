@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.ProductDTO;
 import com.ggm.goguma.mapper.ProductMapper;
 
@@ -66,5 +67,9 @@ public class ProductServiceImpl implements ProductService {
 		return productMapper.getSearchCount(keyword);
 	}
 
+	@Override
+	public List<CategoryDTO> getOptionImg(long productID) throws Exception {
+		return productMapper.getOptionImg(productID);
+	}
 
 }

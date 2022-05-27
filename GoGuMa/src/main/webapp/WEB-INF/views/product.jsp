@@ -8,8 +8,6 @@
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="https://kit.fontawesome.com/985c0d22bf.js" crossorigin="anonymous"></script>
-
 <head>
     <title>Product</title>
     
@@ -17,6 +15,9 @@
     	<%@ include file="/resources/css/style.css" %>
     </style>
     
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/jquery/1.10.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/resources/js/jquery.zoom.js" ></script>
+
     <script>
  		// 가격 format() 함수
  		Number.prototype.format = function() {
@@ -42,16 +43,12 @@
 	    }
 	    
         $(document).ready(function () {
-			var searchForm = $("#searchForm");
-        	
-        	$('#searchBtn').on("click", function() {
-        		if(!searchForm.find("#keyword").val()){
-        			alert("검색 내용을 입력하세요.");
-        		}
+        	$('.option-img').click(function() {
+        		var src = $(this).data("src");
         		
-        		e.preventDefault();
-        		searchForm.submit();
-        	});
+        		// 선택한 옵션 이미지로 썸네일 이미지 변경
+        		$('.thumbnailImg').attr("src", src);
+         	});
         	
             $("#plus").click(function () {
                 var num = $("#numBox").val();
@@ -69,6 +66,8 @@
 	                	$("#numBox").val(plusNum);        
 	                	$('.total_price').text((optionPrice * plusNum).format() + "원");
 	                }
+                } else {
+                	alert("옵션을 선택하세요.");
                 }
             });
 
@@ -87,7 +86,9 @@
                         $("#numBox").val(minusNum);
                         $('.total_price').text((optionPrice * minusNum).format() + "원");
                     }
-            	}
+            	} else {
+                	alert("옵션을 선택하세요.");
+                }
             });
 
             $(function () {
@@ -178,7 +179,7 @@
 	        				if(result){
 	        					alert("장바구니에 상품이 담겼습니다.");
 	        				}else{
-	        					alert("로그인 후 이용가능합니다.")
+	        					alert("로그인 후 이용가능한 서비스입니다.")
 	        				}
 	        				
 	        			},
@@ -190,7 +191,9 @@
 	        				alert(message);
 	        			}
 	        		});
-            	}
+            	} else {
+                	alert("옵션을 선택하세요.");
+                }
         	});
             
             $('#buyBtn').on("click", function() {
@@ -205,11 +208,12 @@
 	
 	<div class="prodlist">
         <h1 style="text-align: center">${categoryName}</h1>
-
+		
         <hr>
 
         <div class="prodInfo">
-            <img class="thumbnailImg" src="${productInfo.prodimgurl}" style="float: left;" />
+           	<img class="thumbnailImg" id="thumbnailImg" src="${productInfo.prodimgurl}" style="float: left;" />
+
             <div class="product_detail">
                 <table>
                 	<tr>
@@ -232,7 +236,7 @@
 	                        <td>옵션</td>
 	                        <td>
 	                        	<div class="selectbox">
-		                            <select class="option" id="option" name="option" style="float: left;" onchange="javascript:selectOption(this.options[this.selectedIndex].value);">
+		                            <select class="option" id="option" name="option" onchange="javascript:selectOption(this.options[this.selectedIndex].value);">
 		                            	<option value="" data-price="${productInfo.productPrice}">선택 없음</option>
 		                            	<c:forEach items="${option}" var="option">
 		                                	<option value="${option.stock}" 
@@ -272,6 +276,14 @@
                        <button class="buyBtn" id="buyBtn">바로구매</button>
                 </div>
             </div>
+            
+            <div class="optionImg">
+	            <c:forEach items="${optionImgList}" var="optionImgUrl">
+	            	<li class="option-img" data-src="${optionImgUrl.prodimgurl}">
+	            		<img src="${optionImgUrl.prodimgurl}" />
+            		</li>
+	            </c:forEach>
+            </div>
         </div>
         
         <div class="tab">
@@ -293,9 +305,11 @@
                     
                     <div class="write-modal">
                         <h4 class="membername">회원 이름</h4>
-                        <p><input class="review-content" placeholder="상품평을 입력하세요.">
+                        <p>
+                        	<input class="review-content" placeholder="상품평을 입력하세요.">
                             <button class="finishBtn" id="finishBtn">작성 완료</button>
                             <button class="cancleBtn" id="cancleBtn" style="color: black">취소</button>
+                        </p>
                     </div>
                     
                     <div class="review" id="review">

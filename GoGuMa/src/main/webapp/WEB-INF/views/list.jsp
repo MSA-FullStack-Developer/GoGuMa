@@ -6,7 +6,6 @@
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="https://kit.fontawesome.com/a4f59ea730.js" crossorigin="anonymous"></script>
 
 <head>
     <title>List</title>
@@ -16,19 +15,6 @@
     </style>
     
     <script>
-        $(document).ready(function () {
-        	var searchForm = $("#searchForm");
-        	
-        	$('#searchBtn').on("click", function() {
-        		if(!searchForm.find("#keyword").val()){
-        			alert("검색할 상품을 입력하세요.");
-        		}
-        		
-        		e.preventDefault();
-        		searchForm.submit();
-        	});
-        });
-        
         function sortList(sort) {
         	if (${isSearch == false}) {
         		location.href="${contextPath}/category/1/${categoryID}/?sortType="+sort;

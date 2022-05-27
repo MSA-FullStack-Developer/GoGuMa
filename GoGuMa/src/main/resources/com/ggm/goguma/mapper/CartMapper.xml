@@ -46,6 +46,6 @@
 		INSERT INTO cart(productid, memberid, cartamount, cartprice)
 		VALUES (#{productId}, #{memberId}, #{cartAmount}, (SELECT productPrice
 															FROM product
-															WHERE productid = #{productId}) ) 
+															WHERE productid = #{productId})) 
 	</insert>
 </mapper>
