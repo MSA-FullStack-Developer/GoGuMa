@@ -14,15 +14,35 @@
 	<bean id="customUserDetailsService" class="com.ggm.goguma.security.CustomUserDetailsService" />
 	
 	<bean id="loginFailHandler" class="com.ggm.goguma.security.UserLoginFailHandler"/>
-
-	<security:http>
 	
+	<bean id="customAuthenticationEntryPoint" class="com.ggm.goguma.security.CustomAuthenticationEntryPoint"/>
+
+	
+	<!-- <security:http pattern="/mypage/manageAddress/**" entry-point-ref="customAuthenticationEntryPoint" use-expressions="true">
+		<security:intercept-url pattern="/**" access="isAuthenticated()"/>
+	</security:http>
+	
+	<security:http pattern="/cart/**" entry-point-ref="customAuthenticationEntryPoint" use-expressions="true">
+		<security:intercept-url pattern="/cart/addCartCount" access="isAuthenticated()" />
+		<security:intercept-url pattern="/cart/minusCartCount" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/cart/delete" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/cart/insertCart" access="isAuthenticated()"/>
+	</security:http>
+	 -->
+	
+
+	<security:http use-expressions="true">
 		<security:form-login login-page="/member/login.do" default-target-url="/"  authentication-failure-handler-ref="loginFailHandler"/>
 		<security:remember-me remember-me-parameter="remember-me" data-source-ref="dataSource" token-validity-seconds="604800"/>
 		<security:logout logout-url="/logout.do" logout-success-url="/" delete-cookies="remember-me,JSESSION_ID"/>
-		
+		<security:intercept-url pattern="/mypage/manageAddress" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/mypage" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/cart/**" access="isAuthenticated()" />
+		<security:intercept-url pattern="/order/**" access="isAuthenticated()" />		
 	</security:http>
+	
 	<security:authentication-manager>
+		
 		<security:authentication-provider
 			user-service-ref="customUserDetailsService">
 			<security:password-encoder
