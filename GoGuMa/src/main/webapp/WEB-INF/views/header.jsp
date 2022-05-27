@@ -2,10 +2,11 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<script src="https://kit.fontawesome.com/a4f59ea730.js" crossorigin="anonymous"></script>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <style>
-	<%@ include file="/resources/css/style.css" %>
-	
+	<%@ include file="/resources/css/header.css" %>
+
 	.main {
 		width: auto;
 		height: auto;

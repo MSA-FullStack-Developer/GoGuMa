@@ -15,6 +15,8 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 	<!-- bootstrap js -->
 	<style>
+		<%@ include file="/resources/css/header.css" %>
+		
         a {
             text-decoration: none;
         }
@@ -37,6 +39,8 @@
     </style>
 </head>
 <body>
+	<%@ include file="../header.jsp" %>
+	
 	<div class="container mt-5" style="min-width: 1200px">
 		<div class="row">
 			<div class="col-3">

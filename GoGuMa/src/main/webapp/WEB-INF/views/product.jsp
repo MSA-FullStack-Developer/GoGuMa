@@ -8,8 +8,6 @@
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="https://kit.fontawesome.com/985c0d22bf.js" crossorigin="anonymous"></script>
-
 <head>
     <title>Product</title>
     
