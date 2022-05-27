@@ -211,19 +211,20 @@
 													</td>
 													<td class="cart-price">
 														<div class="cart-product-price">
-															<span>상품가격 ${dtoList[status.index].nrmOriPrc }</span>원
+															<c:set var="proPrice" value="${dtoList[status.index].nrmOriPrc * dtoList[status.index].ordQty}"></c:set>
+															<em><fmt:formatNumber value="${proPrice}" type="currency" currencySymbol="" /></em>원
 														</div>
 													</td>
 													<td class="cart-discount">
 														<div class="cart-product-discount">
-															<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
-															<em>${dtoList[status.index].disOriPrc }</em>원
+															<c:set var="disPrice" value="${dtoList[status.index].disOriPrc * dtoList[status.index].ordQty}"></c:set>
+															<em><fmt:formatNumber value="${disPrice}" type="currency" currencySymbol="" /></em>원
 														</div>
 													</td>
 													<td class="cart-total">
 														<div class="cart-total-price">
-															<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
-															<span>${dtoList[status.index].totOriPrc }</span>원
+															<c:set var="totPrice" value="${dtoList[status.index].totOriPrc * dtoList[status.index].ordQty}"></c:set>
+															<em><fmt:formatNumber value="${totPrice}" type="currency" currencySymbol="" /></em>원
 														</div>
 													</td>
 												</tr>
