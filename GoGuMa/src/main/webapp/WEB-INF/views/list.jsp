@@ -11,7 +11,7 @@
     <title>List</title>
     
     <style>
-	    <%@ include file="/resources/css/style.css" %>
+	    <%@ include file="/resources/css/product.css" %>
     </style>
     
     <script>

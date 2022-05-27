@@ -16,4 +16,9 @@ public interface CartService {
 
 	void insertCart(long productId, int cartAmount, long memberId) throws Exception;
 
+	/* *
+	 * 작성자 : 경민영
+	 * 작업일 : 22.05.27
+	 * */
+	long isExistCart(long productId) throws Exception;
 }

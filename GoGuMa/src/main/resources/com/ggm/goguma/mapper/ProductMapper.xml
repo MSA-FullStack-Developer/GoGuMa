@@ -17,7 +17,7 @@
 	</sql>
 	
 	<!-- 상품 목록 -->
-	<select id="getProductList" parameterType="long" resultType="com.ggm.goguma.dto.ProductDTO">
+	<select id="getProductList" parameterType="long" resultType="ProductDTO">
 		SELECT C.*
 		FROM (SELECT DISTINCT B.categoryid, A.productname, A.productprice, A.prodimgurl, A.productid, rownum AS rnum
 				FROM (SELECT p.productid, p.productname, p.productprice, i.prodimgurl, p.categoryid
@@ -37,17 +37,18 @@
 	</select>
 	
 	<!-- 상품 상세 정보 -->
-	<select id="getProductInfo" parameterType="long" resultType="com.ggm.goguma.dto.ProductDTO">
+	<select id="getProductInfo" parameterType="long" resultType="ProductDTO">
 		SELECT p.productid, p.parentpid, p.productname, p.productprice, p.productdetail, i.prodimgurl, p.categoryid, p.stock, p.company
 		FROM product p, productimage i
 		WHERE p.productid = i.productid AND p.parentpid is null AND p.productid = #{productID}
 	</select>
 	
 	<!-- 상품 옵션 목록 -->
-	<select id="getOptionList" parameterType="long" resultType="com.ggm.goguma.dto.ProductDTO">
-		SELECT productid, productname, stock, productprice
-		FROM product
-		WHERE parentpid = #{parentPID}
+	<select id="getOptionList" parameterType="long" resultType="ProductDTO">
+		SELECT p.productid, p.productname, p.stock, p.productprice, i.prodimgurl
+		FROM product p, productimage i
+		WHERE p.productid = i.productid
+		AND parentpid = #{parentPID}
 	</select>
 	
 	<!-- 상품 옵션 개수 -->
@@ -55,14 +56,6 @@
 		SELECT count(*) AS cnt
 		FROM product
 		WHERE parentpid = #{parentPID}
-	</select>
-	
-	<!-- 상품 옵션 이미지 -->
-	<select id="getOptionImg" parameterType="long" resultType="com.ggm.goguma.dto.ProductDTO">
-		SELECT DISTINCT i.prodimgurl
-		FROM product p, productimage i
-		WHERE p.productid = i.productid
-		AND parentpid = #{parentPID}
 	</select>
 	
 	<!-- 
@@ -79,7 +72,7 @@
 	</select>
 	
 	<!-- 상품 검색 -->
-	<select id="getSearchList" resultType="com.ggm.goguma.dto.ProductDTO">
+	<select id="getSearchList" resultType="ProductDTO">
 		SELECT p.productid, p.productname, p.productprice, i.prodimgurl, p.categoryid
 		FROM product p, productimage i
 		WHERE p.productid = i.productid AND p.parentpid is null

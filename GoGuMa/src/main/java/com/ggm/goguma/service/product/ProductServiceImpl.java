@@ -1,4 +1,4 @@
-package com.ggm.goguma.service;
+package com.ggm.goguma.service.product;
 
 import java.util.List;
 
@@ -65,11 +65,6 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public long getSearchCount(String keyword) throws Exception {
 		return productMapper.getSearchCount(keyword);
-	}
-
-	@Override
-	public List<CategoryDTO> getOptionImg(long productID) throws Exception {
-		return productMapper.getOptionImg(productID);
 	}
 
 }

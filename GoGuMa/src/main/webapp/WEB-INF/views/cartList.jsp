@@ -241,7 +241,6 @@
 	}
 	// 단일 장바구니 삭제를 위한 함수
 	function oneCartDel(obj) {
-
 		var deleted = confirm("장바구니를 삭제하겠습니까?");
 
 		if (deleted) {
@@ -249,9 +248,8 @@
 			cartDel(obj);
 			alert("장바구니를 삭제했습니다.");
 		}
-		
 	}
-	//주문내역 계산(총 상품 금액, 총 할인 금액, 총 주문 금액)
+	// 주문내역 계산(총 상품 금액, 총 할인 금액, 총 주문 금액)
 	function calculateSellPrice() {
 
 		var totalNormalPrice = 0 //총 상품 금액
@@ -482,7 +480,7 @@
 											<th scope="col" id="th-total-price">합계</th>
 											<th scope="col" id="th-order-delete">구매/삭제</th>
 										</tr>
-										<c:forEach var="i" items="${list }" begin="0" step="1"
+										<c:forEach var="i" items="${list}" begin="0" step="1"
 											varStatus="status">
 											<tr class="cart-product">
 												<td class="product-select-event">
@@ -495,17 +493,17 @@
 													<label for="oneSel${status.count}"></label></td>
 												<td class="cart-product_box">
 													<div class="product-image">
-														<a href="이동할 링크" class="moveProduct"> <img
-															src="${i.prodImgUrl }" width="78" height="78"
+														<a href="${contextPath}/category/1/${i.categoryId}/detail/${i.parentProductId}" class="moveProduct">
+															<img src="${i.prodImgUrl}" width="78" height="78"
 															class="product-img" alt="">
 														</a>
 													</div>
 													<div class="product-name">
-														<a href="이동할 링크" class="moveProduct">${i.parentProductName }</a>
+														<a href="${contextPath}/category/1/${i.categoryId}/detail/${i.parentProductId}" class="moveProduct">${i.parentProductName}</a>
 													</div>
 													<div class="product-option">
 														<span class="product-option-name"> 옵션:
-															${i.productName } </span>
+															${i.productName} </span>
 													</div>
 												</td>
 												<td class="cart-product-count">

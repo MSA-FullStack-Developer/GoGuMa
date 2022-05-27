@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
-import com.ggm.goguma.service.CategoryService;
 import com.ggm.goguma.service.MyPageService;
+import com.ggm.goguma.service.product.CategoryService;
 
 import lombok.extern.log4j.Log4j;
 
