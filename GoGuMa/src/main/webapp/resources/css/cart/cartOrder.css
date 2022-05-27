@@ -352,6 +352,7 @@ ul, ol, menu, li {
 }
 .ccount{
 	width: 30px;
+    text-align: -webkit-center;
 }
 .product-select-event, .cart-product-count, .cart-price, .cart-discount, .cart-total, .cart-purchase-delete{
 	text-align: center;

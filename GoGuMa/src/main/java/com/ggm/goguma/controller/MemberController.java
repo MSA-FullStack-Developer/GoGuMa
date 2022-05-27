@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.member.CheckMemberResult;
 import com.ggm.goguma.dto.member.ContractDTO;
 import com.ggm.goguma.dto.member.CreateMemberDTO;
@@ -30,6 +31,7 @@ import com.ggm.goguma.exception.NoCertificationException;
 import com.ggm.goguma.exception.NotFoundMemberExcption;
 import com.ggm.goguma.service.contract.ContractService;
 import com.ggm.goguma.service.member.MemberService;
+import com.ggm.goguma.service.product.CategoryService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -43,6 +45,8 @@ public class MemberController {
 	private final MemberService memberService;
 
 	private final ContractService contractService;
+	
+	private final CategoryService categoryService;
 
 	@Value("${iamport.code}")
 	private String iamportCode;
@@ -64,10 +68,12 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value =  "/login.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public String loginForm(@RequestParam(value = "error", defaultValue = "") String error, Model model) {
+	public String loginForm(@RequestParam(value = "error", defaultValue = "") String error, Model model) throws Exception {
 		log.info("hello");
 //		String error = (String) req.getAttribute("error");
 		log.info(error);
+		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+		model.addAttribute("parentCategory", parentCategory);
 		model.addAttribute("error", error);
 		return "member/loginForm";
 	}

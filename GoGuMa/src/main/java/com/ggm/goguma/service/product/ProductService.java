@@ -1,4 +1,4 @@
-package com.ggm.goguma.service;
+package com.ggm.goguma.service.product;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public interface ProductService {
 	public long getOptionCount(long productID) throws Exception;
 
 	
-	/**
+	/* *
 	 * 작성자 : 이승준
 	 * 작업일 : 22.05.25
 	 * */

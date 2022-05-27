@@ -15,6 +15,8 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 	<!-- bootstrap js -->
 	<style>
+		<%@ include file="/resources/css/header.css" %>
+		
         a {
             text-decoration: none;
         }
@@ -37,6 +39,8 @@
     </style>
 </head>
 <body>
+	<%@ include file="../header.jsp" %>
+	
 	<div class="container mt-5" style="min-width: 1200px">
 		<div class="row">
 			<div class="col-3">
@@ -94,7 +98,7 @@
                 <div>
                     <h5><b>👨‍💻 송진호님</b></h5>
                 </div>
-                <div class="d-flex flex-row justify-content-evenly border rounded">
+                <div class="d-flex flex-row justify-content-evenly border border-2 rounded">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
                             회원등급

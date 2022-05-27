@@ -19,4 +19,11 @@ public interface CartMapper {
 	void deleteCart(@Param("cartId") long cartId) throws Exception;
 
 	void insertCart(@Param("productId") long productId, @Param("cartAmount") int cartAmount, @Param("memberId") long memberId) throws Exception;
+
+	/**
+	 * 작성자 : 경민영
+	 * 작업일 : 22.05.27
+	 **/
+	// 장바구니에 존재하는 상품인지 확인
+	long isExistCart(@Param("productId") long productId);
 }

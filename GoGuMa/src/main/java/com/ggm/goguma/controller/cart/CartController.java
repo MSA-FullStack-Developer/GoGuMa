@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.cart.CartDTO;
 import com.ggm.goguma.dto.cart.CartItemDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.mapper.CartMapper;
 import com.ggm.goguma.service.cart.CartService;
 import com.ggm.goguma.service.member.MemberService;
+import com.ggm.goguma.service.product.CategoryService;
 
 import lombok.extern.log4j.Log4j;
 
@@ -39,6 +41,9 @@ public class CartController {
 	
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private CategoryService categoryService;
 
 	/*
 	 * public CartController(CartService cartService) { this.cartService =
@@ -48,6 +53,9 @@ public class CartController {
 	@GetMapping("/")
 	public String cartList(Model model, Authentication authentication) throws Exception {
 		try {
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+			model.addAttribute("parentCategory", parentCategory);
+			
 			String memberEmail = "";
 			// 사용자가 권한이 있는 경우
 			if (authentication != null){
@@ -65,7 +73,7 @@ public class CartController {
 				model.addAttribute("memberDTO", memberDTO); // 회원이 담은 카트 정보를 저장한다.
 				//출력 테스트
 				list.forEach(c -> System.out.println("카트 컨트롤러:" + c));
-			}	
+			}
 			
 			return "cartList";
 		} catch (Exception e) {
@@ -134,11 +142,18 @@ public class CartController {
 				log.info("장바구니에서 사용될 사용자 정보: " + memberDTO);
 				long memberId = memberDTO.getId();
 				
-				// 회원이 카트에 담는다.
-				cartService.insertCart(productId, cartAmount, memberId);
+				long isExist = cartService.isExistCart(productId); // 장바구니에 이미 존재하는지 확인
+				
+				if (isExist < 1) {
+					// 회원이 카트에 담는다.
+					cartService.insertCart(productId, cartAmount, memberId);
+				} else {
+					log.info("이미 장바구니에 존재하는 상품입니다.");
+					return false;
+				}
 				return true;
 			} else {
-				log.info("장바구니에 담을 회원 정보 없음");
+				log.info("장바구니에 담을 회원 정보가 없습니다.");
 				return false;
 			}
 		}catch(Exception e) {
