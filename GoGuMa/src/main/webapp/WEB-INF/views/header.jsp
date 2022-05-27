@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <script src="https://kit.fontawesome.com/a4f59ea730.js" crossorigin="anonymous"></script>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <style>
@@ -64,7 +65,17 @@
     </div>
     
 	<div class="menu">
-		<a class="menuA" href="${contextPath}/member/login.do"><i class="fa-solid fa-right-to-bracket"></i>로그인</a>
+		<sec:authorize access="isAnonymous()">
+			<a class="menuA" href="${contextPath}/member/login.do"><i class="fa-solid fa-right-to-bracket"></i>로그인</a>
+		</sec:authorize>
+		<sec:authorize access="isAuthenticated()">
+		 	<a class="menuA" href="javascript: document.logout.submit()"><i class="fa-solid fa-right-to-bracket"></i>로그아웃</a>
+			<form name="logout" action="${contextPath}/logout.do" method="post" hidden="true">
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				<input type="submit" value="로그아웃" hidden="true"/>
+			</form>
+		</sec:authorize>
+		
 		<a class="menuA" href="${contextPath}/cart/"><i class="fa-solid fa-cart-shopping"></i>장바구니</a>
 		<a class="menuA" href="${contextPath}/mypage/"><i class="fa-solid fa-circle-user"></i>마이페이지</a>
 	</div>
