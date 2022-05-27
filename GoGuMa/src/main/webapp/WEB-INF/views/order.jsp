@@ -21,104 +21,146 @@
 <script type="text/javascript" src="${contextPath}/webjars/jquery-ui/1.13.0/jquery-ui.js"></script>
 
 <script type="text/javascript">
-	$(document).ready(function() {
-		
-		// 모달 배송지 등록 이벤트
-		$('#addAddressBtn').on('click', function() {
-			let isDefault = 0;
-			if($('#isDefault').prop('checked')) {
-				isDefault = 1;
-			}
-			
-			let token = $("meta[name='_csrf']").attr("content");
-		    let header = $("meta[name='_csrf_header']").attr("content");
-		    
-		    let data = {
-	    		nickName : $('#addressBody').find('#nickName').val(),
-				recipient : $('#addressBody').find('#recipient').val(),
-				address : $('#addressBody').find('#address').val(),
-				contact : $('#addressBody').find('#contact').val(),
-				isDefault : isDefault
-		    }
-		    
-			$.ajax({
-				url : '${contextPath}/mypage/manageAddress/addAddress',
-				type : 'POST',
-				data : JSON.stringify(data),
-				contentType : 'application/json; charset=utf-8;',
-				beforeSend : function(xhr) {
-		            xhr.setRequestHeader(header, token);
-		        },
-		        success:function(result) {
-		        	var url = "${contextPath}/order/"
-		        	if(result==1) {
-		        		alert('배송지 추가 완료');
-		        		location.reload();
-		        	} else {
-						alert('입력이 올바르지 않습니다.');
-					}
-		        }
-			});
-		});
-			// 배송지 등록 이벤트
-			$('.address-list-box')
-					.click(
-							function() {
-								if ($(".tbody-on").css(
-										'display') == 'none') {
-									$(".no-show-first")
-											.hide();
-									$('.tbody-on').show();
-								}
 
-								var name = $(this)
-										.find(
-												'.delivery-address-name')
-										.text();
-								var addressNickName = $(
-										this)
-										.find(
-												'.delivery-address-nickname')
-										.text();
-								var addressAlias = $(this)
-										.find(
-												'.delivery-address-alias')
-										.text();
-								var addressPer = $(this)
-										.find(
-												'.delivery-address-per')
-										.text();
-								var phonenumber = $(this)
-										.find(
-												'.delivery-phone-num-td')
-										.text();
-
-								if (addressAlias == "") {
-									console
-											.log("기본배송지가 아님");
-									$('#addressAlias')
-											.hide();
-								} else {
-									console
-											.log(addressAlias);
-									$('#addressAlias')
-											.show();
-								}
-
-								$('#name').text(name);
-								$('#addressNickName').text(
-										addressNickName);
-								$('#addressName').text(
-										addressPer);
-								$('#phonenumber').text(
-										phonenumber);
-
-								$('#myModal').modal('hide');
-							});
+	//모달 쿠폰 적용 클릭이벤트
+	$(document).on('click', '.coupon-list-box', function(){
+	  var coupon_discount = $(this).find(".coupon-benefit").text();
+	  $('.dis-coupon-prc').text(coupon_discount);
+	  $('#couponModal').modal('hide');
 	});
+
+  $(document).ready(function() {
+
+
+    //쿠폰 조회 버튼
+    $('#getCoupon-btn').on('click', function() {
+      let token = $("meta[name='_csrf']").attr("content");
+      let header = $("meta[name='_csrf_header']").attr("content");
+      
+      $.ajax({
+        url : '${contextPath}/order/api/getMemberCoupon',
+        type : 'POST',
+        contentType : 'application/json; charset=utf-8;',
+        beforeSend : function(xhr) {
+          xhr.setRequestHeader(header, token);
+        },
+        success : function(result) {
+          if(result.length > 1){
+            $('#coupon-all *').remove();
+			  for(var i=0; i < result.length; i++){
+				  console.log("쿠폰 정보: " + result[i].couponName);
+				  str = "<div class='coupon-list-box'>";
+				  str+= 	"<div class='row'>";
+				  str+= 		"<div class='col-md-8 coupon-name-th'><span class='coupon-name'>"+result[i].couponName+"</span></div>";
+				  str+=			"<div class='col-md-4 coupon-benefit-th'>-<span class='coupon-benefit'>"+result[i].benefit+"</span>원</div>";
+				  str+= 	"<div>";
+				  str+= 	"<div class='row'>";
+				  str+= 		"<div class='col-md-12 coupon-expiration-th'><span class='coupon-expiration'> 날짜 형식"+result[i].expiration+"</span></div>";
+				  str+= 	"<div>";
+				  str+=	"<div>";
+				  $('#coupon-all').append(str);
+			  }
+		  }else{
+			  console.log("보유한 쿠폰이 없습니다.");
+		  }
+        //   <c:forEach var="i" items="${addressList }" begin="0" step="1" varStatus="status">
+		// 			<div class="address-list-box">
+		// 				<div class="row">
+		// 					<div class="col-md-4 delivery-address-th">쿠폰 이름</div>
+		// 					<div class="col-md-4 delivery-address-td">
+		// 						<span class="delivery-address-name">이름이름</span>
+		// 					</div>
+		// 				</div>
+		// 				<div class="row">
+		// 					<div class="col-md-4 delivery-address-th">쿠폰 혜택</div>
+		// 					<div class="col-md-8 delivery-address-td">
+		// 						<span class="delivery-address-nickname">10000원</span>
+		// 					</div>
+		// 				</div>
+		// 				<div class="row">
+		// 					<div class="col-md-4 delivery-address-th">유효기간</div>
+		// 					<div class="col-md-8 delivery-address-td delivery-address-per">2022/6/17</div>
+		// 				</div>
+		// 			</div>
+		// 		</c:forEach>
+        }
+        });
+    });
+
+    
+    // 모달 배송지 등록 이벤트
+    $('#addAddressBtn').on('click', function() {
+      let isDefault = 0;
+      if ($('#isDefault').prop('checked')) {
+        isDefault = 1;
+      }
+
+      let token = $("meta[name='_csrf']").attr("content");
+      let header = $("meta[name='_csrf_header']").attr("content");
+
+      let data = {
+      nickName : $('#addressBody').find('#nickName').val(),
+      recipient : $('#addressBody').find('#recipient').val(),
+      address : $('#addressBody').find('#address').val(),
+      contact : $('#addressBody').find('#contact').val(),
+      isDefault : isDefault
+      }
+
+      $.ajax({
+      url : '${contextPath}/mypage/manageAddress/addAddress',
+      type : 'POST',
+      data : JSON.stringify(data),
+      contentType : 'application/json; charset=utf-8;',
+      beforeSend : function(xhr) {
+        xhr.setRequestHeader(header, token);
+      },
+      success : function(result) {
+        var url = "${contextPath}/order/"
+        if (result == 1) {
+          alert('배송지 추가 완료');
+          location.reload();
+        } else {
+          alert('입력이 올바르지 않습니다.');
+        }
+      }
+      });
+    });
+    // 배송지 등록 이벤트
+    $('.address-list-box').click(function() {
+      if ($(".tbody-on").css('display') == 'none') {
+        $(".no-show-first").hide();
+        $('.tbody-on').show();
+      }
+
+      var name = $(this).find('.delivery-address-name').text();
+      var addressNickName = $(this).find('.delivery-address-nickname').text();
+      var addressAlias = $(this).find('.delivery-address-alias').text();
+      var addressPer = $(this).find('.delivery-address-per').text();
+      var phonenumber = $(this).find('.delivery-phone-num-td').text();
+
+      if (addressAlias == "") {
+        console.log("기본배송지가 아님");
+        $('#addressAlias').hide();
+      } else {
+        console.log(addressAlias);
+        $('#addressAlias').show();
+      }
+
+      $('#name').text(name);
+      $('#addressNickName').text(addressNickName);
+      $('#addressName').text(addressPer);
+      $('#phonenumber').text(phonenumber);
+
+      $('#myModal').modal('hide');
+    });
+  });
 </script>
 
+<style>
+<%@include file="/resources/css/header.css" %>
+</style>
 <div class="container">
+	<%@ include file="header.jsp"%>
 	<!-- 바디 전체-->
 	<div class="cbody">
 		<div class="contents">
@@ -150,7 +192,7 @@
 							</li>
 						</ul>
 						<div class="btngroup agreeCheck">
-							<button type="button" class="btn btn-default medium">
+							<button type="button" class="btn text-white btn-default medium">
 								<span>결제</span>
 							</button>
 						</div>
@@ -238,18 +280,41 @@
 							<h3 class="accordion-header discount-info" id="panelsStayOpen-headingTwo">
 								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">할인 혜택 선택</button>
 							</h3>
+							<!-- 쿠폰 조회 Modal -->
+							<div class="modal fade" id="couponModal" aria-labelledby="couponModalLabel" tabindex="-1">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="couponModalLabel">쿠폰 선택</h4>
+											<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<div class="coupon-all" id="coupon-all">
+												
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
 								<div class="accordion-body">
 									<div class="coupon-point">
 										<div class="row">
 											<div class="col-md-4">쿠폰 할인</div>
-											<div class="col-md-2 dis-coupon">0원</div>
-											<div class="col-md-4"><button class="btn btn-dark">쿠폰 조회 및 적용</button></div>
+											<div class="col-md-2 dis-coupon">-<span class="dis-coupon-prc">0</span>원</div>
+											<div class="col-md-4">
+												<button class="btn text-white btn-default" id="getCoupon-btn" data-bs-toggle="modal" data-bs-target="#couponModal">쿠폰 조회 및 적용</button>
+											</div>
 										</div>
 										<div class="row">
 											<div class="col-md-4">적립금</div>
 											<div class="col-md-2">0원</div>
-											<div class="col-md-4"><button class="btn btn-dark">사용하기</button><button class="btn btn-dark">사용취소</button></div>
+											<div class="col-md-4">
+												<button class="btn text-white btn-default">사용하기</button>
+												<button class="btn text-white btn-default">사용취소</button>
+											</div>
 											<div class="col-md-2">[보유 적립금: 0]</div>
 										</div>
 									</div>
@@ -260,8 +325,7 @@
 							<h3 class="accordion-header member-info" id="panelsStayOpen-headingThree">
 								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="true" aria-controls="panelsStayOpen-collapseThree">받는사람정보</button>
 							</h3>
-							<!-- 회원가입 확인 Modal-->
-							<!-- Modal -->
+							<!-- 배송정보 조회 Modal -->
 							<div class="modal fade" id="myModal" aria-labelledby="ModalLabel1" tabindex="-1">
 								<div class="modal-dialog modal-dialog-centered">
 									<div class="modal-content">
@@ -345,7 +409,7 @@
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-light" data-bs-target="#myModal" data-bs-toggle="modal" data-bs-dismiss="modal">뒤로가기</button>
-											<button type="button" id="addAddressBtn" class="btn btn-dark">확인</button>
+											<button type="button" id="addAddressBtn" class="btn text-white btn-default">확인</button>
 										</div>
 									</div>
 								</div>
@@ -429,9 +493,6 @@
 					</div>
 
 				</div>
-
-
-
 
 			</div>
 

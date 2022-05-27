@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ggm.goguma.dto.cart.CartItemDTO;
 import com.ggm.goguma.dto.cart.CartOrderListDTO;
+import com.ggm.goguma.dto.coupon.MemberCouponOrderDTO;
 import com.ggm.goguma.mapper.OrderMapper;
 
 import lombok.extern.log4j.Log4j;
@@ -21,6 +22,11 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public List<CartItemDTO> getOrderList(List<CartOrderListDTO> dtoList) throws Exception {
 		return orderMapper.getOrderList(dtoList);
+	}
+
+	@Override
+	public List<MemberCouponOrderDTO> getMemberCoupon(long memberId) throws Exception {
+		return orderMapper.getMemberCoupon(memberId);
 	}
 
 }

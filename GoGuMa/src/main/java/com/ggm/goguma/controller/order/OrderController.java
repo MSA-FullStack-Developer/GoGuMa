@@ -25,6 +25,7 @@ import com.ggm.goguma.dto.cart.CartItemDTO;
 import com.ggm.goguma.dto.cart.CartOrderDTO;
 import com.ggm.goguma.dto.cart.CartOrderListDTO;
 import com.ggm.goguma.dto.cart.CartOrderListDTOInfo;
+import com.ggm.goguma.dto.coupon.MemberCouponOrderDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.service.MyPageService;
 import com.ggm.goguma.service.cart.CartService;
@@ -104,25 +105,49 @@ public class OrderController {
 			}
 	}
 	
-	@RequestMapping(value="/getAllAddressList", method=RequestMethod.POST)
-	public void getAllAddressList(Model model) {
+//	@RequestMapping(value="/getAllAddressList", method=RequestMethod.POST)
+//	public void getAllAddressList(Model model) {
+//		try {
+//			DeliveryAddressDTO defaultAddress = myPageService.getDefaultAddress(1);
+//			log.info(defaultAddress);
+//			List<DeliveryAddressDTO> addressList = myPageService.getAddressList(1);
+//			for(DeliveryAddressDTO dto : addressList) {
+//				log.info(dto);
+//			}
+//			model.addAttribute("defaultAddress", defaultAddress);
+//			model.addAttribute("addressList", addressList);
+//		} catch (Exception e) {
+//			log.info(e.getMessage());
+//		}
+//	}
+	//회원 쿠폰 조회
+	@PostMapping("api/getMemberCoupon")
+	@ResponseBody
+	public List<MemberCouponOrderDTO> getMemberCounpon(Authentication authentication, Model model) throws Exception {
 		try {
-			DeliveryAddressDTO defaultAddress = myPageService.getDefaultAddress(1);
-			log.info(defaultAddress);
-			List<DeliveryAddressDTO> addressList = myPageService.getAddressList(1);
-			for(DeliveryAddressDTO dto : addressList) {
-				log.info(dto);
-			}
-			model.addAttribute("defaultAddress", defaultAddress);
-			model.addAttribute("addressList", addressList);
-		} catch (Exception e) {
-			log.info(e.getMessage());
+			String memberEmail = "";
+				
+			UserDetails user = (UserDetails)authentication.getPrincipal();
+			//사용자 이메일정보를 가져온다.
+			memberEmail = user.getUsername();
+			//사용자 정보 가져오기
+			MemberDTO memberDTO = memberService.getMember(memberEmail);
+			log.info("장바구니에서 사용될 사용자 정보: " + memberDTO);
+			long memberId = memberDTO.getId();
+			
+			List<MemberCouponOrderDTO> couponList = orderService.getMemberCoupon(memberId);
+			log.info("조회한 쿠폰 로그: " + couponList);
+			
+			model.addAttribute("couponList", couponList);
+			return couponList;
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			throw e;
 		}
 	}
-	
 	@PostMapping("/orderResult")
 	public String ReceiveFormData()throws Exception {
-		
 		return "redirect:/";
 	}
 }

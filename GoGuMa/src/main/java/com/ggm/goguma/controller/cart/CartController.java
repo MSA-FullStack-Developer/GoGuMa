@@ -45,11 +45,6 @@ public class CartController {
 	@Autowired
 	private CategoryService categoryService;
 
-	/*
-	 * public CartController(CartService cartService) { this.cartService =
-	 * cartService; }
-	 */
-
 	@GetMapping("/")
 	public String cartList(Model model, Authentication authentication) throws Exception {
 		try {
@@ -70,6 +65,7 @@ public class CartController {
 				List<CartItemDTO> list = cartService.getCartList(memberId);
 				
 				model.addAttribute("list", list); // 회원이 담은 카트 정보를 저장한다.
+				model.addAttribute("listCount",  list.size()); 	//회원이 담은 장바구니 수량을 저장
 				model.addAttribute("memberDTO", memberDTO); // 회원이 담은 카트 정보를 저장한다.
 				//출력 테스트
 				list.forEach(c -> System.out.println("카트 컨트롤러:" + c));
@@ -82,10 +78,7 @@ public class CartController {
 		}
 	}
 
-	/*
-	 * @GetMapping("goToOrder") public String order() throws Exception { return
-	 * "redirect:/order/"; }
-	 */
+	//장바구니 수량 증가
 	@PostMapping("api/addCartCount")
 	@ResponseBody
 	public void addCartCount(@RequestParam("cartId") String cartId) throws Exception {
@@ -98,7 +91,8 @@ public class CartController {
 			throw e;
 		}
 	}
-
+	
+	//장바구니 수량 감소
 	@PostMapping("api/minusCartCount")
 	@ResponseBody
 	public void minusCartCount(@RequestParam("cartId") String cartId) throws Exception {
@@ -112,7 +106,7 @@ public class CartController {
 			throw e;
 		}
 	}
-
+	//장바구니 삭제
 	@PostMapping("api/delete")
 	@ResponseBody
 	public void delete(@RequestParam("cartId") String cartId) throws Exception {
@@ -161,4 +155,6 @@ public class CartController {
 			throw e;
 		}
 	}
+	
+	
 }
