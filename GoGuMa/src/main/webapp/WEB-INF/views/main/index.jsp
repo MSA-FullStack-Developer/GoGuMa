@@ -55,7 +55,6 @@
     </style>
     <script>
         $(document).ready(function () {
-
             var bannerSectionBgColors = ['#3831C9', '#C0E3FE', '#FFF8E7'];
 
             $(".list-group-item ").click(function () {
@@ -252,6 +251,5 @@
     
     <%@ include file="../footer.jsp" %>
 </body>
-
 
 </html>

@@ -149,18 +149,9 @@
                     $(".write-modal").show();
                 });
 
-                // .modal안에 button을 클릭하면 .modal닫기
-                $(".write-modal button").click(function () {
+                // 취소하기 버튼 클릭시 닫힘
+                $("#cancleBtn").click(function () {
                     $(".write-modal").hide();
-                });
-
-                // .modal밖에 클릭시 닫힘
-                $(".write-modal").click(function (e) {
-                    if (e.target.className != "write-modal") {
-                        return false;
-                    } else {
-                        $(".write-modal").hide();
-                    }
                 });
             });
             
@@ -205,9 +196,76 @@
                 }
         	});
             
-            $('#buyBtn').on("click", function() {
-            	alert("바로구매 버튼");
+            $('#buyBtn').on("click", function() { // 바로구매 버튼
+				var optionName = $("#option option:selected").text(); // 옵션 상품 이름
+            	
+            	if (optionName != "선택 없음") {
+	            	var token = $("meta[name='_csrf']").attr("content");
+	        		var header = $("meta[name='_csrf_header']").attr("content");
+	                
+	        		var data = {
+	        			// *** 바로구매하기 위해 보낼 데이터 ***
+	        		};
+	        		$.ajax({
+	        			type : "POST",
+	        			url : "${contextPath}/order",
+	        			data : data,
+	        			beforeSend : function(xhr) {
+	        				xhr.setRequestHeader(header, token);
+	        			},
+	        			success : function(result) {
+	        				// *** 결과 처리 ***
+	        			},
+	        			error : function(xhr, status, error) {
+	        				var errorResponse = JSON.parse(xhr.responseText);
+	        				var errorCode = errorResponse.code;
+	        				var message = errorResponse.message;
+	
+	        				alert(message);
+	        			}
+	        		});
+            	} else {
+                	alert("옵션을 선택하세요.");
+                }
             });
+            
+            $('#finishBtn').on("click", function() { // 상품평 작성하기
+            	var token = $("meta[name='_csrf']").attr("content");
+        		var header = $("meta[name='_csrf_header']").attr("content");
+        		
+            	var productID = $("#productID").val();
+                var memberID = $("#memberID").val();
+               	var content = $(".write-review-content").val();
+                
+        		var data = {
+        			"productID" : productID,
+        			"memberID" : memberID,
+        			"content" : content
+        		};
+        		
+        		$.ajax({
+		            url: "${contextPath}/category/1/insertReview",
+		            type: "POST",
+		            data: data,
+		            beforeSend : function(xhr) {
+        				xhr.setRequestHeader(header, token);
+        			},
+		            success : function(result){
+		            	if (result) {
+
+			                $(".modal").hide();
+			                
+			                alert("상품평 등록 성공");
+		            	}
+		            },error : function(xhr, status, error) {
+        				var errorResponse = JSON.parse(xhr.responseText);
+        				var errorCode = errorResponse.code;
+        				var message = errorResponse.message;
+
+        				alert(message);
+        			}
+		        });
+        	});
         });
     </script>
 </head>
@@ -216,6 +274,7 @@
 	<%@ include file="header.jsp" %>
 	
 	<div class="prodlist">
+		<input type="hidden" id="productID" name="${productInfo.productID}" value="${productInfo.productID}"> <!-- *** 구매한 상품 ID로 수정할 것 *** -->
         <h1 style="text-align: center">${categoryName}</h1>
 		
         <hr>
@@ -308,19 +367,25 @@
                     <img class="productDetail" src="${productInfo.productDetail}">
                 </div>
                 <div id="tab02">
+   					<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
                     <!-- 상품평 -->
-                    <div>
-                        <button class="writeBtn" id="writeBtn">상품평 작성하기</button>
-                    </div>
-                    
-                    <div class="write-modal">
-                        <h4 class="membername">회원 이름</h4>
-                        <p>
-                        	<input class="review-content" placeholder="상품평을 입력하세요.">
-                            <button class="finishBtn" id="finishBtn">작성 완료</button>
-                            <button class="cancleBtn" id="cancleBtn" style="color: black">취소</button>
-                        </p>
-                    </div>
+                    <c:if test="${isShowWriteBtn == true}">
+	                    <div>
+	                        <button class="writeBtn" id="writeBtn">상품평 작성하기</button>
+	                    </div>
+	                    
+	                    <div class="write-modal">
+	                    	<input type="hidden" id="memberID" name="${memberDTO.id}" value="${memberDTO.id}">
+	                        <h4 class="membername"><i class="fa-solid fa-heart" style="color: FF493C"></i>
+	                        	<b>${memberDTO.name}</b>님, 이번 상품은 어떠셨나요?
+                        	</h4>
+                        	<input type="textarea" class="write-review-content" placeholder="상품평을 작성해주세요.">
+                        	<div class="review-buttons">
+	                            <button type="button" class="review-button" id="cancleBtn">취소</button>
+	                            <button type="button" class="review-button" id="finishBtn">작성 완료</button>
+                            </div>
+	                    </div>
+                    </c:if>
                     
                     <c:forEach items="${reviewList}" var="review">
 	                    <div class="review" id="review">

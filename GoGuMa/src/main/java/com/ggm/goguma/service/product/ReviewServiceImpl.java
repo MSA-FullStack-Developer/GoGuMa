@@ -21,5 +21,15 @@ public class ReviewServiceImpl implements ReviewService {
 	public List<ReviewDTO> getReviewList(long productID) throws Exception {
 		return reviewMapper.getReviewList(productID);
 	}
+	
+	@Override
+	public long isExistReview(long memberID, long productID) throws Exception {
+		return reviewMapper.isExistReview(memberID, productID);
+	}
+
+	@Override
+	public void insertReview(long productID, long memberID, String content) throws Exception {
+		reviewMapper.insertReview(productID, memberID, content);
+	}
 
 }

@@ -31,16 +31,16 @@
 	
 	<!-- 상품 개수 -->
 	<select id="getProductCount" parameterType="long" resultType="long">
-		SELECT count(*) AS cnt
+		SELECT COUNT(*) AS cnt
 		FROM product
-		WHERE categoryid = #{categoryID} AND parentpid is null
+		WHERE categoryid = #{categoryID} AND parentpid IS NULL
 	</select>
 	
 	<!-- 상품 상세 정보 -->
 	<select id="getProductInfo" parameterType="long" resultType="ProductDTO">
 		SELECT p.productid, p.parentpid, p.productname, p.productprice, p.productdetail, i.prodimgurl, p.categoryid, p.stock, p.company
 		FROM product p, productimage i
-		WHERE p.productid = i.productid AND p.parentpid is null AND p.productid = #{productID}
+		WHERE p.productid = i.productid AND p.parentpid IS NULL AND p.productid = #{productID}
 	</select>
 	
 	<!-- 상품 옵션 목록 -->
@@ -53,7 +53,7 @@
 	
 	<!-- 상품 옵션 개수 -->
 	<select id="getOptionCount" parameterType="long" resultType="long">
-		SELECT count(*) AS cnt
+		SELECT COUNT(*) AS cnt
 		FROM product
 		WHERE parentpid = #{parentPID}
 	</select>
@@ -75,7 +75,7 @@
 	<select id="getSearchList" resultType="ProductDTO">
 		SELECT p.productid, p.productname, p.productprice, i.prodimgurl, p.categoryid
 		FROM product p, productimage i
-		WHERE p.productid = i.productid AND p.parentpid is null
+		WHERE p.productid = i.productid AND p.parentpid IS NULL
 		AND p.productname LIKE '%'||#{keyword}||'%'
 		<include refid="sort"></include>
 	</select>

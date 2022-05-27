@@ -3,13 +3,27 @@
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ggm.goguma.mapper.ReviewMapper">
 
+	<!-- 상품평 목록 -->
 	<select id="getReviewList" parameterType="long" resultType="com.ggm.goguma.dto.ReviewDTO">
 		SELECT A.name, A.reviewid, B.productname, A.productid, B.parentpid AS parentid, A.content, A.createdate
         FROM (SELECT m.name, r.reviewid, r.productid, r.content, r.createdate
-                FROM REVIEW r, MEMBER m
+                FROM review r, member m
                 WHERE r.memberid = m.memberid) A, product B
         WHERE B.productid = A.productid
         AND B.parentpid = #{parentPID}
 	</select>
+	
+	<!-- 회원이 작성한 후기가 있는지 확인 -->
+	<select id="isExistReview" parameterType="long" resultType="long">
+		SELECT COUNT(memberid) AS cnt
+		FROM review
+		WHERE memberid = #{memberID}
+		AND productid = #{productID}
+	</select>
+	
+	<insert id="insertReview">
+		INSERT INTO review(productid, memberid, content)
+		VALUES (#{productID}, #{memberID}, #{content})
+	</insert>
 
 </mapper>

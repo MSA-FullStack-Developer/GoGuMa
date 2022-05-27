@@ -35,6 +35,4 @@ public class MemberDTO {
 
 	private Date joinDate;
 	
-	
-	
 }
