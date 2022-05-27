@@ -35,21 +35,21 @@
 			margin-top: 38px;
         }
 
-        .list-group-item:hover {
+        #md-category .list-group-item:hover {
             background-color: #FF493C;
             cursor: pointer;
         }
 
-        .list-group-item:hover span {
+        #md-category .list-group-item:hover span {
             color: white;
         }
 
-        .active {
+        #md-category .active {
             background-color: #6426DD !important;
 
         }
 
-        .active span {
+        #md-category .active span {
             color: white !important;
         }
     </style>
@@ -250,6 +250,9 @@
             </div> <!-- 상품 리스트 화면 끝  -->
         </section>
     </div> <!-- 메인 화면 wrapper 끝-->
+    
+    <%@ include file="../footer.jsp" %>
 </body>
+
 
 </html>
