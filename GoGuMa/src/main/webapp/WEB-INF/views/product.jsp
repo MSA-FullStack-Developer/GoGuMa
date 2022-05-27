@@ -238,7 +238,7 @@
 	                        	<div class="selectbox">
 		                            <select class="option" id="option" name="option" onchange="javascript:selectOption(this.options[this.selectedIndex].value);">
 		                            	<option value="" data-price="${productInfo.productPrice}">선택 없음</option>
-		                            	<c:forEach items="${option}" var="option">
+		                            	<c:forEach items="${optionList}" var="option">
 		                                	<option value="${option.stock}" 
 		                                			data-id="${option.productID}" 
 		                                			data-price="${option.productPrice}">
@@ -278,7 +278,7 @@
             </div>
             
             <div class="optionImg">
-	            <c:forEach items="${optionImgList}" var="optionImgUrl">
+	            <c:forEach items="${optionList}" var="optionImgUrl">
 	            	<li class="option-img" data-src="${optionImgUrl.prodimgurl}">
 	            		<img src="${optionImgUrl.prodimgurl}" />
             		</li>

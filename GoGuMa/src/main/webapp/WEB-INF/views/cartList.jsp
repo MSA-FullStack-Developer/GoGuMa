@@ -482,7 +482,7 @@
 											<th scope="col" id="th-total-price">합계</th>
 											<th scope="col" id="th-order-delete">구매/삭제</th>
 										</tr>
-										<c:forEach var="i" items="${list }" begin="0" step="1"
+										<c:forEach var="i" items="${list}" begin="0" step="1"
 											varStatus="status">
 											<tr class="cart-product">
 												<td class="product-select-event">
@@ -495,17 +495,17 @@
 													<label for="oneSel${status.count}"></label></td>
 												<td class="cart-product_box">
 													<div class="product-image">
-														<a href="이동할 링크" class="moveProduct"> <img
-															src="${i.prodImgUrl }" width="78" height="78"
+														<a href="${contextPath}/category/1/${i.categoryId}/detail/${i.parentProductId}" class="moveProduct">
+															<img src="${i.prodImgUrl}" width="78" height="78"
 															class="product-img" alt="">
 														</a>
 													</div>
 													<div class="product-name">
-														<a href="이동할 링크" class="moveProduct">${i.parentProductName }</a>
+														<a href="${contextPath}/category/1/${i.categoryId}/detail/${i.parentProductId}" class="moveProduct">${i.parentProductName}</a>
 													</div>
 													<div class="product-option">
 														<span class="product-option-name"> 옵션:
-															${i.productName } </span>
+															${i.productName} </span>
 													</div>
 												</td>
 												<td class="cart-product-count">

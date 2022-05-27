@@ -38,7 +38,4 @@ public interface ProductMapper {
 	public List<ProductDTO> getSearchList(@Param("keyword") String keyword, @Param("sortType") String sortType) throws Exception;
 
 	public long getSearchCount(@Param("keyword") String keyword) throws Exception;
-
-	// 상품 옵션 이미지
-	public List<CategoryDTO> getOptionImg(long productID) throws Exception;
 }

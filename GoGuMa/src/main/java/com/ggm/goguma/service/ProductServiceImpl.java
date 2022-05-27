@@ -67,9 +67,4 @@ public class ProductServiceImpl implements ProductService {
 		return productMapper.getSearchCount(keyword);
 	}
 
-	@Override
-	public List<CategoryDTO> getOptionImg(long productID) throws Exception {
-		return productMapper.getOptionImg(productID);
-	}
-
 }
