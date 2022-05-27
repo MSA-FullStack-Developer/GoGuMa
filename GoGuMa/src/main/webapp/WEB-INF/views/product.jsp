@@ -68,9 +68,10 @@
                 var optionPrice = $("#option option:selected").data("price"); // 옵션 상품 가격
                 
                 if (optionName != "선택 없음") {
-	                if(plusNum > stock) {
+	                if(plusNum > stock) { // 남은 재고를 넘은 경우
 	                	$("#numBox").val(num);
 	                	$('.total_price').text((optionPrice * num).format() + "원");
+	                	alert("더이상 구매하실 수 업습니다.");
 	                } else {
 	                	$("#numBox").val(plusNum);        
 	                	$('.total_price').text((optionPrice * plusNum).format() + "원");
@@ -190,7 +191,6 @@
 	        				} else {
 	        					alert("이미 장바구니에 담겨있는 상품입니다.")
 	        				}
-	        				
 	        			},
 	        			error : function(xhr, status, error) {
 	        				var errorResponse = JSON.parse(xhr.responseText);
