@@ -2,10 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>  
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<script src="https://kit.fontawesome.com/a4f59ea730.js" crossorigin="anonymous"></script>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-
-<!DOCTYPE html>
 
 <head>
     <meta charset="UTF-8">
@@ -34,7 +32,7 @@
         #banner-section {
             background-color: #3831C9;
             transition: background-color 0.3s ease-in-out 0s;
-
+			margin-top: 38px;
         }
 
         .list-group-item:hover {
@@ -56,7 +54,6 @@
         }
     </style>
     <script>
-
         $(document).ready(function () {
 
             var bannerSectionBgColors = ['#3831C9', '#C0E3FE', '#FFF8E7'];
@@ -80,15 +77,11 @@
             var categoryId = $("#categoryGroup").find("li.active").children("input[type=hidden]").val();
             console.log(categoryId);
             getProductList(categoryId);
-            
-          
-
         });
         
         function addComma(number) {
         	var regexp = /\B(?=(\d{3})+(?!\d))/g;                
         	return number.toString().replace(regexp, ',');
-        
         }
         
         function getProductList(categoryId) {
@@ -117,11 +110,10 @@
         		}
         	});
         }
-        
-      
-
     </script>
-
+    
+	<%@ include file="../header.jsp" %>
+	
     <div class="w-100" style="min-width: 1400px;">
         <section id="banner-section" class="continer-fluid">
             <div class="m-auto" style="width: 1240px;">

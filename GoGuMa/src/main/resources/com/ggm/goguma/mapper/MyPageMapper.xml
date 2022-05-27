@@ -9,7 +9,7 @@
 		order by addressId
 	</select>
 	<select id="getDefaultAddress" resultType="DeliveryAddressDTO">
-		select addressId, nickname, recipient, address, contact
+		select addressId, nickname, recipient, address, contact, isdefault
 		from deliveryaddress
 		where memberId = #{memberId} and isdefault = 1
 	</select>

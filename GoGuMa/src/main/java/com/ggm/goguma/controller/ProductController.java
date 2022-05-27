@@ -34,7 +34,7 @@ public class ProductController {
 	@GetMapping("/{categoryID}")
 	public String list(@PathVariable long pg, @PathVariable long categoryID, @RequestParam(defaultValue="recent") String sortType, Model model) throws Exception {
 		try {
-			showCategoryMenu(model);
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			
 			// 페이징
 			long recordCount = productService.getProductCount(categoryID); // 카테고리별 상품 개수
@@ -49,6 +49,7 @@ public class ProductController {
 			String categoryName = categoryService.getCategoryName(categoryID); // 카테고리 이름
 			List<ProductDTO> list = productService.getProductList(pg, categoryID, sortType); // 카테고리별 상품 목록
 
+			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("keyword", ""); // 검색 키워드를 빈 문자열로 지정
 			model.addAttribute("categoryID", categoryID);
 			model.addAttribute("categoryName", categoryName);
@@ -72,13 +73,14 @@ public class ProductController {
 	@GetMapping("/{categoryID}/detail/{productID}")
 	public String detail(@PathVariable long categoryID, @PathVariable long productID, Model model) throws Exception {
 		try {
-			showCategoryMenu(model);
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 
 			String categoryName = categoryService.getCategoryName(categoryID); // 카테고리 이름
 			ProductDTO productInfo = productService.getProductInfo(productID); // 상품 정보
 			List<ProductDTO> option = productService.getOptionList(productID); // 상품 옵션 목록
 			long optionCount = productService.getOptionCount(productID); // 상품 옵션 개수
 
+			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("categoryID", categoryID);
 			model.addAttribute("categoryName", categoryName);
 			model.addAttribute("productInfo", productInfo);
@@ -95,11 +97,12 @@ public class ProductController {
 	@GetMapping("/search/")
 	public String search(@RequestParam(defaultValue="") String keyword, @RequestParam(defaultValue="recent") String sortType, Model model) throws Exception {
 		try {
-			showCategoryMenu(model);
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			
 			List<ProductDTO> list = productService.getSearchList(keyword, sortType);
 			long searchCount = productService.getSearchCount(keyword);
 
+			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("keyword", keyword);
 			model.addAttribute("list", list);
 			model.addAttribute("recordCount", searchCount);
@@ -112,22 +115,6 @@ public class ProductController {
 			model.addAttribute("msg", "list 출력 에러");
 			return "list";
 		}
-	}
-	
-	// 카테고리 메뉴
-	public void showCategoryMenu(Model model) throws Exception {
-		List<CategoryDTO> parentCategory = categoryService.getCategoryParentList(); // 부모 카테고리 목록
-		
-		parentCategory.forEach(cate -> {
-			try {
-				List<CategoryDTO> categoryList = categoryService.getCategoryList(cate.getCategoryID());
-				cate.setCategoryList(categoryList);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-		
-		model.addAttribute("parentCategory", parentCategory);
 	}
 	
 }

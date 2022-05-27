@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.ggm.goguma.controller.cart.CartController;
+import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.cart.CartItemDTO;
 import com.ggm.goguma.dto.cart.CartOrderDTO;
 import com.ggm.goguma.dto.cart.CartOrderListDTO;
 import com.ggm.goguma.dto.cart.CartOrderListDTOInfo;
 import com.ggm.goguma.dto.member.MemberDTO;
+import com.ggm.goguma.service.MyPageService;
 import com.ggm.goguma.service.cart.CartService;
 import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.order.OrderService;
@@ -42,9 +44,11 @@ public class OrderController {
 	@Autowired
 	private MemberService memberService;
 	
+	@Autowired
+	private MyPageService myPageService;
+	
 	@RequestMapping(value="/", method = {RequestMethod.POST, RequestMethod.GET})
-	public void showOrderList(@ModelAttribute CartOrderDTO cartOrderDTO, Model model, Authentication authentication) throws Exception{
-		try {
+	public String showOrderList(@ModelAttribute CartOrderDTO cartOrderDTO, Model model, Authentication authentication) throws Exception{
 			String memberEmail = "";
 			// 사용자가 권한이 있는 경우
 			if (authentication != null){
@@ -57,9 +61,9 @@ public class OrderController {
 				// 회원이 담은 카트 리스트를 불러온다.
 				long memberId = memberDTO.getId();
 				
-				
-				
-				
+				if(cartOrderDTO.getCartOrderListDTO() == null) {
+					return "redirect:/";
+				}
 				List<CartOrderListDTO> dtoList = new ArrayList<CartOrderListDTO>();
 				//상품 주문 dto에서 선택한 상품만 추려내기 위한 작업
 				for(int i = 0; i < cartOrderDTO.getCartOrderListDTO().size(); i++) {
@@ -77,17 +81,42 @@ public class OrderController {
 				}
 				List<CartItemDTO> list = orderService.getOrderList(dtoList);	//주문할 상품을 불러온다.
 				
+				// 기본 배송지와 저장된 배송지를 불러온다.
+				DeliveryAddressDTO defaultAddress = myPageService.getDefaultAddress(1);
+				List<DeliveryAddressDTO> addressList = myPageService.getAddressList(1);
+				
 				model.addAttribute("list", list); // 회원이 담은 카트 정보를 저장한다.
 				model.addAttribute("memberDTO", memberDTO); // 회원이 담은 카트 정보를 저장한다.
 				model.addAttribute("dtoList", dtoList);
 				
+				model.addAttribute("defaultAddress", defaultAddress);
+				model.addAttribute("addressList", addressList);
+				
 				System.out.println("회원의 정보 : " + memberDTO);
 				System.out.println("주문할 상품들의 정보 : " + list);
 				System.out.println("주문할 상품 리스트 dtoList : " + dtoList);
+				
+				log.info("기본 배송지 정보" + defaultAddress);
+				log.info("전체 배송지 정보" + addressList);
+				return "order";
+			}else {
+				return "redirect:/";
 			}
-		}catch (Exception e) {
-			e.printStackTrace();
-			throw e;
+	}
+	
+	@RequestMapping(value="/getAllAddressList", method=RequestMethod.POST)
+	public void getAllAddressList(Model model) {
+		try {
+			DeliveryAddressDTO defaultAddress = myPageService.getDefaultAddress(1);
+			log.info(defaultAddress);
+			List<DeliveryAddressDTO> addressList = myPageService.getAddressList(1);
+			for(DeliveryAddressDTO dto : addressList) {
+				log.info(dto);
+			}
+			model.addAttribute("defaultAddress", defaultAddress);
+			model.addAttribute("addressList", addressList);
+		} catch (Exception e) {
+			log.info(e.getMessage());
 		}
 	}
 	

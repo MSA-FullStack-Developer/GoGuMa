@@ -13,6 +13,13 @@ select {
 	margin-right: 15px;
 }
 
+.headerCategory {
+    width: 1060px;
+    height: 60px;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+
 .option {
 	width: 60%;
 }
@@ -234,7 +241,7 @@ input {
 }
 
 .header {
-    height: 110px;
+    height: auto;
 }
 
 .thumbnailImg {
@@ -322,7 +329,6 @@ h5 {
     width: 1060px;
     height: auto;
     margin: auto;
-    padding-top: 30px;
 }
 
 .product_detail {

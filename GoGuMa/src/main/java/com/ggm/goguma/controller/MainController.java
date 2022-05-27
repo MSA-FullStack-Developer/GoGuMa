@@ -25,8 +25,6 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class MainController {
 	
-	private final ProductService productService;
-	
 	private final CategoryService categoryService;
 	
 	@GetMapping("/")
@@ -35,10 +33,11 @@ public class MainController {
 	}
 	
 	@GetMapping("/main.do")
-	public String main(Model model) {
-		
+	public String main(Model model) throws Exception {
+		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 		List<CategoryDTO> categoryList = this.categoryService.getMdsCategoryParentList();
 		
+		model.addAttribute("parentCategory", parentCategory);
 		model.addAttribute("categoryList", categoryList);
 		return "main/index";
 	}
