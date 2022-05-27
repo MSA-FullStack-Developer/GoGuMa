@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -128,148 +130,75 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="col border border-2 rounded p-4 mb-3">
-                    <div class="d-flex flex-row">
-                        <div class="col">
-                            <h5><b>2022. 5. 26</b></h5>
-                        </div>
-                        <div class="d-flex flex-column">
-                            주문 상세보기
-                        </div>
-                    </div>
-                    <div class="border border-1 rounded">
-                        <table>
-                            <tbody>
-                                <!--여기부터 forEach-->
-                                <tr class="border-bottom">
-                                    <td class="p-3">
-                                        <img src="img\핫브레이크미니.jpg">
-                                    </td>
-                                    <td class="border-end">
-                                        <div class="col">
-                                            <div class="d-flex flex-row">
-                                                핫브레이크 초코바, 50g, 10개입
-                                            </div>
-                                            <div class="d-flex flex-row">
-                                                7,700원, 1개
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td >
-                                        <div class="col">
-                                            <div class="d-flex flex-row justify-content-center">
-                                                <h5><b>주문 완료</b></h5>
-                                            </div>
-                                            <div class="d-flex flex-row justify-content-center mb-2">
-                                                <button type="button" class="btn btn-sm btn-outline-dark">구매확정</button>
-                                            </div>
-                                            <div class="d-flex flex-row justify-content-center mt-2">
-                                                <button type="button" class="btn btn-sm btn-outline-dark">주문취소</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!--여기까지 forEach-->
-                                <tr>
-                                    <td class="col-2 p-3">
-                                        <img src="img\아몬드세트.jpg">
-                                    </td>
-                                    <td class="border-end">
-                                        <div class="col">
-                                            <div class="d-flex flex-row">
-                                                와사비맛 아몬드, 210g, 1개
-                                            </div>
-                                            <div class="d-flex flex-row">
-                                                4,560원, 1개
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="col">
-                                            <div class="d-flex flex-row justify-content-center">
-                                                <h5><b>구매 완료</b></h5>
-                                            </div>
-                                            <div class="d-flex flex-row justify-content-center mb-2">
-                                                <button type="button" class="btn btn-sm btn-outline-dark">상품평 쓰기</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!--여기까지 forEach-->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="col border border-2 rounded p-4 mb-3">
-                    <div class="d-flex flex-row">
-                        <div class="col">
-                            <h5><b>2022. 5. 26</b></h5>
-                        </div>
-                        <div class="d-flex flex-column">
-                            주문 상세보기
-                        </div>
-                    </div>
-                    <div class="border border-1 rounded">
-                        <table>
-                            <tbody>
-                                <!--여기부터 forEach-->
-                                <tr class="border-bottom">
-                                    <td class="p-3">
-                                        <img src="img\핫브레이크미니.jpg">
-                                    </td>
-                                    <td class="border-end">
-                                        <div class="col">
-                                            <div class="d-flex flex-row">
-                                                핫브레이크 초코바, 50g, 10개입
-                                            </div>
-                                            <div class="d-flex flex-row">
-                                                7,700원, 1개
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td >
-                                        <div class="col">
-                                            <div class="d-flex flex-row justify-content-center">
-                                                <h5><b>주문 취소</b></h5>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!--여기까지 forEach-->
-                                <tr>
-                                    <td class="col-2 p-3">
-                                        <img src="img\아몬드세트.jpg">
-                                    </td>
-                                    <td class="border-end">
-                                        <div class="col">
-                                            <div class="d-flex flex-row">
-                                                와사비맛 아몬드, 210g, 1개
-                                            </div>
-                                            <div class="d-flex flex-row">
-                                                4,560원, 1개
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="col">
-                                            <div class="d-flex flex-row justify-content-center">
-                                                <h5><b>주문 완료</b></h5>
-                                            </div>
-                                            <div class="d-flex flex-row justify-content-center mb-2">
-                                                <button type="button" class="btn btn-sm btn-outline-dark">구매확정</button>
-                                            </div>
-                                            <div class="d-flex flex-row justify-content-center mt-2">
-                                                <button type="button" class="btn btn-sm btn-outline-dark">주문취소</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!--여기까지 forEach-->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+				<c:forEach var="receiptDTO" items="${receiptHistory}">
+					<!-- 결제 forEach 시작 -->
+					<div class="col border border-2 rounded p-4 mb-3">
+	                    <div class="d-flex flex-row">
+	                        <div class="col">
+	                            <h5><b>${receiptDTO.orderDate}</b></h5>
+	                        </div>
+	                        <div class="d-flex flex-column">
+	                            주문 상세보기
+	                        </div>
+	                    </div>
+	                    <div class="border border-1 rounded">
+	                        <table>
+	                            <tbody>
+	                            	<c:forEach var="orderDTO" items="${receiptDTO.orderList}">
+		                                <!-- 주문 forEach 시작 -->
+		                                <tr class="border-bottom">
+		                                    <td class="p-3">
+		                                        <img src="${orderDTO.image}">
+		                                    </td>
+		                                    <td class="border-end">
+		                                        <div class="col">
+		                                            <div>
+		                                                ${orderDTO.name}
+		                                            </div>
+		                                            <div>
+		                                                ${orderDTO.price}원, ${orderDTO.count}개
+		                                            </div>
+		                                        </div>
+		                                    </td>
+		                                    <td >
+		                                        <div class="col" align="center">
+		                                        	<c:choose>
+		                                        		<c:when test="${orderDTO.status eq 'N'}">
+			                                        		<div>
+				                                                <h5><b>주문 완료</b></h5>
+				                                            </div>
+				                                            <div class="mb-2">
+				                                                <button type="button" class="btn btn-sm btn-outline-dark">구매확정</button>
+				                                            </div>
+				                                            <div class="mt-2">
+				                                                <button type="button" class="btn btn-sm btn-outline-dark">주문취소</button>
+				                                            </div>
+		                                        		</c:when>
+		                                        		<c:when test="${orderDTO.status eq 'F'}">
+		                                        			<div>
+				                                                <h5><b>구매 완료</b></h5>
+				                                            </div>
+				                                            <div class="mb-2">
+				                                                <button type="button" class="btn btn-sm btn-outline-dark">상품평 쓰기</button>
+				                                            </div>
+		                                        		</c:when>
+		                                        		<c:otherwise>
+		                                        			<div>
+				                                                <h5><b>취소 완료</b></h5>
+				                                            </div>
+		                                        		</c:otherwise>
+		                                        	</c:choose>
+		                                        </div>
+		                                    </td>
+		                                </tr>
+	                                </c:forEach>
+	                                <!-- 주문 forEach 종료 -->
+	                            </tbody>
+	                        </table>
+	                    </div>
+	                </div>
+	                <!-- 결제 forEach 종료 -->
+				</c:forEach>
             </div>
         </div>
     </div>
