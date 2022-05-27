@@ -48,4 +48,9 @@ public class CartServiceImpl implements CartService{
 		cartMapper.insertCart(productId, cartAmount, memberId);
 	}
 
+	@Override
+	public long isExistCart(long productId) throws Exception {
+		return cartMapper.isExistCart(productId);
+	}
+
 }

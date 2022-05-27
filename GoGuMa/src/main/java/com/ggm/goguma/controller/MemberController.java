@@ -29,9 +29,9 @@ import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.exception.CreateMemberFailException;
 import com.ggm.goguma.exception.NoCertificationException;
 import com.ggm.goguma.exception.NotFoundMemberExcption;
-import com.ggm.goguma.service.CategoryService;
 import com.ggm.goguma.service.contract.ContractService;
 import com.ggm.goguma.service.member.MemberService;
+import com.ggm.goguma.service.product.CategoryService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;

@@ -3,7 +3,6 @@ package com.ggm.goguma.controller;
 import java.security.Principal;
 import java.util.List;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +16,11 @@ import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.coupon.MemberCouponDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.exception.CouponCreateException;
-import com.ggm.goguma.service.CategoryService;
-import com.ggm.goguma.service.ProductService;
 import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.memberCoupon.MemberCouponService;
+import com.ggm.goguma.service.product.CategoryService;
+
+
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;

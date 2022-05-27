@@ -12,21 +12,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.ProductDTO;
-import com.ggm.goguma.service.CategoryService;
-import com.ggm.goguma.service.ProductService;
+import com.ggm.goguma.dto.ReviewDTO;
+import com.ggm.goguma.service.product.CategoryService;
+import com.ggm.goguma.service.product.ProductService;
+import com.ggm.goguma.service.product.ReviewService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
 @Controller
 @RequestMapping("/category/{pg}")
+@RequiredArgsConstructor
 public class ProductController {
 	
-	@Autowired
-	private ProductService productService;
+	private final ProductService productService;
 	
-	@Autowired
-	private CategoryService categoryService;
+	private final CategoryService categoryService;
+	
+	private final ReviewService reviewService;
 
 	private long pageSize  = 8; 
 	private long blockSize = 10;
@@ -77,21 +81,20 @@ public class ProductController {
 
 			String categoryName = categoryService.getCategoryName(categoryID); // 카테고리 이름
 			ProductDTO productInfo = productService.getProductInfo(productID); // 상품 정보
-			List<ProductDTO> option = productService.getOptionList(productID); // 상품 옵션 목록
+			List<ProductDTO> optionList = productService.getOptionList(productID); // 상품 옵션 목록
 			long optionCount = productService.getOptionCount(productID); // 상품 옵션 개수
 			
-			// 옵션 이미지
-			List<CategoryDTO> optionImgList = productService.getOptionImg(productID);
-
+			// 상품평 불러오기
+			List<ReviewDTO> reviewList = reviewService.getReviewList(productID);
+			log.info(reviewList);
+			
 			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("categoryID", categoryID);
 			model.addAttribute("categoryName", categoryName);
 			model.addAttribute("productInfo", productInfo);
-			model.addAttribute("option", option);
+			model.addAttribute("optionList", optionList);
 			model.addAttribute("optionCount", optionCount);
-			model.addAttribute("optionImgList", optionImgList);
-			
-			log.info(optionImgList);
+			model.addAttribute("reviewList", reviewList);
 			
 			return "product";
 		} catch (Exception e) {

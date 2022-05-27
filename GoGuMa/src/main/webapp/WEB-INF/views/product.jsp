@@ -21,13 +21,14 @@
         crossorigin="anonymous"></script>
     
     <style>
-    	<%@ include file="/resources/css/style.css" %>
+    	<%@ include file="/resources/css/product.css" %>
     </style>
     
     
     
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/jquery/1.10.2/jquery.min.js"></script>
 	<script type="text/javascript" src="/resources/js/jquery.zoom.js" ></script>
+
 
     <script>
  		// 가격 format() 함수
@@ -189,8 +190,8 @@
 	        			success : function(result) {
 	        				if(result){
 	        					alert("장바구니에 상품이 담겼습니다.");
-	        				}else{
-	        					alert("로그인 후 이용가능한 서비스입니다.")
+	        				} else {
+	        					alert("이미 장바구니에 담겨있는 상품입니다.")
 	        				}
 	        				
 	        			},
@@ -223,7 +224,9 @@
         <hr>
 
         <div class="prodInfo">
-           	<img class="thumbnailImg" id="thumbnailImg" src="${productInfo.prodimgurl}" style="float: left;" />
+        	<div class="wrap">
+           		<img class="thumbnailImg" id="thumbnailImg" src="${productInfo.prodimgurl}" style="float: left;" />
+        	</div>
 
             <div class="product_detail">
                 <table>
@@ -249,7 +252,7 @@
 	                        	<div class="selectbox">
 		                            <select class="option" id="option" name="option" onchange="javascript:selectOption(this.options[this.selectedIndex].value);">
 		                            	<option value="" data-price="${productInfo.productPrice}">선택 없음</option>
-		                            	<c:forEach items="${option}" var="option">
+		                            	<c:forEach items="${optionList}" var="option">
 		                                	<option value="${option.stock}" 
 		                                			data-id="${option.productID}" 
 		                                			data-price="${option.productPrice}">
@@ -289,7 +292,7 @@
             </div>
             
             <div class="optionImg">
-	            <c:forEach items="${optionImgList}" var="optionImgUrl">
+	            <c:forEach items="${optionList}" var="optionImgUrl">
 	            	<li class="option-img" data-src="${optionImgUrl.prodimgurl}">
 	            		<img src="${optionImgUrl.prodimgurl}" />
             		</li>
@@ -323,37 +326,39 @@
                         </p>
                     </div>
                     
-                    <div class="review" id="review">
-                        <div>
-                            <p>
-                            <h4>회원 이름<i style="font-size: 8pt; margin-left: 10px;">작성일</i></h4>
-                            <h5>[부모상품ID] 상품ID</h5>
-                            <h3>상품평 내용</h3>
-                            <div class="imgList">
-                                <div class="imgC">
-                                    <img class="reviewImg" src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
-                                        alt="모달할 이미지">
-                                </div>
-                                <div class="imgC">
-                                    <img class="reviewImg" src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
-                                        alt="모달할 이미지">
-                                </div>
-                                <div class="imgC">
-                                    <img class="reviewImg" src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
-                                        alt="모달할 이미지">
-                                </div>
-                            </div>
-
-                            <!-- 팝업 될 곳 -->
-                            <div class="modal">
-                                <button>&times;</button>
-                                <div class="modalBox">
-                                    <img src="" alt="">
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
+                    <c:forEach items="${reviewList}" var="review">
+	                    <div class="review" id="review">
+	                        <div>
+	                            <p class="review-profile-name">
+	                            	${review.name}
+	                           		<span class="review-create-date">
+		                            	<fmt:formatDate value="${review.createDate}" pattern="yyyy.MM.dd" />
+									</span>
+								</p>
+	                            <p class="review-product-info">[${productInfo.productName}]&nbsp;&nbsp;${review.productName}</p>
+	                            <p class="review-content">${review.content}</p>
+	                            
+	                            <div class="imgList">
+	                                <div class="imgC">
+	                                    <img class="reviewImg" src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
+	                                        alt="모달할 이미지">
+                                        <img class="reviewImg" src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
+	                                        alt="모달할 이미지">
+	                                </div>
+	                            </div>
+	
+	                            <!-- 팝업 될 곳 -->
+	                            <div class="modal">
+	                                <button>&times;</button>
+	                                <div class="modalBox">
+	                                    <img src="" alt="">
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <hr>
+	                    </div>
+                    </c:forEach>
+                    
                 </div>
             </div>
         </div>
