@@ -86,7 +86,7 @@ public class OrderController {
 				List<DeliveryAddressDTO> addressList = myPageService.getAddressList(1);
 				
 				model.addAttribute("list", list); // 회원이 담은 카트 정보를 저장한다.
-				model.addAttribute("memberDTO", memberDTO); // 회원이 담은 카트 정보를 저장한다.
+				model.addAttribute("memberDTO", memberDTO); // 회원 정보를 저장한다.
 				model.addAttribute("dtoList", dtoList);
 				
 				model.addAttribute("defaultAddress", defaultAddress);

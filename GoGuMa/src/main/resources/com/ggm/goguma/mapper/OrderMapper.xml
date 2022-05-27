@@ -18,7 +18,7 @@
 			P.prodimgurl,
 			P.isthumbnail
 			FROM cart C JOIN productoriginal P
-			ON C.productid = P.productid
+			ON C.cartid = P.cartid
 			WHERE C.cartId IN 
 			<foreach collection="list" item="arr" open="(" close=")" separator=",">
 			#{arr.cartId}
