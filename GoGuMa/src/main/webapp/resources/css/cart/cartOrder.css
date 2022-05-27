@@ -463,6 +463,10 @@ ul, ol, menu, li {
     --bs-accordion-active-color: #0c63e4;
     /* --bs-accordion-active-bg: #e7f1ff; */
 }
+.accordion-item{
+	margin: 10px;
+	margin-top: 60px;
+}
 .accordion-button{
 	background-color:#f8f8f8;
 }
@@ -556,4 +560,16 @@ ul, ol, menu, li {
 }
 .btn-change-address{
 	background-color: #6426DD ;
+	float: right;
+}
+.btn-change-address:hover{
+	background-color: #FF493C ;
+}
+.address-list-box{
+	padding: 10px;
+    margin: 10px;
+    border: #F3F3F3 1px solid;
+}.address-list-box:hover {
+	border: #FF493C 2px solid;
+	border-radius: 5px;
 }
