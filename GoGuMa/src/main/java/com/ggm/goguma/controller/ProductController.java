@@ -86,7 +86,6 @@ public class ProductController {
 			
 			// 상품평 불러오기
 			List<ReviewDTO> reviewList = reviewService.getReviewList(productID);
-
 			log.info(reviewList);
 			
 			model.addAttribute("parentCategory", parentCategory);
