@@ -11,6 +11,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" content="${_csrf.token}">
+	<meta name="_csrf_header" content="${_csrf.headerName}">
     <title>고구마 - 고객과 구성하는 마켓</title>
 
     <!-- bootstrap css -->
@@ -30,21 +32,40 @@
 </head>
 
 <body>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			
+			var message = "${message}";
+			if(message) {
+				alert(message);
+			} 
+			
+			$(".coupon").click(function(){
+				var form = $(this).find("form");
+				form.submit();
+			})
+			
+		})
+	</script>
     <style>
-        .cupon {
+        .coupon {
             width: 400px;
             height: 300px;
             cursor: pointer;
         }
     </style>
+    <%@ include file="../header.jsp" %>
+    <section class="mt-5">
     <div class="h-50 container-fluid" style="background-color: #3831C9;">
-        <img src="web-banner-001.png" />
+        <img src="${contextPath}/resources/img/web_banner_001.png" alt="이벤트1 배너" />
     </div>
 
     <div class="h-50 container mt-2 p-3">
         <div class="w-100 h-100 p-3 border rounded d-flex align-items-center">
             <div class="w-100 d-flex justify-content-around">
-                <div class="cupon border border-info">
+                <div class="coupon border border-info">
+                	<form class="w-100 h-100" method="post" action="${contextPath}/coupon/create.do/1?redirectUrl=event/event1.do">
+                	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                     <div class="w-100 h-75 d-flex justify-content-center align-items-center">
                         <h3>10,000원 할인</h3>
                     </div>
@@ -61,9 +82,12 @@
                             </svg>
                         </div>
                     </div>
+                    </form>
                 </div>
 
-                <div class="cupon border border-dark">
+                <div class="coupon border border-dark">
+                	<form class="w-100 h-100" method="post" action="${contextPath}/coupon/create.do/2?redirectUrl=event/event1.do">
+                	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                     <div class="w-100 h-75 d-flex justify-content-center align-items-center">
                         <h3>5,000원 할인</h3>
                     </div>
@@ -80,11 +104,13 @@
                             </svg>
                         </div>
                     </div>
+                    </form>
                 </div>
             </div>
 
         </div>
     </div>
+    </section>
 </body>
 
 </html>

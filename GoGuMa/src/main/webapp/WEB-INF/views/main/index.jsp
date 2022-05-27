@@ -121,8 +121,10 @@
                     <div class="carousel-inner">
 
                         <div class="carousel-item active">
+                        	<a href="${contextPath}/event/event1.do">
                             <img src="${contextPath}/resources/img/web_banner_001.png"
                                 class="d-block w-100" alt="이벤트1 배너" />
+                                </a>
                         </div>
 
                         <div class="carousel-item">
