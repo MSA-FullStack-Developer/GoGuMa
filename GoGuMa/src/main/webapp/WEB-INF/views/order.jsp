@@ -240,13 +240,19 @@
 							</h3>
 							<div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
 								<div class="accordion-body">
-									<table>
-										<tr>
-											<td class="cart-price">
-												<div class="cart-product-price">아아아아아아</div>
-											</td>
-										</tr>
-									</table>
+									<div class="coupon-point">
+										<div class="row">
+											<div class="col-md-4">쿠폰 할인</div>
+											<div class="col-md-2 dis-coupon">0원</div>
+											<div class="col-md-4"><button class="btn btn-dark">쿠폰 조회 및 적용</button></div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">적립금</div>
+											<div class="col-md-2">0원</div>
+											<div class="col-md-4"><button class="btn btn-dark">사용하기</button><button class="btn btn-dark">사용취소</button></div>
+											<div class="col-md-2">[보유 적립금: 0]</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
