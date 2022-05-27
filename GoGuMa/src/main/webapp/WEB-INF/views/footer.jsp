@@ -71,7 +71,7 @@
             <div class="container">
                 <div class="row pt-4 pb-4">
                     <div class="col-1">
-                        <img src="https://image.hmall.com/p/img/co/footer-logo.jpg" width="50" height="120" alt="현대백화점 로고"/>
+                        <img src="https://image.hmall.com/p/img/co/footer-logo.jpg" width=auto height=auto alt="현대백화점 로고"/>
                     </div>
                     <div class="col">
                         <h6>(주)현대홈쇼핑</h6>
