@@ -18,17 +18,11 @@
 	<bean id="customAuthenticationEntryPoint" class="com.ggm.goguma.security.CustomAuthenticationEntryPoint"/>
 
 	
-	<!-- <security:http pattern="/mypage/manageAddress/**" entry-point-ref="customAuthenticationEntryPoint" use-expressions="true">
-		<security:intercept-url pattern="/**" access="isAuthenticated()"/>
+
+	<security:http pattern="/cart/api/**" entry-point-ref="customAuthenticationEntryPoint" use-expressions="true">
+		<security:intercept-url pattern="/cart/api/**" access="isAuthenticated()" />
 	</security:http>
-	
-	<security:http pattern="/cart/**" entry-point-ref="customAuthenticationEntryPoint" use-expressions="true">
-		<security:intercept-url pattern="/cart/addCartCount" access="isAuthenticated()" />
-		<security:intercept-url pattern="/cart/minusCartCount" access="isAuthenticated()"/>
-		<security:intercept-url pattern="/cart/delete" access="isAuthenticated()"/>
-		<security:intercept-url pattern="/cart/insertCart" access="isAuthenticated()"/>
-	</security:http>
-	 -->
+	 
 	
 
 	<security:http use-expressions="true">

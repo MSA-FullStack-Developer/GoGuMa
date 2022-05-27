@@ -47,7 +47,7 @@ public class MainController {
 		return "main/event1";
 	}
 	
-	@PostMapping("/cupon/create.do/{cuponId}")
+	@PostMapping("/coupon/create.do/{couponId}")
 	public String createCupon(@PathVariable int cuponId, @RequestParam String redirectUrl, Authentication authentication, RedirectAttributes ra) {
 	
 		
