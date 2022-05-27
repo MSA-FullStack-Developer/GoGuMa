@@ -32,7 +32,7 @@
 <body>
     <style>
         #banner-section {
-            background-color: #E1E4FD;
+            background-color: #3831C9;
             transition: background-color 0.3s ease-in-out 0s;
 
         }
@@ -59,7 +59,7 @@
 
         $(document).ready(function () {
 
-            var bannerSectionBgColors = ['#E1E4FD', '#C0E3FE', '#FFF8E7'];
+            var bannerSectionBgColors = ['#3831C9', '#C0E3FE', '#FFF8E7'];
 
             $(".list-group-item ").click(function () {
                 $(this).parent().find('li').removeClass('active');
@@ -129,7 +129,7 @@
                     <div class="carousel-inner">
 
                         <div class="carousel-item active">
-                            <img src="https://cdn.011st.com/11dims/resize/1240x400/quality/99/11src/http://cdn.011st.com/ds/2022/02/10/1415/6de72b683174dab67001bbe681c8a1c8.jpg"
+                            <img src="${contextPath}/resources/img/web_banner_001.png"
                                 class="d-block w-100" alt="이벤트1 배너" />
                         </div>
 

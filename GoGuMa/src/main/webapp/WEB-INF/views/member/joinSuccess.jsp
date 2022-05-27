@@ -46,7 +46,7 @@
             <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_cUG5w8.json"  background="transparent"  speed="1"  style="width: 100%; height: 100%;"  loop  autoplay></lottie-player>
         </div>
         <div class="d-flex justify-content-center mt-5">
-            <a id="go-login-btn" class="btn btn-lg" role="button" href="#">로그인하기</a>
+            <a id="go-login-btn" class="btn btn-lg" role="button" href="${contextPath}/member/login.do">로그인하기</a>
         </div>
     </section>
 </body>
