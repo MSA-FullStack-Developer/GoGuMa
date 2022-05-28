@@ -453,7 +453,7 @@
 							</div>
 							<div class="cart-bottom">
 								<span>${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> G.Point: <span>
-									 포인트 조회해야함</span>
+									 ${point }</span>원
 								<div class="btngroup">
 									<button type="button" class="btn btn-cart-del"
 										name="allCartDelete" onclick="selectedCartDel()">

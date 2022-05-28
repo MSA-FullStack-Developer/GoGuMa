@@ -25,8 +25,10 @@
 	//모달 쿠폰 적용 클릭이벤트
 	$(document).on('click', '.coupon-list-box', function(){
 	  var coupon_discount = $(this).find(".coupon-benefit").text();
+	  var coupon_name = $(this).find(".coupon-name").text()
 	  $('.dis-coupon-prc').text(coupon_discount);
 	  $('#couponModal').modal('hide');
+	  alert(coupon_name + " 할인이 적용되었습니다.");
 	});
 
   $(document).ready(function() {

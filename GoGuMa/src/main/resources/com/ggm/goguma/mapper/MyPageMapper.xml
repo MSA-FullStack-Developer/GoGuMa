@@ -38,4 +38,18 @@
 	<update id="cancelDefault">
 		update deliveryaddress set isdefault = 0 where memberId = #{memberId}
 	</update>
+	
+		<!-- 사용자 포인트를 조회한다. -->
+	<select id="getMemberPoint" resultType="int">
+		SELECT (SELECT sum(pointvalue)
+				FROM pointevent
+				WHERE memberid= #{memberId}
+				GROUP BY pointtype
+				having pointtype='plus') - (SELECT sum(pointvalue)
+				                            FROM pointevent
+				                            GROUP BY pointtype
+				                            having pointtype='minus') AS point
+		FROM dual
+	</select>
+	
 </mapper>

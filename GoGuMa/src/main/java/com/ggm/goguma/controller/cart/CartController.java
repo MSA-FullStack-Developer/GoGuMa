@@ -25,6 +25,7 @@ import com.ggm.goguma.dto.cart.CartDTO;
 import com.ggm.goguma.dto.cart.CartItemDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.mapper.CartMapper;
+import com.ggm.goguma.service.MyPageService;
 import com.ggm.goguma.service.cart.CartService;
 import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.product.CategoryService;
@@ -44,6 +45,9 @@ public class CartController {
 	
 	@Autowired
 	private CategoryService categoryService;
+	
+	@Autowired
+	private MyPageService mypageService;
 
 	@GetMapping("/")
 	public String cartList(Model model, Authentication authentication) throws Exception {
@@ -64,6 +68,10 @@ public class CartController {
 				long memberId = memberDTO.getId();
 				List<CartItemDTO> list = cartService.getCartList(memberId);
 				
+				// 회원이 가진 포인트 조회한다.
+				int point = mypageService.getMemberPoint(memberId);
+				
+				model.addAttribute("point", point);	 //회원이 가진 포인트를 조회한다.
 				model.addAttribute("list", list); // 회원이 담은 카트 정보를 저장한다.
 				model.addAttribute("listCount",  list.size()); 	//회원이 담은 장바구니 수량을 저장
 				model.addAttribute("memberDTO", memberDTO); // 회원이 담은 카트 정보를 저장한다.

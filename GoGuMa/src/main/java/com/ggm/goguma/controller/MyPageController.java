@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -124,4 +125,18 @@ public class MyPageController {
 		}
 		return "1";
 	}
+	
+	
+
+	/**
+	 * @작성자: Moon Seokho
+	 * @Date: 2022. 5. 28.
+	 * @프로그램설명: 사용자 포인트 조회기능
+	 * @변경이력: 
+	 */
+//	@PostMapping("api/getMemberPoint")
+//	@ResponseBody
+//	public void getMemberPoint() {
+//		
+//	}
 }

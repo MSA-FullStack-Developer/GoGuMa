@@ -18,4 +18,6 @@ public interface MyPageService {
 	void setDefault(long memberId, long addressId) throws Exception;
 
 	void cancelDefault(long memberId) throws Exception;
+
+	int getMemberPoint(long memberId) throws Exception;
 }
