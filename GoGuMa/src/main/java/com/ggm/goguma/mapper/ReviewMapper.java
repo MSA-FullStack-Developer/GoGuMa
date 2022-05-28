@@ -15,4 +15,7 @@ public interface ReviewMapper {
 
 	// 상품평 등록
 	void insertReview(@Param("productID") long productID, @Param("memberID") long memberID, @Param("content") String content);
+	
+	// 상품평 등록 자격 확인
+	long isFinishRcpt(long productID, long memberID) throws Exception;
 }

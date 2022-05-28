@@ -32,4 +32,9 @@ public class ReviewServiceImpl implements ReviewService {
 		reviewMapper.insertReview(productID, memberID, content);
 	}
 
+	@Override
+	public long isFinishRcpt(long productID, long memberID) throws Exception {
+		return reviewMapper.isFinishRcpt(productID, memberID);
+	}
+
 }

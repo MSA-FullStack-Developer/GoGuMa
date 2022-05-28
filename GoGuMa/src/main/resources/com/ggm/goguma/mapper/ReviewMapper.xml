@@ -10,7 +10,7 @@
                 FROM review r, member m
                 WHERE r.memberid = m.memberid) A, product B
         WHERE B.productid = A.productid
-        AND B.parentpid = #{parentPID}
+        AND B.parentpid = #{productID}
 	</select>
 	
 	<!-- 회원이 상품의 상품평을 작성한 적이 있는지 확인
@@ -21,8 +21,21 @@
                 FROM review r, member m
                 WHERE r.memberid = m.memberid) A, product B
         WHERE B.productid = A.productid
-        AND B.parentpid = #{parentPID}
+        AND B.parentpid = #{productID}
         AND A.memberid = #{memberID}
+	</select>
+	
+	<!-- 회원이 상품을 구매 확정한 상태인지 확인
+		 'cnt >= 1' 인 경우 상품평 작성 가능 -->
+	<select id="isFinishRcpt" parameterType="long" resultType="long">
+		SELECT COUNT(A.productid) AS cnt
+		FROM (SELECT o.orderstatus, p.parentpid, o.receiptid, o.productid
+			    FROM orderdetail o, product p
+			    WHERE p.productid = o.productid
+			    AND o.orderstatus = 'F'
+			    AND p.parentpid = #{productID}) A, receipt B
+		WHERE A.receiptid = B.receiptid
+		AND B.memberid = #{memberID}
 	</select>
 	
 	<!-- 상품평 작성 -->

@@ -92,10 +92,12 @@ public class ProductController {
 			log.info(reviewList);
 			
 			// 상품평을 작성할 수 있는 조건 (= 상품평 쓰기 버튼이 보이는 조건)
-			// 1. 사용자가 권한이 있고,								: memberService.getMember(user.getUsername()) != null
-			// 2. 해당 상품을 '구매확정'한 경우						:
+			// UserDetails user = (UserDetails) authentication.getPrincipal();
+			// memberDTO = memberService.getMember(user.getUsername()); // 로그인한 회원 정보 불러오기
+			// 1. 사용자가 권한이 있고,								: user != null
+			// 2. 해당 상품을 '구매확정'한 경우						: reviewService.isFinishRcpt(productID, memberDTO.getId()) < 1
 			// 2. 이전에 해당 상품의 상품평을 작성한 적이 없는 경우 : reviewService.isExistReview(memberDTO.getId(), productID) < 1
-			
+	
 			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("categoryID", categoryID);
 			model.addAttribute("categoryName", categoryName);
