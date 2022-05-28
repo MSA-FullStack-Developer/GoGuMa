@@ -15,7 +15,7 @@
 	</select>
 	
 	<!-- 회원이 상품의 상품평을 작성한 적이 있는지 확인
-		 'cnt < 1' 인 경우 상품평 작성 가능 -->
+		 'resultType < 1' 인 경우 상품평 작성 가능 -->
 	<select id="isExistReview" resultType="long">
 		SELECT COUNT(*) AS cnt
         FROM (SELECT r.productid, m.memberid
@@ -27,7 +27,7 @@
 	</select>
 	
 	<!-- 회원이 상품을 구매 확정한 상태인지 확인
-		 'cnt == 1' 인 경우 상품평 작성 가능 -->
+		 'resultType != null' 인 경우 상품평 작성 가능 -->
 	<select id="isFinishRcpt" resultType="Integer">
 		SELECT A.productid AS productid
 		FROM (SELECT o.orderstatus, p.parentpid, o.receiptid, o.productid

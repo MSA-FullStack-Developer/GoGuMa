@@ -103,18 +103,14 @@ public class ProductController {
 			boolean showWriteBtn = false;
 			Integer orderProductID = null; // 상품이 '구매확정'이면 구매확정한 상품의 ID를 저장
 			if (authentication != null) {
-				try {
-					UserDetails user = (UserDetails) authentication.getPrincipal();
-					MemberDTO memberDTO = memberService.getMember(user.getUsername());
-					model.addAttribute("memberDTO", memberDTO);
-					long isWrittened = reviewService.isExistReview(productID, memberDTO.getId());
-					orderProductID = reviewService.isFinishRcpt(productID, memberDTO.getId());
-					
-					if (isWrittened < 1 && orderProductID != null) {
-						showWriteBtn = true; // 상품평 작성 가능
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				UserDetails user = (UserDetails) authentication.getPrincipal();
+				MemberDTO memberDTO = memberService.getMember(user.getUsername());
+				model.addAttribute("memberDTO", memberDTO);
+				long isWrittened = reviewService.isExistReview(productID, memberDTO.getId());
+				orderProductID = reviewService.isFinishRcpt(productID, memberDTO.getId());
+				
+				if (isWrittened < 1 && orderProductID != null) {
+					showWriteBtn = true; // 상품평 작성 가능
 				}
 			}
 	

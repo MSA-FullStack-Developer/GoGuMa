@@ -224,9 +224,9 @@
             	var token = $("meta[name='_csrf']").attr("content");
         		var header = $("meta[name='_csrf_header']").attr("content");
         		
-            	var productID = $("#productID").val();
-                var memberID = $("#memberID").val();
-               	var content = $(".write-review-content").val();
+            	var productID = $("#productID").val(); // 구매한 상품 번호
+                var memberID = $("#memberID").val(); // 로그인한 회원 번호
+               	var content = $(".write-review-content").val(); // 상품평 내용
                 
         		var data = {
         			"productID" : productID,
@@ -243,13 +243,9 @@
         			},
 		            success : function(result){
 		            	if (result) {
-
 			                $(".modal").hide();
-			                
-			                alert("상품평 등록 성공");
-			                
+			                alert("상품평이 등록되었습니다.");
 			                location.reload();
-			                // *** 등록 완료된 상품평 목록에서 보여주기 *** 
 		            	}
 		            },error : function(xhr, status, error) {
         				var errorResponse = JSON.parse(xhr.responseText);
@@ -362,24 +358,24 @@
    					<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
    					
                     <!-- 상품평 -->
-				<c:if test="${showWriteBtn == true}">
-                    <div>
-                        <button class="writeBtn" id="writeBtn">상품평 작성하기</button>
-                    </div>
-                    
-                    <div class="write-modal">
-                    	<input type="hidden" id="memberID" name="${memberDTO.id}" value="${memberDTO.id}">
-                    	<input type="hidden" id="productID" name="${orderProductID}" value="${orderProductID}">
-                        <h4 class="membername"><i class="fa-solid fa-heart" style="color: FF493C"></i>
-                        	<b>${memberDTO.name}</b>님, 이번 상품은 어떠셨나요?
-                       	</h4>
-                       	<input type="textarea" class="write-review-content" placeholder="상품평을 작성해주세요.">
-                       	<div class="review-buttons">
-                            <button type="button" class="review-button" id="cancleBtn">취소</button>
-                            <button type="button" class="review-button" id="finishBtn">작성 완료</button>
-                          </div>
-                    </div>
-                 </c:if>
+					<c:if test="${showWriteBtn == true}">
+	                    <div>
+	                        <button class="writeBtn" id="writeBtn">상품평 작성하기</button>
+	                    </div>
+	                    
+	                    <div class="write-modal">
+	                    	<input type="hidden" id="memberID" name="${memberDTO.id}" value="${memberDTO.id}">
+	                    	<input type="hidden" id="productID" name="${orderProductID}" value="${orderProductID}">
+	                        <h4 class="membername"><i class="fa-solid fa-heart" style="color: FF493C"></i>
+	                        	<b>${memberDTO.name}</b>님, 이번 상품은 어떠셨나요?
+	                       	</h4>
+	                       	<input type="text" class="write-review-content" placeholder="상품평을 작성해주세요.">
+	                       	<div class="review-buttons">
+	                            <button type="button" class="review-button" id="cancleBtn">취소</button>
+	                            <button type="button" class="review-button" id="finishBtn">작성 완료</button>
+	                          </div>
+	                    </div>
+	                 </c:if>
                     
                     <c:forEach items="${reviewList}" var="review">
 	                    <div class="review" id="review">
@@ -402,7 +398,7 @@
 	                                </div>
 	                            </div>
 	
-	                            <!-- 팝업 될 곳 -->
+	                            <!-- 상품평 이미지 팝업 -->
 	                            <div class="modal">
 	                                <button>&times;</button>
 	                                <div class="modalBox">
