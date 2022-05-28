@@ -11,11 +11,12 @@
                 WHERE r.memberid = m.memberid) A, product B
         WHERE B.productid = A.productid
         AND B.parentpid = #{productID}
+        ORDER BY A.createdate DESC
 	</select>
 	
 	<!-- 회원이 상품의 상품평을 작성한 적이 있는지 확인
 		 'cnt < 1' 인 경우 상품평 작성 가능 -->
-	<select id="isExistReview" parameterType="long" resultType="long">
+	<select id="isExistReview" resultType="long">
 		SELECT COUNT(*) AS cnt
         FROM (SELECT r.productid, m.memberid
                 FROM review r, member m
@@ -26,9 +27,9 @@
 	</select>
 	
 	<!-- 회원이 상품을 구매 확정한 상태인지 확인
-		 'cnt >= 1' 인 경우 상품평 작성 가능 -->
-	<select id="isFinishRcpt" parameterType="long" resultType="long">
-		SELECT COUNT(A.productid) AS cnt
+		 'cnt == 1' 인 경우 상품평 작성 가능 -->
+	<select id="isFinishRcpt" resultType="Integer">
+		SELECT A.productid AS productid
 		FROM (SELECT o.orderstatus, p.parentpid, o.receiptid, o.productid
 			    FROM orderdetail o, product p
 			    WHERE p.productid = o.productid

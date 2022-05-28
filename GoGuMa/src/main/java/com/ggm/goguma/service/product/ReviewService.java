@@ -15,5 +15,5 @@ public interface ReviewService {
 	void insertReview(long productID, long memberID, String content) throws Exception;
 	
 	// 상품평 등록 자격 확인
-	long isFinishRcpt(long productID, long memberID) throws Exception;
+	Integer isFinishRcpt(long productID, long memberID) throws Exception;
 }

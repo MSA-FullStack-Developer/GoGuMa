@@ -23,8 +23,8 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 	
 	@Override
-	public long isExistReview(long memberID, long productID) throws Exception {
-		return reviewMapper.isExistReview(memberID, productID);
+	public long isExistReview(long productID, long memberID) throws Exception {
+		return reviewMapper.isExistReview(productID, memberID);
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public long isFinishRcpt(long productID, long memberID) throws Exception {
+	public Integer isFinishRcpt(long productID, long memberID) throws Exception {
 		return reviewMapper.isFinishRcpt(productID, memberID);
 	}
 

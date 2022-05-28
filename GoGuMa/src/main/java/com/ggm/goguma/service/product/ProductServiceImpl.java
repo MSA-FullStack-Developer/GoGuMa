@@ -50,7 +50,6 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<ProductDTO> getSameParentCategoryProductList(long categoryID) {
-		
 		long offset = 0;
 		long limit = 8;
 	

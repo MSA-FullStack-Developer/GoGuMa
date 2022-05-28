@@ -56,7 +56,7 @@
         		$('.thumbnailImg').attr("src", src);
          	});
         	
-            $("#plus").click(function () {
+            $("#plus").click(function () { // 수량 증가
                 var num = $("#numBox").val();
                 var plusNum = Number(num) + 1;
                 
@@ -78,7 +78,7 @@
                 }
             });
 
-            $("#minus").click(function () {
+            $("#minus").click(function () { // 수량 감소
                 var num = $("#numBox").val();
                 var minusNum = Number(num) - 1;
 
@@ -146,7 +146,7 @@
                 });
             });
             
-            $('#cartBtn').on("click", function() { // 장바구니 버튼
+            $('#cartBtn').on("click", function() { // 장바구니 담기
             	var optionName = $("#option option:selected").text(); // 옵션 상품 이름
             	
             	if (optionName != "선택 없음") {
@@ -187,7 +187,7 @@
                 }
         	});
             
-            $('#buyBtn').on("click", function() { // 바로구매 버튼
+            $('#buyBtn').on("click", function() { // 바로구매하기
 				var optionName = $("#option option:selected").text(); // 옵션 상품 이름
             	
             	if (optionName != "선택 없음") {
@@ -267,7 +267,6 @@
 	<%@ include file="header.jsp" %>
 	
 	<div class="prodlist">
-		<input type="hidden" id="productID" name="${productInfo.productID}" value="${productInfo.productID}"> <!-- *** 구매한 상품 ID로 수정할 것 *** -->
         <h1 style="text-align: center">${categoryName}</h1>
 		
         <hr>
@@ -363,13 +362,14 @@
    					<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
    					
                     <!-- 상품평 -->
-                    <c:if test="${memberDTO != null}">
+				<c:if test="${showWriteBtn == true}">
                     <div>
                         <button class="writeBtn" id="writeBtn">상품평 작성하기</button>
                     </div>
                     
                     <div class="write-modal">
                     	<input type="hidden" id="memberID" name="${memberDTO.id}" value="${memberDTO.id}">
+                    	<input type="hidden" id="productID" name="${orderProductID}" value="${orderProductID}">
                         <h4 class="membername"><i class="fa-solid fa-heart" style="color: FF493C"></i>
                         	<b>${memberDTO.name}</b>님, 이번 상품은 어떠셨나요?
                        	</h4>
@@ -379,7 +379,7 @@
                             <button type="button" class="review-button" id="finishBtn">작성 완료</button>
                           </div>
                     </div>
-                    </c:if>
+                 </c:if>
                     
                     <c:forEach items="${reviewList}" var="review">
 	                    <div class="review" id="review">
