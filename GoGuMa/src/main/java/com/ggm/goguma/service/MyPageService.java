@@ -12,6 +12,8 @@ public interface MyPageService {
 	List<ReceiptDTO> getReceiptList(long memberId) throws Exception;
 	
 	List<OrderDTO> getOrderList(long receiptId) throws Exception;
+	
+	void updateOrderStatus(long orderId, String status) throws Exception;
 
 	List<DeliveryAddressDTO> getAddressList(long memberId) throws Exception;
 

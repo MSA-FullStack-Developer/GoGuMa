@@ -5,6 +5,7 @@
 <mapper namespace="com.ggm.goguma.mapper.MyPageMapper">
 	<select id="getReceiptList" resultType="ReceiptDTO">
 		select receiptid, orderdate, memberid from receiptlistview where memberid = #{memberId}
+		order by orderdate desc
 	</select>
 
 	<select id="getOrderList" resultType="OrderDTO">
@@ -12,6 +13,10 @@
 		from orderlistview where receiptId = #{receiptId}
 		order by name
 	</select>
+	
+	<update id="updateOrderStatus">
+		update orderdetail set orderstatus = #{status} where orderid = #{orderId}
+	</update>
 
 	<select id="getAddressList" resultType="DeliveryAddressDTO">
 		select addressId, nickname, recipient, address, contact, isdefault

@@ -16,6 +16,16 @@ public class MyPageServiceImpl implements MyPageService {
 	private MyPageMapper mapper;
 
 	@Override
+	public List<ReceiptDTO> getReceiptList(long memberId) throws Exception {
+		return mapper.getReceiptList(memberId);
+	}
+	
+	@Override
+	public List<OrderDTO> getOrderList(long receiptId) throws Exception {
+		return mapper.getOrderList(receiptId);
+	}
+	
+	@Override
 	public List<ReceiptDTO> getReceiptHistory(long memberId) throws Exception {
 		List<ReceiptDTO> receiptList = getReceiptList(memberId);
 		for(ReceiptDTO receipt : receiptList) {
@@ -28,18 +38,11 @@ public class MyPageServiceImpl implements MyPageService {
 		}
 		return receiptList;
 	}
-	
+
 	@Override
-	public List<ReceiptDTO> getReceiptList(long memberId) throws Exception {
-		return mapper.getReceiptList(memberId);
+	public void updateOrderStatus(long orderId, String status) throws Exception {
+		mapper.updateOrderStatus(orderId, status);
 	}
-	
-	@Override
-	public List<OrderDTO> getOrderList(long receiptId) throws Exception {
-		return mapper.getOrderList(receiptId);
-	}
-	
-	
 	
 	@Override
 	public List<DeliveryAddressDTO> getAddressList(long memberid) throws Exception {
