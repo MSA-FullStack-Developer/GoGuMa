@@ -3,7 +3,6 @@ package com.ggm.goguma.controller;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.ProductDTO;
 import com.ggm.goguma.dto.ReviewDTO;
-import com.ggm.goguma.dto.member.MemberDTO;
-import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.product.CategoryService;
 import com.ggm.goguma.service.product.ProductService;
 import com.ggm.goguma.service.product.ReviewService;
@@ -37,8 +34,6 @@ public class ProductController {
 	
 	private final ReviewService reviewService;
 	
-	private final MemberService memberService;
-
 	private long pageSize  = 12; 
 	private long blockSize = 10;
 	
@@ -82,7 +77,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("/{categoryID}/detail/{productID}")
-	public String detail(@PathVariable long categoryID, @PathVariable long productID, Model model, Authentication authentication) throws Exception {
+	public String detail(@PathVariable long categoryID, @PathVariable long productID, Model model) throws Exception {
 		try {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 
@@ -96,6 +91,11 @@ public class ProductController {
 			List<ReviewDTO> reviewList = reviewService.getReviewList(productID);
 			log.info(reviewList);
 			
+			// 상품평을 작성할 수 있는 조건 (= 상품평 쓰기 버튼이 보이는 조건)
+			// 1. 사용자가 권한이 있고,								: memberService.getMember(user.getUsername()) != null
+			// 2. 해당 상품을 '구매확정'한 경우						:
+			// 2. 이전에 해당 상품의 상품평을 작성한 적이 없는 경우 : reviewService.isExistReview(memberDTO.getId(), productID) < 1
+			
 			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("categoryID", categoryID);
 			model.addAttribute("categoryName", categoryName);
@@ -103,28 +103,6 @@ public class ProductController {
 			model.addAttribute("optionList", optionList);
 			model.addAttribute("optionCount", optionCount);
 			model.addAttribute("reviewList", reviewList);
-			
-			// 상품평을 작성할 수 있는 조건
-			// 1. 사용자가 권한이 있고, 해당 상품을 '구매확정'한 경우
-			// 2. 이전에 해당 상품의 상품평을 작성한 적이 없는 경우
-			boolean isShowWriteBtn = false;
-			MemberDTO memberDTO = null;
-			
-			if (authentication != null) {
-				UserDetails user = (UserDetails) authentication.getPrincipal();
-				memberDTO = memberService.getMember(user.getUsername()); // 로그인한 회원 정보 불러오기
-				long isExistReview = reviewService.isExistReview(memberDTO.getId(), productID); // 회원이 작성한 후기가 있는지 확인
-				boolean isFinished = true; // 해당 상품을 '구매확정'한지 확인
-				
-				if (isExistReview < 1 && isFinished) {
-					isShowWriteBtn = true;
-				} else {
-					isShowWriteBtn = false;
-				}
-			}
-			
-			model.addAttribute("memberDTO", memberDTO);
-			model.addAttribute("isShowWriteBtn", isShowWriteBtn);
 			
 			return "product";
 		} catch (Exception e) {

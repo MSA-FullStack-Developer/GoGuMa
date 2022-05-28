@@ -24,9 +24,6 @@
     	<%@ include file="/resources/css/product.css" %>
     </style>
     
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/jquery/1.10.2/jquery.min.js"></script>
-	<script type="text/javascript" src="/resources/js/jquery.zoom.js" ></script>
-
     <script>
  		// 가격 format() 함수
  		Number.prototype.format = function() {
@@ -120,13 +117,6 @@
                     var imgAlt = $(this).children("img").attr("alt");
                     $(".modalBox img").attr("src", imgSrc);
                     $(".modalBox img").attr("alt", imgAlt);
-
-                    // 해당 이미지 텍스트 가져오기
-                    var imgTit = $(this).children("p").text();
-                    $(".modalBox p").text(imgTit);
-
-                    // 해당 이미지에 alt값을 가져와 제목으로
-                    // $(".modalBox p").text(imgAlt);
                 });
 
                 $(".write-modal").hide();
@@ -136,7 +126,7 @@
                     $(".modal").hide();
                 });
 
-                // .modal밖에 클릭시 닫힘
+                // .modal밖에 클릭시 닫기
                 $(".modal").click(function (e) {
                     if (e.target.className != "modal") {
                         return false;
@@ -145,17 +135,18 @@
                     }
                 });
 
+                // 상품평 쓰기 버튼
                 $(".writeBtn").click(function () {
                     $(".write-modal").show();
                 });
 
-                // 취소하기 버튼 클릭시 닫힘
+                // 취소하기 버튼 클릭시 닫기
                 $("#cancleBtn").click(function () {
                     $(".write-modal").hide();
                 });
             });
             
-            $('#cartBtn').on("click", function() {
+            $('#cartBtn').on("click", function() { // 장바구니 버튼
             	var optionName = $("#option option:selected").text(); // 옵션 상품 이름
             	
             	if (optionName != "선택 없음") {
@@ -256,12 +247,14 @@
 			                $(".modal").hide();
 			                
 			                alert("상품평 등록 성공");
+			                
+			                location.reload();
+			                // *** 등록 완료된 상품평 목록에서 보여주기 *** 
 		            	}
 		            },error : function(xhr, status, error) {
         				var errorResponse = JSON.parse(xhr.responseText);
         				var errorCode = errorResponse.code;
         				var message = errorResponse.message;
-
         				alert(message);
         			}
 		        });
@@ -368,23 +361,24 @@
                 </div>
                 <div id="tab02">
    					<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
+   					
                     <!-- 상품평 -->
-                    <c:if test="${isShowWriteBtn == true}">
-	                    <div>
-	                        <button class="writeBtn" id="writeBtn">상품평 작성하기</button>
-	                    </div>
-	                    
-	                    <div class="write-modal">
-	                    	<input type="hidden" id="memberID" name="${memberDTO.id}" value="${memberDTO.id}">
-	                        <h4 class="membername"><i class="fa-solid fa-heart" style="color: FF493C"></i>
-	                        	<b>${memberDTO.name}</b>님, 이번 상품은 어떠셨나요?
-                        	</h4>
-                        	<input type="textarea" class="write-review-content" placeholder="상품평을 작성해주세요.">
-                        	<div class="review-buttons">
-	                            <button type="button" class="review-button" id="cancleBtn">취소</button>
-	                            <button type="button" class="review-button" id="finishBtn">작성 완료</button>
-                            </div>
-	                    </div>
+                    <c:if test="${memberDTO != null}">
+                    <div>
+                        <button class="writeBtn" id="writeBtn">상품평 작성하기</button>
+                    </div>
+                    
+                    <div class="write-modal">
+                    	<input type="hidden" id="memberID" name="${memberDTO.id}" value="${memberDTO.id}">
+                        <h4 class="membername"><i class="fa-solid fa-heart" style="color: FF493C"></i>
+                        	<b>${memberDTO.name}</b>님, 이번 상품은 어떠셨나요?
+                       	</h4>
+                       	<input type="textarea" class="write-review-content" placeholder="상품평을 작성해주세요.">
+                       	<div class="review-buttons">
+                            <button type="button" class="review-button" id="cancleBtn">취소</button>
+                            <button type="button" class="review-button" id="finishBtn">작성 완료</button>
+                          </div>
+                    </div>
                     </c:if>
                     
                     <c:forEach items="${reviewList}" var="review">
@@ -393,7 +387,7 @@
 	                            <p class="review-profile-name">
 	                            	${review.name}
 	                           		<span class="review-create-date">
-		                            	<fmt:formatDate value="${review.createDate}" pattern="yyyy.MM.dd" />
+		                            	<fmt:formatDate value="${review.createDate}" pattern="yyyy-MM-dd" />
 									</span>
 								</p>
 	                            <p class="review-product-info">[${productInfo.productName}]&nbsp;&nbsp;${review.productName}</p>

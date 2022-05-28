@@ -13,14 +13,19 @@
         AND B.parentpid = #{parentPID}
 	</select>
 	
-	<!-- 회원이 작성한 후기가 있는지 확인 -->
+	<!-- 회원이 상품의 상품평을 작성한 적이 있는지 확인
+		 'cnt < 1' 인 경우 상품평 작성 가능 -->
 	<select id="isExistReview" parameterType="long" resultType="long">
-		SELECT COUNT(memberid) AS cnt
-		FROM review
-		WHERE memberid = #{memberID}
-		AND productid = #{productID}
+		SELECT COUNT(*) AS cnt
+        FROM (SELECT r.productid, m.memberid
+                FROM review r, member m
+                WHERE r.memberid = m.memberid) A, product B
+        WHERE B.productid = A.productid
+        AND B.parentpid = #{parentPID}
+        AND A.memberid = #{memberID}
 	</select>
 	
+	<!-- 상품평 작성 -->
 	<insert id="insertReview">
 		INSERT INTO review(productid, memberid, content)
 		VALUES (#{productID}, #{memberID}, #{content})

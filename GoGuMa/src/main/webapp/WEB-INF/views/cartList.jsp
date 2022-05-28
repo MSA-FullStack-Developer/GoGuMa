@@ -206,7 +206,6 @@
 			},
 			success : function(result) {
 				location.reload();
-
 			},
 			error : function(xhr, status, error) {
 				var errorResponse = JSON.parse(xhr.responseText);
