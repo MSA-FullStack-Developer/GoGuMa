@@ -48,7 +48,7 @@
                         <h5><b>MY 쇼핑</b></h5>
                     </div>
                     <div>
-                        주문내역
+                        <a href="${contextPath}/mypage/orderHistory">주문내역</a>
                     </div>
                 </div>
                 <div class="mb-4">
