@@ -15,13 +15,17 @@ public interface MyPageMapper {
 	List<ReceiptDTO> getReceiptList(long memberId) throws Exception;
 	
 	List<OrderDTO> getOrderList(long receiptId) throws Exception;
+	
+	ReceiptDTO getReceiptDetail(long receiptId) throws Exception;
 
 	void updateOrderStatus(@Param("orderId") long orderId, @Param("status") String status) throws Exception;
 	
 	List<DeliveryAddressDTO> getAddressList(long memberid) throws Exception;
+	
+	DeliveryAddressDTO getDeliveryAddress(long addressId) throws Exception;
 
 	DeliveryAddressDTO getDefaultAddress(long memberid) throws Exception;
-	
+
 	void addAddress(DeliveryAddressDTO dto) throws Exception;
 
 	void updateAddress(DeliveryAddressDTO dto) throws Exception;

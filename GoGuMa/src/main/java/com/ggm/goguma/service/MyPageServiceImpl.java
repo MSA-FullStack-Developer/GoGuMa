@@ -21,6 +21,13 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 	
 	@Override
+	public ReceiptDTO getReceiptDetail(long receiptId) throws Exception {
+		ReceiptDTO dto = mapper.getReceiptDetail(receiptId);
+		dto.setOrderList(mapper.getOrderList(receiptId));
+		return dto;
+	}
+	
+	@Override
 	public List<OrderDTO> getOrderList(long receiptId) throws Exception {
 		return mapper.getOrderList(receiptId);
 	}
@@ -49,6 +56,11 @@ public class MyPageServiceImpl implements MyPageService {
 		return mapper.getAddressList(memberid);
 	}
 
+	@Override
+	public DeliveryAddressDTO getDeliveryAddress(long addressId) throws Exception {
+		return mapper.getDeliveryAddress(addressId);
+	}
+	
 	@Override
 	public DeliveryAddressDTO getDefaultAddress(long memberid) throws Exception {
 		return mapper.getDefaultAddress(memberid);

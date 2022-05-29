@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,6 +44,21 @@ public class MyPageController {
 			log.info(e.getMessage());
 		}
 		return "mypage/orderHistory";
+	}
+	
+	@RequestMapping(value="/orderHistory/{receiptId}", method=RequestMethod.GET)
+	public String getOrderDetail(@PathVariable("receiptId") long receiptId, Model model) {
+		try {
+			ReceiptDTO receiptDTO = service.getReceiptDetail(receiptId); // 결제상세 가져오기
+			DeliveryAddressDTO addressDTO = service.getDeliveryAddress(receiptDTO.getAddressId()); // 배송지정보 가져오기
+			model.addAttribute("receiptDTO", receiptDTO);
+			model.addAttribute("addressDTO", addressDTO);
+			log.info(receiptDTO);
+			log.info(addressDTO);
+		} catch (Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/orderDetail";
 	}
 	
 	@ResponseBody

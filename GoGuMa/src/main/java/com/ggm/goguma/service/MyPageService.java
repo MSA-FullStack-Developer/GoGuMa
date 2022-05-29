@@ -9,6 +9,8 @@ import com.ggm.goguma.dto.ReceiptDTO;
 public interface MyPageService {
 	List<ReceiptDTO> getReceiptHistory(long memberId) throws Exception;
 	
+	ReceiptDTO getReceiptDetail(long receiptId) throws Exception;
+	
 	List<ReceiptDTO> getReceiptList(long memberId) throws Exception;
 	
 	List<OrderDTO> getOrderList(long receiptId) throws Exception;
@@ -16,6 +18,8 @@ public interface MyPageService {
 	void updateOrderStatus(long orderId, String status) throws Exception;
 
 	List<DeliveryAddressDTO> getAddressList(long memberId) throws Exception;
+
+	DeliveryAddressDTO getDeliveryAddress(long addressId) throws Exception;
 
 	DeliveryAddressDTO getDefaultAddress(long memberId) throws Exception;
 
