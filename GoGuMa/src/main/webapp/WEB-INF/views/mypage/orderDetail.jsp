@@ -176,10 +176,10 @@
 			                                                <h5><b>주문 완료</b></h5>
 			                                            </div>
 			                                            <div class="mb-2">
-			                                                <button type="button" class="btn btn-sm btn-outline-dark">구매확정</button>
+			                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="configBtn(${orderDTO.orderId})">구매확정</button>
 			                                            </div>
 			                                            <div class="mt-2">
-			                                                <button type="button" class="btn btn-sm btn-outline-dark">주문취소</button>
+			                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="cancelBtn(${orderDTO.orderId})">주문취소</button>
 			                                            </div>
 	                                        		</c:when>
 	                                        		<c:when test="${orderDTO.status eq 'F'}">
@@ -287,4 +287,55 @@
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
+<script type="text/javascript">
+	function configBtn(orderId) {
+		if(confirm("구매확정 하시겠습니까?")) {
+			let token = $("meta[name='_csrf']").attr("content");
+		    let header = $("meta[name='_csrf_header']").attr("content");
+			$.ajax({
+				url : "${contextPath}/mypage/orderHistory/updateOrderStatus",
+				type : "POST",
+				data : {
+					orderId : orderId,
+					status : 'F'
+				},
+				beforeSend : function(xhr) {
+		            xhr.setRequestHeader(header, token);
+	            },
+				success:function(result) {
+					if(result==1) {
+						window.location.href = "${contextPath}/mypage/orderHistory/${receiptDTO.receiptId}";
+					} else {
+						alert('구매확정 오류');
+					}
+				}
+			})
+		}
+	}
+	function cancelBtn(orderId) {
+		if(confirm("주문을 취소하시겠습니까?")) {
+			let token = $("meta[name='_csrf']").attr("content");
+		    let header = $("meta[name='_csrf_header']").attr("content");
+			$.ajax({
+				url : "${contextPath}/mypage/orderHistory/updateOrderStatus",
+				type : "POST",
+				data : {
+					orderId : orderId,
+					status : 'C'
+				},
+				beforeSend : function(xhr) {
+		            xhr.setRequestHeader(header, token);
+	            },
+				success:function(result) {
+					if(result==1) {
+						window.location.href = "${contextPath}/mypage/orderHistory/${receiptDTO.receiptId}";
+					} else {
+						alert('주문취소 오류');
+					}
+				}
+			})
+		}
+	}
+</script>
 </html>
