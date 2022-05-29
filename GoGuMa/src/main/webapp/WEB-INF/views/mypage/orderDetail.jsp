@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,7 +35,6 @@
         table tbody tr {
             line-height: 2rem;
         }
-        
     </style>
 </head>
 <body>
@@ -40,14 +42,14 @@
 		<div class="row">
 			<div class="col-3">
                 <div class="mb-4">
-                    <h3><b>마이페이지</b></h3>
+                    <h3><a href="${contextPath}/mypage"><b>마이페이지</b></a></h3>
                 </div>
                 <div class="mb-4">
                     <div>
                         <h5><b>MY 쇼핑</b></h5>
                     </div>
                     <div>
-                        주문내역
+                        <a href="${contextPath}/mypage/orderHistory">주문내역</a>
                     </div>
                 </div>
                 <div class="mb-4">
@@ -82,7 +84,7 @@
                         비밀번호변경
                     </div>
                     <div>
-                        배송지관리
+                        <a href="${contextPath}/mypage/manageAddress">배송지관리</a>
                     </div>
                     <div>
                         회원탈퇴
@@ -141,74 +143,63 @@
                 <div class="col border border-2 rounded p-4 mb-4">
                     <div class="d-flex flex-row">
                         <div class="col">
-                            <h5><b>2022. 5. 26</b></h5>
+                            <h5><b><fmt:formatDate pattern="yyyy-MM-dd" value="${receiptDTO.orderDate}" /></b></h5>
                         </div>
                     </div>
                     <div class="border border-1 rounded">
                         <table>
                             <tbody>
-                                <!--여기부터 forEach-->
-                                <tr class="border-bottom">
-                                    <td class="col-1 p-3">
-                                        <img src="img\핫브레이크미니.jpg" style="width:100px; height:100px">
-                                    </td>
-                                    <td class="col-5 border-end">
-                                        캐시미어 100% 리버시블 삼각 숄
-                                    </td>
-                                    <td class="border-end">
-                                        <div class="col" align="center">
-                                            <div>
-                                                7,700원
-                                            </div>
-                                            <div>
-                                                (1개)
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="col" align="center">
-                                            <div>
-                                                <h5><b>주문 완료</b></h5>
-                                            </div>
-                                            <div class="mb-2">
-                                                <button type="button" class="btn btn-sm btn-outline-dark">구매확정</button>
-                                            </div>
-                                            <div class="mt-2">
-                                                <button type="button" class="btn btn-sm btn-outline-dark">주문취소</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!--여기까지 forEach-->
-                                <tr class="border-bottom">
-                                    <td class="col-1 p-3">
-                                        <img src="img\아몬드세트.jpg" style="width:100px; height:100px">
-                                    </td>
-                                    <td class="col-5 border-end">
-                                        와사비맛 아몬드, 210g, 1개
-                                    </td>
-                                    <td class="border-end">
-                                        <div class="col" align="center">
-                                            <div>
-                                                4,560원
-                                            </div>
-                                            <div>
-                                                (1개)
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="col" align="center">
-                                            <div>
-                                                <h5><b>구매 완료</b></h5>
-                                            </div>
-                                            <div class="mb-2">
-                                                <button type="button" class="btn btn-sm btn-outline-dark">상품평 쓰기</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!--여기까지 forEach-->
+                            	<c:forEach var="orderDTO" items="${receiptDTO.orderList}">
+	                                <!--여기부터 forEach-->
+	                                <tr class="border-bottom">
+	                                    <td class="col-1 p-3">
+	                                        <img src="${orderDTO.image}" style="width:100px; height:100px">
+	                                    </td>
+	                                    <td class="col-5 border-end">
+	                                        ${orderDTO.name}
+	                                    </td>
+	                                    <td class="border-end">
+	                                        <div class="col" align="center">
+	                                            <div>
+	                                            	${orderDTO.price}원
+	                                            </div>
+	                                            <div>
+	                                                (${orderDTO.count}개)
+	                                            </div>
+	                                        </div>
+	                                    </td>
+	                                    <td>
+	                                        <div class="col" align="center">
+	                                        	<c:choose>
+	                                        		<c:when test="${orderDTO.status eq 'N'}">
+		                                        		<div>
+			                                                <h5><b>주문 완료</b></h5>
+			                                            </div>
+			                                            <div class="mb-2">
+			                                                <button type="button" class="btn btn-sm btn-outline-dark">구매확정</button>
+			                                            </div>
+			                                            <div class="mt-2">
+			                                                <button type="button" class="btn btn-sm btn-outline-dark">주문취소</button>
+			                                            </div>
+	                                        		</c:when>
+	                                        		<c:when test="${orderDTO.status eq 'F'}">
+	                                        			<div>
+			                                                <h5><b>구매 완료</b></h5>
+			                                            </div>
+			                                            <div class="mb-2">
+			                                                <button type="button" class="btn btn-sm btn-outline-dark">상품평 쓰기</button>
+			                                            </div>
+	                                        		</c:when>
+	                                        		<c:otherwise>
+	                                        			<div>
+			                                                <h5><b>취소 완료</b></h5>
+			                                            </div>
+	                                        		</c:otherwise>
+	                                        	</c:choose>
+	                                        </div>
+	                                    </td>
+                                    </tr>
+	                            </c:forEach>
                             </tbody>
                         </table>
                     </div>
@@ -220,23 +211,23 @@
                     <tbody class="table-group-divider">
                         <tr>
                             <th>배송지 별칭</th>
-                            <td>집</td>
+                            <td>${addressDTO.nickName}</td>
                         </tr>
                         <tr>
                             <th>수령인</th>
-                            <td>송진호</td>
+                            <td>${addressDTO.recipient}</td>
                         </tr>
                         <tr>
                             <th>연락처</th>
-                            <td>010-4474-8813</td>
+                            <td>${addressDTO.contact}</td>
                         </tr>
                         <tr>
                             <th>배송지 주소</th>
-                            <td>경기도 광주시 오포읍 수레안길41번길 32-6</td>
+                            <td>${addressDTO.address}</td>
                         </tr>
                         <tr>
                             <th>배송시 요청사항</th>
-                            <td>초인종을 누르지 말아주세요.</td>
+                            <td>${receiptDTO.requirement}</td>
                         </tr>
                     </tbody>
                 </table>
