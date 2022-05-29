@@ -47,7 +47,7 @@ public class CartController {
 	private CategoryService categoryService;
 	
 	@Autowired
-	private MyPageService mypageService;
+	private MyPageService myPageService;
 
 	@GetMapping("/")
 	public String cartList(Model model, Authentication authentication) throws Exception {
@@ -69,7 +69,7 @@ public class CartController {
 				List<CartItemDTO> list = cartService.getCartList(memberId);
 				
 				// 회원이 가진 포인트 조회한다.
-				int point = mypageService.getMemberPoint(memberId);
+				int point = myPageService.getMemberPoint(memberId);
 				
 				model.addAttribute("point", point);	 //회원이 가진 포인트를 조회한다.
 				model.addAttribute("list", list); // 회원이 담은 카트 정보를 저장한다.

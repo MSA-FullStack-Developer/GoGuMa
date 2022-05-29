@@ -86,7 +86,15 @@ public class OrderController {
 				DeliveryAddressDTO defaultAddress = myPageService.getDefaultAddress(1);
 				List<DeliveryAddressDTO> addressList = myPageService.getAddressList(1);
 				
+				// 회원이 가진 포인트 조회한다.
+				int point = myPageService.getMemberPoint(memberId);
+				
+				model.addAttribute("point", point);	 //회원이 가진 포인트를 저장한다.
 				model.addAttribute("list", list); // 회원이 담은 카트 정보를 저장한다.
+				
+				//총 판매 금액
+				//총 멤버십 할인 금액
+				
 				model.addAttribute("memberDTO", memberDTO); // 회원 정보를 저장한다.
 				model.addAttribute("dtoList", dtoList);
 				

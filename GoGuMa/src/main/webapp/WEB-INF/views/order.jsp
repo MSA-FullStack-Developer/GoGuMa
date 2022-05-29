@@ -20,76 +20,72 @@
 <script type="text/javascript" src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.js"></script>
 <script type="text/javascript" src="${contextPath}/webjars/jquery-ui/1.13.0/jquery-ui.js"></script>
 
+
+ <!-- iamport.payment.js -->
+ <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
+  
 <script type="text/javascript">
 
-	//모달 쿠폰 적용 클릭이벤트
-	$(document).on('click', '.coupon-list-box', function(){
-	  var coupon_discount = $(this).find(".coupon-benefit").text();
-	  var coupon_name = $(this).find(".coupon-name").text()
-	  $('.dis-coupon-prc').text(coupon_discount);
-	  $('#couponModal').modal('hide');
-	  alert(coupon_name + " 할인이 적용되었습니다.");
-	});
+
+  //모달 쿠폰 적용 클릭이벤트
+  $(document).on('click', '.coupon-list-box', function() {
+    var coupon_discount = $(this).find(".coupon-benefit").text();
+    var coupon_name = $(this).find(".coupon-name").text()
+    $('.dis-coupon-prc').text(numFormatComma(coupon_discount));
+    $('#coupon-discount').text(numFormatComma(coupon_discount));
+    $('#couponDiscount').attr('value', parseInt(coupon_discount));
+    $('#couponModal').modal('hide');
+    calDisPrice();
+    alert(coupon_name + " 할인이 적용되었습니다.");
+  });
 
   $(document).ready(function() {
 
-
+    //총 판매 금액, 총 멤버십 할인
+    var total = $('#total').val();
+    $('#total-price').text(numFormatComma(total));
+    
+    var membershipDiscount = parseInt($('#membershipDiscount').val());
+    $('#membership-discount').text(numFormatComma(membershipDiscount));
+    
+    $('#all-discount').text(numFormatComma(membershipDiscount));
+    
+    $('#lastStlAmtDd').text(numFormatComma(total-membershipDiscount));
     //쿠폰 조회 버튼
     $('#getCoupon-btn').on('click', function() {
       let token = $("meta[name='_csrf']").attr("content");
       let header = $("meta[name='_csrf_header']").attr("content");
-      
+
       $.ajax({
-        url : '${contextPath}/order/api/getMemberCoupon',
-        type : 'POST',
-        contentType : 'application/json; charset=utf-8;',
-        beforeSend : function(xhr) {
-          xhr.setRequestHeader(header, token);
-        },
-        success : function(result) {
-          if(result.length > 1){
-            $('#coupon-all *').remove();
-			  for(var i=0; i < result.length; i++){
-				  console.log("쿠폰 정보: " + result[i].couponName);
-				  str = "<div class='coupon-list-box'>";
-				  str+= 	"<div class='row'>";
-				  str+= 		"<div class='col-md-8 coupon-name-th'><span class='coupon-name'>"+result[i].couponName+"</span></div>";
-				  str+=			"<div class='col-md-4 coupon-benefit-th'>-<span class='coupon-benefit'>"+result[i].benefit+"</span>원</div>";
-				  str+= 	"<div>";
-				  str+= 	"<div class='row'>";
-				  str+= 		"<div class='col-md-12 coupon-expiration-th'><span class='coupon-expiration'> 날짜 형식"+result[i].expiration+"</span></div>";
-				  str+= 	"<div>";
-				  str+=	"<div>";
-				  $('#coupon-all').append(str);
-			  }
-		  }else{
-			  console.log("보유한 쿠폰이 없습니다.");
-		  }
-        //   <c:forEach var="i" items="${addressList }" begin="0" step="1" varStatus="status">
-		// 			<div class="address-list-box">
-		// 				<div class="row">
-		// 					<div class="col-md-4 delivery-address-th">쿠폰 이름</div>
-		// 					<div class="col-md-4 delivery-address-td">
-		// 						<span class="delivery-address-name">이름이름</span>
-		// 					</div>
-		// 				</div>
-		// 				<div class="row">
-		// 					<div class="col-md-4 delivery-address-th">쿠폰 혜택</div>
-		// 					<div class="col-md-8 delivery-address-td">
-		// 						<span class="delivery-address-nickname">10000원</span>
-		// 					</div>
-		// 				</div>
-		// 				<div class="row">
-		// 					<div class="col-md-4 delivery-address-th">유효기간</div>
-		// 					<div class="col-md-8 delivery-address-td delivery-address-per">2022/6/17</div>
-		// 				</div>
-		// 			</div>
-		// 		</c:forEach>
+      url : '${contextPath}/order/api/getMemberCoupon',
+      type : 'POST',
+      contentType : 'application/json; charset=utf-8;',
+      beforeSend : function(xhr) {
+        xhr.setRequestHeader(header, token);
+      },
+      success : function(result) {
+        if (result.length > 1) {
+          $('#coupon-all *').remove();
+          for (var i = 0; i < result.length; i++) {
+            console.log("쿠폰 정보: " + result[i].couponName);
+            str = "<div class='coupon-list-box'>";
+            str += "<div class='row'>";
+            str += "<div class='col-md-8 coupon-name-th'><span class='coupon-name'>" + result[i].couponName + "</span></div>";
+            str += "<div class='col-md-4 coupon-benefit-th'>-<span class='coupon-benefit'>" + result[i].benefit + "</span>원</div>";
+            str += "<div>";
+            str += "<div class='row'>";
+            str += "<div class='col-md-12 coupon-expiration-th'><span class='coupon-expiration'> 날짜 형식" + result[i].expiration + "</span></div>";
+            str += "<div>";
+            str += "<div>";
+            $('#coupon-all').append(str);
+          }
+        } else {
+          console.log("보유한 쿠폰이 없습니다.");
         }
-        });
+      }
+      });
     });
 
-    
     // 모달 배송지 등록 이벤트
     $('#addAddressBtn').on('click', function() {
       let isDefault = 0;
@@ -154,12 +150,132 @@
       $('#phonenumber').text(phonenumber);
 
       $('#myModal').modal('hide');
+      alert("배송지가 적용되었습니다.");
+    });
+    
+    $("#g-point").on("input propertychange paste", function(){
+    	var point = $('#g-point').val();
+    	var limitpoint = Number($('#member-point').text());
+    	console.log(limitpoint);
+    	console.log("로그: " + numFormatComma(point));
+    	if(point != ""){
+	   	  	//포인트가 가진 포인트보다 많거 0보다 작은경우
+	      	if(point > limitpoint || point < 0){
+	      	  alert("보유 포인트를 넘길 수 없습니다. 모든 포인트를 사용합니다.");
+	      	  $('#g-point').val(numFormatComma(limitpoint));
+	      	  $('#point-discount').text(numFormatComma(limitpoint));
+	      	  $('#GPoint').attr('value', parseInt(limitpoint));
+	      	  calDisPrice();
+	      	}else{
+	      	  $('#point-discount').text(numFormatComma(point));
+	      	  $('#GPoint').attr('value', parseInt(point));
+	      	  calDisPrice();
+	      	}
+    	}else{
+    	  console.log("빈값");
+    	  $('#point-discount').text(0);
+    	}
+
+
     });
   });
+   
+	//결제
+	function iamport(){
+		//가맹점 식별코드
+		IMP.init('imp37623879');
+		IMP.request_pay({
+		    pg : 'html5_inicis',
+		    pay_method : 'card',
+		    merchant_uid : 'merchant_' + new Date().getTime(),
+		    name : '상품1' , //결제창에서 보여질 이름
+		    amount : 100, //실제 결제되는 가격
+		    buyer_email : 'iamport@siot.do',
+		    buyer_name : '구매자이름',
+		    buyer_tel : '010-1234-5678',
+		    buyer_addr : '서울 강남구 도곡동',
+		    buyer_postcode : '123-456'
+		}, function(rsp) {
+			console.log(rsp);
+		    if ( rsp.success ) {
+		    	var msg = '결제가 완료되었습니다.';
+		        msg += '고유ID : ' + rsp.imp_uid;
+		        msg += '상점 거래ID : ' + rsp.merchant_uid;
+		        msg += '결제 수단 : ' + rsp.pay_method;
+		        msg += '결제 금액 : ' + rsp.paid_amount;
+		        msg += '주문 명 : ' + rsp.name;
+		        msg += '카드 승인번호 : ' + rsp.apply_num;
+		    } else {
+		    	 var msg = '결제에 실패하였습니다.';
+		         msg += '에러내용 : ' + rsp.error_msg;
+		    }
+		    alert(msg);
+		});
+	}/* 
+	function chkPoint(){
+	  var point = document.getElementById("g-point");
+	  console.log(point);
+	} */
+	function numFormatComma(nNumber, nDetail) {
+		if (nNumber == null)
+			return "";
+		if (nDetail == null)
+			nDetail = 0;
+
+		nNumber = parseFloat(nNumber);
+		nNumber = Math.round(nNumber, nDetail);
+
+		var minusFlag = false;
+		if (nNumber < 0) {
+			nNumber = nNumber * -1;
+			minusFlag = true;
+		}
+
+		var strNumber = new String(nNumber);
+		var arrNumber = strNumber.split(".");
+		var strFormatNum = "";
+		var j = 0;
+
+		for (var i = arrNumber[0].length - 1; i >= 0; i--) {
+			if (i != strNumber.length && j == 3) {
+				strFormatNum = arrNumber[0].charAt(i) + "," + strFormatNum;
+				j = 0;
+			} else {
+				strFormatNum = arrNumber[0].charAt(i) + strFormatNum;
+			}
+			j++;
+		}
+
+		if (arrNumber.length > 1)
+			strFormatNum = strFormatNum + "." + arrNumber[1];
+
+		if (minusFlag)
+			strFormatNum = '-' + strFormatNum;
+
+		return strFormatNum;
+	};
+	
+	//총 할인 금액, 총 결제 금액계산
+	function calDisPrice(){
+	    var totalDC = parseInt($('#membershipDiscount').val());
+	    if(!isNaN($('#GPoint').val())){
+	      totalDC += parseInt($('#GPoint').val());
+	    }
+	    if(!isNaN($('#couponDiscount').val())){
+	      totalDC += parseInt($('#couponDiscount').val())
+	    }
+	    $('#all-discount').text(numFormatComma(totalDC));
+	    
+	    var totalPrice = parseInt($('#total').val());
+	    var totalPayPrice = totalPrice - totalDC;
+	    
+	    $('#lastStlAmtDd').text(numFormatComma(totalPayPrice));
+	    console.log(totalPayPrice);
+	}
 </script>
 
 <style>
-<%@include file="/resources/css/header.css" %>
+<%@include file="/resources/css/header.css"%>
 </style>
 <div class="container">
 	<%@ include file="header.jsp"%>
@@ -173,18 +289,24 @@
 						<ul class="payment-list">
 							<li>
 								<div id="orderAmt">
-									<span class="tit">총 판매 금액</span> <span class="txt"><strong>151,730</strong>원</span>
+									<span class="tit">총 판매 금액</span> <span class="txt"><strong id="total-price"></strong>원</span>
+								</div>
+								<div id="membershipDcAmtDiv">
+									<span class="tit">멤버십 할인</span> <span class="txt">-<strong id="membership-discount"></strong>원</span>
 								</div>
 								<div id="copnDcAmtDiv">
-									<span class="tit">쿠폰 할인</span> <span class="txt"><strong>-4,770</strong>원</span>
+									<span class="tit">쿠폰 할인</span> <span class="txt">-<strong id="coupon-discount"></strong>원</span>
+								</div>
+								<div id="pointDcAmtDiv">
+									<span class="tit">G.Point</span> <span class="txt">-<strong id="point-discount"></strong>원</span>
 								</div>
 								<div id="totDcAmtDiv">
-									<span class="tit">할인 합계금액</span> <span class="txt"><strong>-4,770</strong>원</span>
+									<span class="tit">할인 합계금액</span> <span class="txt">-<strong id="all-discount"></strong>원</span>
 								</div>
 							</li>
 							<li>
 								<div class="total">
-									<span class="tit">최종 결제금액</span> <span class="txt" id="lastStlAmtDd"><strong>146,960</strong>원</span>
+									<span class="tit">최종 결제금액</span> <span class="txt"><strong id="lastStlAmtDd"></strong>원</span>
 								</div>
 							</li>
 							<li>
@@ -194,7 +316,7 @@
 							</li>
 						</ul>
 						<div class="btngroup agreeCheck">
-							<button type="button" class="btn text-white btn-default medium">
+							<button type="button" class="btn text-white btn-default medium" onclick="iamport()">
 								<span>결제</span>
 							</button>
 						</div>
@@ -213,7 +335,7 @@
 							</ol>
 						</div>
 						<div class="cart-bottom">
-							<span> ${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> 적립금: <span> 100000 </span>
+							<span> ${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> G.Point: <span id="member-point"> ${point } </span>P
 						</div>
 					</div>
 
@@ -233,7 +355,10 @@
 												<th scope="col" id="th-discount-price">할인금액</th>
 												<th scope="col" id="th-total-price">합계</th>
 											</tr>
+											<c:set var = "total" value = "0" />
+											<c:set var = "membershipDiscount" value = "0" />
 											<c:forEach var="i" items="${list }" begin="0" step="1" varStatus="status">
+												
 												<tr class="order-product">
 													<td class="order-product_box">
 														<div class="product-image">
@@ -257,12 +382,14 @@
 														<div class="cart-product-price">
 															<c:set var="proPrice" value="${dtoList[status.index].nrmOriPrc * dtoList[status.index].ordQty}"></c:set>
 															<em><fmt:formatNumber value="${proPrice}" type="currency" currencySymbol="" /></em>원
+															<c:set var= "total" value="${total + proPrice}"/>
 														</div>
 													</td>
 													<td class="cart-discount">
 														<div class="cart-product-discount">
 															<c:set var="disPrice" value="${dtoList[status.index].disOriPrc * dtoList[status.index].ordQty}"></c:set>
 															<em><fmt:formatNumber value="${disPrice}" type="currency" currencySymbol="" /></em>원
+															<c:set var = "membershipDiscount" value = "${membershipDiscount + disPrice }" />
 														</div>
 													</td>
 													<td class="cart-total">
@@ -273,8 +400,13 @@
 													</td>
 												</tr>
 											</c:forEach>
+
 										</thead>
 									</table>
+									<input type="hidden" id="total" value="${total }"/>
+									<input type="hidden" id="membershipDiscount" value="${membershipDiscount }"/>
+									<input type="hidden" id="couponDiscount" value=/>
+									<input type="hidden" id="GPoint" value=0/>
 								</div>
 							</div>
 						</div>
@@ -293,9 +425,7 @@
 											</button>
 										</div>
 										<div class="modal-body">
-											<div class="coupon-all" id="coupon-all">
-												
-											</div>
+											<div class="coupon-all" id="coupon-all"></div>
 										</div>
 									</div>
 								</div>
@@ -303,21 +433,30 @@
 							<div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
 								<div class="accordion-body">
 									<div class="coupon-point">
-										<div class="row">
-											<div class="col-md-4">쿠폰 할인</div>
-											<div class="col-md-2 dis-coupon">-<span class="dis-coupon-prc">0</span>원</div>
+										<div class="row ">
+											<div class="col-md-2">쿠폰 할인</div>
+											<div class="col-md-2 dis-coupon">
+												<span class="dis-coupon-prc">0</span>원
+											</div>
 											<div class="col-md-4">
 												<button class="btn text-white btn-default" id="getCoupon-btn" data-bs-toggle="modal" data-bs-target="#couponModal">쿠폰 조회 및 적용</button>
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-md-4">적립금</div>
-											<div class="col-md-2">0원</div>
+											<div class="col-md-2">G.Point</div>
+											<div class="col-md-2">
+												<div class="input-group mb-3">
+													<input type="number" class="form-control use-point" id="g-point" placeholder="G.Point" aria-describedby="basic-addon1" value=0>
+													<div class="input-group-append">
+														<span class="input-group-text" id="basic-addon1">P</span>
+													</div>
+												</div>
+											</div>
+										
 											<div class="col-md-4">
-												<button class="btn text-white btn-default">사용하기</button>
 												<button class="btn text-white btn-default">사용취소</button>
 											</div>
-											<div class="col-md-2">[보유 적립금: 0]</div>
+											<div class="col-md-4">[보유 G.Point: ${point }]</div>
 										</div>
 									</div>
 								</div>
@@ -442,6 +581,10 @@
 													<th class="delivery-address-th delivery-phone-num-th">연락처</th>
 													<td class="delivery-address-td delivery-phone-num-td" id="phonenumber"></td>
 												</tr>
+												<tr>
+													<th class="delivery-address-th delivery-requirement-th">요청사항</th>
+													<td class="delivery-address-td delivery-requirement-td" id="requirement"><input class="requirement-in" type="text"></td>
+												</tr>
 											</tbody>
 										</c:if>
 										<c:if test="${not empty defaultAddress }">
@@ -468,6 +611,10 @@
 												<tr>
 													<th class="delivery-address-th delivery-phone-num-th">연락처</th>
 													<td class="delivery-address-td delivery-phone-num-td" id="phonenumber">${defaultAddress.contact }</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th delivery-requirement-th">요청사항</th>
+													<td class="delivery-address-td delivery-requirement-td" id="requirement"><input class="requirement-in" type="text"></td>
 												</tr>
 											</tbody>
 										</c:if>
