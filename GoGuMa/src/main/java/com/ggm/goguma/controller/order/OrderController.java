@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -106,7 +107,7 @@ public class OrderController {
 				
 				model.addAttribute("memberDTO", memberDTO); // 회원 정보를 저장한다.
 				model.addAttribute("dtoList", dtoList);
-				System.out.println("장바구니에서 선택한 상품 구매를 누른 경우" + dtoList);
+				System.out.println("장바구니에서 선택한 상품 구매를 누른 경우 담기는 상품 리스트: " + dtoList);
 				model.addAttribute("defaultAddress", defaultAddress);
 				model.addAttribute("addressList", addressList);
 				
@@ -163,6 +164,15 @@ public class OrderController {
 		api = new IamportClient(payKey, paySecretKey);
 		//imp_uid에 해당하는 거래내역이 있는지 확인한다.
 		return api.paymentByImpUid(imp_uid);
+	}
+	
+	@ResponseBody
+	@PostMapping("api/paytransaction")
+	public void paytransaction(@RequestBody List<CartOrderListDTO> reqs) throws Exception {
+		// 상품 결제 완료 후 DB에서 필요한 작업 실행
+		
+		log.info("카트 정보 리스트: " +reqs);
+		//orderService.paytransaction();
 	}
 	
 	@PostMapping("/orderResult")

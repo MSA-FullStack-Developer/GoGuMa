@@ -11,5 +11,7 @@ public interface OrderService {
 	List<CartItemDTO> getOrderList(List<CartOrderListDTO> dtoList) throws Exception;
 
 	List<MemberCouponOrderDTO> getMemberCoupon(long memberId) throws Exception;
+
+	void paytransaction() throws Exception;
 	
 }

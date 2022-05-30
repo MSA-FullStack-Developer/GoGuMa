@@ -30,10 +30,15 @@
   //모달 쿠폰 적용 클릭이벤트
   $(document).on('click', '.coupon-list-box', function() {
     var coupon_discount = $(this).find(".coupon-benefit").text();
-    var coupon_name = $(this).find(".coupon-name").text()
+    var coupon_name = $(this).find(".coupon-name").text();
+    
+    var coupon_id = $(this).find("#coupon-id").val();
+    $('#use-coupon-id').attr('value', parseInt(coupon_id));
     $('.dis-coupon-prc').text(numFormatComma(coupon_discount));
     $('#coupon-discount').text(numFormatComma(coupon_discount));
+    
     $('#couponDiscount').attr('value', parseInt(coupon_discount));
+    
     $('#couponModal').modal('hide');
     calDisPrice();
     alert(coupon_name + " 할인이 적용되었습니다.");
@@ -42,7 +47,6 @@
   $(document).ready(function() {
 	
     console.log($('.pProductName').text());
-    
     //총 판매 금액, 총 멤버십 할인
     var total = $('#total').val();
     $('#total-price').text(numFormatComma(total));
@@ -72,6 +76,7 @@
             console.log("쿠폰 정보: " + result[i].couponName);
             str = "<div class='coupon-list-box'>";
             str += "<div class='row'>";
+            str += "<input type='hidden' id='coupon-id' value='"+ result[i].couponId +"'>";
             str += "<div class='col-md-8 coupon-name-th'><span class='coupon-name'>" + result[i].couponName + "</span></div>";
             str += "<div class='col-md-4 coupon-benefit-th'>-<span class='coupon-benefit'>" + result[i].benefit + "</span>원</div>";
             str += "<div>";
@@ -177,8 +182,12 @@
     	  console.log("빈값");
     	  $('#point-discount').text(0);
     	}
-
-
+    });
+    
+    $('.requirement-in').change(function(){
+      var a = $('.requirement-in').val();
+      $('.requirement-in').attr('value',a);
+      console.log($('.requirement-in').val());
     });
   });
 
@@ -191,7 +200,7 @@
 		    pay_method : 'card',
 		    merchant_uid : 'merchant_' + new Date().getTime(),
 		    name : $('.pProductName').text(), //결제창에서 보여질 이름
-		    amount : $('#lastStlAmtDd').text(), //실제 결제되는 가격
+		    amount : 100,//$('#lastStlAmtDd').text(), //실제 결제되는 가격
 		    buyer_email : "${memberDTO.email}",
 		    buyer_name : $('#name').text(),
 		    buyer_tel : $('#phonenumber').text(),
@@ -212,9 +221,13 @@
 		      }).done(function(data){
 		        console.log("done Data : " + data);
 		        if(rsp.paid_amount == data.response.amount){
-		        	alert("결제 및 결제검증완료");
+		         	console.log("결제 및 결제검증완료");
+		          	console.log(rsp);
+		          	console.log(data);
+		        	paytransaction();
 	        	} else {
 	        		alert("결제 실패");
+	        		//환불처리 되어야함
 	        	}
 		        /* var msg = '결제가 완료되었습니다.';
 		        msg += '고유ID : ' + rsp.imp_uid;
@@ -226,11 +239,69 @@
 		      });
 		    
 		});
-	}/* 
-	function chkPoint(){
-	  var point = document.getElementById("g-point");
-	  console.log(point);
-	} */
+	}
+
+	//결제가 완료 된 후 트랜잭션처리
+	function paytransaction(){
+	  	var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		var parr = [];
+		
+		$('#nrmProd').find(".order-product").each(function(index, item){
+		  var cartId = $(item).find("input[name=cartId]").val();
+		  var productId = $(item).find("input[name=productId]").val();
+		  var ordQty = $(item).find("input[name=cartAmount]").val();
+		  parr.push({cartId, productId, ordQty});
+		});
+		
+		var addr = {
+		    nickName: $('#addressNickName').text(),
+			recipient: $('#name').text(),
+			address: $('#addressName').text(),
+			contact: $('#phonenumber').text()
+		  };
+		var req = $('.requirement-in').val();
+		var oriprc = $('#total').val();
+		var memDc = $('#membershipDiscount').val();
+		var ucI = $('#use-coupon-id').val();
+		var couponDis = $('#couponDiscount').val();
+		var usePoint = $('#GPoint').val();
+		var totprc = $('#finalPrice').val();
+		var data = {
+		    products: parr,
+		    address: addr,
+		    requirement: req,
+		    originalPrice: oriprc,
+		    membershipDiscount: memDc,
+		    couponId: ucI,
+		    couponDiscount: couponDis,
+		    usagePoint: usePoint,
+		    totalPrice: totprc
+		};
+		console.log(data);
+/* 		$.ajax({
+		  type : "POST",
+			url : "${contextPath}/order/api/paytransaction",
+			contentType: "application/json; charset=UTF-8",
+			data : JSON.stringify(data),
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+			success : function(result) {
+				alert("정상 작동");
+
+			},
+			error : function(xhr, status, error) {
+				var errorResponse = JSON.parse(xhr.responseText);
+				var errorCode = errorResponse.code;
+				var message = errorResponse.message;
+
+				alert(message);
+			}
+		}); */
+		
+	}
+	
 	function numFormatComma(nNumber, nDetail) {
 		if (nNumber == null)
 			return "";
@@ -285,6 +356,7 @@
 	    var totalPayPrice = totalPrice - totalDC;
 	    
 	    $('#lastStlAmtDd').text(numFormatComma(totalPayPrice));
+	    $('#finalPrice').attr('value', totalPayPrice);
 	    console.log(totalPayPrice);
 	}
 </script>
@@ -373,7 +445,6 @@
 											<c:set var = "total" value = "0" />
 											<c:set var = "membershipDiscount" value = "0" />
 											<c:forEach var="i" items="${list }" begin="0" step="1" varStatus="status">
-												
 												<tr class="order-product">
 													<td class="order-product_box">
 														<div class="product-image">
@@ -382,7 +453,10 @@
 															</a>
 														</div>
 														<div class="product-name">
-															<a href="이동할 링크" class="pProductName">${i.parentProductName }</a>
+															<input type="hidden" name="cartId" value="${i.cartId }"/>
+															<input type="hidden" name="productId" value="${i.productId }"/>
+															<input type="hidden" name="cartAmount" value="${i.cartAmount }"/>
+															<a href="이동할 링크" class="pProductName">"${i.parentProductName }"</a>
 														</div>
 														<div class="product-option">
 															<span class="product-option-name"> 옵션: ${i.productName } </span>
@@ -420,8 +494,10 @@
 									</table>
 									<input type="hidden" id="total" value="${total }"/>
 									<input type="hidden" id="membershipDiscount" value="${membershipDiscount }"/>
+									<input type="hidden" id="use-coupon-id" value=/>
 									<input type="hidden" id="couponDiscount" value=/>
-									<input type="hidden" id="GPoint" value=0/>
+									<input type="hidden" id="GPoint" value="0"/>
+									<input type="hidden" id="finalPrice" value=/>
 								</div>
 							</div>
 						</div>
@@ -573,6 +649,7 @@
 							<div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingThree">
 								<div class="accordion-body address-info">
 									<table class="delivery-address">
+										<!-- 기본배송지 설정이 안되어 있는 경우 -->
 										<c:if test="${empty defaultAddress }">
 											<div class="no-show-first">등록된 기본 배송지가 없습니다.</div>
 											<tbody class="tbody-on" style="display: none">
@@ -598,10 +675,11 @@
 												</tr>
 												<tr>
 													<th class="delivery-address-th delivery-requirement-th">요청사항</th>
-													<td class="delivery-address-td delivery-requirement-td" id="requirement"><input class="requirement-in" type="text"></td>
+													<td class="delivery-address-td delivery-requirement-td" id="requirement"><input class="requirement-in" type="text" value="" placeholder="배송 요청사항을 입력하세요."></td>
 												</tr>
 											</tbody>
 										</c:if>
+										<!-- 기본배송지 설정이 되어 있는 경우 -->
 										<c:if test="${not empty defaultAddress }">
 											<tbody>
 												<tr>
@@ -629,7 +707,7 @@
 												</tr>
 												<tr>
 													<th class="delivery-address-th delivery-requirement-th">요청사항</th>
-													<td class="delivery-address-td delivery-requirement-td" id="requirement"><input class="requirement-in" type="text"></td>
+													<td class="delivery-address-td delivery-requirement-td" id="requirement"><input class="requirement-in" type="text" value="" id="requirement"></td>
 												</tr>
 											</tbody>
 										</c:if>

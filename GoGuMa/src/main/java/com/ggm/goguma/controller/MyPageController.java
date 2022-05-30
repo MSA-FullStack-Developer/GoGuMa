@@ -126,17 +126,4 @@ public class MyPageController {
 		return "1";
 	}
 	
-	
-
-	/**
-	 * @작성자: Moon Seokho
-	 * @Date: 2022. 5. 28.
-	 * @프로그램설명: 사용자 포인트 조회기능
-	 * @변경이력: 
-	 */
-//	@PostMapping("api/getMemberPoint")
-//	@ResponseBody
-//	public void getMemberPoint() {
-//		
-//	}
 }
