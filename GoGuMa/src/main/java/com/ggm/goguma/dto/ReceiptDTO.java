@@ -8,9 +8,17 @@ import lombok.Data;
 @Data
 public class ReceiptDTO {
 	private long receiptId;
+	private String recipient;
+	private String rcptContact;
+	private String rcptAddress;
+	private String rcptNickname;
+	private String requirement;
+	private long originalPrice;
+	private long membershipDiscount;
+	private long couponDiscount;
+	private long usagePoint;
+	private long totalPrice;
 	private Date orderDate;
 	private long memberId;
-	private long addressId;
-	private String requirement;
 	List<OrderDTO> orderList;
 }
