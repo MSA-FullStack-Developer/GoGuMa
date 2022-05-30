@@ -96,7 +96,7 @@
                 <div>
                     <h5><b>👨‍💻 송진호님</b></h5>
                 </div>
-                <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-4">
+                <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-3">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
                             회원등급
@@ -141,7 +141,7 @@
                 <div>
                     <h5><b>주문상세</b></h5>
                 </div>
-                <div class="col border border-2 rounded p-4 mb-4">
+                <div class="col border border-2 rounded p-4 mb-3">
                     <div class="d-flex flex-row">
                         <div class="col">
                             <h5><b><fmt:formatDate pattern="yyyy-MM-dd" value="${receiptDTO.orderDate}" /></b></h5>
@@ -209,7 +209,7 @@
                 <div>
                     <h5><b>배송지 정보</b></h5>
                 </div>
-                <table class="table mb-4" style="margin: auto;">
+                <table class="table mb-3" style="margin: auto;">
                     <tbody class="table-group-divider">
                         <tr>
                             <th>배송지 별칭</th>
@@ -236,7 +236,7 @@
                 <div>
                     <h5><b>할인 정보</b></h5>
                 </div>
-                <table class="table mb-4" style="margin: auto;">
+                <table class="table mb-3" style="margin: auto;">
                     <tbody class="table-group-divider">
                         <tr>
                             <th>멤버십 등급 할인</th>
@@ -259,7 +259,7 @@
                 <div>
                     <h5><b>결제 정보</b></h5>
                 </div>
-                <table class="table mb-4" style="margin: auto;">
+                <table class="table mb-3" style="margin: auto;">
                     <tbody class="table-group-divider">
                         <tr>
                             <th>상품 합계</th>
