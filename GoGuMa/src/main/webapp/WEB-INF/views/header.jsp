@@ -7,7 +7,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <style>
 	<%@ include file="/resources/css/header.css" %>
-
+	
 	.main {
 		width: auto;
 		height: auto;

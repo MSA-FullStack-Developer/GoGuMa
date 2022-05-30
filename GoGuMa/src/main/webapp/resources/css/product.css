@@ -23,8 +23,10 @@ select {
 
 .no_result {
 	text-align: center;
-	margin-top: 100px;
-	color: #FF493C;
+    margin-top: 200px;
+    margin-bottom: 100px;
+    color: #FF493C;
+    height: 100px;
 }
 
 .no_keyword {
@@ -101,13 +103,24 @@ input {
 	border-radius: 5pt;
 }
 
-#cancleBtn {
+#cancelBtn {
 	width: 90px;
 	height: 40px;
 	border: none;
 	color: #000;
 	background: #fff;
 	margin-right: 5px;
+}
+
+#deleteBtn {
+	width: auto;
+	height: auto;
+	color: #fff;
+	background: #6426DD;
+	border: none;
+	font-size: 10pt;
+	margin-left: 5px;
+	border-radius: 5pt;
 }
 
 #finishBtn {

@@ -261,7 +261,6 @@
         		var header = $("meta[name='_csrf_header']").attr("content");
         		
             	var reviewID = $("#reviewID").val(); // 삭제할 상품 번호
-            	alert(reviewID);
                 
         		var data = {
         			"reviewID" : reviewID
@@ -290,10 +289,8 @@
         });
     </script>
 </head>
-
 <body>
 	<%@ include file="header.jsp" %>
-	
 	<div class="prodlist">
         <h1 style="text-align: center">${categoryName}</h1>
 		
@@ -362,7 +359,7 @@
                 
                 <div class="btnDiv">
                 	<button class="cartBtn" id="cartBtn">장바구니</button>
-                       <button class="buyBtn" id="buyBtn">바로구매</button>
+                    <button class="buyBtn" id="buyBtn">바로구매</button>
                 </div>
             </div>
             
@@ -401,7 +398,7 @@
 	                        <h4 class="membername"><i class="fa-solid fa-heart" style="color: FF493C"></i>
 	                        	<b>${memberDTO.name}</b>님, 이번 상품은 어떠셨나요?
 	                       	</h4>
-	                       	<input type="text" class="write-review-content" placeholder="상품평을 작성해주세요.">
+	                       	<textarea cols="34" rows="5" type="text" class="write-review-content" placeholder="상품평을 작성해주세요. (최대 2,000자)"></textarea>
 	                       	<div class="review-buttons">
 	                            <button type="button" class="review-button" id="cancelBtn">취소</button>
 	                            <button type="button" class="review-button" id="finishBtn">작성 완료</button>
@@ -445,13 +442,10 @@
 	                        <hr>
 	                    </div>
                     </c:forEach>
-                    
                 </div>
             </div>
         </div>
     </div>
-    
     <%@ include file="./footer.jsp" %>
 </body>
-
 </html>
