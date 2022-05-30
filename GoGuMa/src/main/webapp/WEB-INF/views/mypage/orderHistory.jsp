@@ -29,6 +29,10 @@
             width: 100%;
             height: 100%;
         }
+        table {
+        	table-layout: fixed;
+        	word-break: break-all;
+        }
     </style>
 </head>
 <body>
@@ -139,7 +143,7 @@
 	                            <h5><b><fmt:formatDate pattern="yyyy-MM-dd" value="${receiptDTO.orderDate}" /></b></h5>
 	                        </div>
 	                        <div class="d-flex flex-column">
-	                            주문 상세보기
+	                            <a href="${contextPath}/mypage/orderHistory/${receiptDTO.receiptId}">주문 상세보기</a>
 	                        </div>
 	                    </div>
 	                    <div class="border border-1 rounded">
@@ -151,13 +155,16 @@
 		                                    <td class="col-1 p-3">
 		                                        <img src="${orderDTO.image}" style="width:100px; height:100px;">
 		                                    </td>
+		                                    <td class="col-5 border-end">
+		                                    	${orderDTO.name}
+		                                    </td>
 		                                    <td class="border-end">
-		                                        <div class="col">
+		                                        <div class="col" align="center">
 		                                            <div>
-		                                                ${orderDTO.name}
+		                                                ${orderDTO.price}원
 		                                            </div>
 		                                            <div>
-		                                                ${orderDTO.price}원, ${orderDTO.count}개
+		                                                (${orderDTO.count}개)
 		                                            </div>
 		                                        </div>
 		                                    </td>
@@ -227,7 +234,13 @@
 					} else {
 						alert('구매확정 오류');
 					}
-				}
+				},
+				error:function(xhr, status, error) {
+    				var errorResponse = JSON.parse(xhr.responseText);
+    				var errorCode = errorResponse.code;
+    				var message = errorResponse.message;
+    				alert(message);
+    			}
 			})
 		}
 	}
