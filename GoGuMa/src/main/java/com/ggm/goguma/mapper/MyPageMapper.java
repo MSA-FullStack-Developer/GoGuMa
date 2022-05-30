@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
+import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
 
 public interface MyPageMapper {
@@ -17,12 +18,12 @@ public interface MyPageMapper {
 	List<OrderDTO> getOrderList(long receiptId) throws Exception;
 	
 	ReceiptDTO getReceiptDetail(long receiptId) throws Exception;
+	
+	PointDTO getEarnedPoint(long receiptId) throws Exception;
 
 	void updateOrderStatus(@Param("orderId") long orderId, @Param("status") String status) throws Exception;
 	
 	List<DeliveryAddressDTO> getAddressList(long memberid) throws Exception;
-	
-	DeliveryAddressDTO getDeliveryAddress(long addressId) throws Exception;
 
 	DeliveryAddressDTO getDefaultAddress(long memberid) throws Exception;
 

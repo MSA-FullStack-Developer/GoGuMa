@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ggm.goguma.dto.DeliveryAddressDTO;
+import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
 import com.ggm.goguma.service.MyPageService;
 
@@ -50,11 +51,11 @@ public class MyPageController {
 	public String getOrderDetail(@PathVariable("receiptId") long receiptId, Model model) {
 		try {
 			ReceiptDTO receiptDTO = service.getReceiptDetail(receiptId); // 결제상세 가져오기
-			DeliveryAddressDTO addressDTO = service.getDeliveryAddress(receiptDTO.getAddressId()); // 배송지정보 가져오기
+			PointDTO pointDTO = service.getEarnedPoint(receiptId);
 			model.addAttribute("receiptDTO", receiptDTO);
-			model.addAttribute("addressDTO", addressDTO);
+			model.addAttribute("pointDTO", pointDTO);
 			log.info(receiptDTO);
-			log.info(addressDTO);
+			log.info(pointDTO);
 		} catch (Exception e) {
 			log.info(e.getMessage());
 		}

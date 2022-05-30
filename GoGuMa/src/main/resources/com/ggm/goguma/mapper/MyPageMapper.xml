@@ -4,8 +4,8 @@
 
 <mapper namespace="com.ggm.goguma.mapper.MyPageMapper">
 	<select id="getReceiptList" resultType="ReceiptDTO">
-		select receiptid, orderdate, memberid, addressid
-		from receiptview where memberid = #{memberId}
+		select receiptid, orderdate, memberid
+		from receipt where memberid = #{memberId}
 		order by orderdate desc
 	</select>
 
@@ -16,8 +16,14 @@
 	</select>
 	
 	<select id="getReceiptDetail" resultType="ReceiptDTO">
-		select receiptid, orderdate, memberid, addressid, requirement
-		from receiptview where receiptid = #{receiptId}
+		select receiptid, recipient, rcptcontact, rcptaddress, rcptnickname, requirement,
+		originalprice, membershipdiscount, coupondiscount, usagepoint, totalprice, orderdate, memberid
+		from receipt where receiptid = #{receiptId}
+	</select>
+	
+	<select id="getEarnedPoint" resultType="PointDTO">
+		select pointeventid, pointtype, pointvalue, pointcreateddate, orderid, receiptid
+		from pointevent where receiptid = #{receiptId} and pointtype = 'plus'
 	</select>
 	
 	<update id="updateOrderStatus">
@@ -28,11 +34,6 @@
 		select addressId, nickname, recipient, address, contact, isdefault
 		from deliveryaddress where memberId = #{memberId}
 		order by addressId
-	</select>
-	
-	<select id="getDeliveryAddress" resultType="DeliveryAddressDTO">
-		select nickname, recipient, address, contact
-		from deliveryaddress where addressid = #{addressId}
 	</select>
 	
 	<select id="getDefaultAddress" resultType="DeliveryAddressDTO">

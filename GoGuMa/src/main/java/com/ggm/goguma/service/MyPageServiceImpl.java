@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
+import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
 import com.ggm.goguma.mapper.MyPageMapper;
 
@@ -15,23 +16,6 @@ public class MyPageServiceImpl implements MyPageService {
 	@Autowired
 	private MyPageMapper mapper;
 
-	@Override
-	public List<ReceiptDTO> getReceiptList(long memberId) throws Exception {
-		return mapper.getReceiptList(memberId);
-	}
-	
-	@Override
-	public ReceiptDTO getReceiptDetail(long receiptId) throws Exception {
-		ReceiptDTO dto = mapper.getReceiptDetail(receiptId);
-		dto.setOrderList(mapper.getOrderList(receiptId));
-		return dto;
-	}
-	
-	@Override
-	public List<OrderDTO> getOrderList(long receiptId) throws Exception {
-		return mapper.getOrderList(receiptId);
-	}
-	
 	@Override
 	public List<ReceiptDTO> getReceiptHistory(long memberId) throws Exception {
 		List<ReceiptDTO> receiptList = getReceiptList(memberId);
@@ -45,6 +29,28 @@ public class MyPageServiceImpl implements MyPageService {
 		}
 		return receiptList;
 	}
+	
+	@Override
+	public List<ReceiptDTO> getReceiptList(long memberId) throws Exception {
+		return mapper.getReceiptList(memberId);
+	}
+
+	@Override
+	public List<OrderDTO> getOrderList(long receiptId) throws Exception {
+		return mapper.getOrderList(receiptId);
+	}
+	
+	@Override
+	public PointDTO getEarnedPoint(long receiptId) throws Exception {
+		return mapper.getEarnedPoint(receiptId);
+	}
+	
+	@Override
+	public ReceiptDTO getReceiptDetail(long receiptId) throws Exception {
+		ReceiptDTO dto = mapper.getReceiptDetail(receiptId);
+		dto.setOrderList(mapper.getOrderList(receiptId));
+		return dto;
+	}
 
 	@Override
 	public void updateOrderStatus(long orderId, String status) throws Exception {
@@ -54,11 +60,6 @@ public class MyPageServiceImpl implements MyPageService {
 	@Override
 	public List<DeliveryAddressDTO> getAddressList(long memberid) throws Exception {
 		return mapper.getAddressList(memberid);
-	}
-
-	@Override
-	public DeliveryAddressDTO getDeliveryAddress(long addressId) throws Exception {
-		return mapper.getDeliveryAddress(addressId);
 	}
 	
 	@Override
