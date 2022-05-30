@@ -30,33 +30,33 @@
 <body>
     <style>
         #banner-section {
-            background-color: #E1E4FD;
+            background-color: #3831C9;
             transition: background-color 0.3s ease-in-out 0s;
 			margin-top: 38px;
         }
 
-        .list-group-item:hover {
+        #md-category .list-group-item:hover {
             background-color: #FF493C;
             cursor: pointer;
         }
 
-        .list-group-item:hover span {
+        #md-category .list-group-item:hover span {
             color: white;
         }
 
-        .active {
+        #md-category .active {
             background-color: #6426DD !important;
 
         }
 
-        .active span {
+        #md-category .active span {
             color: white !important;
         }
     </style>
     <script>
         $(document).ready(function () {
 
-            var bannerSectionBgColors = ['#E1E4FD', '#C0E3FE', '#FFF8E7'];
+            var bannerSectionBgColors = ['#3831C9', '#C0E3FE', '#FFF8E7'];
 
             $(".list-group-item ").click(function () {
                 $(this).parent().find('li').removeClass('active');
@@ -119,10 +119,11 @@
             <div class="m-auto" style="width: 1240px;">
                 <div id="banner-slide" class="carousel slide carousel-fade" data-bs-ride="carousel">
                     <div class="carousel-inner">
-
                         <div class="carousel-item active">
-                            <img src="https://cdn.011st.com/11dims/resize/1240x400/quality/99/11src/http://cdn.011st.com/ds/2022/02/10/1415/6de72b683174dab67001bbe681c8a1c8.jpg"
-                                class="d-block w-100" alt="이벤트1 배너" />
+                        	<a href="${contextPath}/event/event1.do">
+                            <img src="${contextPath}/resources/img/web_banner_001.png"
+                                class="d-block w-80" alt="이벤트1 배너" />
+                                </a>
                         </div>
 
                         <div class="carousel-item">
@@ -248,6 +249,9 @@
             </div> <!-- 상품 리스트 화면 끝  -->
         </section>
     </div> <!-- 메인 화면 wrapper 끝-->
+    
+    <%@ include file="../footer.jsp" %>
 </body>
+
 
 </html>

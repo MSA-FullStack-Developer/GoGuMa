@@ -5,10 +5,7 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class CartDTO implements Serializable{
-	/**
-	 * 
-	 */
+public class CartDTO implements Serializable { 
 	private static final long serialVersionUID = 1L;
 	private long cartId;
 	private long productId;
