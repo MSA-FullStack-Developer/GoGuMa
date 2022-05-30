@@ -44,5 +44,11 @@
 		INSERT INTO review(productid, memberid, content)
 		VALUES (#{productID}, #{memberID}, #{content})
 	</insert>
+	
+	<!-- 상품평 삭제 -->
+	<delete id="deleteReview" parameterType="long">
+		DELETE FROM review
+		WHERE reviewid = #{reviewID}
+	</delete>
 
 </mapper>

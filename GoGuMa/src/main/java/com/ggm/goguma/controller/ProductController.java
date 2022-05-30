@@ -171,4 +171,20 @@ public class ProductController {
 		}
 	}
 	
+	// 상품평 삭제
+	@PostMapping("/deleteReview")
+	@ResponseBody
+	public Boolean deleteReview(@RequestParam("reviewID") long reviewID, Authentication authentication) throws Exception {
+		try {
+			if(authentication != null) {
+				reviewService.deleteReview(reviewID);	
+				return true;
+			}
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
 }

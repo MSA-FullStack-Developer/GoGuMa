@@ -141,7 +141,7 @@
                 });
 
                 // 취소하기 버튼 클릭시 닫기
-                $("#cancleBtn").click(function () {
+                $("#cancelBtn").click(function () {
                     $(".write-modal").hide();
                 });
             });
@@ -254,6 +254,38 @@
         				alert(message);
         			}
 		        });
+        	});
+            
+            $('#deleteBtn').on("click", function() { // 상품평 삭제
+            	var token = $("meta[name='_csrf']").attr("content");
+        		var header = $("meta[name='_csrf_header']").attr("content");
+        		
+            	var reviewID = $("#reviewID").val(); // 삭제할 상품 번호
+            	alert(reviewID);
+                
+        		var data = {
+        			"reviewID" : reviewID
+        		};
+        		
+        		$.ajax({
+    	            url: "${contextPath}/category/1/deleteReview",
+    	            type: "POST",
+    	            data: data,
+    	            beforeSend : function(xhr) {
+        				xhr.setRequestHeader(header, token);
+        			},
+    	            success : function(result){
+    	            	if (result) {
+    	            		alert("상품평이 삭제되었습니다.");
+    		                location.reload();
+    	            	}
+    	            },error : function(xhr, status, error) {
+        				var errorResponse = JSON.parse(xhr.responseText);
+        				var errorCode = errorResponse.code;
+        				var message = errorResponse.message;
+        				alert(message);
+        			}
+    	        });
         	});
         });
     </script>
@@ -371,7 +403,7 @@
 	                       	</h4>
 	                       	<input type="text" class="write-review-content" placeholder="상품평을 작성해주세요.">
 	                       	<div class="review-buttons">
-	                            <button type="button" class="review-button" id="cancleBtn">취소</button>
+	                            <button type="button" class="review-button" id="cancelBtn">취소</button>
 	                            <button type="button" class="review-button" id="finishBtn">작성 완료</button>
 	                          </div>
 	                    </div>
@@ -380,15 +412,19 @@
                     <c:forEach items="${reviewList}" var="review">
 	                    <div class="review" id="review">
 	                        <div>
+	                    		<input type="hidden" id="reviewID" name="${review.reviewID}" value="${review.reviewID}">
 	                            <p class="review-profile-name">
 	                            	${review.name}
+		                        	<c:if test="${review.name == memberDTO.name}">
+		                        		<button type="button" class="deleteBtn" id="deleteBtn" style="float: right;">삭제</button>
+		                        	</c:if>
 	                           		<span class="review-create-date">
 		                            	<fmt:formatDate value="${review.createDate}" pattern="yyyy-MM-dd" />
 									</span>
 								</p>
 	                            <p class="review-product-info">[${productInfo.productName}]&nbsp;&nbsp;${review.productName}</p>
 	                            <p class="review-content">${review.content}</p>
-	                            
+                            
 	                            <div class="imgList">
 	                                <div class="imgC">
 	                                    <img class="reviewImg" src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"

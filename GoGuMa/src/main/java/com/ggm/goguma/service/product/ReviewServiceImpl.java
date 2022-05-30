@@ -37,4 +37,9 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewMapper.isFinishRcpt(productID, memberID);
 	}
 
+	@Override
+	public void deleteReview(long reviewID) throws Exception {
+		reviewMapper.deleteReview(reviewID);
+	}
+
 }

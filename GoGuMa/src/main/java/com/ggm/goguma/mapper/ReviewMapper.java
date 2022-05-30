@@ -18,4 +18,7 @@ public interface ReviewMapper {
 	
 	// 상품평 등록 자격 확인
 	Integer isFinishRcpt(@Param("productID") long productID, @Param("memberID") long memberID) throws Exception;
+	
+	// 상품평 삭제
+	int deleteReview(long reviewID) throws Exception;
 }
