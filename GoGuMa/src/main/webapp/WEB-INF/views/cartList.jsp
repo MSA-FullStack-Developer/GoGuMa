@@ -82,7 +82,7 @@
 											if (count_val >= 1 && count_val <= stock_val) {
 												$.ajax({
 															type : "POST",
-															url : "${contextPath}/cart/addCartCount",
+															url : "${contextPath}/cart/api/addCartCount",
 															data : data1,
 															beforeSend : function(xhr) {
 																xhr.setRequestHeader(header,token);
@@ -157,7 +157,7 @@
 											if (count_val >= 1 && count_val <= stock_val) {
 												$.ajax({
 															type : "POST",
-															url : "${contextPath}/cart/minusCartCount",
+															url : "${contextPath}/cart/api/minusCartCount",
 															data : data1,
 															beforeSend : function(xhr) {
 																xhr.setRequestHeader(header,token);
@@ -199,7 +199,7 @@
 		};
 		$.ajax({
 			type : "POST",
-			url : "${contextPath}/cart/delete",
+			url : "${contextPath}/cart/api/delete",
 			data : data,
 			beforeSend : function(xhr) {
 				xhr.setRequestHeader(header, token);
@@ -241,7 +241,6 @@
 	}
 	// 단일 장바구니 삭제를 위한 함수
 	function oneCartDel(obj) {
-
 		var deleted = confirm("장바구니를 삭제하겠습니까?");
 
 		if (deleted) {
@@ -249,9 +248,8 @@
 			cartDel(obj);
 			alert("장바구니를 삭제했습니다.");
 		}
-		
 	}
-	//주문내역 계산(총 상품 금액, 총 할인 금액, 총 주문 금액)
+	// 주문내역 계산(총 상품 금액, 총 할인 금액, 총 주문 금액)
 	function calculateSellPrice() {
 
 		var totalNormalPrice = 0 //총 상품 금액
@@ -428,7 +426,12 @@
 	};
 	
 </script>
+<style>
+	<%@ include file="/resources/css/header.css" %>
+</style>
 <div class="container">
+	<%@ include file="header.jsp" %>
+	
 	<!-- 바디 전체-->
 	<div class="cbody">
 		<div class="contents">
@@ -477,7 +480,7 @@
 											<th scope="col" id="th-total-price">합계</th>
 											<th scope="col" id="th-order-delete">구매/삭제</th>
 										</tr>
-										<c:forEach var="i" items="${list }" begin="0" step="1"
+										<c:forEach var="i" items="${list}" begin="0" step="1"
 											varStatus="status">
 											<tr class="cart-product">
 												<td class="product-select-event">
@@ -490,17 +493,17 @@
 													<label for="oneSel${status.count}"></label></td>
 												<td class="cart-product_box">
 													<div class="product-image">
-														<a href="이동할 링크" class="moveProduct"> <img
-															src="${i.prodImgUrl }" width="78" height="78"
+														<a href="${contextPath}/category/1/${i.categoryId}/detail/${i.parentProductId}" class="moveProduct">
+															<img src="${i.prodImgUrl}" width="78" height="78"
 															class="product-img" alt="">
 														</a>
 													</div>
 													<div class="product-name">
-														<a href="이동할 링크" class="moveProduct">${i.parentProductName }</a>
+														<a href="${contextPath}/category/1/${i.categoryId}/detail/${i.parentProductId}" class="moveProduct">${i.parentProductName}</a>
 													</div>
 													<div class="product-option">
 														<span class="product-option-name"> 옵션:
-															${i.productName } </span>
+															${i.productName} </span>
 													</div>
 												</td>
 												<td class="cart-product-count">
@@ -551,8 +554,8 @@
 												</td>
 												<td class="cart-purchase-delete">
 													<div class="cart-pur-del">
-														<button type="button" class="btn-purchase">구매</button>
-														<button type="button" class="btn-delete"
+														<button type="button" class="btn text-white btn-purchase">구매</button>
+														<button type="button" class="btn text-black btn-delete"
 															onclick="oneCartDel(this)">삭제</button>
 													</div>
 
@@ -588,9 +591,8 @@
 						</div>
 					</div>
 					<div class="order-buttons">
-						<button type="button" class="btn text-black continue"
-							style="background-color: #FFFFFF;">쇼핑 계속하기</button>
-						<button type="submit" id="orderBtn" class="btn text-white purchase" style="background-color: #6426DD">구매하기</button>
+						<button type="button" class="btn text-black continue">쇼핑 계속하기</button>
+						<button type="submit" id="orderBtn" class="btn text-white purchase">구매하기</button>
 					</div>
 				</form>
 			</div>

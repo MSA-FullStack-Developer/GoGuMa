@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ggm.goguma.dto.ProductDTO;
-import com.ggm.goguma.service.ProductService;
+import com.ggm.goguma.service.product.ProductService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;

@@ -26,6 +26,9 @@
     <!-- jquery -->
 	<script type="text/javascript" src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.min.js"></script>
 </head>
+<style>
+	<%@ include file="/resources/css/header.css" %>
+</style>
 <body>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -36,10 +39,12 @@
 		})
 	</script>
 	
+	<%@ include file="../header.jsp" %>
+	
     <section class="container"> 
-        <div class="d-flex align-items-center min-vh-100">
+        <div class="align-items-center min-vh-100">
             <div class="w-50 m-auto p-5" style="min-width: 650px;">
-                <h1>LOGIN</h1>
+                <h1 style="margin-top: 45px">LOGIN</h1>
                 <form id="login-form" method="post" action="${contextPath}/login" class="mt-3">
                 
                 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
@@ -67,5 +72,7 @@
             </div>
         </div>
     </section>
+    
+    <%@ include file="../footer.jsp" %>
 </body>
 </html>

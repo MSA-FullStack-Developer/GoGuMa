@@ -16,5 +16,6 @@ public class CartItemDTO {
 	private String prodImgUrl;
 	private int isThumbNail;
 	private int discountPercent;
-	
+	private long categoryId;
+	private long parentProductId;
 }

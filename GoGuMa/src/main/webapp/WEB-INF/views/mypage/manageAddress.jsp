@@ -15,6 +15,8 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 	<!-- bootstrap js -->
 	<style>
+		<%@ include file="/resources/css/header.css" %>
+		
         a {
             text-decoration: none;
         }
@@ -37,6 +39,8 @@
     </style>
 </head>
 <body>
+	<%@ include file="../header.jsp" %>
+	
 	<div class="container mt-5" style="min-width: 1200px">
 		<div class="row">
 			<div class="col-3">
@@ -48,7 +52,7 @@
                         <h5><b>MY 쇼핑</b></h5>
                     </div>
                     <div>
-                        <a href="${contextPath}/mypage/orderHistory">주문내역</a>
+                        주문내역
                     </div>
                 </div>
                 <div class="mb-4">
@@ -291,6 +295,7 @@
             </div>
         </div>
     </div>
+     <%@ include file="../footer.jsp" %>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>

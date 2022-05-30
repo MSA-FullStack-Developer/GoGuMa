@@ -1,10 +1,11 @@
-package com.ggm.goguma.service;
+package com.ggm.goguma.service.product;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.ProductDTO;
 import com.ggm.goguma.mapper.ProductMapper;
 
@@ -17,7 +18,7 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductMapper productMapper;
 	
-	private long pageSize = 8;
+	private long pageSize = 12;
 	
 	@Override
 	public List<ProductDTO> getProductList(long pg, long categoryID, String sortType) throws Exception {
@@ -65,6 +66,5 @@ public class ProductServiceImpl implements ProductService {
 	public long getSearchCount(String keyword) throws Exception {
 		return productMapper.getSearchCount(keyword);
 	}
-
 
 }
