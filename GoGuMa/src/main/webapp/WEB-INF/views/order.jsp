@@ -7,185 +7,117 @@
 
 <meta name="_csrf" content="${_csrf.token}">
 <meta name="_csrf_header" content="${_csrf.headerName}">
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
-	crossorigin="anonymous">
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-	integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
-	crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
 
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 
-<link rel="stylesheet"
-	href="${contextPath}/resources/css/cart/cartOrder.css">
+<link rel="stylesheet" href="${contextPath}/resources/css/cart/cartOrder.css">
 
-<link rel="stylesheet"
-	href="${contextPath}/webjars/jquery-ui/1.13.0/jquery-ui.css">
-<script type="text/javascript"
-	src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.js"></script>
-<script type="text/javascript"
-	src="${contextPath}/webjars/jquery-ui/1.13.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="${contextPath}/webjars/jquery-ui/1.13.0/jquery-ui.css">
+<script type="text/javascript" src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.js"></script>
+<script type="text/javascript" src="${contextPath}/webjars/jquery-ui/1.13.0/jquery-ui.js"></script>
 
 <script type="text/javascript">
 	$(document).ready(function() {
-
-	});
-
-	//주문내역 계산(총 상품 금액, 총 할인 금액, 총 주문 금액)
-	function calculateSellPrice() {
-
-		var totalNormalPrice = 0 //총 상품 금액
-		var totalDcPrice = 0 //총 할인 금액
-		var totalPayPrice = 0 //총 주문 금액
-		var selectedItemCount = 0;
-		var checkedLength = $("input:checkbox[name=itemSelect]:checked").length;
-
-		console.log("선택한 체크 수: " + checkedLength);
-		$("input:checkbox[name=itemSelect]:checked").each(
-				function(idx) {
-					selectedItemCount += 1;
-					//선택된 상품 계산
-					var itemObj = $(this).parents("tr");
-					var ordQty = Number($(itemObj).find("input[name='ordQty']")
-							.val());
-					if (!isNaN(ordQty)) {
-						//총 상품금액 계산(정상금액)
-						if (!isNaN(Number($(itemObj).find(
-								"input[name='nrmOriPrc']").val()))) {
-							totalNormalPrice += Number($(itemObj).find(
-									"input[name='nrmOriPrc']").val())
-									* ordQty;
-						}
-						//총 할인금액 계산
-						if (!isNaN(Number($(itemObj).find(
-								"input[name='disOriPrc']").val()))) {
-							totalDcPrice += Number($(itemObj).find(
-									"input[name='disOriPrc']").val())
-									* ordQty;
-						}
-						//총 결제예상 금액
-						if (!isNaN(Number($(itemObj).find(
-								"input[name='totOriPrc']").val()))) {
-							totalPayPrice += Number($(itemObj).find(
-									"input[name='totOriPrc']").val())
-									* ordQty;
-						}
-					}
-				});
-		console.log("총 상품 정상 금액: " + totalNormalPrice);
-		$("#emPriceFTotNrmlprice").text(numFormatComma(totalNormalPrice));
-		$("#emPriceFTotDcAmt").text(numFormatComma(totalDcPrice));
-		$("#emPriceFTotPayAmt").text(numFormatComma(totalPayPrice));
-		$("#emTotalItemCnt").text(numFormatComma(selectedItemCount));
-	};
-
-	// 변경된 상품 가격 할인금액, 합계 화면에서 보여주는 계산
-	function calculateItemSellPrice(itemObj, obj) {
-		var ordQty = Number($("input[name=ordQty]", $(itemObj)).val());
-		//상품 정상 금액
-		var nOP = Number($("input[name=nrmOriPrc]", $(itemObj)).val());
-		//상품 할인 금액
-		var dOP = Number($("input[name=disOriPrc]", $(itemObj)).val());
-		//상품 할인된 금액
-		var tOP = Number($("input[name=totOriPrc]", $(itemObj)).val());
-
-		$(itemObj).find(".cart-product-price span").text(
-				numFormatComma(nOP * ordQty));
-		$(itemObj).find(".cart-product-discount em").text(
-				numFormatComma(dOP * ordQty));
-		$(itemObj).find(".cart-total-price span").text(
-				numFormatComma(tOP * ordQty));
-	};
-
-	// 상품 선택 & 선택된 총상품가격 총할인가격, 총 주문 금액 계산
-	function bindCartList() {
-		if ($("input:checkbox[name=allItemSelect]")) {
-			$("input:checkbox[name=allItemSelect]").click(
-					function(e) {
-						var isChecked = $(this).is(":checked");
-						$("input:checkbox[name=itemSelect]").prop("checked",
-								isChecked);
-						//가격 재계산
-						calculateSellPrice();
-						//주문이 가능한 상태인지 체크
-
-					});
-		}
-		if ($("input:checkbox[name=itemSelect]")) {
-			$("input:checkbox[name=itemSelect]").click(
-					function(e) {
-						//상품 선택 해제 시 전체선택 체크박스 해제
-						if (!$(this).is(":checked")
-								&& $("input:checkbox[name=allItemSelect]").is(
-										":checked")) {
-							$("input:checkbox[name=allItemSelect]").prop(
-									"checked", false);
-						}
-						//모든 상품이 체크 된 경우 전체 선택 체크박스 선택 (하나라도 체크가 안되어 있다면 false)
-						var isAllCheck = true;
-						$("input:checkbox[name=itemSelect]").each(function() {
-							if (!$(this).is(":checked")) {
-								isAllCheck = false;
-								return;
-							}
-						});
-						if (isAllCheck) {
-							$("input:checkbox[name=allItemSelect]").prop(
-									"checked", true);
-						}
-						//가격 재계산
-						calculateSellPrice();
-						//주문 가능한 상태인지 체크
-					});
-		}
-	};
-
-	function numFormatComma(nNumber, nDetail) {
-		if (nNumber == null)
-			return "";
-		if (nDetail == null)
-			nDetail = 0;
-
-		nNumber = parseFloat(nNumber);
-		nNumber = Math.round(nNumber, nDetail);
-
-		var minusFlag = false;
-		if (nNumber < 0) {
-			nNumber = nNumber * -1;
-			minusFlag = true;
-		}
-
-		var strNumber = new String(nNumber);
-		var arrNumber = strNumber.split(".");
-		var strFormatNum = "";
-		var j = 0;
-
-		for (var i = arrNumber[0].length - 1; i >= 0; i--) {
-			if (i != strNumber.length && j == 3) {
-				strFormatNum = arrNumber[0].charAt(i) + "," + strFormatNum;
-				j = 0;
-			} else {
-				strFormatNum = arrNumber[0].charAt(i) + strFormatNum;
+		
+		// 모달 배송지 등록 이벤트
+		$('#addAddressBtn').on('click', function() {
+			let isDefault = 0;
+			if($('#isDefault').prop('checked')) {
+				isDefault = 1;
 			}
-			j++;
-		}
+			
+			let token = $("meta[name='_csrf']").attr("content");
+		    let header = $("meta[name='_csrf_header']").attr("content");
+		    
+		    let data = {
+	    		nickName : $('#addressBody').find('#nickName').val(),
+				recipient : $('#addressBody').find('#recipient').val(),
+				address : $('#addressBody').find('#address').val(),
+				contact : $('#addressBody').find('#contact').val(),
+				isDefault : isDefault
+		    }
+		    
+			$.ajax({
+				url : '${contextPath}/mypage/manageAddress/addAddress',
+				type : 'POST',
+				data : JSON.stringify(data),
+				contentType : 'application/json; charset=utf-8;',
+				beforeSend : function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
+		        success:function(result) {
+		        	var url = "${contextPath}/order/"
+		        	if(result==1) {
+		        		alert('배송지 추가 완료');
+		        		location.reload();
+		        	} else {
+						alert('입력이 올바르지 않습니다.');
+					}
+		        }
+			});
+		});
+			// 배송지 등록 이벤트
+			$('.address-list-box')
+					.click(
+							function() {
+								if ($(".tbody-on").css(
+										'display') == 'none') {
+									$(".no-show-first")
+											.hide();
+									$('.tbody-on').show();
+								}
 
-		if (arrNumber.length > 1)
-			strFormatNum = strFormatNum + "." + arrNumber[1];
+								var name = $(this)
+										.find(
+												'.delivery-address-name')
+										.text();
+								var addressNickName = $(
+										this)
+										.find(
+												'.delivery-address-nickname')
+										.text();
+								var addressAlias = $(this)
+										.find(
+												'.delivery-address-alias')
+										.text();
+								var addressPer = $(this)
+										.find(
+												'.delivery-address-per')
+										.text();
+								var phonenumber = $(this)
+										.find(
+												'.delivery-phone-num-td')
+										.text();
 
-		if (minusFlag)
-			strFormatNum = '-' + strFormatNum;
+								if (addressAlias == "") {
+									console
+											.log("기본배송지가 아님");
+									$('#addressAlias')
+											.hide();
+								} else {
+									console
+											.log(addressAlias);
+									$('#addressAlias')
+											.show();
+								}
 
-		return strFormatNum;
-	}
+								$('#name').text(name);
+								$('#addressNickName').text(
+										addressNickName);
+								$('#addressName').text(
+										addressPer);
+								$('#phonenumber').text(
+										phonenumber);
+
+								$('#myModal').modal('hide');
+							});
+	});
 </script>
+
 <div class="container">
 	<!-- 바디 전체-->
 	<div class="cbody">
@@ -208,8 +140,7 @@
 							</li>
 							<li>
 								<div class="total">
-									<span class="tit">최종 결제금액</span> <span class="txt"
-										id="lastStlAmtDd"><strong>146,960</strong>원</span>
+									<span class="tit">최종 결제금액</span> <span class="txt" id="lastStlAmtDd"><strong>146,960</strong>원</span>
 								</div>
 							</li>
 							<li>
@@ -238,24 +169,16 @@
 							</ol>
 						</div>
 						<div class="cart-bottom">
-							<span> ${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> 적립금: <span>
-								100000 </span>
+							<span> ${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> 적립금: <span> 100000 </span>
 						</div>
 					</div>
 
 					<div class="accordion accordion-flush">
 						<div class="accordion-item">
-							<h3 class="accordion-header order-products"
-								id="panelsStayOpen-headingOne">
-								<button class="accordion-button" type="button"
-									data-bs-toggle="collapse"
-									data-bs-target="#panelsStayOpen-collapseOne"
-									aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-									주문 상품정보</button>
+							<h3 class="accordion-header order-products" id="panelsStayOpen-headingOne">
+								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">주문 상품정보</button>
 							</h3>
-							<div id="panelsStayOpen-collapseOne"
-								class="accordion-collapse collapse show"
-								aria-labelledby="panelsStayOpen-headingOne">
+							<div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
 								<div class="accordion-body">
 									<table class="table table-bordered border-white" id="nrmProd">
 										<thead>
@@ -267,44 +190,44 @@
 												<th scope="col" id="th-total-price">합계</th>
 											</tr>
 											<c:forEach var="i" items="${list }" begin="0" step="1" varStatus="status">
-											<tr class="order-product">
-												<td class="order-product_box">
-													<div class="product-image">
-														<a href="이동할 링크" class="moveProduct"> 
-														<img src="${i.prodImgUrl }" width="78" height="78" class="product-img" alt="">
-														</a>
-													</div>
-													<div class="product-name">
-														<a href="이동할 링크" class="moveProduct">${i.parentProductName }</a>
-													</div>
-													<div class="product-option">
-														<span class="product-option-name"> 옵션:
-															${i.productName } </span>
-													</div>
-												</td>
-												<td class="cart-product-count">
-													<div class="cart-count">
-														<span class="c" readonly name="ordQty">${i.cartAmount }</span>
-													</div>
-												</td>
-												<td class="cart-price">
-													<div class="cart-product-price">
-														<span>상품가격 ${dtoList[status.index].nrmOriPrc }</span>원
-													</div>
-												</td>
-												<td class="cart-discount">
-													<div class="cart-product-discount">
-														<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
-														<em>${dtoList[status.index].disOriPrc }</em>원
-													</div>
-												</td>
-												<td class="cart-total">
-													<div class="cart-total-price">
-														<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
-														<span>${dtoList[status.index].totOriPrc }</span>원
-													</div>
-												</td>
-											</tr>
+												<tr class="order-product">
+													<td class="order-product_box">
+														<div class="product-image">
+															<a href="이동할 링크" class="moveProduct">
+																<img src="${i.prodImgUrl }" width="78" height="78" class="product-img" alt="">
+															</a>
+														</div>
+														<div class="product-name">
+															<a href="이동할 링크" class="moveProduct">${i.parentProductName }</a>
+														</div>
+														<div class="product-option">
+															<span class="product-option-name"> 옵션: ${i.productName } </span>
+														</div>
+													</td>
+													<td class="cart-product-count">
+														<div class="cart-count">
+															<span class="c" readonly name="ordQty">${i.cartAmount }</span>
+														</div>
+													</td>
+													<td class="cart-price">
+														<div class="cart-product-price">
+															<c:set var="proPrice" value="${dtoList[status.index].nrmOriPrc * dtoList[status.index].ordQty}"></c:set>
+															<em><fmt:formatNumber value="${proPrice}" type="currency" currencySymbol="" /></em>원
+														</div>
+													</td>
+													<td class="cart-discount">
+														<div class="cart-product-discount">
+															<c:set var="disPrice" value="${dtoList[status.index].disOriPrc * dtoList[status.index].ordQty}"></c:set>
+															<em><fmt:formatNumber value="${disPrice}" type="currency" currencySymbol="" /></em>원
+														</div>
+													</td>
+													<td class="cart-total">
+														<div class="cart-total-price">
+															<c:set var="totPrice" value="${dtoList[status.index].totOriPrc * dtoList[status.index].ordQty}"></c:set>
+															<em><fmt:formatNumber value="${totPrice}" type="currency" currencySymbol="" /></em>원
+														</div>
+													</td>
+												</tr>
 											</c:forEach>
 										</thead>
 									</table>
@@ -312,63 +235,186 @@
 							</div>
 						</div>
 						<div class="accordion-item">
-							<h3 class="accordion-header discount-info"
-								id="panelsStayOpen-headingTwo">
-								<button class="accordion-button" type="button"
-									data-bs-toggle="collapse"
-									data-bs-target="#panelsStayOpen-collapseTwo"
-									aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">
-									할인 혜택 선택</button>
+							<h3 class="accordion-header discount-info" id="panelsStayOpen-headingTwo">
+								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">할인 혜택 선택</button>
 							</h3>
-							<div id="panelsStayOpen-collapseTwo"
-								class="accordion-collapse collapse show"
-								aria-labelledby="panelsStayOpen-headingTwo">
+							<div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
 								<div class="accordion-body">
-									<table>
-										<tr>
-											<td class="cart-price">
-												<div class="cart-product-price">아아아아아아</div>
-											</td>
-										</tr>
-									</table>
+									<div class="coupon-point">
+										<div class="row">
+											<div class="col-md-4">쿠폰 할인</div>
+											<div class="col-md-2 dis-coupon">0원</div>
+											<div class="col-md-4"><button class="btn btn-dark">쿠폰 조회 및 적용</button></div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">적립금</div>
+											<div class="col-md-2">0원</div>
+											<div class="col-md-4"><button class="btn btn-dark">사용하기</button><button class="btn btn-dark">사용취소</button></div>
+											<div class="col-md-2">[보유 적립금: 0]</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 						<div class="accordion-item">
-							<h3 class="accordion-header member-info"
-								id="panelsStayOpen-headingThree">
-								<button class="accordion-button" type="button"
-									data-bs-toggle="collapse"
-									data-bs-target="#panelsStayOpen-collapseThree"
-									aria-expanded="true"
-									aria-controls="panelsStayOpen-collapseThree">주문고객 /
-									배송지 정보 입력</button>
+							<h3 class="accordion-header member-info" id="panelsStayOpen-headingThree">
+								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="true" aria-controls="panelsStayOpen-collapseThree">받는사람정보</button>
 							</h3>
-							<div id="panelsStayOpen-collapseThree"
-								class="accordion-collapse collapse show"
-								aria-labelledby="panelsStayOpen-headingThree">
-								<div class="accordion-body">
-									<table>
-										<tr>
-											<td class="cart-price">
-												<div class="cart-product-price">아아아아아아</div>
-											</td>
-										</tr>
+							<!-- 회원가입 확인 Modal-->
+							<!-- Modal -->
+							<div class="modal fade" id="myModal" aria-labelledby="ModalLabel1" tabindex="-1">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="ModalLabel1">배송지 선택</h4>
+											<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<div class="delivery-All-address">
+												<c:forEach var="i" items="${addressList }" begin="0" step="1" varStatus="status">
+													<div class="address-list-box">
+														<div class="row">
+															<div class="col-md-4 delivery-address-th">이름</div>
+															<div class="col-md-4 delivery-address-td">
+																<span class="delivery-address-name">${i.recipient }</span>
+															</div>
+															<c:if test="${i.isDefault == 1}">
+																<div class="col-md-4">
+																	<span class="delivery-address-alias">기본배송지</span>
+																</div>
+															</c:if>
+														</div>
+														<div class="row">
+															<div class="col-md-4 delivery-address-th">배송지이름</div>
+															<div class="col-md-8 delivery-address-td">
+																<span class="delivery-address-nickname">${i.nickName }</span>
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-md-4 delivery-address-th">배송주소</div>
+															<div class="col-md-8 delivery-address-td delivery-address-per">${i.address }</div>
+														</div>
+														<div class="row">
+															<div class="col-md-4 delivery-address-th delivery-phone-num-th">연락처</div>
+															<div class="col-md-8 delivery-address-td delivery-phone-num-td">${i.contact }</div>
+														</div>
+													</div>
+												</c:forEach>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button class="btn btn-secondary" data-bs-target="#deliveryAddressModal" data-bs-toggle="modal" data-bs-dismiss="modal">배송지 추가</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="modal fade" id="deliveryAddressModal" tabindex="-1">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">
+												<b>배송지 등록</b>
+											</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div id="addressBody" class="modal-body">
+											<form>
+												<div class="mb-1">
+													<label for="nickName" class="col-form-label">배송지 별칭</label>
+													<input type="text" class="form-control" id="nickName">
+												</div>
+												<div class="mb-1">
+													<label for="recipient" class="col-form-label">받는 분</label>
+													<input type="text" class="form-control" id="recipient">
+												</div>
+												<div class="mb-1">
+													<label for="address" class="col-form-label">배송지 주소</label>
+													<input type="text" class="form-control" id="address">
+												</div>
+												<div class="mb-3">
+													<label for="contact" class="col-form-label">연락처</label>
+													<input type="text" class="form-control" id="contact">
+												</div>
+												<div class="">
+													<label for="checkDefault" class="col-form-label">기본 배송지 설정</label>
+													<input type="checkbox" id="isDefault">
+												</div>
+											</form>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-light" data-bs-target="#myModal" data-bs-toggle="modal" data-bs-dismiss="modal">뒤로가기</button>
+											<button type="button" id="addAddressBtn" class="btn btn-dark">확인</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingThree">
+								<div class="accordion-body address-info">
+									<table class="delivery-address">
+										<c:if test="${empty defaultAddress }">
+											<div class="no-show-first">등록된 기본 배송지가 없습니다.</div>
+											<tbody class="tbody-on" style="display: none">
+												<tr>
+													<th class="delivery-address-th">이름</th>
+													<td class="delivery-address-td">
+														<span class="delivery-address-name" id="name"></span>
+													</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th">배송지이름</th>
+													<td class="delivery-address-td">
+														<span class="delivery-address-nickname" id="addressNickName"></span>
+													</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th">배송주소</th>
+													<td class="delivery-address-td delivery-address-per" id="addressName"></td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th delivery-phone-num-th">연락처</th>
+													<td class="delivery-address-td delivery-phone-num-td" id="phonenumber"></td>
+												</tr>
+											</tbody>
+										</c:if>
+										<c:if test="${not empty defaultAddress }">
+											<tbody>
+												<tr>
+													<th class="delivery-address-th">이름</th>
+													<td class="delivery-address-td">
+														<span class="delivery-address-name" id="name">${defaultAddress.recipient }</span>
+														<c:if test="${defaultAddress.isDefault == 1}">
+															<span class="delivery-address-alias" id="addressAlias">기본배송지</span>
+														</c:if>
+													</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th">배송지이름</th>
+													<td class="delivery-address-td">
+														<span class="delivery-address-nickname" id="addressNickName">${defaultAddress.nickName }</span>
+													</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th">배송주소</th>
+													<td class="delivery-address-td delivery-address-per" id="addressName">${defaultAddress.address }</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th delivery-phone-num-th">연락처</th>
+													<td class="delivery-address-td delivery-phone-num-td" id="phonenumber">${defaultAddress.contact }</td>
+												</tr>
+											</tbody>
+										</c:if>
 									</table>
 								</div>
 							</div>
+							<button type="button" class="btn text-white btn-change-address" id="btn-change-address" data-bs-toggle="modal" data-bs-target="#myModal">배송지변경</button>
 						</div>
 						<div class="accordion-item">
 							<h3 class="accordion-header pay-info" id="panelsStayOpen-headine">
-								<button class="accordion-button" type="button"
-									data-bs-toggle="collapse"
-									data-bs-target="#panelsStayOpen-collapseFour"
-									aria-expanded="true"
-									aria-controls="panelsStayOpen-collapseFour">결제 정보 선택</button>
+								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="true" aria-controls="panelsStayOpen-collapseFour">결제 정보 선택</button>
 							</h3>
-							<div id="panelsStayOpen-collapseFour"
-								class="accordion-collapse collapse show"
-								aria-labelledby="panelsStayOpen-headingFour">
+							<div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingFour">
 								<div class="accordion-body">
 									<table>
 										<tr>

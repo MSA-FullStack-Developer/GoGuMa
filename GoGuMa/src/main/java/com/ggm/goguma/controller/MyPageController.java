@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.service.MyPageService;
+import com.ggm.goguma.service.product.CategoryService;
 
 import lombok.extern.log4j.Log4j;
 
@@ -25,21 +27,28 @@ public class MyPageController {
 	@Autowired
 	private MyPageService service;
 	
+	@Autowired
+	private CategoryService categoryService;
+	
 	@RequestMapping(value="", method=RequestMethod.GET)
-	public String getMainPage() {
+	public String getMainPage(Model model) throws Exception {
 		log.info("페이지 접근 테스트");
+		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+		model.addAttribute("parentCategory", parentCategory);
 		return "mypage/main";
 	}
 	
 	@RequestMapping(value="/manageAddress", method=RequestMethod.GET)
 	public String getAddressList(Model model) {
 		try {
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			DeliveryAddressDTO defaultAddress = service.getDefaultAddress(1);
 			log.info(defaultAddress);
 			List<DeliveryAddressDTO> addressList = service.getAddressList(1);
 			for(DeliveryAddressDTO dto : addressList) {
 				log.info(dto);
 			}
+			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("defaultAddress", defaultAddress);
 			model.addAttribute("addressList", addressList);
 		} catch (Exception e) {

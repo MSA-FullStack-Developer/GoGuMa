@@ -24,9 +24,8 @@ public interface ProductMapper {
 	
 	// 상품 옵션 개수
 	public long getOptionCount(long productID) throws Exception;
-	
-	
-	/**
+		
+	/* *
 	 * 작성자 : 이승준
 	 * 작업일 : 22.05.25
 	 * */
@@ -38,5 +37,4 @@ public interface ProductMapper {
 	public List<ProductDTO> getSearchList(@Param("keyword") String keyword, @Param("sortType") String sortType) throws Exception;
 
 	public long getSearchCount(@Param("keyword") String keyword) throws Exception;
-
 }
