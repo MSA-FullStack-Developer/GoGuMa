@@ -47,7 +47,7 @@
                         <h5><b>MY 쇼핑</b></h5>
                     </div>
                     <div>
-                        주문내역
+                        <a href="${contextPath}/mypage/orderHistory">주문내역</a>
                     </div>
                 </div>
                 <div class="col mb-4">
@@ -93,7 +93,7 @@
                 <div class="col">
                     <h5><b>👨‍💻 송진호님</b></h5>
                 </div>
-                <div class="d-flex flex-row justify-content-evenly border rounded mb-2">
+                <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-2">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
                             회원등급

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ggm.goguma.dto.DeliveryAddressDTO;
+import com.ggm.goguma.dto.PointDTO;
+import com.ggm.goguma.dto.ReceiptDTO;
 import com.ggm.goguma.service.MyPageService;
 
 import lombok.extern.log4j.Log4j;
@@ -29,6 +31,48 @@ public class MyPageController {
 	public String getMainPage() {
 		log.info("페이지 접근 테스트");
 		return "mypage/main";
+	}
+	
+	@RequestMapping(value="/orderHistory", method=RequestMethod.GET)
+	public String getOrderHistory(Model model) {
+		try {
+			List<ReceiptDTO> receiptHistory = service.getReceiptHistory(1); // 회원ID로 결제정보DTO를 모두 불러오기
+			for(ReceiptDTO dto : receiptHistory) {
+				log.info(dto);
+			}
+			model.addAttribute("receiptHistory", receiptHistory);
+		} catch(Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/orderHistory";
+	}
+	
+	@RequestMapping(value="/orderHistory/{receiptId}", method=RequestMethod.GET)
+	public String getOrderDetail(@PathVariable("receiptId") long receiptId, Model model) {
+		try {
+			ReceiptDTO receiptDTO = service.getReceiptDetail(receiptId); // 결제상세 가져오기
+			PointDTO pointDTO = service.getEarnedPoint(receiptId);
+			model.addAttribute("receiptDTO", receiptDTO);
+			model.addAttribute("pointDTO", pointDTO);
+			log.info(receiptDTO);
+			log.info(pointDTO);
+		} catch (Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/orderDetail";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/orderHistory/updateOrderStatus", method=RequestMethod.POST)
+	public String updateOrderStatus(@RequestParam("orderId") long orderId, @RequestParam("status") String status) {
+		try {
+			log.info(orderId+" "+status);
+			service.updateOrderStatus(orderId, status);
+		} catch (Exception e) {
+			log.info(e.getMessage());
+			return "2";
+		}
+		return "1";
 	}
 	
 	@RequestMapping(value="/manageAddress", method=RequestMethod.GET)
