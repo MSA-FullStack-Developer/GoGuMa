@@ -7,17 +7,16 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
+import com.ggm.goguma.dto.PointDTO;
+import com.ggm.goguma.dto.ReceiptDTO;
 import com.ggm.goguma.service.MyPageService;
-import com.ggm.goguma.service.product.CategoryService;
 
 import lombok.extern.log4j.Log4j;
 
@@ -28,28 +27,63 @@ public class MyPageController {
 	@Autowired
 	private MyPageService service;
 	
-	@Autowired
-	private CategoryService categoryService;
-	
 	@RequestMapping(value="", method=RequestMethod.GET)
-	public String getMainPage(Model model) throws Exception {
+	public String getMainPage() {
 		log.info("페이지 접근 테스트");
-		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-		model.addAttribute("parentCategory", parentCategory);
 		return "mypage/main";
+	}
+	
+	@RequestMapping(value="/orderHistory", method=RequestMethod.GET)
+	public String getOrderHistory(Model model) {
+		try {
+			List<ReceiptDTO> receiptHistory = service.getReceiptHistory(1); // 회원ID로 결제정보DTO를 모두 불러오기
+			for(ReceiptDTO dto : receiptHistory) {
+				log.info(dto);
+			}
+			model.addAttribute("receiptHistory", receiptHistory);
+		} catch(Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/orderHistory";
+	}
+	
+	@RequestMapping(value="/orderHistory/{receiptId}", method=RequestMethod.GET)
+	public String getOrderDetail(@PathVariable("receiptId") long receiptId, Model model) {
+		try {
+			ReceiptDTO receiptDTO = service.getReceiptDetail(receiptId); // 결제상세 가져오기
+			PointDTO pointDTO = service.getEarnedPoint(receiptId);
+			model.addAttribute("receiptDTO", receiptDTO);
+			model.addAttribute("pointDTO", pointDTO);
+			log.info(receiptDTO);
+			log.info(pointDTO);
+		} catch (Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/orderDetail";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/orderHistory/updateOrderStatus", method=RequestMethod.POST)
+	public String updateOrderStatus(@RequestParam("orderId") long orderId, @RequestParam("status") String status) {
+		try {
+			log.info(orderId+" "+status);
+			service.updateOrderStatus(orderId, status);
+		} catch (Exception e) {
+			log.info(e.getMessage());
+			return "2";
+		}
+		return "1";
 	}
 	
 	@RequestMapping(value="/manageAddress", method=RequestMethod.GET)
 	public String getAddressList(Model model) {
 		try {
-			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			DeliveryAddressDTO defaultAddress = service.getDefaultAddress(1);
 			log.info(defaultAddress);
 			List<DeliveryAddressDTO> addressList = service.getAddressList(1);
 			for(DeliveryAddressDTO dto : addressList) {
 				log.info(dto);
 			}
-			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("defaultAddress", defaultAddress);
 			model.addAttribute("addressList", addressList);
 		} catch (Exception e) {
@@ -125,5 +159,4 @@ public class MyPageController {
 		}
 		return "1";
 	}
-	
 }
