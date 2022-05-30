@@ -2,17 +2,22 @@ package com.ggm.goguma.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.ProductDTO;
 import com.ggm.goguma.dto.ReviewDTO;
+import com.ggm.goguma.dto.member.MemberDTO;
+import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.product.CategoryService;
 import com.ggm.goguma.service.product.ProductService;
 import com.ggm.goguma.service.product.ReviewService;
@@ -31,7 +36,9 @@ public class ProductController {
 	private final CategoryService categoryService;
 	
 	private final ReviewService reviewService;
-
+	
+	private final MemberService memberService;
+	
 	private long pageSize  = 12; 
 	private long blockSize = 10;
 	
@@ -75,10 +82,11 @@ public class ProductController {
 	}
 	
 	@GetMapping("/{categoryID}/detail/{productID}")
-	public String detail(@PathVariable long categoryID, @PathVariable long productID, Model model) throws Exception {
+	public String detail(@PathVariable long categoryID, @PathVariable long productID, Model model, Authentication authentication) throws Exception {
 		try {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 
+			// 상품 상세 정보 불러오기
 			String categoryName = categoryService.getCategoryName(categoryID); // 카테고리 이름
 			ProductDTO productInfo = productService.getProductInfo(productID); // 상품 정보
 			List<ProductDTO> optionList = productService.getOptionList(productID); // 상품 옵션 목록
@@ -88,6 +96,24 @@ public class ProductController {
 			List<ReviewDTO> reviewList = reviewService.getReviewList(productID);
 			log.info(reviewList);
 			
+			// 상품평을 작성할 수 있는 조건 (= 상품평 쓰기 버튼이 보이는 조건)
+			// 1. 사용자가 권한이 있고,		
+			// 2. 해당 상품을 '구매확정'한 경우
+			// 2. 이전에 해당 상품의 상품평을 작성한 적이 없는 경우
+			boolean showWriteBtn = false;
+			Integer orderProductID = null; // 상품이 '구매확정'이면 구매확정한 상품의 ID를 저장
+			if (authentication != null) {
+				UserDetails user = (UserDetails) authentication.getPrincipal();
+				MemberDTO memberDTO = memberService.getMember(user.getUsername());
+				model.addAttribute("memberDTO", memberDTO);
+				long isWrittened = reviewService.isExistReview(productID, memberDTO.getId());
+				orderProductID = reviewService.isFinishRcpt(productID, memberDTO.getId());
+				
+				if (isWrittened < 1 && orderProductID != null) {
+					showWriteBtn = true; // 상품평 작성 가능
+				}
+			}
+	
 			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("categoryID", categoryID);
 			model.addAttribute("categoryName", categoryName);
@@ -95,6 +121,8 @@ public class ProductController {
 			model.addAttribute("optionList", optionList);
 			model.addAttribute("optionCount", optionCount);
 			model.addAttribute("reviewList", reviewList);
+			model.addAttribute("orderProductID", orderProductID);
+			model.addAttribute("showWriteBtn", showWriteBtn);
 			
 			return "product";
 		} catch (Exception e) {
@@ -123,6 +151,39 @@ public class ProductController {
 		} catch (Exception e) {
 			model.addAttribute("msg", "list 출력 에러");
 			return "list";
+		}
+	}
+	
+	// 상품평 작성
+	@PostMapping("/insertReview")
+	@ResponseBody
+	public Boolean insertReview(@RequestParam("productID") long productID, @RequestParam("memberID") long memberID, @RequestParam("content") String content, Authentication authentication) throws Exception{
+		try {
+			if (authentication != null) {
+				reviewService.insertReview(productID, memberID, content);
+				return true;
+			}
+			
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	// 상품평 삭제
+	@PostMapping("/deleteReview")
+	@ResponseBody
+	public Boolean deleteReview(@RequestParam("reviewID") long reviewID, Authentication authentication) throws Exception {
+		try {
+			if(authentication != null) {
+				reviewService.deleteReview(reviewID);	
+				return true;
+			}
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
 		}
 	}
 	

@@ -32,7 +32,6 @@
         }
     </script>
 </head>
-
 <body>
 	<%@ include file="header.jsp" %>
 	
@@ -48,7 +47,7 @@
 
 		<c:if test="${recordCount != 0}">
 	        <p class="h4Class">
-	        	총 <span style="color: #FF493C;">${recordCount}</span>개
+	        	총 <span style="color: #FF493C;"><b>${recordCount}</b></span>개
 		        <select class="select-sortType" name="sortType" onchange="javascript:sortList(this.options[this.selectedIndex].value);"
 		        	style="width: auto; margin-right: 15px; float: right; padding-right: 15px">
 		        	<option value="recent" <c:if test="${sortType eq 'recent'}">selected</c:if>>최신순</option>
@@ -97,5 +96,4 @@
     </div>
      <%@ include file="./footer.jsp" %>
 </body>
-
 </html>

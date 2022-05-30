@@ -3,13 +3,52 @@
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ggm.goguma.mapper.ReviewMapper">
 
+	<!-- 상품평 목록 -->
 	<select id="getReviewList" parameterType="long" resultType="com.ggm.goguma.dto.ReviewDTO">
 		SELECT A.name, A.reviewid, B.productname, A.productid, B.parentpid AS parentid, A.content, A.createdate
         FROM (SELECT m.name, r.reviewid, r.productid, r.content, r.createdate
-                FROM REVIEW r, MEMBER m
+                FROM review r, member m
                 WHERE r.memberid = m.memberid) A, product B
         WHERE B.productid = A.productid
-        AND B.parentpid = #{parentPID}
+        AND B.parentpid = #{productID}
+        ORDER BY A.createdate DESC
 	</select>
+	
+	<!-- 회원이 상품의 상품평을 작성한 적이 있는지 확인
+		 'resultType < 1' 인 경우 상품평 작성 가능 -->
+	<select id="isExistReview" resultType="long">
+		SELECT COUNT(*) AS cnt
+        FROM (SELECT r.productid, m.memberid
+                FROM review r, member m
+                WHERE r.memberid = m.memberid) A, product B
+        WHERE B.productid = A.productid
+        AND B.parentpid = #{productID}
+        AND A.memberid = #{memberID}
+	</select>
+	
+	<!-- 회원이 상품을 구매 확정한 상태인지 확인
+		 'resultType != null' 인 경우 상품평 작성 가능 -->
+	<select id="isFinishRcpt" resultType="Integer">
+		SELECT A.productid AS productid
+		FROM (SELECT o.orderstatus, p.parentpid, o.receiptid, o.productid
+			    FROM orderdetail o, product p
+			    WHERE p.productid = o.productid
+			    AND o.orderstatus = 'F'
+			    AND p.parentpid = #{productID}) A, receipt B
+		WHERE A.receiptid = B.receiptid
+		AND B.memberid = #{memberID}
+	</select>
+	
+	<!-- 상품평 작성 -->
+	<insert id="insertReview">
+		INSERT INTO review(productid, memberid, content)
+		VALUES (#{productID}, #{memberID}, #{content})
+	</insert>
+	
+	<!-- 상품평 삭제 -->
+	<delete id="deleteReview" parameterType="long">
+		DELETE FROM review
+		WHERE reviewid = #{reviewID}
+	</delete>
 
 </mapper>
