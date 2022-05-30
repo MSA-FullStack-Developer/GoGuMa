@@ -3,39 +3,11 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ggm.goguma.mapper.MyPageMapper">
-	<select id="getReceiptList" resultType="ReceiptDTO">
-		select receiptid, orderdate, memberid
-		from receipt where memberid = #{memberId}
-		order by orderdate desc
-	</select>
-
-	<select id="getOrderList" resultType="OrderDTO">
-		select orderid, name, price, image, count, status, receiptid
-		from orderview where receiptId = #{receiptId}
-		order by name
-	</select>
-	
-	<select id="getReceiptDetail" resultType="ReceiptDTO">
-		select receiptid, recipient, rcptcontact, rcptaddress, rcptnickname, requirement,
-		originalprice, membershipdiscount, coupondiscount, usagepoint, totalprice, orderdate, memberid
-		from receipt where receiptid = #{receiptId}
-	</select>
-	
-	<select id="getEarnedPoint" resultType="PointDTO">
-		select pointeventid, pointtype, pointvalue, pointcreateddate, orderid, receiptid
-		from pointevent where receiptid = #{receiptId} and pointtype = 'plus'
-	</select>
-	
-	<update id="updateOrderStatus">
-		update orderdetail set orderstatus = #{status} where orderid = #{orderId}
-	</update>
-
 	<select id="getAddressList" resultType="DeliveryAddressDTO">
 		select addressId, nickname, recipient, address, contact, isdefault
 		from deliveryaddress where memberId = #{memberId}
 		order by addressId
 	</select>
-	
 	<select id="getDefaultAddress" resultType="DeliveryAddressDTO">
 		select addressId, nickname, recipient, address, contact
 		from deliveryaddress
