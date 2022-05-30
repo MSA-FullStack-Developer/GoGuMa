@@ -41,14 +41,14 @@
 	
 		<!-- 사용자 포인트를 조회한다. -->
 	<select id="getMemberPoint" resultType="int">
-		SELECT (SELECT sum(pointvalue)
+		SELECT NVL((SELECT sum(pointvalue)
 				FROM pointevent
 				WHERE memberid= #{memberId}
 				GROUP BY pointtype
 				having pointtype='plus') - (SELECT sum(pointvalue)
 				                            FROM pointevent
 				                            GROUP BY pointtype
-				                            having pointtype='minus') AS point
+				                            having pointtype='minus'),0) AS point
 		FROM dual
 	</select>
 	

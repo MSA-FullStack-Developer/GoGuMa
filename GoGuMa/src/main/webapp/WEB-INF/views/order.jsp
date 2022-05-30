@@ -40,7 +40,9 @@
   });
 
   $(document).ready(function() {
-
+	
+    console.log($('.pProductName').text());
+    
     //총 판매 금액, 총 멤버십 할인
     var total = $('#total').val();
     $('#total-price').text(numFormatComma(total));
@@ -74,7 +76,7 @@
             str += "<div class='col-md-4 coupon-benefit-th'>-<span class='coupon-benefit'>" + result[i].benefit + "</span>원</div>";
             str += "<div>";
             str += "<div class='row'>";
-            str += "<div class='col-md-12 coupon-expiration-th'><span class='coupon-expiration'> 날짜 형식" + result[i].expiration + "</span></div>";
+            str += "<div class='col-md-12 coupon-expiration-th'><span class='coupon-expiration'> 유효기간 ~" + result[i].expiration + "</span></div>";
             str += "<div>";
             str += "<div>";
             $('#coupon-all').append(str);
@@ -179,37 +181,50 @@
 
     });
   });
-   
+
 	//결제
 	function iamport(){
 		//가맹점 식별코드
 		IMP.init('imp37623879');
 		IMP.request_pay({
-		    pg : 'html5_inicis',
+		    pg : 'kakaopay',
 		    pay_method : 'card',
 		    merchant_uid : 'merchant_' + new Date().getTime(),
-		    name : '상품1' , //결제창에서 보여질 이름
-		    amount : 100, //실제 결제되는 가격
-		    buyer_email : 'iamport@siot.do',
-		    buyer_name : '구매자이름',
-		    buyer_tel : '010-1234-5678',
-		    buyer_addr : '서울 강남구 도곡동',
+		    name : $('.pProductName').text(), //결제창에서 보여질 이름
+		    amount : $('#lastStlAmtDd').text(), //실제 결제되는 가격
+		    buyer_email : "${memberDTO.email}",
+		    buyer_name : $('#name').text(),
+		    buyer_tel : $('#phonenumber').text(),
+		    buyer_addr : $('#addressName').text(),
 		    buyer_postcode : '123-456'
 		}, function(rsp) {
-			console.log(rsp);
-		    if ( rsp.success ) {
-		    	var msg = '결제가 완료되었습니다.';
+			  console.log("결제 완료 후 로그 : " + rsp);
+		      //아임포트 검증절차
+		      var token = $("meta[name='_csrf']").attr("content");
+			  var header = $("meta[name='_csrf_header']").attr("content");
+			  
+		      $.ajax({
+		        type: "POST",
+		        url: "${contextPath}/order/api/verifyIamport/" + rsp.imp_uid,
+		        beforeSend : function(xhr) {
+							xhr.setRequestHeader(header,token);
+						}
+		      }).done(function(data){
+		        console.log("done Data : " + data);
+		        if(rsp.paid_amount == data.response.amount){
+		        	alert("결제 및 결제검증완료");
+	        	} else {
+	        		alert("결제 실패");
+	        	}
+		        /* var msg = '결제가 완료되었습니다.';
 		        msg += '고유ID : ' + rsp.imp_uid;
 		        msg += '상점 거래ID : ' + rsp.merchant_uid;
 		        msg += '결제 수단 : ' + rsp.pay_method;
 		        msg += '결제 금액 : ' + rsp.paid_amount;
-		        msg += '주문 명 : ' + rsp.name;
 		        msg += '카드 승인번호 : ' + rsp.apply_num;
-		    } else {
-		    	 var msg = '결제에 실패하였습니다.';
-		         msg += '에러내용 : ' + rsp.error_msg;
-		    }
-		    alert(msg);
+		        alert(msg); */
+		      });
+		    
 		});
 	}/* 
 	function chkPoint(){
@@ -367,7 +382,7 @@
 															</a>
 														</div>
 														<div class="product-name">
-															<a href="이동할 링크" class="moveProduct">${i.parentProductName }</a>
+															<a href="이동할 링크" class="pProductName">${i.parentProductName }</a>
 														</div>
 														<div class="product-option">
 															<span class="product-option-name"> 옵션: ${i.productName } </span>

@@ -33,10 +33,10 @@
 			couponname,
 			benefit,
 			restriction,
-			expiration
+			to_char(expiration, 'yyyy-mm-dd') AS expiration
 		FROM 
 			membercouponinfo
 		WHERE
-			memberid = #{memberId} and used = 0
+			memberid = #{memberId} and used = 0 and expiration > sysdate
 	</select>
 </mapper>

@@ -13,6 +13,6 @@ public class MemberCouponOrderDTO {
 	private String couponName;
 	private int benefit;
 	private int restriction;
-	private Date expiration;
+	private String expiration;
 	
 }
