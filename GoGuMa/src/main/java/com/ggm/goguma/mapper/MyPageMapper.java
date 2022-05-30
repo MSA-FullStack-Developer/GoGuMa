@@ -24,4 +24,6 @@ public interface MyPageMapper {
 
 	void cancelDefault(@Param("memberId") long memberId) throws Exception;
 
+	int getMemberPoint(@Param("memberId") long memberId) throws Exception;
+
 }

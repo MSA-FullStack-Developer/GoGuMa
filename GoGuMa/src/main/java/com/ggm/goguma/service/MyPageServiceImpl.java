@@ -50,4 +50,9 @@ public class MyPageServiceImpl implements MyPageService {
 	public void cancelDefault(long memberId) throws Exception {
 		mapper.cancelDefault(memberId);
 	}
+
+	@Override
+	public int getMemberPoint(long memberId) throws Exception {
+		return mapper.getMemberPoint(memberId);
+	}
 }

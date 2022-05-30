@@ -19,4 +19,5 @@ public interface MemberService {
 	void createMember(CreateMemberDTO member) throws CreateMemberFailException;
 	
 	void updateMemberPassword(MemberDTO member);
+
 }

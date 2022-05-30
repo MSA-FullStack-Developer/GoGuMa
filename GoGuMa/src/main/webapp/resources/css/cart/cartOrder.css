@@ -305,7 +305,6 @@ ul, ol, menu, li {
 	height: 50px;
 	margin: 0 auto;
 	border-radius: 5px;
-	background: #6426DD;
 }
 .all-select-event{
 	text-align: center;
@@ -360,9 +359,6 @@ ul, ol, menu, li {
 }
 .btn-purchase{
 	margin-bottom: 20px;
-	background-color: #6426D0;
-}
-.purchase{
 	background-color: #6426D0;
 }
 .continue{
@@ -420,6 +416,7 @@ ul, ol, menu, li {
   vertical-align:middle;/*체크 전과 체크 후 높이 차이 때문에 설정*/
   border-radius: 50%;
   background-color:#FFFFFF;
+  cursor: pointer;
 }
 
 .all-select-event input[type="checkbox"]:checked + label:before, .product-select-event input[type="checkbox"]:checked + label:before{
@@ -544,8 +541,11 @@ ul, ol, menu, li {
     font-size: 17px;
     letter-spacing: -0.6px;
 }
-.btn-default span {
-    color: #fff;
+.btn-default {
+    background-color: #6426DD;
+}
+.btn-default:hover {
+    background-color: #FF493C;
 }
 .btn.medium span {
     font-size: 16px;
@@ -566,11 +566,11 @@ ul, ol, menu, li {
 .btn-change-address:hover{
 	background-color: #FF493C ;
 }
-.address-list-box{
+.address-list-box, .coupon-list-box{
 	padding: 10px;
     margin: 10px;
     border: #F3F3F3 1px solid;
-}.address-list-box:hover {
+}.address-list-box:hover, .coupon-list-box:hover{
 	border: #FF493C 2px solid;
 	border-radius: 5px;
 }
