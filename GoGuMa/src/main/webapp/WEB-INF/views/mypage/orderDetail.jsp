@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="totalDiscount" value="${receiptDTO.membershipDiscount + receiptDTO.couponDiscount + receiptDTO.usagePoint}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -161,7 +162,8 @@
 	                                    <td class="border-end">
 	                                        <div class="col" align="center">
 	                                            <div>
-	                                            	${orderDTO.price}원
+	                                            	<c:set var="orderPrice" value="${orderDTO.price * orderDTO.count}" />
+	                                            	<fmt:formatNumber value="${orderPrice}" />원
 	                                            </div>
 	                                            <div>
 	                                                (${orderDTO.count}개)
@@ -211,19 +213,19 @@
                     <tbody class="table-group-divider">
                         <tr>
                             <th>배송지 별칭</th>
-                            <td>${addressDTO.nickName}</td>
+                            <td>${receiptDTO.rcptNickname}</td>
                         </tr>
                         <tr>
                             <th>수령인</th>
-                            <td>${addressDTO.recipient}</td>
+                            <td>${receiptDTO.recipient}</td>
                         </tr>
                         <tr>
                             <th>연락처</th>
-                            <td>${addressDTO.contact}</td>
+                            <td>${receiptDTO.rcptContact}</td>
                         </tr>
                         <tr>
                             <th>배송지 주소</th>
-                            <td>${addressDTO.address}</td>
+                            <td>${receiptDTO.rcptAddress}</td>
                         </tr>
                         <tr>
                             <th>배송시 요청사항</th>
@@ -238,20 +240,19 @@
                     <tbody class="table-group-divider">
                         <tr>
                             <th>멤버십 등급 할인</th>
-                            <td>-10,000원</td>                           
+                            <td>-<fmt:formatNumber value="${receiptDTO.membershipDiscount}" />원</td>                           
                         </tr>
                          <tr>
-                            <th>포인트 할인</th>
-                            <td>-1,100원</td>
+                            <th>쿠폰 할인</th>
+                            <td>-<fmt:formatNumber value="${receiptDTO.couponDiscount}" />원</td>
                         </tr>
                         <tr>
-                            <th>쿠폰 할인</th>
-                            <td>-5.000원</td>
+                            <th>포인트 할인</th>
+                            <td>-<fmt:formatNumber value="${receiptDTO.usagePoint}" />원</td>
                         </tr>
-
                         <tr>
                             <th>할인 합계</th>
-                            <td><b>-16,000원</b></td>
+                            <td><b>-<fmt:formatNumber value="${totalDiscount}" />원</b></td>
                         </tr>
                     </tbody>
                 </table>
@@ -262,19 +263,19 @@
                     <tbody class="table-group-divider">
                         <tr>
                             <th>상품 합계</th>
-                            <td>22,600원</td>                           
+                            <td><fmt:formatNumber value="${receiptDTO.originalPrice}" />원</td>                           
                         </tr>
                         <tr>
                             <th>할인 합계</th>
-                            <td>-16,000원</td>
+                            <td>-<fmt:formatNumber value="${totalDiscount}" />원</td>
                         </tr>
                         <tr>
                             <th>예상 적립 포인트</th>
-                            <td>122P</td>
+                            <td>+<fmt:formatNumber value="${pointDTO.pointValue}" />P</td>
                         </tr>
                         <tr>
                             <th>최종 결제금액</th>
-                            <td><b>16,600원</b></td>
+                            <td><b><fmt:formatNumber value="${receiptDTO.totalPrice}" />원</b></td>
                         </tr>
                         <tr>
                             <th>결제수단</th>
