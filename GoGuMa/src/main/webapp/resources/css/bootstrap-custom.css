@@ -1,0 +1,6 @@
+@charset "UTF-8";
+
+.container {
+	width: 1320px;
+	max-width: none !important;
+}
