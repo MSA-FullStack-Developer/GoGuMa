@@ -14,7 +14,7 @@ public interface ReviewMapper {
 	long isExistReview(@Param("productID") long productID, @Param("memberID") long memberID) throws Exception;
 
 	// 상품평 등록
-	void insertReview(@Param("productID") long productID, @Param("memberID") long memberID, @Param("content") String content);
+	void insertReview(ReviewDTO reviewDTO);
 	
 	// 상품평 등록 자격 확인
 	Integer isFinishRcpt(@Param("productID") long productID, @Param("memberID") long memberID) throws Exception;

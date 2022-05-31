@@ -1,19 +1,42 @@
 package com.ggm.goguma.controller;
 
 import java.util.List;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.UUID;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.ggm.goguma.dto.CategoryDTO;
+import com.ggm.goguma.dto.ImageAttachDTO;
 import com.ggm.goguma.dto.ProductDTO;
 import com.ggm.goguma.dto.ReviewDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
@@ -24,6 +47,7 @@ import com.ggm.goguma.service.product.ReviewService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import net.coobird.thumbnailator.Thumbnailator;
 
 @Log4j
 @Controller
@@ -38,6 +62,9 @@ public class ProductController {
 	private final ReviewService reviewService;
 	
 	private final MemberService memberService;
+	
+	@Value("${uploadDir}")
+	private String uploadFolder;
 	
 	private long pageSize  = 12; 
 	private long blockSize = 10;
@@ -157,10 +184,16 @@ public class ProductController {
 	// 상품평 작성
 	@PostMapping("/insertReview")
 	@ResponseBody
-	public Boolean insertReview(@RequestParam("productID") long productID, @RequestParam("memberID") long memberID, @RequestParam("content") String content, Authentication authentication) throws Exception{
+	public Boolean insertReview(@ModelAttribute ReviewDTO reviewDTO, Authentication authentication) throws Exception{
 		try {
 			if (authentication != null) {
-				reviewService.insertReview(productID, memberID, content);
+				log.info("register : " + reviewDTO.getAttachList());
+				
+				if(reviewDTO.getAttachList() != null) {
+					reviewDTO.getAttachList().forEach(attach -> log.info(attach));
+				}
+				
+				reviewService.insertReview(reviewDTO);
 				return true;
 			}
 			
@@ -187,4 +220,127 @@ public class ProductController {
 		}
 	}
 	
+	@GetMapping("/uploadForm")
+	public void uploadForm() {
+		log.info("upload form");
+	}
+	
+	@PostMapping("uploadFormAction")
+	public void uploadFormAction(MultipartFile[] uploadFile, Model model) {
+		for(MultipartFile multipartFile: uploadFile) {
+			log.info("----------------------------");
+			log.info("Upload File Name : " + multipartFile.getOriginalFilename());
+			log.info("Upload File Size : " + multipartFile.getSize());
+			File saveFile = new File(uploadFolder, multipartFile.getOriginalFilename());
+			try {
+				multipartFile.transferTo(saveFile);
+			}catch(Exception e) {
+				log.error(e.getMessage());
+			}
+		}
+	}
+	
+	@GetMapping("/uploadAjax")
+	public void uploadAjax() {
+		log.info("upload Ajax");
+	}
+	
+	private String getFolder() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		String str = sdf.format(date);
+		
+		return str.replace("-", File.separator);
+	}
+	
+	@PostMapping(value = "uploadAjaxAction", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<ImageAttachDTO>> uploadAjaxPost(MultipartFile[] uploadFile){
+		
+		List<ImageAttachDTO> list = new ArrayList<>();
+		String uploadFolderPath = getFolder();
+		File uploadPath  = new File(uploadFolder, uploadFolderPath);
+		log.info("upload path : " + uploadPath);
+		
+		if(uploadPath.exists() == false) {
+			uploadPath.mkdirs();
+		}
+		
+		for (MultipartFile multipartFile : uploadFile) {
+			ImageAttachDTO attachDTO = new ImageAttachDTO();
+			String uploadFileName = multipartFile.getOriginalFilename();
+			
+			log.info("----------------------------");
+			log.info("Upload File Name: " + multipartFile.getOriginalFilename());
+			log.info("Upload File Size :" + multipartFile.getSize());
+			
+			
+			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("/") + 1);
+			log.info("only file name : " + uploadFileName);
+			attachDTO.setImageName(uploadFileName);
+			
+			UUID uuid = UUID.randomUUID();
+			
+			uploadFileName = uuid.toString() + "_" + uploadFileName;
+			log.info("uploadFileName:" + uploadFileName);
+			
+			try {
+				File saveFile = new File(uploadPath, uploadFileName);
+				multipartFile.transferTo(saveFile);
+				
+				attachDTO.setImageUUID(uuid.toString());
+				attachDTO.setImagePath(uploadFolderPath);
+				
+				FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
+				Thumbnailator.createThumbnail(multipartFile.getInputStream(), thumbnail, 100, 100);
+				thumbnail.close();
+				
+				list.add(attachDTO);
+				log.info("attachDTO:" + attachDTO);
+			} catch (Exception e){
+				log.error(e.getMessage());
+			}
+		}
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
+	@GetMapping("display")
+	@ResponseBody
+	public ResponseEntity<byte[]> getFile(String imageName){
+		log.info("fileName : " + imageName);
+		File file = new File(uploadFolder+imageName);
+		log.info("file : " + file);
+		
+		ResponseEntity<byte[]> result = null;
+		
+		try {
+			HttpHeaders header = new HttpHeaders();
+			header.add("Content-Type", Files.probeContentType(file.toPath()));
+			result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file),header,HttpStatus.OK);
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	@PostMapping("deleteFile")
+	@ResponseBody
+	public ResponseEntity<String> deleteFile(String imageName){
+		log.info("deleteFile : " + imageName);
+		File file;
+		
+		try {
+			file = new File(uploadFolder+URLDecoder.decode(imageName, "UTF-8"));
+			file.delete();
+			
+			String largeFileName = file.getAbsolutePath().replace("s_", "");
+			log.info("largeFileName : " + largeFileName);
+			file = new File(largeFileName);
+			file.delete();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<String>("deleted",HttpStatus.OK);
+	}
 }

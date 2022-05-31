@@ -228,6 +228,8 @@
                 var memberID = $("#memberID").val(); // 로그인한 회원 번호
                	var content = $(".write-review-content").val(); // 상품평 내용
                 
+               	// *** 첨부한 상품평 이미지 등록 코드 추가 ***
+               	
         		var data = {
         			"productID" : productID,
         			"memberID" : memberID,
@@ -285,6 +287,113 @@
         				alert(message);
         			}
     	        });
+        	});
+            
+            $(".uploadResult").on("click", "button", function(e) {
+            	var token = $("meta[name='_csrf']").attr("content");
+        		var header = $("meta[name='_csrf_header']").attr("content");
+        		
+        		console.log("delete file");
+        		var targetFile = $(this).data("file");
+        		var targetLi = $(this).closest("li");
+        		
+        		$.ajax({
+        			url: '${contextPath}/category/1/deleteFile',
+        			data: {imageName: targetFile},
+        			dataType: 'text',
+        			beforeSend : function(xhr) {
+        				xhr.setRequestHeader(header, token);
+        			},
+        			type: 'POST',
+       				success: function(result) {
+       					alert("이미지가 삭제되었습니다.");
+       					
+       					targetLi.remove();
+       				},error : function(xhr, status, error) {
+           				var errorResponse = JSON.parse(xhr.responseText);
+           				var errorCode = errorResponse.code;
+           				var message = errorResponse.message;
+           				alert(message);
+           			}
+        		});
+        	});
+            
+        	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+        	var maxSize = 5242880;
+        	
+        	function checkExtension(fileName, fileSize){
+        		if(fileSize >= maxSize){
+        			alert("파일 사이즈 초과");
+        			return false;
+        		}
+        		if(regex.test(fileName)){
+        			alert("해당 종류의 파일은 업로드 할 수 없습니다.");
+        			return false;
+        		}
+        		return true;
+        	}
+        	
+        	function showUploadResult(uploadResultArr) {
+        		if(!uploadResultArr || uploadResultArr.length == 0) {return;}
+        		
+        		var uploadUL = $(".uploadResult ul");
+        		
+        		var str="";
+        		
+        		$(uploadResultArr).each(function(i, obj){
+        			var fileCallPath = encodeURIComponent(obj.imagePath + "/s_" + obj.imageUUID + "_" + obj.imageName);
+    				var fileLink = fileCallPath.replace(new RegExp(/\\/),"/");
+    				
+    				str += "<li data-imagePath='" + obj.imagePath + "'";
+    				str += " data-imageUUID='" + obj.imageUUID + "' data-imageName='" + obj.imageName;
+    				str += "'><div>";
+    				str += "<span>" + obj.imageName + "</span>";
+    				str += "<button type='button' data-file=\'" + fileCallPath + "\'>X</button><br>";
+    				str += "<img src='${contextPath}/category/1/display?imageName=" + fileCallPath+"'>";
+    				str += "</div>";
+    				str += "</li>";
+        		}); 
+        		
+        		uploadUL.append(str);
+        	}
+        	
+        	$("input[type='file']").change(function(e){
+        		var token = $("meta[name='_csrf']").attr("content");
+        		var header = $("meta[name='_csrf_header']").attr("content");
+        		
+        		var formData = new FormData();
+        		var inputFile = $("input[name='uploadFile']");
+        		var files = inputFile[0].files;
+        		console.log(files);
+        		
+        		for(var i = 0; i < files.length ; i++){
+        			if(!checkExtension(files[i].imageName, files[i].size)){
+        				return false;
+        			}
+        			formData.append("uploadFile", files[i]);
+        		}
+        	
+        		$.ajax({
+        			url: '${contextPath}/category/1/uploadAjaxAction',
+        			processData: false,
+        			contentType: false,
+        			data: formData,
+        			beforeSend : function(xhr) {
+        				xhr.setRequestHeader(header, token);
+        			},
+        			type: 'POST',
+        			dataType: 'json',
+        				success: function(result){
+        				console.log(result);
+        				
+        				showUploadResult(result);
+        			}, error : function(xhr, status, error) {
+        				var errorResponse = JSON.parse(xhr.responseText);
+        				var errorCode = errorResponse.code;
+        				var message = errorResponse.message;
+        				alert(message);
+        			}
+        		});
         	});
         });
     </script>
@@ -399,6 +508,12 @@
 	                        	<b>${memberDTO.name}</b>님, 이번 상품은 어떠셨나요?
 	                       	</h4>
 	                       	<textarea cols="34" rows="5" type="text" class="write-review-content" placeholder="상품평을 작성해주세요. (최대 2,000자)"></textarea>
+	                       	<input type="file" name='uploadFile' style="margin-left: 30px; "multiple>
+	                       	<div class='uploadResult'>
+								<ul>
+								
+								</ul>
+							</div>
 	                       	<div class="review-buttons">
 	                            <button type="button" class="review-button" id="cancelBtn">취소</button>
 	                            <button type="button" class="review-button" id="finishBtn">작성 완료</button>
@@ -446,6 +561,5 @@
             </div>
         </div>
     </div>
-    <%@ include file="./footer.jsp" %>
 </body>
 </html>

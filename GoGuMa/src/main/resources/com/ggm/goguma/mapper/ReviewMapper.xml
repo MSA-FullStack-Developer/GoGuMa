@@ -40,7 +40,7 @@
 	</select>
 	
 	<!-- 상품평 작성 -->
-	<insert id="insertReview">
+	<insert id="insertReview" parameterType="ReviewDTO">
 		INSERT INTO review(productid, memberid, content)
 		VALUES (#{productID}, #{memberID}, #{content})
 	</insert>
