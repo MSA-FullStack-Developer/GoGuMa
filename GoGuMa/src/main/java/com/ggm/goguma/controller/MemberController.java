@@ -2,6 +2,7 @@ package com.ggm.goguma.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -68,8 +70,11 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value =  "/login.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public String loginForm(@RequestParam(value = "error", defaultValue = "") String error, Model model) throws Exception {
+	public String loginForm(@RequestParam(value = "error", defaultValue = "") String error, Model model, Authentication authentication) throws Exception {
 		log.info("hello");
+		if(authentication != null && authentication.isAuthenticated()) {
+			return "redirect:/main.do";
+		}
 //		String error = (String) req.getAttribute("error");
 		log.info(error);
 		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
