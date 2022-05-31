@@ -206,7 +206,6 @@
 			},
 			success : function(result) {
 				location.reload();
-
 			},
 			error : function(xhr, status, error) {
 				var errorResponse = JSON.parse(xhr.responseText);
@@ -442,7 +441,7 @@
 						<div class="cart-head">
 							<div class="cart-top">
 								<div class="cart-all">
-									<strong>장바구니</strong> <span>(<em class="cart-count">0</em>)
+									<strong>장바구니</strong> <span>(<em class="cart-count">${listCount }</em>)
 									</span>
 								</div>
 								<ol class="cart-list-num">
@@ -453,7 +452,7 @@
 							</div>
 							<div class="cart-bottom">
 								<span>${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> G.Point: <span>
-									 포인트 조회해야함</span>
+									 ${point }</span>원
 								<div class="btngroup">
 									<button type="button" class="btn btn-cart-del"
 										name="allCartDelete" onclick="selectedCartDel()">
@@ -554,7 +553,7 @@
 												</td>
 												<td class="cart-purchase-delete">
 													<div class="cart-pur-del">
-														<button type="button" class="btn text-white btn-purchase">구매</button>
+														<button type="button" class="btn text-white btn-default btn-purchase">구매</button>
 														<button type="button" class="btn text-black btn-delete"
 															onclick="oneCartDel(this)">삭제</button>
 													</div>
@@ -592,7 +591,7 @@
 					</div>
 					<div class="order-buttons">
 						<button type="button" class="btn text-black continue">쇼핑 계속하기</button>
-						<button type="submit" id="orderBtn" class="btn text-white purchase">구매하기</button>
+						<button type="submit" id="orderBtn" class="btn text-white btn-default purchase">구매하기</button>
 					</div>
 				</form>
 			</div>
@@ -624,3 +623,5 @@
 		</div>
 	</div>
 </div>
+
+<%@ include file="./footer.jsp" %>

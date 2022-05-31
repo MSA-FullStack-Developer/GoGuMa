@@ -5,13 +5,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.mapper.MemberMapper;
 
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 
@@ -34,6 +31,5 @@ public class CustomUserDetailsService implements UserDetailsService {
 				.roles(member.getRole().toString())
 				.build();
 	}
-	
 	
 }

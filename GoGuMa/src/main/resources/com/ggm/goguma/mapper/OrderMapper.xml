@@ -25,4 +25,18 @@
 			</foreach>
 	</select>
 	
+	<select id="getMemberCoupon" resultType="MemberCouponOrderDTO">
+		SELECT 
+			memberid,
+			used,
+			couponid,
+			couponname,
+			benefit,
+			restriction,
+			to_char(expiration, 'yyyy-mm-dd') AS expiration
+		FROM 
+			membercouponinfo
+		WHERE
+			memberid = #{memberId} and used = 0 and expiration > sysdate
+	</select>
 </mapper>

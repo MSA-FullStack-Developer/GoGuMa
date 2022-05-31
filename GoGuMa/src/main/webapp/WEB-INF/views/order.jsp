@@ -20,105 +20,353 @@
 <script type="text/javascript" src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.js"></script>
 <script type="text/javascript" src="${contextPath}/webjars/jquery-ui/1.13.0/jquery-ui.js"></script>
 
+
+ <!-- iamport.payment.js -->
+ <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
+  
 <script type="text/javascript">
-	$(document).ready(function() {
-		
-		// 모달 배송지 등록 이벤트
-		$('#addAddressBtn').on('click', function() {
-			let isDefault = 0;
-			if($('#isDefault').prop('checked')) {
-				isDefault = 1;
-			}
-			
-			let token = $("meta[name='_csrf']").attr("content");
-		    let header = $("meta[name='_csrf_header']").attr("content");
+
+
+  //모달 쿠폰 적용 클릭이벤트
+  $(document).on('click', '.coupon-list-box', function() {
+    var coupon_discount = $(this).find(".coupon-benefit").text();
+    var coupon_name = $(this).find(".coupon-name").text();
+    
+    var coupon_id = $(this).find("#coupon-id").val();
+    $('#use-coupon-id').attr('value', parseInt(coupon_id));
+    $('.dis-coupon-prc').text(numFormatComma(coupon_discount));
+    $('#coupon-discount').text(numFormatComma(coupon_discount));
+    
+    $('#couponDiscount').attr('value', parseInt(coupon_discount));
+    
+    $('#couponModal').modal('hide');
+    calDisPrice();
+    alert(coupon_name + " 할인이 적용되었습니다.");
+  });
+
+  $(document).ready(function() {
+	
+    console.log($('.pProductName').text());
+    //총 판매 금액, 총 멤버십 할인
+    var total = $('#total').val();
+    $('#total-price').text(numFormatComma(total));
+    
+    var membershipDiscount = parseInt($('#membershipDiscount').val());
+    $('#membership-discount').text(numFormatComma(membershipDiscount));
+    
+    $('#all-discount').text(numFormatComma(membershipDiscount));
+    
+    $('#lastStlAmtDd').text(numFormatComma(total-membershipDiscount));
+    //쿠폰 조회 버튼
+    $('#getCoupon-btn').on('click', function() {
+      let token = $("meta[name='_csrf']").attr("content");
+      let header = $("meta[name='_csrf_header']").attr("content");
+
+      $.ajax({
+      url : '${contextPath}/order/api/getMemberCoupon',
+      type : 'POST',
+      contentType : 'application/json; charset=utf-8;',
+      beforeSend : function(xhr) {
+        xhr.setRequestHeader(header, token);
+      },
+      success : function(result) {
+        if (result.length > 1) {
+          $('#coupon-all *').remove();
+          for (var i = 0; i < result.length; i++) {
+            console.log("쿠폰 정보: " + result[i].couponName);
+            str = "<div class='coupon-list-box'>";
+            str += "<div class='row'>";
+            str += "<input type='hidden' id='coupon-id' value='"+ result[i].couponId +"'>";
+            str += "<div class='col-md-8 coupon-name-th'><span class='coupon-name'>" + result[i].couponName + "</span></div>";
+            str += "<div class='col-md-4 coupon-benefit-th'>-<span class='coupon-benefit'>" + result[i].benefit + "</span>원</div>";
+            str += "<div>";
+            str += "<div class='row'>";
+            str += "<div class='col-md-12 coupon-expiration-th'><span class='coupon-expiration'> 유효기간 ~" + result[i].expiration + "</span></div>";
+            str += "<div>";
+            str += "<div>";
+            $('#coupon-all').append(str);
+          }
+        } else {
+          console.log("보유한 쿠폰이 없습니다.");
+        }
+      }
+      });
+    });
+
+    // 모달 배송지 등록 이벤트
+    $('#addAddressBtn').on('click', function() {
+      let isDefault = 0;
+      if ($('#isDefault').prop('checked')) {
+        isDefault = 1;
+      }
+
+      let token = $("meta[name='_csrf']").attr("content");
+      let header = $("meta[name='_csrf_header']").attr("content");
+
+      let data = {
+      nickName : $('#addressBody').find('#nickName').val(),
+      recipient : $('#addressBody').find('#recipient').val(),
+      address : $('#addressBody').find('#address').val(),
+      contact : $('#addressBody').find('#contact').val(),
+      isDefault : isDefault
+      }
+
+      $.ajax({
+      url : '${contextPath}/mypage/manageAddress/addAddress',
+      type : 'POST',
+      data : JSON.stringify(data),
+      contentType : 'application/json; charset=utf-8;',
+      beforeSend : function(xhr) {
+        xhr.setRequestHeader(header, token);
+      },
+      success : function(result) {
+        var url = "${contextPath}/order/"
+        if (result == 1) {
+          alert('배송지 추가 완료');
+          location.reload();
+        } else {
+          alert('입력이 올바르지 않습니다.');
+        }
+      }
+      });
+    });
+    // 배송지 등록 이벤트
+    $('.address-list-box').click(function() {
+      if ($(".tbody-on").css('display') == 'none') {
+        $(".no-show-first").hide();
+        $('.tbody-on').show();
+      }
+
+      var name = $(this).find('.delivery-address-name').text();
+      var addressNickName = $(this).find('.delivery-address-nickname').text();
+      var addressAlias = $(this).find('.delivery-address-alias').text();
+      var addressPer = $(this).find('.delivery-address-per').text();
+      var phonenumber = $(this).find('.delivery-phone-num-td').text();
+
+      if (addressAlias == "") {
+        console.log("기본배송지가 아님");
+        $('#addressAlias').hide();
+      } else {
+        console.log(addressAlias);
+        $('#addressAlias').show();
+      }
+
+      $('#name').text(name);
+      $('#addressNickName').text(addressNickName);
+      $('#addressName').text(addressPer);
+      $('#phonenumber').text(phonenumber);
+
+      $('#myModal').modal('hide');
+      alert("배송지가 적용되었습니다.");
+    });
+    
+    $("#g-point").on("input propertychange paste", function(){
+    	var point = $('#g-point').val();
+    	var limitpoint = Number($('#member-point').text());
+    	console.log(limitpoint);
+    	console.log("로그: " + numFormatComma(point));
+    	if(point != ""){
+	   	  	//포인트가 가진 포인트보다 많거 0보다 작은경우
+	      	if(point > limitpoint || point < 0){
+	      	  alert("보유 포인트를 넘길 수 없습니다. 모든 포인트를 사용합니다.");
+	      	  $('#g-point').val(numFormatComma(limitpoint));
+	      	  $('#point-discount').text(numFormatComma(limitpoint));
+	      	  $('#GPoint').attr('value', parseInt(limitpoint));
+	      	  calDisPrice();
+	      	}else{
+	      	  $('#point-discount').text(numFormatComma(point));
+	      	  $('#GPoint').attr('value', parseInt(point));
+	      	  calDisPrice();
+	      	}
+    	}else{
+    	  console.log("빈값");
+    	  $('#point-discount').text(0);
+    	}
+    });
+    
+    $('.requirement-in').change(function(){
+      var a = $('.requirement-in').val();
+      $('.requirement-in').attr('value',a);
+      console.log($('.requirement-in').val());
+    });
+  });
+
+	//결제
+	function iamport(){
+		//가맹점 식별코드
+		IMP.init('imp37623879');
+		IMP.request_pay({
+		    pg : 'kakaopay',
+		    pay_method : 'card',
+		    merchant_uid : 'merchant_' + new Date().getTime(),
+		    name : $('.pProductName').text(), //결제창에서 보여질 이름
+		    amount : 100,//$('#lastStlAmtDd').text(), //실제 결제되는 가격
+		    buyer_email : "${memberDTO.email}",
+		    buyer_name : $('#name').text(),
+		    buyer_tel : $('#phonenumber').text(),
+		    buyer_addr : $('#addressName').text(),
+		    buyer_postcode : '123-456'
+		}, function(rsp) {
+			  console.log("결제 완료 후 로그 : " + rsp);
+		      //아임포트 검증절차
+		      var token = $("meta[name='_csrf']").attr("content");
+			  var header = $("meta[name='_csrf_header']").attr("content");
+			  
+		      $.ajax({
+		        type: "POST",
+		        url: "${contextPath}/order/api/verifyIamport/" + rsp.imp_uid,
+		        beforeSend : function(xhr) {
+							xhr.setRequestHeader(header,token);
+						}
+		      }).done(function(data){
+		        console.log("done Data : " + data);
+		        if(rsp.paid_amount == data.response.amount){
+		         	console.log("결제 및 결제검증완료");
+		          	console.log(rsp);
+		          	console.log(data);
+		        	paytransaction();
+	        	} else {
+	        		alert("결제 실패");
+	        		//환불처리 되어야함
+	        	}
+		        /* var msg = '결제가 완료되었습니다.';
+		        msg += '고유ID : ' + rsp.imp_uid;
+		        msg += '상점 거래ID : ' + rsp.merchant_uid;
+		        msg += '결제 수단 : ' + rsp.pay_method;
+		        msg += '결제 금액 : ' + rsp.paid_amount;
+		        msg += '카드 승인번호 : ' + rsp.apply_num;
+		        alert(msg); */
+		      });
 		    
-		    let data = {
-	    		nickName : $('#addressBody').find('#nickName').val(),
-				recipient : $('#addressBody').find('#recipient').val(),
-				address : $('#addressBody').find('#address').val(),
-				contact : $('#addressBody').find('#contact').val(),
-				isDefault : isDefault
-		    }
-		    
-			$.ajax({
-				url : '${contextPath}/mypage/manageAddress/addAddress',
-				type : 'POST',
-				data : JSON.stringify(data),
-				contentType : 'application/json; charset=utf-8;',
-				beforeSend : function(xhr) {
-		            xhr.setRequestHeader(header, token);
-		        },
-		        success:function(result) {
-		        	var url = "${contextPath}/order/"
-		        	if(result==1) {
-		        		alert('배송지 추가 완료');
-		        		location.reload();
-		        	} else {
-						alert('입력이 올바르지 않습니다.');
-					}
-		        }
-			});
 		});
-			// 배송지 등록 이벤트
-			$('.address-list-box')
-					.click(
-							function() {
-								if ($(".tbody-on").css(
-										'display') == 'none') {
-									$(".no-show-first")
-											.hide();
-									$('.tbody-on').show();
-								}
+	}
 
-								var name = $(this)
-										.find(
-												'.delivery-address-name')
-										.text();
-								var addressNickName = $(
-										this)
-										.find(
-												'.delivery-address-nickname')
-										.text();
-								var addressAlias = $(this)
-										.find(
-												'.delivery-address-alias')
-										.text();
-								var addressPer = $(this)
-										.find(
-												'.delivery-address-per')
-										.text();
-								var phonenumber = $(this)
-										.find(
-												'.delivery-phone-num-td')
-										.text();
+	//결제가 완료 된 후 트랜잭션처리
+	function paytransaction(){
+	  	var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		var parr = [];
+		
+		$('#nrmProd').find(".order-product").each(function(index, item){
+		  var cartId = $(item).find("input[name=cartId]").val();
+		  var productId = $(item).find("input[name=productId]").val();
+		  var ordQty = $(item).find("input[name=cartAmount]").val();
+		  parr.push({cartId, productId, ordQty});
+		});
+		
+		var addr = {
+		    nickName: $('#addressNickName').text(),
+			recipient: $('#name').text(),
+			address: $('#addressName').text(),
+			contact: $('#phonenumber').text()
+		  };
+		var req = $('.requirement-in').val();
+		var oriprc = $('#total').val();
+		var memDc = $('#membershipDiscount').val();
+		var ucI = $('#use-coupon-id').val();
+		var couponDis = $('#couponDiscount').val();
+		var usePoint = $('#GPoint').val();
+		var totprc = $('#finalPrice').val();
+		var data = {
+		    products: parr,
+		    address: addr,
+		    requirement: req,
+		    originalPrice: oriprc,
+		    membershipDiscount: memDc,
+		    couponId: ucI,
+		    couponDiscount: couponDis,
+		    usagePoint: usePoint,
+		    totalPrice: totprc
+		};
+		console.log(data);
+/* 		$.ajax({
+		  type : "POST",
+			url : "${contextPath}/order/api/paytransaction",
+			contentType: "application/json; charset=UTF-8",
+			data : JSON.stringify(data),
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+			success : function(result) {
+				alert("정상 작동");
 
-								if (addressAlias == "") {
-									console
-											.log("기본배송지가 아님");
-									$('#addressAlias')
-											.hide();
-								} else {
-									console
-											.log(addressAlias);
-									$('#addressAlias')
-											.show();
-								}
+			},
+			error : function(xhr, status, error) {
+				var errorResponse = JSON.parse(xhr.responseText);
+				var errorCode = errorResponse.code;
+				var message = errorResponse.message;
 
-								$('#name').text(name);
-								$('#addressNickName').text(
-										addressNickName);
-								$('#addressName').text(
-										addressPer);
-								$('#phonenumber').text(
-										phonenumber);
+				alert(message);
+			}
+		}); */
+		
+	}
+	
+	function numFormatComma(nNumber, nDetail) {
+		if (nNumber == null)
+			return "";
+		if (nDetail == null)
+			nDetail = 0;
 
-								$('#myModal').modal('hide');
-							});
-	});
+		nNumber = parseFloat(nNumber);
+		nNumber = Math.round(nNumber, nDetail);
+
+		var minusFlag = false;
+		if (nNumber < 0) {
+			nNumber = nNumber * -1;
+			minusFlag = true;
+		}
+
+		var strNumber = new String(nNumber);
+		var arrNumber = strNumber.split(".");
+		var strFormatNum = "";
+		var j = 0;
+
+		for (var i = arrNumber[0].length - 1; i >= 0; i--) {
+			if (i != strNumber.length && j == 3) {
+				strFormatNum = arrNumber[0].charAt(i) + "," + strFormatNum;
+				j = 0;
+			} else {
+				strFormatNum = arrNumber[0].charAt(i) + strFormatNum;
+			}
+			j++;
+		}
+
+		if (arrNumber.length > 1)
+			strFormatNum = strFormatNum + "." + arrNumber[1];
+
+		if (minusFlag)
+			strFormatNum = '-' + strFormatNum;
+
+		return strFormatNum;
+	};
+	
+	//총 할인 금액, 총 결제 금액계산
+	function calDisPrice(){
+	    var totalDC = parseInt($('#membershipDiscount').val());
+	    if(!isNaN($('#GPoint').val())){
+	      totalDC += parseInt($('#GPoint').val());
+	    }
+	    if(!isNaN($('#couponDiscount').val())){
+	      totalDC += parseInt($('#couponDiscount').val())
+	    }
+	    $('#all-discount').text(numFormatComma(totalDC));
+	    
+	    var totalPrice = parseInt($('#total').val());
+	    var totalPayPrice = totalPrice - totalDC;
+	    
+	    $('#lastStlAmtDd').text(numFormatComma(totalPayPrice));
+	    $('#finalPrice').attr('value', totalPayPrice);
+	    console.log(totalPayPrice);
+	}
 </script>
 
+<style>
+<%@include file="/resources/css/header.css"%>
+</style>
 <div class="container">
+
+	<%@ include file="header.jsp"%>
 	<!-- 바디 전체-->
 	<div class="cbody">
 		<div class="contents">
@@ -129,18 +377,24 @@
 						<ul class="payment-list">
 							<li>
 								<div id="orderAmt">
-									<span class="tit">총 판매 금액</span> <span class="txt"><strong>151,730</strong>원</span>
+									<span class="tit">총 판매 금액</span> <span class="txt"><strong id="total-price"></strong>원</span>
+								</div>
+								<div id="membershipDcAmtDiv">
+									<span class="tit">멤버십 할인</span> <span class="txt">-<strong id="membership-discount"></strong>원</span>
 								</div>
 								<div id="copnDcAmtDiv">
-									<span class="tit">쿠폰 할인</span> <span class="txt"><strong>-4,770</strong>원</span>
+									<span class="tit">쿠폰 할인</span> <span class="txt">-<strong id="coupon-discount"></strong>원</span>
+								</div>
+								<div id="pointDcAmtDiv">
+									<span class="tit">G.Point</span> <span class="txt">-<strong id="point-discount"></strong>원</span>
 								</div>
 								<div id="totDcAmtDiv">
-									<span class="tit">할인 합계금액</span> <span class="txt"><strong>-4,770</strong>원</span>
+									<span class="tit">할인 합계금액</span> <span class="txt">-<strong id="all-discount"></strong>원</span>
 								</div>
 							</li>
 							<li>
 								<div class="total">
-									<span class="tit">최종 결제금액</span> <span class="txt" id="lastStlAmtDd"><strong>146,960</strong>원</span>
+									<span class="tit">최종 결제금액</span> <span class="txt"><strong id="lastStlAmtDd"></strong>원</span>
 								</div>
 							</li>
 							<li>
@@ -150,7 +404,7 @@
 							</li>
 						</ul>
 						<div class="btngroup agreeCheck">
-							<button type="button" class="btn btn-default medium">
+							<button type="button" class="btn text-white btn-default medium" onclick="iamport()">
 								<span>결제</span>
 							</button>
 						</div>
@@ -169,7 +423,7 @@
 							</ol>
 						</div>
 						<div class="cart-bottom">
-							<span> ${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> 적립금: <span> 100000 </span>
+							<span> ${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> G.Point: <span id="member-point"> ${point } </span>P
 						</div>
 					</div>
 
@@ -189,6 +443,8 @@
 												<th scope="col" id="th-discount-price">할인금액</th>
 												<th scope="col" id="th-total-price">합계</th>
 											</tr>
+											<c:set var = "total" value = "0" />
+											<c:set var = "membershipDiscount" value = "0" />
 											<c:forEach var="i" items="${list }" begin="0" step="1" varStatus="status">
 												<tr class="order-product">
 													<td class="order-product_box">
@@ -198,7 +454,10 @@
 															</a>
 														</div>
 														<div class="product-name">
-															<a href="이동할 링크" class="moveProduct">${i.parentProductName }</a>
+															<input type="hidden" name="cartId" value="${i.cartId }"/>
+															<input type="hidden" name="productId" value="${i.productId }"/>
+															<input type="hidden" name="cartAmount" value="${i.cartAmount }"/>
+															<a href="이동할 링크" class="pProductName">"${i.parentProductName }"</a>
 														</div>
 														<div class="product-option">
 															<span class="product-option-name"> 옵션: ${i.productName } </span>
@@ -213,12 +472,14 @@
 														<div class="cart-product-price">
 															<c:set var="proPrice" value="${dtoList[status.index].nrmOriPrc * dtoList[status.index].ordQty}"></c:set>
 															<em><fmt:formatNumber value="${proPrice}" type="currency" currencySymbol="" /></em>원
+															<c:set var= "total" value="${total + proPrice}"/>
 														</div>
 													</td>
 													<td class="cart-discount">
 														<div class="cart-product-discount">
 															<c:set var="disPrice" value="${dtoList[status.index].disOriPrc * dtoList[status.index].ordQty}"></c:set>
 															<em><fmt:formatNumber value="${disPrice}" type="currency" currencySymbol="" /></em>원
+															<c:set var = "membershipDiscount" value = "${membershipDiscount + disPrice }" />
 														</div>
 													</td>
 													<td class="cart-total">
@@ -229,8 +490,15 @@
 													</td>
 												</tr>
 											</c:forEach>
+
 										</thead>
 									</table>
+									<input type="hidden" id="total" value="${total }"/>
+									<input type="hidden" id="membershipDiscount" value="${membershipDiscount }"/>
+									<input type="hidden" id="use-coupon-id" value=/>
+									<input type="hidden" id="couponDiscount" value=/>
+									<input type="hidden" id="GPoint" value="0"/>
+									<input type="hidden" id="finalPrice" value=/>
 								</div>
 							</div>
 						</div>
@@ -238,19 +506,49 @@
 							<h3 class="accordion-header discount-info" id="panelsStayOpen-headingTwo">
 								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">할인 혜택 선택</button>
 							</h3>
+							<!-- 쿠폰 조회 Modal -->
+							<div class="modal fade" id="couponModal" aria-labelledby="couponModalLabel" tabindex="-1">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="couponModalLabel">쿠폰 선택</h4>
+											<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<div class="coupon-all" id="coupon-all"></div>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
 								<div class="accordion-body">
 									<div class="coupon-point">
-										<div class="row">
-											<div class="col-md-4">쿠폰 할인</div>
-											<div class="col-md-2 dis-coupon">0원</div>
-											<div class="col-md-4"><button class="btn btn-dark">쿠폰 조회 및 적용</button></div>
+										<div class="row ">
+											<div class="col-md-2">쿠폰 할인</div>
+											<div class="col-md-2 dis-coupon">
+												<span class="dis-coupon-prc">0</span>원
+											</div>
+											<div class="col-md-4">
+												<button class="btn text-white btn-default" id="getCoupon-btn" data-bs-toggle="modal" data-bs-target="#couponModal">쿠폰 조회 및 적용</button>
+											</div>
 										</div>
 										<div class="row">
-											<div class="col-md-4">적립금</div>
-											<div class="col-md-2">0원</div>
-											<div class="col-md-4"><button class="btn btn-dark">사용하기</button><button class="btn btn-dark">사용취소</button></div>
-											<div class="col-md-2">[보유 적립금: 0]</div>
+											<div class="col-md-2">G.Point</div>
+											<div class="col-md-2">
+												<div class="input-group mb-3">
+													<input type="number" class="form-control use-point" id="g-point" placeholder="G.Point" aria-describedby="basic-addon1" value=0>
+													<div class="input-group-append">
+														<span class="input-group-text" id="basic-addon1">P</span>
+													</div>
+												</div>
+											</div>
+										
+											<div class="col-md-4">
+												<button class="btn text-white btn-default">사용취소</button>
+											</div>
+											<div class="col-md-4">[보유 G.Point: ${point }]</div>
 										</div>
 									</div>
 								</div>
@@ -260,8 +558,7 @@
 							<h3 class="accordion-header member-info" id="panelsStayOpen-headingThree">
 								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="true" aria-controls="panelsStayOpen-collapseThree">받는사람정보</button>
 							</h3>
-							<!-- 회원가입 확인 Modal-->
-							<!-- Modal -->
+							<!-- 배송정보 조회 Modal -->
 							<div class="modal fade" id="myModal" aria-labelledby="ModalLabel1" tabindex="-1">
 								<div class="modal-dialog modal-dialog-centered">
 									<div class="modal-content">
@@ -345,7 +642,7 @@
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-light" data-bs-target="#myModal" data-bs-toggle="modal" data-bs-dismiss="modal">뒤로가기</button>
-											<button type="button" id="addAddressBtn" class="btn btn-dark">확인</button>
+											<button type="button" id="addAddressBtn" class="btn text-white btn-default">확인</button>
 										</div>
 									</div>
 								</div>
@@ -353,6 +650,7 @@
 							<div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingThree">
 								<div class="accordion-body address-info">
 									<table class="delivery-address">
+										<!-- 기본배송지 설정이 안되어 있는 경우 -->
 										<c:if test="${empty defaultAddress }">
 											<div class="no-show-first">등록된 기본 배송지가 없습니다.</div>
 											<tbody class="tbody-on" style="display: none">
@@ -376,8 +674,13 @@
 													<th class="delivery-address-th delivery-phone-num-th">연락처</th>
 													<td class="delivery-address-td delivery-phone-num-td" id="phonenumber"></td>
 												</tr>
+												<tr>
+													<th class="delivery-address-th delivery-requirement-th">요청사항</th>
+													<td class="delivery-address-td delivery-requirement-td" id="requirement"><input class="requirement-in" type="text" value="" placeholder="배송 요청사항을 입력하세요."></td>
+												</tr>
 											</tbody>
 										</c:if>
+										<!-- 기본배송지 설정이 되어 있는 경우 -->
 										<c:if test="${not empty defaultAddress }">
 											<tbody>
 												<tr>
@@ -403,6 +706,10 @@
 													<th class="delivery-address-th delivery-phone-num-th">연락처</th>
 													<td class="delivery-address-td delivery-phone-num-td" id="phonenumber">${defaultAddress.contact }</td>
 												</tr>
+												<tr>
+													<th class="delivery-address-th delivery-requirement-th">요청사항</th>
+													<td class="delivery-address-td delivery-requirement-td" id="requirement"><input class="requirement-in" type="text" value="" id="requirement"></td>
+												</tr>
 											</tbody>
 										</c:if>
 									</table>
@@ -427,15 +734,10 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
-
-
-
-
 			</div>
-
 		</div>
 	</div>
-
 </div>
+
+<%@ include file="./footer.jsp" %>

@@ -33,6 +33,7 @@
 		SET cartamount = cartamount + 1
 		WHERE cartid = #{cartId}
 	</update>
+	
 	<update id="minusCartCount" parameterType="long">
 		UPDATE cart
 		SET cartamount = cartamount - 1

@@ -11,9 +11,9 @@ public interface CategoryMapper {
 	
 	public String getCategoryName(long categoryID) throws Exception;
 	
-	/**
+	/* *
 	 * 작성자 : 이승준
-	 * 작업 날짜 : 22.05.25
+	 * 작업일 : 22.05.25
 	 * */
 	public List<CategoryDTO> findCategoryByMd();
 }

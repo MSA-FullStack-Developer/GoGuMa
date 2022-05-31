@@ -32,7 +32,6 @@
         }
     </script>
 </head>
-
 <body>
 	<%@ include file="header.jsp" %>
 	
@@ -47,13 +46,15 @@
         <hr>
 
 		<c:if test="${recordCount != 0}">
-	        <h4>총 <span style="color: red;">${recordCount}</span>개
-		        <select name="sortType" name="type" onchange="javascript:sortList(this.options[this.selectedIndex].value);">
+	        <p class="h4Class">
+	        	총 <span style="color: #FF493C;"><b>${recordCount}</b></span>개
+		        <select class="select-sortType" name="sortType" onchange="javascript:sortList(this.options[this.selectedIndex].value);"
+		        	style="width: auto; margin-right: 15px; float: right; padding-right: 15px">
 		        	<option value="recent" <c:if test="${sortType eq 'recent'}">selected</c:if>>최신순</option>
 		        	<option value="expensive" <c:if test="${sortType eq 'expensive'}">selected</c:if>>높은 가격순</option>
 		        	<option value="cheap" <c:if test="${sortType eq 'cheap'}">selected</c:if>>낮은 가격순</option>
 	        	</select>
-	        </h4>
+	        </p>
         </c:if>
 		
         <div class="listBox">
@@ -61,7 +62,9 @@
         	<c:set var="categoryID" value="${product.categoryID}"/>
             <div class="product">
                 <a href="${contextPath}/category/${pg}/${product.categoryID}/detail/${product.productID}"><img class="listImg" src="${product.prodimgurl}" /></a>
-                <h4>${product.productName}</h4>
+                <p class="product-name">
+                	${product.productName}
+               	</p>
                 <h3><fmt:formatNumber value="${product.productPrice}" pattern="#,###" />원</h3>
             </div>
             </c:forEach>
@@ -71,7 +74,7 @@
         	<h3 class="no_result">해당하는 상품이 없습니다.</h3>
         </c:if>
         
-        <c:if test="${isSearch == false}">
+		<c:if test="${isSearch == false}">
 	        <div class="list_number">
 			    <div>
 			    	<div class="list_n_menu">
@@ -89,8 +92,8 @@
 			    </div>
 			</div>
 		</c:if>
+		<div class="fa-solid" style="width: 100%"></div>
     </div>
      <%@ include file="./footer.jsp" %>
 </body>
-
 </html>

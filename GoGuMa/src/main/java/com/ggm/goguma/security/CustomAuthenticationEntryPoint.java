@@ -23,7 +23,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
 		
-
 		log.info("[CustomAuthenticationEntryPoint] not Authentication!!");
 		Map<String, String> result = new HashMap<>();
 		result.put("code", HttpStatus.UNAUTHORIZED.toString());
@@ -35,9 +34,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 	    response.setCharacterEncoding("UTF-8");
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		response.getWriter().write(json);
-	
-		
 	}
 
-	
 }

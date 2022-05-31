@@ -7,18 +7,16 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <style>
 	<%@ include file="/resources/css/header.css" %>
-
+	
 	.main {
 		width: auto;
 		height: auto;
-		float: left;
-		margin-top: 50px;
 	}
 	
 	.menu {
-		width: 350px;
+		width: 400px;
 		float: right;
-		margin-top: 35px;
+		margin-top: 13px
 	}
 	
 	.menuA {
@@ -56,31 +54,7 @@
 			🍠
 		</a>
 	</div>
-		
-   	<div class="search">
-    	<form id="searchForm" action="${contextPath}/category/1/search/" autocomplete="off">
-			<input type="text" id="keyword" name="keyword" placeholder="상품명을 검색하세요" autocomplete="off" value="${keyword}"></input>
-			<button type="submit" class="searchBtn" id="searchBtn"></button>
-		</form>
-    </div>
-    
-	<div class="menu">
-		<sec:authorize access="isAnonymous()">
-			<a class="menuA" href="${contextPath}/member/login.do"><i class="fa-solid fa-right-to-bracket"></i>로그인</a>
-		</sec:authorize>
-		<sec:authorize access="isAuthenticated()">
-		 	<a class="menuA" href="javascript: document.logout.submit()"><i class="fa-solid fa-right-to-bracket"></i>로그아웃</a>
-			<form name="logout" action="${contextPath}/logout.do" method="post" hidden="true">
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-				<input type="submit" value="로그아웃" hidden="true"/>
-			</form>
-		</sec:authorize>
-		
-		<a class="menuA" href="${contextPath}/cart/"><i class="fa-solid fa-cart-shopping"></i>장바구니</a>
-		<a class="menuA" href="${contextPath}/mypage/"><i class="fa-solid fa-circle-user"></i>마이페이지</a>
-	</div>
-    
-    <div class="headerCategory">
+	<div style="margin-top: 40px;">
 	    <div id="menu">
 		    <ul class="main1">
 		        <li><i class="fa-solid fa-bars"></i>카테고리
@@ -97,6 +71,28 @@
 		            </ul>
 		        </li>
 		    </ul>
+		</div>
+	
+		<div class="menu">
+			<sec:authorize access="isAnonymous()">
+				<a class="menuA" href="${contextPath}/member/login.do"><i class="fa-solid fa-right-to-bracket"></i>로그인</a>
+			</sec:authorize>
+			<sec:authorize access="isAuthenticated()">
+			 	<a class="menuA" href="javascript: document.logout.submit()"><i class="fa-solid fa-right-to-bracket"></i>로그아웃</a>
+				<form name="logout" action="${contextPath}/logout.do" method="post" hidden="true">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					<input type="submit" value="로그아웃" hidden="true"/>
+				</form>
+			</sec:authorize>
+			
+			<a class="menuA" href="${contextPath}/cart/"><i class="fa-solid fa-cart-shopping"></i>장바구니</a>
+			<a class="menuA" href="${contextPath}/mypage/"><i class="fa-solid fa-circle-user"></i>마이페이지</a>
+		</div>
+	    <div class="search">
+	    	<form id="searchForm" action="${contextPath}/category/1/search/" autocomplete="off">
+				<input type="text" id="keyword" name="keyword" placeholder="상품명을 검색하세요" autocomplete="off" value="${keyword}"></input>
+				<button type="submit" class="searchBtn" id="searchBtn"></button>
+			</form>
 		</div>
 	</div>
 </div>

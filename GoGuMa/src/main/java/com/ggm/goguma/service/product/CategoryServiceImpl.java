@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryMapper.getCategoryName(categoryID);
 	}
 
-	/**
+	/* *
 	 * 작성자 : 이승준
 	 * 작업 날짜 : 22.05.25
 	 * */

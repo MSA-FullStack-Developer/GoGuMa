@@ -6,7 +6,8 @@ import lombok.Data;
 
 @Data
 public class ReviewDTO {
-	private String name;
+	private long reviewID;
+	private String name; // 회원 이름
 	private Date createDate;
 	private long productPID;
 	private long productID;

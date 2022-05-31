@@ -18,7 +18,7 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductMapper productMapper;
 	
-	private long pageSize = 8;
+	private long pageSize = 12;
 	
 	@Override
 	public List<ProductDTO> getProductList(long pg, long categoryID, String sortType) throws Exception {
@@ -50,7 +50,6 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<ProductDTO> getSameParentCategoryProductList(long categoryID) {
-		
 		long offset = 0;
 		long limit = 8;
 	

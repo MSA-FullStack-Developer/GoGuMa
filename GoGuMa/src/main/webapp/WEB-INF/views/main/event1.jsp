@@ -61,7 +61,7 @@
     <%@ include file="../header.jsp" %>
     <section class="mt-5">
     <div class="h-50 container-fluid" style="background-color: #3831C9;">
-        <img src="${contextPath}/resources/img/web_banner_001.png" alt="이벤트1 배너" />
+        <img class="d-block w-80" src="${contextPath}/resources/img/web_banner_001.png" alt="이벤트1 배너" style="margin: 0 auto;"/>
     </div>
 
     <div class="h-50 container mt-2 p-3">
