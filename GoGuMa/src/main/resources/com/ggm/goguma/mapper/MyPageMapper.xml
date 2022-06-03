@@ -3,7 +3,7 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ggm.goguma.mapper.MyPageMapper">
-		<select id="getReceiptList" resultType="ReceiptDTO">
+	<select id="getReceiptList" resultType="ReceiptDTO">
 		select receiptid, orderdate, memberid
 		from receipt where memberid = #{memberId}
 		order by orderdate desc
@@ -21,9 +21,20 @@
 		from receipt where receiptid = #{receiptId}
 	</select>
 	
-	<select id="getEarnedPoint" resultType="PointDTO">
-		select pointeventid, pointtype, pointvalue, pointcreateddate, orderid, receiptid
-		from pointevent where receiptid = #{receiptId} and pointtype = 'plus'
+	<select id="getEarnablePoint" resultType="int">
+		select pointvalue from pointevent where receiptId = #{receiptId}
+	</select>
+	
+	<select id="getPointHistory" resultType="PointDTO">
+		select pointeventid, pointtype, pointvalue, inquirable, pointCreatedDate, receiptid, orderid
+		from pointevent where memberid = #{memberId} and inquirable = 1
+		order by pointCreatedDate desc
+	</select>
+	
+	<select id="getSpecificPointHistory" resultType="PointDTO">
+		select pointeventid, pointtype, pointvalue, inquirable, pointCreatedDate, receiptid, orderid
+		from pointevent where memberid = #{memberId} and pointtype = #{type} and inquirable = 1
+		order by pointCreatedDate desc
 	</select>
 	
 	<update id="updateOrderStatus">

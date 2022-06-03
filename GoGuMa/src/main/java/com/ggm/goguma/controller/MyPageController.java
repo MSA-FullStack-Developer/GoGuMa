@@ -1,8 +1,10 @@
 package com.ggm.goguma.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,15 +53,29 @@ public class MyPageController {
 	public String getOrderDetail(@PathVariable("receiptId") long receiptId, Model model) {
 		try {
 			ReceiptDTO receiptDTO = service.getReceiptDetail(receiptId); // 결제상세 가져오기
-			PointDTO pointDTO = service.getEarnedPoint(receiptId);
+			int earnablePoint = service.getEarnablePoint(receiptId);
 			model.addAttribute("receiptDTO", receiptDTO);
-			model.addAttribute("pointDTO", pointDTO);
+			model.addAttribute("earnablePoint", earnablePoint);
 			log.info(receiptDTO);
-			log.info(pointDTO);
 		} catch (Exception e) {
 			log.info(e.getMessage());
 		}
 		return "mypage/orderDetail";
+	}
+	
+	@RequestMapping(value="/pointHistory/{type}", method=RequestMethod.GET)
+	public String getPointHistory(
+			@RequestParam(value="start", required=false) @DateTimeFormat(pattern="yyyy-mm-dd") Date start,
+			@RequestParam(value="end", required=false) @DateTimeFormat(pattern="yyyy-mm-dd") Date end,
+			@PathVariable("type") String type, Model model) {
+		try {
+			List<PointDTO> pointHistory = service.getPointHistory(1, type);
+			log.info(pointHistory);
+			model.addAttribute("pointHistory", pointHistory);
+		} catch (Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/pointHistory";
 	}
 	
 	@ResponseBody

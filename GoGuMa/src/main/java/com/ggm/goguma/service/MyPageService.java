@@ -16,7 +16,9 @@ public interface MyPageService {
 	
 	ReceiptDTO getReceiptDetail(long receiptId) throws Exception;
 	
-	PointDTO getEarnedPoint(long receiptId) throws Exception;
+	int getEarnablePoint(long receiptId) throws Exception;
+	
+	List<PointDTO> getPointHistory(long memberId, String type) throws Exception;
 
 	void updateOrderStatus(long orderId, String status) throws Exception;	
 

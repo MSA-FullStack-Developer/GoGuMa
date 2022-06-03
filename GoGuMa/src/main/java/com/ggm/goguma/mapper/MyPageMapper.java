@@ -19,7 +19,11 @@ public interface MyPageMapper {
 	
 	ReceiptDTO getReceiptDetail(long receiptId) throws Exception;
 	
-	PointDTO getEarnedPoint(long receiptId) throws Exception;
+	List<Integer> getEarnablePoint(long receiptId) throws Exception;
+	
+	List<PointDTO> getPointHistory(long memberId) throws Exception;
+
+	List<PointDTO> getSpecificPointHistory(@Param("memberId") long memberId, @Param("type") String type) throws Exception;
 
 	void updateOrderStatus(@Param("orderId") long orderId, @Param("status") String status) throws Exception;
 	
@@ -38,5 +42,4 @@ public interface MyPageMapper {
 	void cancelDefault(@Param("memberId") long memberId) throws Exception;
 
 	int getMemberPoint(@Param("memberId") long memberId) throws Exception;
-
 }
