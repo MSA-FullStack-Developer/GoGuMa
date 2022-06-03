@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ggm.goguma.dto.FileDTO;
 import com.ggm.goguma.exception.DownloadFileFailException;
 import com.ggm.goguma.exception.UploadFileFailException;
 
@@ -31,9 +32,9 @@ public interface FileService {
 	 *  - fileName : 읽어올 파일 이름
 	 *  
 	 * return
-	 * 	- byte[] : 읽어온 file을 byte로 변환하여 반환
+	 * 	- FileDTO 
 	 * */
-	byte[] readFile(String fileName) throws DownloadFileFailException;
+	FileDTO readFile(String fileName) throws DownloadFileFailException;
 	
 	default boolean checkImageType(File file) throws IOException {
 		String contentType = Files.probeContentType(file.toPath());

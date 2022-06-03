@@ -1,14 +1,17 @@
 package com.ggm.goguma.service.market;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.market.CreateMarketDTO;
 import com.ggm.goguma.dto.market.MarketDTO;
+import com.ggm.goguma.exception.NotFoundMarketException;
 import com.ggm.goguma.exception.UploadFileFailException;
 import com.ggm.goguma.mapper.MarketMapper;
 import com.ggm.goguma.service.FileService;
@@ -33,9 +36,11 @@ public class MarketServiceImpl implements MarketService{
 		
 		List<String> savedFiles = this.FileService.uploadFile(multipartFiles);
 		
+		CategoryDTO category = new CategoryDTO();
+		category.setCategoryID(data.getCategoryId());
 		MarketDTO market = MarketDTO.builder()
 				.memberId(data.getMemberId())
-				.categoryId(data.getCategoryId())
+				.category(category)
 				.marketName(data.getMarketName())
 				.marketDetail(data.getMarketDetail())
 				.marketThumbnail(savedFiles.get(0))
@@ -48,5 +53,14 @@ public class MarketServiceImpl implements MarketService{
 		return market;
 	}
 
+
+	@Override
+	public MarketDTO getMarket(long marketId) throws Exception {
+		
+		return this.marketMapper.findMarketById(marketId).orElseThrow(NotFoundMarketException::new);
+	
+	}
+
+	
 	
 }

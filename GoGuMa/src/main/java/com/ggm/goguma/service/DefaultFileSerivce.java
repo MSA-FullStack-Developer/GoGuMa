@@ -2,6 +2,7 @@ package com.ggm.goguma.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ggm.goguma.dto.FileDTO;
 import com.ggm.goguma.exception.DownloadFileFailException;
 import com.ggm.goguma.exception.UploadFileFailException;
 
@@ -60,12 +62,14 @@ public class DefaultFileSerivce implements FileService {
 	}
 
 	@Override
-	public byte[] readFile(String fileName) throws DownloadFileFailException {
+	public FileDTO readFile(String fileName) throws DownloadFileFailException {
 
 		try {
 			File file = new File(this.uploadPath, fileName);
-
-			return FileCopyUtils.copyToByteArray(file);
+			FileDTO fileDTO = new FileDTO();
+			fileDTO.setContentType(Files.probeContentType(file.toPath()));
+			fileDTO.setStream(FileCopyUtils.copyToByteArray(file));
+			return fileDTO;
 		} catch (IOException e) {
 			log.error("[readFile] IOException 발생");
 

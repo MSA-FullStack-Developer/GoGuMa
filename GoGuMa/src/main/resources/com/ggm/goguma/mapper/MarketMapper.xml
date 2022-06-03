@@ -3,11 +3,30 @@
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 		
 <mapper namespace="com.ggm.goguma.mapper.MarketMapper">
+	<resultMap type="MarketDTO" id="MarketResult">
+		<id property="marketId" column="marketId"/>
+		<result property="marketId" column="marketId"/>
+		<result property="marketName" column="marketName"/>
+		<result property="marketDetail" column="marketDetail"/>
+		<result property="marketThumbnail" column="marketThumb"/>
+		<result property="marketBanner" column="marketBanner"/>
+		<result property="memberId" column="memberId"/>
+		<association property="category" column="categoryId" select="com.ggm.goguma.mapper.CategoryMapper.findCategoryById"></association>
+	</resultMap>
+	
 	
 	<insert id="insertMarket" parameterType="MarketDTO" useGeneratedKeys="true" keyProperty="marketId" keyColumn="marketId">
 	
 		INSERT INTO market(MEMBERID, CATEGORYID, MARKETNAME, MARKETDETAIL, MARKETTHUMB,MARKETBANNER)
-		VALUES(#{memberId}, #{categoryId}, #{marketName}, #{marketDetail}, #{marketThumbnail}, #{marketBanner})
+		VALUES(#{memberId}, #{category.categoryID}, #{marketName}, #{marketDetail}, #{marketThumbnail}, #{marketBanner})
 	</insert>
 
+
+	<select id="findMarketById" parameterType="long" resultMap="MarketResult">
+		SELECT 
+			marketId,memberId, marketName, marketDetail,marketThumb,marketBanner,categoryId
+		FROM
+			Market 
+		WHERE marketId = #{id} 
+	</select>
 </mapper>

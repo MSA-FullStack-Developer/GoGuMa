@@ -53,9 +53,22 @@ public class MarketController {
 		return "market/createMarket";
 	}
 	
-	@GetMapping("/show.do/{marketId}")
-	public String showMarket(@PathVariable long marketId, Model model) {
+	@GetMapping("/show.do")
+	public String showMarket(@RequestParam long marketNum, Model model, Principal principal) throws Exception {
 		
+		MarketDTO market = this.marketService.getMarket(marketNum);
+		log.info("[showMarket] market : " + market);
+		boolean isMine = false;
+		
+		if(principal != null) {
+			MemberDTO member = this.memberService.getMember(principal.getName());
+			if(member.getId() == market.getMemberId()) {
+				isMine = true;
+			}
+		}
+		model.addAttribute("isMine", isMine);
+		model.addAttribute("market", market);
+	
 		return "market/showMarket";
 	}
 
@@ -70,7 +83,7 @@ public class MarketController {
 			MarketDTO market = this.marketService.createMarket(data);
 			log.debug("[createMarket] market : " + market);
 			// 만들어진 마켓으로 리다이렉트 하기
-			return "redirect:/market/show.do/" + market.getMarketId();
+			return "redirect:/market/show.do?marketNum=" + market.getMarketId();
 		} catch (UploadFileFailException e) {
 
 			e.printStackTrace();

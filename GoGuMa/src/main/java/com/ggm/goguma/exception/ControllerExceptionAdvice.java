@@ -28,4 +28,14 @@ public class ControllerExceptionAdvice {
 		return "redirect:/member/join/start.do";
 	}
 	
+	
+	@ExceptionHandler(NotFoundMemberExcption.class)
+	public String NotFoundMemberExcptionHandler(NotFoundMemberExcption e, HttpServletRequest request) {
+		
+		
+		log.info("[NotFoundMemberExcptionHandler] 찾을 수 없는 멤버");
+		
+		log.info(request.getPathInfo());
+		return "redirect:/member/login.do";
+	}
 }
