@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.cart.CartItemDTO;
 import com.ggm.goguma.dto.cart.CartOrderListDTO;
 import com.ggm.goguma.dto.cart.ProductOrderDTO;
@@ -55,8 +56,11 @@ public class OrderServiceImpl implements OrderService{
 		
 		log.info(map);
 		orderMapper.saveOrderDetail(map);
-		//2-1. 포인트 이벤트에 주문 상세 번호 별로 적립된 포인트가 저장된다.
-		
+		//2-1. 포인트 이벤트에 주문 상세 번호 별로 적립된 포인트가 적립예정인 상태로 저장된다.
+			//주문 상세에서 포인트 적입 예정인 상품들을 담는다.
+		List<PointDTO> pointList = orderMapper.getBeforePoint(memberId, receiptKey);
+		System.out.println(pointList);
+		orderMapper.savePointEvent(pointList);
 		//2-2. 포인트를 사용한 경우 포인트 이벤트에 주문상세번호 없이 차감 데이터를 저장한다.
 		
 		//3. 구매한 상품 수량만큼 상품 수량이 감소 업데이트 된다.

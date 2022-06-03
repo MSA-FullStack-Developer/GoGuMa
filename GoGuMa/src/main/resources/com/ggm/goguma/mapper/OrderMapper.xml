@@ -72,7 +72,7 @@
 		 <selectKey keyProperty="transactionDTO.receiptId" resultType="long" order="AFTER">SELECT ISEQ$$_92238.CURRVAL FROM DUAL</selectKey>
 	</insert>
 	
-	<!-- PK의 값을 sequence의 nextval을 사용해서 생성할 경우에는 insert all을 사용 하면 안된다.-->
+	<!-- PK의 값을 sequence의 nextval을 사용해서 생성할 경우 시퀀스 증가함수 사용.-->
  	<insert id="saveOrderDetail" parameterType="hashmap">
  	INSERT ALL
  		<foreach collection="productOrderList" item="item" open="" separator=" " close="SELECT * FROM DUAL">
@@ -87,6 +87,37 @@
 			VALUES(
 					get_orderdetail_access_id('ISEQ$$_92317'), #{receiptKey}, #{item.productId}, #{item.ordQty}, 'N', #{item.cartId}
 				)
+		</foreach>
+	</insert>
+	
+	<select id="getBeforePoint" parameterType="long" resultType="PointDTO">
+		SELECT O.memberid memberid, O.receiptid receiptid, O.orderid orderid, FLOOR(O.productprice * (MI.pointpercent/100)) AS pointvalue
+		FROM orderview O JOIN membergradeINFO MI
+		ON O.memberid = MI.memberid
+		WHERE O.receiptid = #{receiptKey} and O.memberid=#{memberId}
+	</select>
+	
+	<insert id="savePointEvent" parameterType="list">
+		INSERT ALL
+		<foreach collection="list" item="item" open="" separator=" " close="SELECT * FROM DUAL">
+			INTO pointevent(
+				pointeventid,
+				memberid,
+				receiptid,
+				orderid,
+				pointtype,
+				pointvalue,
+				preordination
+			)
+			VALUES(
+				get_orderdetail_access_id('ISEQ$$_92242'),
+				#{item.memberId},
+				#{item.receiptId},
+				#{item.orderId},
+				'earn',
+				#{item.pointValue},
+				0
+			)
 		</foreach>
 	</insert>
 </mapper>
