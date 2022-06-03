@@ -8,6 +8,7 @@ import lombok.Data;
 
 @Data
 public class TransactionDTO {
+	private long receiptId;
 	private List<ProductOrderDTO> products;
 	private DeliveryAddressDTO address;
 	private String requirement;

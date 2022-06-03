@@ -48,6 +48,40 @@
 	
     console.log($('.pProductName').text());
     //총 판매 금액, 총 멤버십 할인
+    
+    /* var parr = [];
+		
+		$('#nrmProd').find(".order-product").each(function(index, item){
+		  var cartId = $(item).find("input[name=cartId]").val();
+		  var productId = $(item).find("input[name=productId]").val();
+		  var ordQty = $(item).find("input[name=cartAmount]").val();
+		  parr.push({cartId, productId, ordQty});
+		});
+		
+		var addr = {
+		    nickName: $('#addressNickName').text(),
+			recipient: $('#name').text(),
+			address: $('#addressName').text(),
+			contact: $('#phonenumber').text()
+		  };
+		var req = $('.requirement-in').val();
+		var oriprc = $('#total').val();
+		var memDc = parseInt($('#membershipDiscount').val());
+		var ucI = $('#use-coupon-id').val();
+		var couponDis = $('#couponDiscount').val();
+		var usePoint = $('#GPoint').val();
+		var totprc = $('#finalPrice').val();
+    console.log(parr);
+    console.log(addr);
+    console.log(req);
+    console.log(oriprc);
+    console.log(memDc);
+    
+    console.log(ucI);
+    console.log(couponDis);
+    console.log(usePoint);
+    console.log(totprc); */
+    
     var total = $('#total').val();
     $('#total-price').text(numFormatComma(total));
     
@@ -262,11 +296,11 @@
 		  };
 		var req = $('.requirement-in').val();
 		var oriprc = $('#total').val();
-		var memDc = $('#membershipDiscount').val();
+		var memDc = parseInt($('#membershipDiscount').val());
 		var ucI = $('#use-coupon-id').val();
 		var couponDis = $('#couponDiscount').val();
 		var usePoint = $('#GPoint').val();
-		var totprc = $('#finalPrice').val();
+		var totprc = parseInt($('#finalPrice').val());
 		var data = {
 		    products: parr,
 		    address: addr,
@@ -279,7 +313,7 @@
 		    totalPrice: totprc
 		};
 		console.log(data);
-/* 		$.ajax({
+ 		$.ajax({
 		  type : "POST",
 			url : "${contextPath}/order/api/paytransaction",
 			contentType: "application/json; charset=UTF-8",
@@ -298,7 +332,7 @@
 
 				alert(message);
 			}
-		}); */
+		});
 		
 	}
 	
@@ -457,10 +491,10 @@
 															<input type="hidden" name="cartId" value="${i.cartId }"/>
 															<input type="hidden" name="productId" value="${i.productId }"/>
 															<input type="hidden" name="cartAmount" value="${i.cartAmount }"/>
-															<a href="이동할 링크" class="pProductName">"${i.parentProductName }"</a>
+															<a href="이동할 링크" class="pProductName">${i.parentProductName }</a>
 														</div>
 														<div class="product-option">
-															<span class="product-option-name"> 옵션: ${i.productName } </span>
+															 옵션: <span class="product-option-name">${i.productName } </span>
 														</div>
 													</td>
 													<td class="cart-product-count">
@@ -490,15 +524,14 @@
 													</td>
 												</tr>
 											</c:forEach>
-
 										</thead>
 									</table>
 									<input type="hidden" id="total" value="${total }"/>
 									<input type="hidden" id="membershipDiscount" value="${membershipDiscount }"/>
-									<input type="hidden" id="use-coupon-id" value=/>
-									<input type="hidden" id="couponDiscount" value=/>
+									<input type="hidden" id="use-coupon-id" value="" />
+									<input type="hidden" id="couponDiscount" value="" />
 									<input type="hidden" id="GPoint" value="0"/>
-									<input type="hidden" id="finalPrice" value=/>
+									<input type="hidden" id="finalPrice" value="${total - membershipDiscount }" />
 								</div>
 							</div>
 						</div>

@@ -31,7 +31,7 @@ import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.cart.CartItemDTO;
 import com.ggm.goguma.dto.cart.CartOrderDTO;
 import com.ggm.goguma.dto.cart.CartOrderListDTO;
-import com.ggm.goguma.dto.cart.CartOrderListDTOInfo;
+import com.ggm.goguma.dto.cart.TransactionDTO;
 import com.ggm.goguma.dto.coupon.MemberCouponOrderDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.service.MyPageService;
@@ -168,11 +168,18 @@ public class OrderController {
 	
 	@ResponseBody
 	@PostMapping("api/paytransaction")
-	public void paytransaction(@RequestBody List<CartOrderListDTO> reqs) throws Exception {
-		// 상품 결제 완료 후 DB에서 필요한 작업 실행
+	public void paytransaction(@RequestBody TransactionDTO transactionDTO, Authentication authentication) throws Exception {
+		String memberEmail = "";
+		UserDetails user = (UserDetails)authentication.getPrincipal();
+		//사용자 이메일정보를 가져온다.
+		memberEmail = user.getUsername();
+		//사용자 정보 가져오기
+		MemberDTO memberDTO = memberService.getMember(memberEmail);
+		long memberId = memberDTO.getId();
 		
-		log.info("카트 정보 리스트: " +reqs);
-		//orderService.paytransaction();
+		// 상품 결제 완료 후 DB에서 필요한 작업 실행
+		log.info("카트 정보 리스트: " +transactionDTO);
+		orderService.paytransaction(transactionDTO, memberId);
 	}
 	
 	@PostMapping("/orderResult")

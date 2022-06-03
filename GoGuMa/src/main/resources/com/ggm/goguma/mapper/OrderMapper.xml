@@ -39,4 +39,54 @@
 		WHERE
 			memberid = #{memberId} and used = 0 and expiration > sysdate
 	</select>
+	
+	<insert id="saveReceipt" parameterType="map">
+		INSERT INTO receipt(
+							memberid, 
+							recipient, 
+							rcptcontact, 
+							rcptaddress,
+							rcptnickname,
+							requirement,
+							originalprice, 
+							membershipdiscount,
+							coupondiscount,
+							usagepoint, 
+							totalprice,
+							couponid
+							)
+		VALUES(
+		#{memberId}, 
+		#{transactionDTO.address.recipient}, 
+		#{transactionDTO.address.contact}, 
+		#{transactionDTO.address.address},
+		#{transactionDTO.address.nickName},
+		#{transactionDTO.requirement},
+		#{transactionDTO.originalPrice},
+		#{transactionDTO.membershipDiscount},
+		#{transactionDTO.couponDiscount}, 
+		#{transactionDTO.usagePoint},
+		#{transactionDTO.totalPrice},
+		#{transactionDTO.couponId}
+		 )
+		 <selectKey keyProperty="transactionDTO.receiptId" resultType="long" order="AFTER">SELECT ISEQ$$_92238.CURRVAL FROM DUAL</selectKey>
+	</insert>
+	
+	<!-- PK의 값을 sequence의 nextval을 사용해서 생성할 경우에는 insert all을 사용 하면 안된다.-->
+ 	<insert id="saveOrderDetail" parameterType="hashmap">
+ 	INSERT ALL
+ 		<foreach collection="productOrderList" item="item" open="" separator=" " close="SELECT * FROM DUAL">
+			INTO orderdetail(
+									orderid,
+									receiptid,
+									productid,
+									ordercount,
+									orderstatus,
+									cartid
+									)
+			VALUES(
+					get_orderdetail_access_id('ISEQ$$_92317'), #{receiptKey}, #{item.productId}, #{item.ordQty}, 'N', #{item.cartId}
+				)
+		</foreach>
+	</insert>
 </mapper>
