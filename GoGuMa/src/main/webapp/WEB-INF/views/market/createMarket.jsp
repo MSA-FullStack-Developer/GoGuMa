@@ -52,18 +52,24 @@
 	
 	<script>
 	    $(document).ready(function () {
+	    	
+	    	var error = "${error}";
+	    	if(error) {
+	    		alert(error);
+	    	}
+	    	
 	        $("#upload-thumbnail").click(function () {
-	            $("#marketThumb").click();
+	            $("#thumbnail").click();
 	        });
 	
 	        $("#upload-banner").click(function () {
-	            $("#marketBanner").click();
+	            $("#banner").click();
 	        });
-	        $("#marketThumb").change(function () {
+	        $("#thumbnail").change(function () {
 	            var img = $("#preview-thumbnail");
 	            readfile(this, img);
 	        });
-	        $("#marketBanner").change(function () {
+	        $("#banner").change(function () {
 	            var img = $("#preview-banner");
 	            readfile(this,img);
 	        });
@@ -72,7 +78,7 @@
 	            var btn = $(this);
 	            var value = btn.data("value");
 	            console.log(value);
-	            $("#category").val(value);
+	            $("#categoryId").val(value);
 	
 	        
 	            btn.parent("div").find("button").each(function(idx,elem) {
@@ -105,7 +111,9 @@
             <h1>나만의 마켓 만들기</h1>
             <p class="text-secondary">아래 정보를 기입해주세요.</p>
 
-            <form id="MarketForm">
+            <form id="MarketForm" method="post" action="${contextPath}/market/createMarket.do" enctype="multipart/form-data">
+                <input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
+                <input type="hidden" name="memberId" value="12" /> 
                 <label for="marketName" class="form-label">
                     사용할 마켓 이름
                 </label>
@@ -116,24 +124,24 @@
                 </label>
                 <input id="marketDetail" name="marketDetail" type="text" class="form-control"
                     placeholder="마켓에 대해 설명해주세요." required/>
-                <label for="marketThumb" class="form-label mt-3">
+                <label for="thumbnail" class="form-label mt-3">
                     마켓 썸네일
                 </label>
-                <input id="marketThumb" name="marketThumb" type="file" class="form-control" accept=".jpg, .jpeg, .png"
+                <input id=thumbnail name="thumbnail" type="file" class="form-control" accept=".jpg, .jpeg, .png"
                     style="position: absolute; left: -9999px;"  required>
                 <div id="upload-thumbnail">
-                    <img id="preview-thumbnail" class="w-100 h-100" src="./gallery.png"/>
+                    <img id="preview-thumbnail" class="w-100 h-100" src="${contextPath}/resources/img/gallery.png"/>
                 </div>
-                <label for="marketBanner" class="form-label mt-3">
+                <label for="banner" class="form-label mt-3">
                     마켓 배너 이미지 <span class="text-secondary">(가로 1320px 이상으로 넣어주세요.)</span>
                 </label>
-                <input id="marketBanner" name="marketBanner" type="file" class="form-control" accept=".jpg, .jpeg, .png"
+                <input id="banner" name="banner" type="file" class="form-control" accept=".jpg, .jpeg, .png"
                     style="position: absolute; left: -9999px;"  required>
                 <div id="upload-banner">
-                    <img id="preview-banner" class="w-100 h-100" src="./gallery.png"/>
+                    <img id="preview-banner" class="w-100 h-100" src="${contextPath}/resources/img/gallery.png"/>
                 </div>
 
-                <input id="category" name="category" type="hidden" class="form-control" required/>
+                <input id="categoryId" name="categoryId" type="hidden" class="form-control" required/>
                 <div class="accordion mt-3" id="accordionCategories">
                     <div class="accordion-item">
                       <h2 class="accordion-header" id="headingOne">
@@ -144,15 +152,9 @@
                       <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <div class="d-flex justify-content-between flex-wrap">
-                                <button type="button" name="categoryBtn" class="btn btn-outline-primary mt-2" data-value="1">패션잡화/명품</button>
-                                <button type="button" name="categoryBtn" class="btn btn-outline-primary mt-2" data-value="2">패션잡화/명품</button>
-                                <button type="button" name="categoryBtn" class="btn btn-outline-primary mt-2" data-value="3">패션잡화/명품</button>
-                                <button type="button" name="categoryBtn" class="btn btn-outline-primary mt-2" data-value="4">패션잡화/명품</button>
-                                <button type="button" name="categoryBtn" class="btn btn-outline-primary mt-2" data-value="5">패션잡화/명품</button>
-                                <button type="button" name="categoryBtn" class="btn btn-outline-primary mt-2" data-value="6">패션잡화/명품</button>
-                                <button type="button" name="categoryBtn" class="btn btn-outline-primary mt-2" data-value="7">패션잡화/명품</button>
-                                <button type="button" name="categoryBtn" class="btn btn-outline-primary mt-2" data-value="8">패션잡화/명품</button>
-                                
+                            	<c:forEach items="${categoryList}" var="category">
+                            		<button type="button" name="categoryBtn" class="btn btn-outline-primary mt-2" data-value="${category.categoryID}">${category.categoryName}</button>
+                            	</c:forEach>                                
                             </div>
                         </div>
                       </div>

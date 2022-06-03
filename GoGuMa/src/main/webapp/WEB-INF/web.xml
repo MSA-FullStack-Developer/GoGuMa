@@ -51,11 +51,20 @@
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
+		
+		<multipart-config>
+			<location>/Users/tmdwns/Documents/file_repo/goguma</location>
+			<max-file-size>41943040</max-file-size>
+			<max-request-size>83886080</max-request-size>
+			<file-size-threshold>20971520</file-size-threshold>
+		</multipart-config>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	
+
 
 </web-app>
