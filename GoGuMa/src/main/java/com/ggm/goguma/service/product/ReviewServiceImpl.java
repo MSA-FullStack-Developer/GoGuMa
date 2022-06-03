@@ -57,7 +57,7 @@ public class ReviewServiceImpl implements ReviewService {
 		int deleteResult = reviewMapper.deleteReview(reviewID);
 		
 		if (deleteResult == 1) {
-			attachMapper.deleteAll(reviewID); // 테이블에 존재하는 해당 게시물의 파일 모두 삭제
+			attachMapper.attachDelete(reviewID);
 		}
 	}
 

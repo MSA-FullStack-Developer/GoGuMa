@@ -9,9 +9,7 @@ import com.ggm.goguma.dto.ImageAttachDTO;
 public interface ImageAttachMapper {
 	public void attachInsert(ImageAttachDTO attachDTO);
 	
-	public void attachDelete(String imageUUID);
+	public void attachDelete(long reviewID);
 
 	public List<ImageAttachDTO> attachListByReviewID(@Param("reviewID") long reviewID);
-	
-	public void deleteAll(long reviewID);
 }

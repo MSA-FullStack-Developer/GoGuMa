@@ -29,12 +29,10 @@ select {
 	text-align: center;
 }
 
-.uploadResult ul li img{
+.uploadResult img{
 	width: 100px;
-}
-
-.uploadResult ul li span{
-	color: black;
+	margin-left: 10px;
+	margin-right: 10px;
 }
 
 .selectbox {
@@ -241,7 +239,6 @@ input {
 	top: 20%;
 	left: 50%;
 	transform: translate(-50%, -20%);
-	background-color: #ffffff;
 	width: 30%;
 	height: 30%;
 	text-align: center;

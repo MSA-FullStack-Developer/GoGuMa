@@ -227,27 +227,39 @@
             	var productID = $("#productID").val(); // 구매한 상품 번호
                 var memberID = $("#memberID").val(); // 로그인한 회원 번호
                	var content = $(".write-review-content").val(); // 상품평 내용
-                
-               	// *** 첨부한 상품평 이미지 등록 코드 추가 ***
+               	var list = new Array();
+               	
+               	$(".uploadResult ul li").each(function(i, obj) {
+        			var jobj = $(obj);
+        			
+        			var attachDTO = new Object();
+        			attachDTO.imageName = jobj.data("imagename");
+        			attachDTO.imagePath = jobj.data("imagepath");
+        			list.push(attachDTO);
+        		});
                	
         		var data = {
-        			"productID" : productID,
-        			"memberID" : memberID,
-        			"content" : content
+        			productID : productID,
+        			memberID : memberID,
+        			content : content,
+        			attachList : list
         		};
         		
         		$.ajax({
 		            url: "${contextPath}/category/1/insertReview",
 		            type: "POST",
-		            data: data,
+		            contentType: 'application/json; charset=utf-8',
+		            data: JSON.stringify(data),
 		            beforeSend : function(xhr) {
         				xhr.setRequestHeader(header, token);
         			},
 		            success : function(result){
-		            	if (result) {
+		            	if (result == 1) {
 			                $(".modal").hide();
 			                alert("상품평이 등록되었습니다.");
 			                location.reload();
+		            	} else {
+		            		alert("상품평 등록 실패");
 		            	}
 		            },error : function(xhr, status, error) {
         				var errorResponse = JSON.parse(xhr.responseText);
@@ -288,36 +300,39 @@
         			}
     	        });
         	});
-            
-            $(".uploadResult").on("click", "button", function(e) {
+        	
+        	$(".uploadResult").on("click", "button", function(e) {
             	var token = $("meta[name='_csrf']").attr("content");
         		var header = $("meta[name='_csrf_header']").attr("content");
         		
         		console.log("delete file");
-        		var targetFile = $(this).data("file");
+        		var targetFile = $(this).data("imagename");
         		var targetLi = $(this).closest("li");
+        		
+        		var data = {
+        			imageName : targetFile
+        		};
         		
         		$.ajax({
         			url: '${contextPath}/category/1/deleteFile',
-        			data: {imageName: targetFile},
-        			dataType: 'text',
+        			data: data,
+        			type: 'POST',
         			beforeSend : function(xhr) {
         				xhr.setRequestHeader(header, token);
         			},
-        			type: 'POST',
        				success: function(result) {
        					alert("이미지가 삭제되었습니다.");
        					
        					targetLi.remove();
        				},error : function(xhr, status, error) {
-           				var errorResponse = JSON.parse(xhr.responseText);
-           				var errorCode = errorResponse.code;
-           				var message = errorResponse.message;
-           				alert(message);
-           			}
+        				var errorResponse = JSON.parse(xhr.responseText);
+        				var errorCode = errorResponse.code;
+        				var message = errorResponse.message;
+        				alert(message);
+        			}
         		});
         	});
-            
+        	
         	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
         	var maxSize = 5242880;
         	
@@ -341,15 +356,11 @@
         		var str="";
         		
         		$(uploadResultArr).each(function(i, obj){
-        			var fileCallPath = encodeURIComponent(obj.imagePath + "/s_" + obj.imageUUID + "_" + obj.imageName);
-    				var fileLink = fileCallPath.replace(new RegExp(/\\/),"/");
-    				
-    				str += "<li data-imagePath='" + obj.imagePath + "'";
-    				str += " data-imageUUID='" + obj.imageUUID + "' data-imageName='" + obj.imageName;
-    				str += "'><div>";
-    				str += "<span>" + obj.imageName + "</span>";
-    				str += "<button type='button' data-file=\'" + fileCallPath + "\'>X</button><br>";
-    				str += "<img src='${contextPath}/category/1/display?imageName=" + fileCallPath+"'>";
+        			str += "<li data-imagepath='"+obj.imagePath+"'";
+    				str += " data-imagename='"+obj.imageName+"' ><div>";
+    				str += "<span>"+obj.imageName+"</span>";
+    				str += "<button type='button' data-imagename='"+obj.imageName+"'>X</button><br>";
+    				str += "<img src='" + obj.imagePath + "'>";
     				str += "</div>";
     				str += "</li>";
         		}); 
@@ -383,9 +394,11 @@
         			},
         			type: 'POST',
         			dataType: 'json',
-        				success: function(result){
-        				console.log(result);
+       				success: function(result){
+       					console.log(result);
         				
+       					attachList = result;
+       					
         				showUploadResult(result);
         			}, error : function(xhr, status, error) {
         				var errorResponse = JSON.parse(xhr.responseText);
@@ -519,7 +532,7 @@
 	                            <button type="button" class="review-button" id="finishBtn">작성 완료</button>
 	                          </div>
 	                    </div>
-	                 </c:if>
+	                </c:if>
                     
                     <c:forEach items="${reviewList}" var="review">
 	                    <div class="review" id="review">
@@ -539,10 +552,9 @@
                             
 	                            <div class="imgList">
 	                                <div class="imgC">
-	                                    <img class="reviewImg" src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
-	                                        alt="모달할 이미지">
-                                        <img class="reviewImg" src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
-	                                        alt="모달할 이미지">
+		                                <c:forEach items="${review.attachList}" var="attach">
+		                                    <img class="reviewImg" src="${attach.imagePath}" alt="${attach.imagePath}">
+	                                    </c:forEach>
 	                                </div>
 	                            </div>
 	
