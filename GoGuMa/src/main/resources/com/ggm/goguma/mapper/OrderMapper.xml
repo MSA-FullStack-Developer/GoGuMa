@@ -137,4 +137,13 @@
 			1
 		)
 	</insert>
+	
+	<update id="minusProductStock" parameterType="hashmap">
+		<foreach collection="productOrderList" item="item" open="DECLARE BEGIN" separator=";" close=";END;">
+			UPDATE product SET stock = stock - #{item.ordQty}
+			<where>
+				productid = #{item.productId}
+			</where>
+		</foreach>
+	</update>
 </mapper>

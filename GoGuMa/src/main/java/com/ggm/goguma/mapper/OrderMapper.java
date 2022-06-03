@@ -31,4 +31,7 @@ public interface OrderMapper {
 	//포인트를 사용한 경우 타입이 usage인 포인트 저장
 	void minusPointEvent(@Param("memberId")long memberId, @Param("receiptKey")long receiptKey, @Param("point")int point) throws Exception;
 
+	//상품 재고량 감소
+	void minusProductStock(HashMap<String, Object> map)throws Exception;
+
 }
