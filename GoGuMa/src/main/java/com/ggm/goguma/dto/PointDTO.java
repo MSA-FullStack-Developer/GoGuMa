@@ -13,5 +13,5 @@ public class PointDTO {
     private String pointType;
     private long pointValue;
     private Date pointCreatedDate;
-    private long pointOrdination;
+    private long inquirable;
 }

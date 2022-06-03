@@ -195,15 +195,15 @@
     });
     
     $("#g-point").on("input propertychange paste", function(){
-    	var point = $('#g-point').val();
-    	var limitpoint = Number($('#member-point').text());
+    	var point = parseInt($('#g-point').val());
+    	var limitpoint = Number($('#member-point').val());
     	console.log(limitpoint);
     	console.log("로그: " + numFormatComma(point));
-    	if(point != ""){
+    	if(numFormatComma(point) != "NaN"){
 	   	  	//포인트가 가진 포인트보다 많거 0보다 작은경우
 	      	if(point > limitpoint || point < 0){
 	      	  alert("보유 포인트를 넘길 수 없습니다. 모든 포인트를 사용합니다.");
-	      	  $('#g-point').val(numFormatComma(limitpoint));
+	      	  $('#g-point').val(limitpoint);
 	      	  $('#point-discount').text(numFormatComma(limitpoint));
 	      	  $('#GPoint').attr('value', parseInt(limitpoint));
 	      	  calDisPrice();
@@ -216,6 +216,12 @@
     	  console.log("빈값");
     	  $('#point-discount').text(0);
     	}
+    });
+    
+    $('#point-cancel').click(function(){
+      $('#g-point').val(0);
+      $('#point-discount').text(0);
+      $('#GPoint').attr('value', 0);
     });
     
     $('.requirement-in').change(function(){
@@ -456,9 +462,7 @@
 								<li><strong>03</strong> <span>주문완료</span></li>
 							</ol>
 						</div>
-						<div class="cart-bottom">
-							<span> ${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> G.Point: <span id="member-point"> ${point } </span>P
-						</div>
+						<input type="hidden" id="member-point" value=${point }>
 					</div>
 
 					<div class="accordion accordion-flush">
@@ -528,8 +532,8 @@
 									</table>
 									<input type="hidden" id="total" value="${total }"/>
 									<input type="hidden" id="membershipDiscount" value="${membershipDiscount }"/>
-									<input type="hidden" id="use-coupon-id" value="" />
-									<input type="hidden" id="couponDiscount" value="" />
+									<input type="hidden" id="use-coupon-id" value="0" />
+									<input type="hidden" id="couponDiscount" value="0" />
 									<input type="hidden" id="GPoint" value="0"/>
 									<input type="hidden" id="finalPrice" value="${total - membershipDiscount }" />
 								</div>
@@ -558,30 +562,28 @@
 							<div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
 								<div class="accordion-body">
 									<div class="coupon-point">
-										<div class="row ">
+										<div class="row" style="padding: 10px;">
 											<div class="col-md-2">쿠폰 할인</div>
 											<div class="col-md-2 dis-coupon">
-												<span class="dis-coupon-prc">0</span>원
+												<span class="dis-coupon-prc">적용 없음</span>
 											</div>
 											<div class="col-md-4">
 												<button class="btn text-white btn-default" id="getCoupon-btn" data-bs-toggle="modal" data-bs-target="#couponModal">쿠폰 조회 및 적용</button>
 											</div>
 										</div>
-										<div class="row">
+										<div class="row" style="padding: 10px;">
 											<div class="col-md-2">G.Point</div>
 											<div class="col-md-2">
 												<div class="input-group mb-3">
 													<input type="number" class="form-control use-point" id="g-point" placeholder="G.Point" aria-describedby="basic-addon1" value=0>
-													<div class="input-group-append">
-														<span class="input-group-text" id="basic-addon1">P</span>
-													</div>
 												</div>
 											</div>
 										
 											<div class="col-md-4">
-												<button class="btn text-white btn-default">사용취소</button>
+												<button class="btn text-white btn-default" id="point-cancel">사용취소</button>
 											</div>
-											<div class="col-md-4">[보유 G.Point: ${point }]</div>
+											<div class="col-md-4">[보유 G.Point: <fmt:formatNumber value="${point}"
+																type="currency" currencySymbol="" />원]</div>
 										</div>
 									</div>
 								</div>

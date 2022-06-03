@@ -62,7 +62,9 @@ public class OrderServiceImpl implements OrderService{
 		System.out.println(pointList);
 		orderMapper.savePointEvent(pointList);
 		//2-2. 포인트를 사용한 경우 포인트 이벤트에 주문상세번호 없이 차감 데이터를 저장한다.
-		
+		if(transactionDTO.getUsagePoint() != 0) {
+			orderMapper.minusPointEvent(memberId, receiptKey, transactionDTO.getUsagePoint());
+		}
 		//3. 구매한 상품 수량만큼 상품 수량이 감소 업데이트 된다.
 		
 		//4. 쿠폰을 사용한 경우 결제 상세테이블에서 회원 ID와 사용한 쿠폰ID로 쿠폰을 사용처리한다.

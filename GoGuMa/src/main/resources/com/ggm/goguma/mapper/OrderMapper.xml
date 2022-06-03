@@ -107,7 +107,7 @@
 				orderid,
 				pointtype,
 				pointvalue,
-				preordination
+				inquirable
 			)
 			VALUES(
 				get_orderdetail_access_id('ISEQ$$_92242'),
@@ -119,5 +119,22 @@
 				0
 			)
 		</foreach>
+	</insert>
+	
+	<insert id="minusPointEvent">
+		INSERT INTO pointevent(
+				memberid,
+				receiptid,
+				pointtype,
+				pointvalue,
+				inquirable
+		)
+		VALUES(
+			#{memberId},
+			#{receiptKey},
+			'usage',
+			#{point},
+			1
+		)
 	</insert>
 </mapper>
