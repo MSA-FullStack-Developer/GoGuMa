@@ -58,7 +58,7 @@
                         <h5><b>MY 혜택</b></h5>
                     </div>
                     <div>
-                        포인트
+                        <a href="${contextPath}/mypage/pointHistory/all">포인트</a>
                     </div>
                     <div >
                         예치금
@@ -107,7 +107,7 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            포인트
+                            <a href="${contextPath}/mypage/pointHistory">포인트</a>
                         </div>
                         <div>
                             1,000P
@@ -271,7 +271,7 @@
                         </tr>
                         <tr>
                             <th>예상 적립 포인트</th>
-                            <td>+<fmt:formatNumber value="${pointDTO.pointValue}" />P</td>
+                            <td>+<fmt:formatNumber value="${earnablePoint}" />P</td>
                         </tr>
                         <tr>
                             <th>최종 결제금액</th>

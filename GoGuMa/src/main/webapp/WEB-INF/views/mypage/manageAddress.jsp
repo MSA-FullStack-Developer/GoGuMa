@@ -56,7 +56,7 @@
                         <h5><b>MY 혜택</b></h5>
                     </div>
                     <div>
-                        포인트
+                        <a href="${contextPath}/mypage/pointHistory/all">포인트</a>
                     </div>
                     <div >
                         예치금
@@ -83,7 +83,7 @@
                         비밀번호변경
                     </div>
                     <div>
-                        배송지관리
+                        <a href="${contextPath}/mypage/manageAddress">배송지관리</a>
                     </div>
                     <div>
                         회원탈퇴
@@ -94,7 +94,7 @@
                 <div>
                     <h5><b>👨‍💻 송진호님</b></h5>
                 </div>
-                <div class="d-flex flex-row justify-content-evenly border border-2 rounded">
+                <div class="d-flex flex-row justify-content-evenly border border-2 mb-3 rounded">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
                             회원등급
@@ -105,7 +105,7 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            포인트
+                            <a href="${contextPath}/mypage/pointHistory">포인트</a>
                         </div>
                         <div>
                             1,000P
@@ -136,10 +136,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-3" >
+                <div class="mb-2">
                     <h5><b>배송지 관리</b></h5>
                 </div>
-                <div class="mt-2">
+                <div>
                     <h5>기본 배송지</h5>
                 </div>
                 <table class="table table-hover mb-3" style="margin: auto; text-align: center">

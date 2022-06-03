@@ -40,7 +40,7 @@
 		<div class="row">
 			<div class="col-3">
                 <div class="col mb-4">
-                    <h3><b>마이페이지</b></h3>
+                    <h3><a href="${contextPath}/mypage"><b>마이페이지</b></a></h3>
                 </div>
                 <div class="col mb-4">
                     <div>
@@ -55,7 +55,7 @@
                         <h5><b>MY 혜택</b></h5>
                     </div>
                     <div>
-                        포인트
+                        <a href="${contextPath}/mypage/pointHistory/all">포인트</a>
                     </div>
                     <div >
                         예치금
@@ -104,7 +104,7 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            포인트
+                            <a href="${contextPath}/mypage/pointHistory">포인트</a>
                         </div>
                         <div>
                             1,000P
