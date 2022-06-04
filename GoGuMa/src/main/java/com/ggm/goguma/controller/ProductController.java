@@ -1,29 +1,53 @@
 package com.ggm.goguma.controller;
 
 import java.util.List;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.UUID;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import com.ggm.goguma.amazons3.AmazonS3Utils;
 import com.ggm.goguma.dto.CategoryDTO;
+import com.ggm.goguma.dto.ImageAttachDTO;
 import com.ggm.goguma.dto.ProductDTO;
 import com.ggm.goguma.dto.ReviewDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.product.CategoryService;
+import com.ggm.goguma.service.product.ImageAttachService;
 import com.ggm.goguma.service.product.ProductService;
 import com.ggm.goguma.service.product.ReviewService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import net.coobird.thumbnailator.Thumbnailator;
 
 @Log4j
 @Controller
@@ -37,7 +61,11 @@ public class ProductController {
 	
 	private final ReviewService reviewService;
 	
+	private final ImageAttachService attachService;
+	
 	private final MemberService memberService;
+	
+	private final AmazonS3Utils amazonService;
 	
 	private long pageSize  = 12; 
 	private long blockSize = 10;
@@ -95,6 +123,16 @@ public class ProductController {
 			// 상품평 불러오기
 			List<ReviewDTO> reviewList = reviewService.getReviewList(productID);
 			log.info(reviewList);
+			
+			// 상품평 목록 이미지 불러오기
+			reviewList.forEach(review -> {
+				try {
+					List<ImageAttachDTO> attachList = attachService.attachListByReviewID(review.getReviewID());
+					review.setAttachList(attachList);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
 			
 			// 상품평을 작성할 수 있는 조건 (= 상품평 쓰기 버튼이 보이는 조건)
 			// 1. 사용자가 권한이 있고,		
@@ -155,16 +193,22 @@ public class ProductController {
 	}
 	
 	// 상품평 작성
-	@PostMapping("/insertReview")
 	@ResponseBody
-	public Boolean insertReview(@RequestParam("productID") long productID, @RequestParam("memberID") long memberID, @RequestParam("content") String content, Authentication authentication) throws Exception{
+	@PostMapping(value="/insertReview", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public String insertReview(@RequestBody ReviewDTO reviewDTO, Authentication authentication) throws Exception{
 		try {
 			if (authentication != null) {
-				reviewService.insertReview(productID, memberID, content);
-				return true;
+				log.info("상품평 이미지 목록 : " + reviewDTO.getAttachList());
+				
+				if (reviewDTO.getAttachList() != null) {
+					reviewDTO.getAttachList().forEach(attach -> log.info(attach));
+				}
+				
+				reviewService.insertReview(reviewDTO);
+				return "1";
 			}
 			
-			return false;
+			return "2";
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -176,8 +220,20 @@ public class ProductController {
 	@ResponseBody
 	public Boolean deleteReview(@RequestParam("reviewID") long reviewID, Authentication authentication) throws Exception {
 		try {
-			if(authentication != null) {
-				reviewService.deleteReview(reviewID);	
+			if (authentication != null) {
+				// 상품평 이미지 삭제
+				List<ImageAttachDTO> attachList = attachService.attachListByReviewID(reviewID);
+				attachList.forEach(review -> {
+					try {
+						amazonService.deleteFile(review.getImageName());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				});
+				
+				// 상품평 삭제
+				reviewService.deleteReview(reviewID);
+				
 				return true;
 			}
 			return false;
@@ -187,4 +243,37 @@ public class ProductController {
 		}
 	}
 	
+	@GetMapping("/uploadAjax")
+	public void uploadAjax() {
+		log.info("upload Ajax");
+	}
+	
+	@PostMapping(value = "uploadAjaxAction", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<ImageAttachDTO>> uploadAjaxPost(MultipartFile[] uploadFile) throws IOException{
+		List<ImageAttachDTO> list = new ArrayList<>();
+		
+		for (MultipartFile multipartFile : uploadFile) {
+			// 파일 업로드
+			String[] uploadResult = amazonService.uploadFile("upload", multipartFile);
+
+			ImageAttachDTO attachDTO = new ImageAttachDTO();
+			
+			attachDTO.setImageName(uploadResult[0]);
+			attachDTO.setImagePath(uploadResult[1]);
+			list.add(attachDTO);
+		}
+		
+		log.info(list);
+		
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
+	@PostMapping("deleteFile")
+	@ResponseBody
+	public ResponseEntity<String> deleteFile(String imageName) {
+		amazonService.deleteFile(imageName);
+		
+		return new ResponseEntity<String>("deleted",HttpStatus.OK);
+	}
 }

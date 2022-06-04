@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="com.ggm.goguma.mapper.ImageAttachMapper">
+
+	<!-- 상품평 이미지 등록 -->
+	<insert id="attachInsert">
+		INSERT INTO reviewimage (reviewid, reviewimagename, reviewimagepath)
+		VALUES (#{reviewID}, #{imageName}, #{imagePath})
+	</insert>
+	
+	<!-- 상품평 이미지 삭제 -->
+	<delete id="attachDelete">
+		DELETE FROM reviewimage WHERE reviewid=#{reviewID}
+	</delete>
+	
+	<!-- 상품평 이미지 조회 -->
+	<select id="attachListByReviewID" resultType="com.ggm.goguma.dto.ImageAttachDTO">
+		SELECT reviewid, reviewimagename AS imageName, reviewimagepath AS imagePath
+		FROM reviewimage
+		WHERE reviewid=#{reviewID}
+	</select>
+	
+</mapper>
