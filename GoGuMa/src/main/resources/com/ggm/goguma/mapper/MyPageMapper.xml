@@ -59,6 +59,24 @@
 		order by pointCreatedDate desc
 	</select>
 
+	<select id="getAvailableCoupon" resultType="CouponDTO">
+		select couponid, couponname, benefit, restriction, createddate, expirationdate, used
+		from couponview where memberid = #{memberId}
+		<![CDATA[
+			and used = 0 and sysdate < expirationdate
+		]]>
+		order by createddate
+	</select>
+	
+	<select id="getUnavailableCoupon" resultType="CouponDTO">
+		select couponid, couponname, benefit, restriction, createddate, expirationdate, used
+		from couponview where memberid = #{memberId}
+		<![CDATA[
+			and (used = 1 or sysdate >= expirationdate)
+		]]>
+		order by createddate
+	</select>
+
 	<select id="getAddressList" resultType="DeliveryAddressDTO">
 		select addressId, nickname, recipient, address, contact, isdefault
 		from deliveryaddress where memberId = #{memberId}

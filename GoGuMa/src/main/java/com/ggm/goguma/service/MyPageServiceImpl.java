@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
 import com.ggm.goguma.dto.PointDTO;
@@ -76,6 +77,12 @@ public class MyPageServiceImpl implements MyPageService {
 	public void updateOrderStatus(long orderId, String status) throws Exception {
 		mapper.updateOrderStatus(orderId, status);
 		if(status.equals("F")) mapper.makeInquirable(orderId);
+	}
+
+	@Override
+	public List<CouponDTO> getCouponHistory(long memberId, boolean available) throws Exception {
+		if(available) return mapper.getAvailableCoupon(memberId);
+		return mapper.getUnavailableCoupon(memberId);
 	}
 	
 	@Override

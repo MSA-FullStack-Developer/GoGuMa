@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
@@ -80,7 +81,6 @@ public class MyPageController {
 			@RequestParam(value="endDate", required=false) String endDate,
 			@PathVariable("type") String type, Model model) {
 		try {
-			log.info(startDate+" "+endDate);
 			List<PointDTO> pointHistory = service.getPointHistory(1, type, startDate, endDate);
 			model.addAttribute("pointHistory", pointHistory);
 			model.addAttribute("type", type);
@@ -88,6 +88,21 @@ public class MyPageController {
 			log.info(e.getMessage());
 		}
 		return "mypage/pointHistory";
+	}
+	
+	@RequestMapping(value="/couponHistory", method=RequestMethod.GET)
+	public String getCouponHistory(Model model) {
+		try {
+			List<CouponDTO> unavailableCouponList = service.getCouponHistory(1, false);
+			List<CouponDTO> availableCouponList = service.getCouponHistory(1, true);
+			model.addAttribute("unavailableCouponList", unavailableCouponList);
+			model.addAttribute("availableCouponList", availableCouponList);
+			log.info(unavailableCouponList);
+			log.info(availableCouponList);
+		} catch(Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/couponHistory";
 	}
 	
 	@RequestMapping(value="/manageAddress", method=RequestMethod.GET)

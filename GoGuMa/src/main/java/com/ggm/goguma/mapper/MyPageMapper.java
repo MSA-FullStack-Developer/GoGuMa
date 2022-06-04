@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
 import com.ggm.goguma.dto.PointDTO;
@@ -33,6 +34,10 @@ public interface MyPageMapper {
 
 	List<PointDTO> getSpecificPointHistoryByPeriod(@Param("memberId") long memberId, @Param("type") String type, @Param("startDate") String startDate, @Param("endDate") String endDate) throws Exception;
 	
+	List<CouponDTO> getAvailableCoupon(long memberId) throws Exception;
+
+	List<CouponDTO> getUnavailableCoupon(long memberId) throws Exception;
+	
 	List<DeliveryAddressDTO> getAddressList(long memberid) throws Exception;
 
 	DeliveryAddressDTO getDefaultAddress(long memberid) throws Exception;
@@ -48,5 +53,4 @@ public interface MyPageMapper {
 	void cancelDefault(@Param("memberId") long memberId) throws Exception;
 
 	int getMemberPoint(@Param("memberId") long memberId) throws Exception;
-
 }

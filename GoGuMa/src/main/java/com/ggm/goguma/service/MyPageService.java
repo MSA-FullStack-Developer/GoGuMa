@@ -2,6 +2,7 @@ package com.ggm.goguma.service;
 
 import java.util.List;
 
+import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
 import com.ggm.goguma.dto.PointDTO;
@@ -22,6 +23,8 @@ public interface MyPageService {
 	
 	List<PointDTO> getPointHistory(long memberId, String type, String startDate, String endDate) throws Exception;
 
+	List<CouponDTO> getCouponHistory(long memberId, boolean available) throws Exception;
+	
 	List<DeliveryAddressDTO> getAddressList(long memberId) throws Exception;
 
 	DeliveryAddressDTO getDefaultAddress(long memberId) throws Exception;
