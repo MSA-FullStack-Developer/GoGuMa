@@ -2,6 +2,7 @@ package com.ggm.goguma.service.market;
 
 
 import com.ggm.goguma.dto.market.CreateMarketDTO;
+import com.ggm.goguma.dto.market.FollowMarketDTO;
 import com.ggm.goguma.dto.market.MarketDTO;
 import com.ggm.goguma.exception.UploadFileFailException;
 
@@ -11,4 +12,9 @@ public interface MarketService {
 	
 	
 	MarketDTO getMarket(long marketId) throws Exception;
+	
+	boolean isAlreadyFollowMarket(FollowMarketDTO followMarket);
+	
+	boolean createOrDeleteFollowMarket(FollowMarketDTO followMarket);
+	
 }

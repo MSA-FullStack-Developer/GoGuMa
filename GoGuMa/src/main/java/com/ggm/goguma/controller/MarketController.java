@@ -4,17 +4,22 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ggm.goguma.dto.CategoryDTO;
+import com.ggm.goguma.dto.DefaultResponseDTO;
 import com.ggm.goguma.dto.market.CreateMarketDTO;
+import com.ggm.goguma.dto.market.FollowMarketDTO;
 import com.ggm.goguma.dto.market.MarketDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.exception.UploadFileFailException;
@@ -59,13 +64,21 @@ public class MarketController {
 		MarketDTO market = this.marketService.getMarket(marketNum);
 		log.info("[showMarket] market : " + market);
 		boolean isMine = false;
+		boolean isAlreadyFollow  = false;
 		
 		if(principal != null) {
 			MemberDTO member = this.memberService.getMember(principal.getName());
 			if(member.getId() == market.getMemberId()) {
 				isMine = true;
 			}
+			FollowMarketDTO followMarket = new FollowMarketDTO();
+			followMarket.setMarketId(marketNum);
+			followMarket.setMemberId(member.getId());
+			isAlreadyFollow = this.marketService.isAlreadyFollowMarket(followMarket);
 		}
+		
+		
+		model.addAttribute("isAlreadyFollow", isAlreadyFollow);
 		model.addAttribute("isMine", isMine);
 		model.addAttribute("market", market);
 	
@@ -92,5 +105,28 @@ public class MarketController {
 		}
 
 	}
+	
+	@PostMapping(value = "/api/updateFollow.do", produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public DefaultResponseDTO updateFollowMarket(@RequestParam long marketId, Principal principal) {
+	
+		log.info("[updateFollowMarket] marketId : " + marketId);
+		
+		MemberDTO member = this.memberService.getMember(principal.getName());
+		
+		FollowMarketDTO followMarket = new FollowMarketDTO();
+		followMarket.setMarketId(marketId);
+		followMarket.setMemberId(member.getId());
+		
+		boolean isCreated = this.marketService.createOrDeleteFollowMarket(followMarket);
+		
+		String message = isCreated ? "follow" : "cancel";
+		
+		
+		
+		return DefaultResponseDTO.builder().status(200).message(message).build();
+		
+	}
+	
 
 }

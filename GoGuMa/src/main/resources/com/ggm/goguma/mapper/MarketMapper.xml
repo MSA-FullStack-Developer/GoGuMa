@@ -29,4 +29,19 @@
 			Market 
 		WHERE marketId = #{id} 
 	</select>
+	
+	<select id="findFollwMarketCountByMarketIdAndMemberId" parameterType="FollowMarketDTO" resultType="int">
+		SELECT count(*) FROM followMarket
+		WHERE marketId = #{marketId} AND memberId = #{memberId}
+	</select>
+	
+	<insert id="insertFollowMarket" parameterType="FollowMarketDTO">
+		INSERT INTO followMarket(marketId, memberId) 
+		VALUES (#{marketId},#{memberId})
+	</insert>
+	
+	<delete id="deleteFollowMarket" parameterType="FollowMarketDTO">
+		DELETE followMarket
+		WHERE marketId = #{marketId} AND memberId = #{memberId}
+	</delete>
 </mapper>

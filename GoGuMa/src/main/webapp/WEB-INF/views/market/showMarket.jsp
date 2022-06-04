@@ -9,6 +9,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <title>마켓 - 고구마</title>
 
 <!-- bootstrap css -->
@@ -32,7 +34,55 @@
 </style>
 </head>
 <body>
-<div class="container pt-3 pb-3" style="width: 1320px; max-width: none !important;">
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			var marketId = $("input[name=marketId]").val();
+			
+			$("#follow-btn").click(function() {
+				var data = {
+						marketId: marketId,
+						_csrf: token
+				};
+				var btn = $(this);
+				
+				$.ajax({ 
+					url : '${contextPath}/market/api/updateFollow.do',
+					type : 'POST',
+					data : data,
+					beforeSend : function(xhr) {
+			            xhr.setRequestHeader(header, token);
+		            },
+					success:function(result) {
+						console.log(result);
+						var message = result.message;
+						
+						if(message === 'follow') {
+							btn.removeClass();
+							btn.addClass("btn btn-secondary");
+							btn.html("팔로우 중");
+						} else {
+							btn.removeClass();
+							btn.addClass("btn btn-primary");
+							btn.html("팔로우 하기");
+						}
+						
+					},
+					error: function(req, status, error) {
+						if(req.status == 401) {
+							alert("로그인 후 이용 할 수 있습니다.");
+						}else {
+							alert("데이터 전송 중 문제가 발생하였습니다.");
+						}
+					}
+				});
+			}) 
+		}); 	
+	
+	</script>
+	<div class="container pt-3 pb-3">
+		<input name="marketId" type="hidden" value="${market.marketId}" />
         <section name="head-area" class="w-100 border border-secondary rounded">
             <div class="w-100"
                 style="background-image: url(${contextPath}/image/${market.marketBanner}); background-repeat: no-repeat; background-size: cover; background-position: center center; height: 200px;">
@@ -48,7 +98,13 @@
                 </div>
                 
                 <div class="col d-flex justify-content-center align-items-center">
-                    <button type="button" class="btn btn-primary">팔로우 하기</button>
+                	<c:if test="${not isAlreadyFollow}">
+                		<button id="follow-btn" type="button" class="btn btn-primary">팔로우 하기</button>
+                	</c:if>
+                	<c:if test="${isAlreadyFollow}">
+                		<button id="follow-btn" type="button" class="btn btn-secondary">팔로우 중</button>
+                	</c:if>
+                
                 </div>
             </div>
 

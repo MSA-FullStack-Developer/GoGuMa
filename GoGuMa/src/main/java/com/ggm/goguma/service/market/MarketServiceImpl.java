@@ -1,7 +1,7 @@
 package com.ggm.goguma.service.market;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.market.CreateMarketDTO;
+import com.ggm.goguma.dto.market.FollowMarketDTO;
 import com.ggm.goguma.dto.market.MarketDTO;
 import com.ggm.goguma.exception.NotFoundMarketException;
 import com.ggm.goguma.exception.UploadFileFailException;
@@ -61,6 +62,29 @@ public class MarketServiceImpl implements MarketService{
 	
 	}
 
+
+	@Override
+	public boolean isAlreadyFollowMarket(FollowMarketDTO followMarket) {
+		int count = this.marketMapper.findFollwMarketCountByMarketIdAndMemberId(followMarket);
+		
+		return count > 0 ? true : false;
+	}
+
+	@Override
+	public boolean createOrDeleteFollowMarket(FollowMarketDTO followMarket) {
+		
+		boolean isCreated = true;
+		
+		if(!isAlreadyFollowMarket(followMarket)) {
+			this.marketMapper.insertFollowMarket(followMarket);
+		} else {
+			isCreated = false;
+			this.marketMapper.deleteFollowMarket(followMarket);
+		}
+		return isCreated;
+	}
+
+	
 	
 	
 }
