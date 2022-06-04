@@ -143,8 +143,10 @@
                 </div>
                 <div class="d-flex flex-row align-items-center border border-2 p-3 mb-2">
                     <b>조회기간 설정</b>
-                    <input type="text" id="startDate" class="ms-2 me-1"> ~ <input type="text" id="endDate" class="ms-1">
-                    <button type="button" id="inquireHistory" class="btn btn-sm btn-secondary ms-2">조회</button>
+                	<form id="inquirePeriodForm" method="GET" action="${contextPath}/mypage/pointHistory/${type}">
+	                    <input type="text" name="startDate" class="ms-2 me-1"> ~ <input type="text" name="endDate" class="ms-1">
+	                    <button type="button" class="btn btn-sm btn-secondary ms-2" onclick="inquireHistory()">조회</button>
+                	</form>
                 </div>
                 
                 <div class="d-flex flex-row mb-2">
@@ -241,30 +243,37 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.kr.min.js"></script>
 <script type="text/javascript">
-	$('#startDate').datepicker({
-		format: 'yyyy-mm-dd',
-		language: 'kr',
-		autoclose: true,
-		todayHighlight: true
-	}).on('changeDate', function(selected) {
-		let startDate = new Date(selected.date.valueOf());
-		$('#endDate').datepicker('setStartDate', startDate);
-	}).on('clearDate', function(selected) {
-		$('#endDate').datepicker('setStartDate', null);
+	$(document).ready(function() {
+		$('input[name=startDate]').datepicker({
+			format: 'yyyy-mm-dd',
+			language: 'kr',
+			autoclose: true,
+			todayHighlight: true
+		}).on('changeDate', function(selected) {
+			let startDate = new Date(selected.date.valueOf());
+			$('input[name=endDate]').datepicker('setStartDate', startDate);
+		}).on('clearDate', function(selected) {
+			$('input[name=endDate]').datepicker('setStartDate', null);
+		});
+		$('input[name=endDate]').datepicker({
+			format: 'yyyy-mm-dd',
+			language: 'kr',
+			autoclose: true,
+			todayHighlight: true
+		}).on('changeDate', function(selected) {
+			let endDate = new Date(selected.date.valueOf());
+			$('input[name=startDate]').datepicker('setEndDate', endDate);
+		}).on('clearDate', function(selected) {
+			$('input[name=startDate]').datepicker('setEndDate', null);
+		});
 	});
-	$('#endDate').datepicker({
-		format: 'yyyy-mm-dd',
-		language: 'kr',
-		autoclose: true,
-		todayHighlight: true
-	}).on('changeDate', function(selected) {
-		let endDate = new Date(selected.date.valueOf());
-		$('#startDate').datepicker('setEndDate', endDate);
-	}).on('clearDate', function(selected) {
-		$('#startDate').datepicker('setEndDate', null);
-	});
-    $('#inquireHistory').on("click", function() {
-        
-    });
+	
+    function inquireHistory() {
+    	if($('input[name=startDate]').val()=='' || $('input[name=endDate]').val()=='') {
+    		alert('조회하려는 날짜를 선택해주세요.');
+    	} else {
+    		$('#inquirePeriodForm').submit();
+    	}
+    };
 </script>
 </html>
