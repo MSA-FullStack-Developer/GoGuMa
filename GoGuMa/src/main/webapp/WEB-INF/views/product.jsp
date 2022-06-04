@@ -43,8 +43,9 @@
 	    	var optionName = $("#option option:selected").text(); // 옵션 상품 이름
 	    	var optionID = $("#option option:selected").data("id"); // 옵션 상품 번호
 	    	var optionPrice = $("#option option:selected").data("price"); // 옵션 상품 가격
-	    	
+	    	console.log("옵션 아이디 : " + optionID);
 	    	$('.selectedOption').text(optionName);
+	    	$('#product-id').val(optionID);
 	    	$('.total_price').text(optionPrice.format() + "원"); // 초기화
 	    }
 	    
@@ -187,19 +188,24 @@
                 }
         	});
             
-            $('#buyBtn').on("click", function() { // 바로구매하기
+/*             $('#buyBtn').on("click", function() { // 바로구매하기
 				var optionName = $("#option option:selected").text(); // 옵션 상품 이름
             	
             	if (optionName != "선택 없음") {
 	            	var token = $("meta[name='_csrf']").attr("content");
 	        		var header = $("meta[name='_csrf_header']").attr("content");
 	                
+	        		var optionID = $("#option option:selected").data("id");
+              		var amount = $("#numBox").val();
+              		
 	        		var data = {
 	        			// *** 바로구매하기 위해 보낼 데이터 ***
+	        			productId : optionID,
+	        			ordQTY : amount
 	        		};
 	        		$.ajax({
 	        			type : "POST",
-	        			url : "${contextPath}/order",
+	        			url : "${contextPath}/order/",
 	        			data : data,
 	        			beforeSend : function(xhr) {
 	        				xhr.setRequestHeader(header, token);
@@ -218,7 +224,7 @@
             	} else {
                 	alert("옵션을 선택하세요.");
                 }
-            });
+            }); */
             
             $('#finishBtn').on("click", function() { // 상품평 작성하기
             	var token = $("meta[name='_csrf']").attr("content");
@@ -345,13 +351,22 @@
                     </tr>
                     </c:if>
                 </table>
-                
+                <form id="product-order" action="${contextPath}/order/" method="post">
+                	<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                	<input type="hidden" id="product-price" name="productOrder.nrmOriPrc" value="${productInfo.productPrice}"/>
+                	<fmt:parseNumber var="disPrc" value="${productInfo.productPrice * (memberDTO.grade.discountPercent / 100)}" integerOnly="true"/>
+                	<input type="hidden" id="product-discount" name="productOrder.disOriPrc" value="${disPrc}" />
+                	
+                	<fmt:parseNumber var="totPrc" value="${productInfo.productPrice - disPrc}" integerOnly="true"/>
+                	<input type="hidden" id="product-discount" name="productOrder.totOriPrc" value="${totPrc}" />
                 <div class="selectedInfo">
                 	<h5 class="selectedOption">선택 없음</h5>
+                	<input type="hidden" name="productOrder.productId" id="product-id" value= />
                 	<p class="cartStock">
                         <button type="button" class="calc" id="minus">-</button>
                         <span style="text-align: center;">
-                        	<input type="number" id="numBox" min="1" max="${productInfo.stock}" value="1" readonly="readonly" />
+                        
+                        	<input type="number" name="productOrder.ordQty" id="numBox" min="1" max="${productInfo.stock}" value="1" readonly="readonly" />
                         </span>
                         <button type="button" class="calc" id="plus">+</button>
                      </p>
@@ -359,8 +374,9 @@
                 
                 <div class="btnDiv">
                 	<button class="cartBtn" id="cartBtn">장바구니</button>
-                    <button class="buyBtn" id="buyBtn">바로구매</button>
+                    <button type="submit" class="buyBtn" id="buyBtn">바로구매</button>
                 </div>
+                </form>
             </div>
             
             <div class="optionImg">

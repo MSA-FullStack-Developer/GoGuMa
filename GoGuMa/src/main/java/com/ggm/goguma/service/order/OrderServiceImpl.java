@@ -39,13 +39,13 @@ public class OrderServiceImpl implements OrderService{
 	@Transactional
 	@Override
 	public void paytransaction(TransactionDTO transactionDTO, long memberId) throws Exception {
+		log.info("transactionDTO : " + transactionDTO);
 		
 		//1. 결제 상세 테이블에 구매정보가 저장된다.
 		orderMapper.saveReceipt(transactionDTO, memberId);
 		
 		// 결제 상세 번호 가져오기
 		long receiptKey = transactionDTO.getReceiptId();
-		log.info("receiptKey: " + receiptKey);
 		
 		//2. 생성된 결제 상세 테이블의 번호로 상품, 상품 수량을 주문 상세에 저장한다. (여러개 가능)
 		List<ProductOrderDTO> productOrderList = transactionDTO.getProducts();
@@ -67,11 +67,22 @@ public class OrderServiceImpl implements OrderService{
 		}
 		//3. 구매한 상품 수량만큼 상품 수량이 감소 업데이트 된다.
 		orderMapper.minusProductStock(map);
+		
 		//4. 쿠폰을 사용한 경우 결제 상세테이블에서 회원 ID와 사용한 쿠폰ID로 쿠폰을 사용처리한다.
-		
+		 if(transactionDTO.getCouponId() != 0){
+			 log.info("쿠폰을 사용한 경우");
+			 orderMapper.usageCoupon(memberId, transactionDTO.getCouponId());
+		 }
 		//5. 장바구니에서 구매한 구매한 상품의 경우 장바구니 목록에서 삭제된다.
-		
+		log.info("오더서비스에서 상품 정보 : " + transactionDTO.getProducts());
 		//모든 결제 과정 완료
+	}
+
+	
+	//단일 상품 바로 구매
+	@Override
+	public List<CartItemDTO> getOrder(List<CartOrderListDTO> dtoList) throws Exception {
+		return orderMapper.getOrder(dtoList);
 	}
 
 }

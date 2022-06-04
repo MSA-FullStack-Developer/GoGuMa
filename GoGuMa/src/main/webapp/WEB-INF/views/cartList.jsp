@@ -435,7 +435,7 @@
 	<div class="cbody">
 		<div class="contents">
 			<div class="csection">
-				<form id="frmCartInfo" action="${contextPath}/order/" method="post">
+				<form id="frmCartInfo" action="${contextPath}/order/" method="POST">
 					<div class="cart-area">
 						<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<div class="cart-head">

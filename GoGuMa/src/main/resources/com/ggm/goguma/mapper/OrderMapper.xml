@@ -25,6 +25,16 @@
 			</foreach>
 	</select>
 	
+	<select id="getOrder" parameterType="list" resultType="CartItemDTO">
+		SELECT *
+		FROM productinfo
+		WHERE productid = 
+		<foreach collection="list" item="arr">
+			#{arr.productId}
+		</foreach>
+
+	</select>
+	
 	<select id="getMemberCoupon" resultType="MemberCouponOrderDTO">
 		SELECT 
 			memberid,
@@ -145,5 +155,11 @@
 				productid = #{item.productId}
 			</where>
 		</foreach>
+	</update>
+	
+	<update id="usageCoupon">
+		UPDATE membercoupon
+		SET used = 1
+		WHERE couponid = ${couponId} and memberid = #{memberId}
 	</update>
 </mapper>

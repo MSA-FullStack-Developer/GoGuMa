@@ -28,6 +28,7 @@
 			WHERE P.memberid = #{memberId}
 	</select>
 	
+	
 	<update id="addCartCount" parameterType="long">
 		UPDATE cart
 		SET cartamount = cartamount + 1

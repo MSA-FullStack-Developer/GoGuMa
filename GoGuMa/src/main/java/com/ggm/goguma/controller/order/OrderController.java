@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,8 +61,11 @@ public class OrderController {
 	private MyPageService myPageService;
 	
 	@RequestMapping(value="/", method = {RequestMethod.POST, RequestMethod.GET})
-	public String showOrderList(@ModelAttribute CartOrderDTO cartOrderDTO, Model model, Authentication authentication) throws Exception{
-			String memberEmail = "";
+	public String showOrderList(@ModelAttribute CartOrderDTO cartOrderDTO, Model model, Authentication authentication, BindingResult errors) throws Exception{
+		if ( errors.hasErrors() ){
+			log.info(errors.getAllErrors() );
+			}	
+		String memberEmail = "";
 			// 사용자가 권한이 있는 경우
 			if (authentication != null){
 				UserDetails user = (UserDetails)authentication.getPrincipal();
@@ -73,9 +77,30 @@ public class OrderController {
 				// 회원이 담은 카트 리스트를 불러온다.
 				long memberId = memberDTO.getId();
 				
+				//장바구니를 거치지 않고 상품 구매하는경우
 				if(cartOrderDTO.getCartOrderListDTO() == null) {
-					return "redirect:/";
-				}
+					 List<CartOrderListDTO> dtoList = new ArrayList<CartOrderListDTO>();
+					 dtoList.add(cartOrderDTO.getProductOrder());
+					 
+					 log.info("오더에서 카트오더 DTO : " + cartOrderDTO); log.info("오더에서 dtoList: " +
+					 dtoList);
+					 
+					 List<CartItemDTO> list = orderService.getOrder(dtoList); //주문할 상품을 불러온다.
+					 list.get(0).setCartAmount(cartOrderDTO.getProductOrder().getOrdQty());
+					 log.info("단일상품 구매 리스트: " + list); // 기본 배송지와 저장된 배송지를 불러온다.
+					 DeliveryAddressDTO defaultAddress =
+					 myPageService.getDefaultAddress(memberId); List<DeliveryAddressDTO>
+					 addressList = myPageService.getAddressList(memberId); // 회원이 가진 포인트 조회한다. int
+					 int point = myPageService.getMemberPoint(memberId);
+					 
+					 model.addAttribute("list", list); model.addAttribute("dtoList", dtoList);
+					 model.addAttribute("memberDTO", memberDTO); // 회원 정보를 저장한다.
+					 model.addAttribute("point", point); //회원이 가진 포인트를 저장한다.
+					 model.addAttribute("defaultAddress", defaultAddress);
+					 model.addAttribute("addressList", addressList); return "order";
+					 
+				} 
+				log.info("어어어ㅓ어어어어어엉여영");
 				List<CartOrderListDTO> dtoList = new ArrayList<CartOrderListDTO>();
 				//상품 주문 dto에서 선택한 상품만 추려내기 위한 작업
 				for(int i = 0; i < cartOrderDTO.getCartOrderListDTO().size(); i++) {
@@ -94,34 +119,34 @@ public class OrderController {
 				List<CartItemDTO> list = orderService.getOrderList(dtoList);	//주문할 상품을 불러온다.
 				
 				// 기본 배송지와 저장된 배송지를 불러온다.
-				DeliveryAddressDTO defaultAddress = myPageService.getDefaultAddress(1);
-				List<DeliveryAddressDTO> addressList = myPageService.getAddressList(1);
+				DeliveryAddressDTO defaultAddress = myPageService.getDefaultAddress(memberId);
+				List<DeliveryAddressDTO> addressList = myPageService.getAddressList(memberId);
 				
 				// 회원이 가진 포인트 조회한다.
 				int point = myPageService.getMemberPoint(memberId);
 				
 				model.addAttribute("point", point);	 //회원이 가진 포인트를 저장한다.
-				model.addAttribute("list", list); // 회원이 담은 카트 정보를 저장한다.
+				model.addAttribute("list", list); // 회원이 담은 카트나 단품 상품 정보를 저장한다.
 				//총 판매 금액
 				//총 멤버십 할인 금액
-				
 				model.addAttribute("memberDTO", memberDTO); // 회원 정보를 저장한다.
 				model.addAttribute("dtoList", dtoList);
 				System.out.println("장바구니에서 선택한 상품 구매를 누른 경우 담기는 상품 리스트: " + dtoList);
+				
 				model.addAttribute("defaultAddress", defaultAddress);
 				model.addAttribute("addressList", addressList);
 				
 				System.out.println("회원의 정보 : " + memberDTO);
 				System.out.println("주문할 상품들의 정보 : " + list);
-				System.out.println("주문할 상품 리스트 dtoList : " + dtoList);
 				
 				log.info("기본 배송지 정보" + defaultAddress);
 				log.info("전체 배송지 정보" + addressList);
 				return "order";
-			}else {
+			} else {
 				return "redirect:/";
 			}
 	}
+	
 	
 	//회원 쿠폰 조회
 	@PostMapping("api/getMemberCoupon")

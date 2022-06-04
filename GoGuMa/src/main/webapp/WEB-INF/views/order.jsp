@@ -48,39 +48,7 @@
 	
     console.log($('.pProductName').text());
     //총 판매 금액, 총 멤버십 할인
-    
-    /* var parr = [];
-		
-		$('#nrmProd').find(".order-product").each(function(index, item){
-		  var cartId = $(item).find("input[name=cartId]").val();
-		  var productId = $(item).find("input[name=productId]").val();
-		  var ordQty = $(item).find("input[name=cartAmount]").val();
-		  parr.push({cartId, productId, ordQty});
-		});
-		
-		var addr = {
-		    nickName: $('#addressNickName').text(),
-			recipient: $('#name').text(),
-			address: $('#addressName').text(),
-			contact: $('#phonenumber').text()
-		  };
-		var req = $('.requirement-in').val();
-		var oriprc = $('#total').val();
-		var memDc = parseInt($('#membershipDiscount').val());
-		var ucI = $('#use-coupon-id').val();
-		var couponDis = $('#couponDiscount').val();
-		var usePoint = $('#GPoint').val();
-		var totprc = $('#finalPrice').val();
-    console.log(parr);
-    console.log(addr);
-    console.log(req);
-    console.log(oriprc);
-    console.log(memDc);
-    
-    console.log(ucI);
-    console.log(couponDis);
-    console.log(usePoint);
-    console.log(totprc); */
+
     
     var total = $('#total').val();
     $('#total-price').text(numFormatComma(total));

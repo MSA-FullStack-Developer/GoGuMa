@@ -34,4 +34,8 @@ public interface OrderMapper {
 	//상품 재고량 감소
 	void minusProductStock(HashMap<String, Object> map)throws Exception;
 
+	void usageCoupon(@Param("memberId")long memberId, @Param("couponId")long couponId)throws Exception;
+
+	List<CartItemDTO> getOrder(List<CartOrderListDTO> dtoList)throws Exception;
+
 }
