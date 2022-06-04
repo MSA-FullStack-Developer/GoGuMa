@@ -44,6 +44,20 @@
 		from pointevent where memberid = #{memberId} and pointtype = #{type} and inquirable = 1
 		order by pointCreatedDate desc
 	</select>
+	
+	<select id="getPointHistoryByPeriod" resultType="PointDTO">
+		select pointeventid, pointtype, pointvalue, inquirable, pointCreatedDate, receiptid, orderid
+		from pointevent where memberid = #{memberId} and inquirable = 1
+		and pointCreatedDate between to_date(#{startDate}, 'yyyy-mm-dd') and to_date(#{endDate}, 'yyyy-mm-dd')
+		order by pointCreatedDate desc
+	</select>
+	
+	<select id="getSpecificPointHistoryByPeriod" resultType="PointDTO">
+		select pointeventid, pointtype, pointvalue, inquirable, pointCreatedDate, receiptid, orderid
+		from pointevent where memberid = #{memberId} and pointtype = #{type} and inquirable = 1
+		and pointCreatedDate between to_date(#{startDate}, 'yyyy-mm-dd') and to_date(#{endDate}, 'yyyy-mm-dd')
+		order by pointCreatedDate desc
+	</select>
 
 	<select id="getAddressList" resultType="DeliveryAddressDTO">
 		select addressId, nickname, recipient, address, contact, isdefault

@@ -12,9 +12,6 @@ import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
 import com.ggm.goguma.mapper.MyPageMapper;
 
-import lombok.extern.log4j.Log4j;
-
-@Log4j
 @Service
 public class MyPageServiceImpl implements MyPageService {
 	@Autowired
@@ -55,9 +52,15 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 
 	@Override
-	public List<PointDTO> getPointHistory(long memberId, String type) throws Exception {
-		if(type.equals("all")) return mapper.getPointHistory(memberId);
-		return mapper.getSpecificPointHistory(memberId, type);
+	public List<PointDTO> getPointHistory(long memberId, String type, String startDate, String endDate) throws Exception {
+		if(startDate==null || endDate==null) {
+			if(type.equals("all")) return mapper.getPointHistory(memberId);
+			return mapper.getSpecificPointHistory(memberId, type);
+		}
+		else {
+			if(type.equals("all")) return mapper.getPointHistoryByPeriod(memberId, startDate, endDate);
+			return mapper.getSpecificPointHistoryByPeriod(memberId, type, startDate, endDate);
+		}
 	}
 	
 	@Override

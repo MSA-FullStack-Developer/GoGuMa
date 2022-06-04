@@ -1,10 +1,8 @@
 package com.ggm.goguma.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,22 +60,7 @@ public class MyPageController {
 		}
 		return "mypage/orderDetail";
 	}
-	
-	@RequestMapping(value="/pointHistory/{type}", method=RequestMethod.GET)
-	public String getPointHistory(
-			@RequestParam(value="start", required=false) @DateTimeFormat(pattern="yyyy-mm-dd") Date start,
-			@RequestParam(value="end", required=false) @DateTimeFormat(pattern="yyyy-mm-dd") Date end,
-			@PathVariable("type") String type, Model model) {
-		try {
-			List<PointDTO> pointHistory = service.getPointHistory(1, type);
-			log.info(pointHistory);
-			model.addAttribute("pointHistory", pointHistory);
-		} catch (Exception e) {
-			log.info(e.getMessage());
-		}
-		return "mypage/pointHistory";
-	}
-	
+
 	@ResponseBody
 	@RequestMapping(value="/orderHistory/updateOrderStatus", method=RequestMethod.POST)
 	public String updateOrderStatus(@RequestParam("orderId") long orderId, @RequestParam("status") String status) {
@@ -89,6 +72,22 @@ public class MyPageController {
 			return "2";
 		}
 		return "1";
+	}
+	
+	@RequestMapping(value="/pointHistory/{type}", method=RequestMethod.GET)
+	public String getPointHistory(
+			@RequestParam(value="startDate", required=false) String startDate,
+			@RequestParam(value="endDate", required=false) String endDate,
+			@PathVariable("type") String type, Model model) {
+		try {
+			log.info(startDate+" "+endDate);
+			List<PointDTO> pointHistory = service.getPointHistory(1, type, startDate, endDate);
+			model.addAttribute("pointHistory", pointHistory);
+			model.addAttribute("type", type);
+		} catch (Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/pointHistory";
 	}
 	
 	@RequestMapping(value="/manageAddress", method=RequestMethod.GET)

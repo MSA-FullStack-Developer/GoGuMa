@@ -20,7 +20,7 @@ public interface MyPageService {
 	
 	int getEarnablePoint(long receiptId) throws Exception;
 	
-	List<PointDTO> getPointHistory(long memberId, String type) throws Exception;
+	List<PointDTO> getPointHistory(long memberId, String type, String startDate, String endDate) throws Exception;
 
 	List<DeliveryAddressDTO> getAddressList(long memberId) throws Exception;
 

@@ -28,6 +28,10 @@ public interface MyPageMapper {
 	List<PointDTO> getPointHistory(long memberId) throws Exception;
 
 	List<PointDTO> getSpecificPointHistory(@Param("memberId") long memberId, @Param("type") String type) throws Exception;
+
+	List<PointDTO> getPointHistoryByPeriod(@Param("memberId") long memberId, @Param("startDate") String startDate, @Param("endDate") String endDate) throws Exception;
+
+	List<PointDTO> getSpecificPointHistoryByPeriod(@Param("memberId") long memberId, @Param("type") String type, @Param("startDate") String startDate, @Param("endDate") String endDate) throws Exception;
 	
 	List<DeliveryAddressDTO> getAddressList(long memberid) throws Exception;
 
@@ -44,4 +48,5 @@ public interface MyPageMapper {
 	void cancelDefault(@Param("memberId") long memberId) throws Exception;
 
 	int getMemberPoint(@Param("memberId") long memberId) throws Exception;
+
 }
