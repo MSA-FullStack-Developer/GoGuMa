@@ -62,7 +62,7 @@
                         예치금
                     </div>
                     <div>
-                        쿠폰
+                        <a href="${contextPath}/mypage/couponHistory">쿠폰</a>
                     </div>
                 </div>
                 <div class="mb-4">
@@ -105,7 +105,7 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            <a href="${contextPath}/mypage/pointHistory">포인트</a>
+                            <a href="${contextPath}/mypage/pointHistory/all">포인트</a>
                         </div>
                         <div>
                             1,000P
@@ -121,7 +121,7 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            쿠폰
+                            <a href="${contextPath}/mypage/couponHistory">쿠폰</a>
                         </div>
                         <div>
                             3장
@@ -330,7 +330,13 @@
 	        	} else {
 					alert('배송지 수정 오류');
 				}
-	        }
+	        },
+			error:function(xhr, status, error) {
+				var errorResponse = JSON.parse(xhr.responseText);
+				var errorCode = errorResponse.code;
+				var message = errorResponse.message;
+				alert(message);
+			}
 	    });
 	}
 	
@@ -355,6 +361,12 @@
 				} else {
 					alert('삭제 오류');
 				}
+			},
+			error:function(xhr, status, error) {
+				var errorResponse = JSON.parse(xhr.responseText);
+				var errorCode = errorResponse.code;
+				var message = errorResponse.message;
+				alert(message);
 			}
 		});
 	}
@@ -379,6 +391,12 @@
 				} else {
 					alert('기본배송지 해지 오류');
 				}
+			},
+			error:function(xhr, status, error) {
+				var errorResponse = JSON.parse(xhr.responseText);
+				var errorCode = errorResponse.code;
+				var message = errorResponse.message;
+				alert(message);
 			}
 		});
 	}
@@ -413,7 +431,13 @@
 				        	} else {
 								alert('삭제 오류');
 							}
-				        }
+				        },
+						error:function(xhr, status, error) {
+		    				var errorResponse = JSON.parse(xhr.responseText);
+		    				var errorCode = errorResponse.code;
+		    				var message = errorResponse.message;
+		    				alert(message);
+		    			}
 					});
 				});
 			}
@@ -451,7 +475,13 @@
 		        	} else {
 						alert('배송지 추가 오류');
 					}
-		        }
+		        },
+				error:function(xhr, status, error) {
+    				var errorResponse = JSON.parse(xhr.responseText);
+    				var errorCode = errorResponse.code;
+    				var message = errorResponse.message;
+    				alert(message);
+    			}
 			});
 		});
 		
@@ -483,7 +513,13 @@
 						} else {
 							alert('삭제 오류');
 						}
-					}
+					},
+					error:function(xhr, status, error) {
+	    				var errorResponse = JSON.parse(xhr.responseText);
+	    				var errorCode = errorResponse.code;
+	    				var message = errorResponse.message;
+	    				alert(message);
+	    			}
 				});
 			}
 		});

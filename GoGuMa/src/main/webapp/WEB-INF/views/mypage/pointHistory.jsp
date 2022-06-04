@@ -64,7 +64,7 @@
                         예치금
                     </div>
                     <div>
-                        쿠폰
+                        <a href="${contextPath}/mypage/couponHistory">쿠폰</a>
                     </div>
                 </div>
                 <div class="mb-4">
@@ -107,7 +107,7 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            <a href="${contextPath}/mypage/pointHistory?type=all">포인트</a>
+                            <a href="${contextPath}/mypage/pointHistory/all">포인트</a>
                         </div>
                         <div>
                             1,000P
@@ -123,7 +123,7 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            쿠폰
+                            <a href="${contextPath}/mypage/couponHistory">쿠폰</a>
                         </div>
                         <div>
                             3장
