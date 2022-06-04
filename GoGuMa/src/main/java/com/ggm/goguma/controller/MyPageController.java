@@ -159,4 +159,18 @@ public class MyPageController {
 		}
 		return "1";
 	}
+	
+	/* *
+	 * 작성자 : 경민영
+	 * 작업 날짜 : 22.06.04
+	 * */
+	@RequestMapping(value="/myReview", method=RequestMethod.GET)
+	public String getMyReview(Model model) throws Exception {
+		try {
+			// 로그인한 회원 아이디로 작성 가능한 후기와 작성한 후기 불러오기
+		} catch(Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/myReview";
+	}
 }

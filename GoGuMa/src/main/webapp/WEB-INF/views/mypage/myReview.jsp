@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Insert title here</title>
+	<title>My Review</title>
     <!-- bootstrap icon -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 	<!-- bootstrap css -->
@@ -88,46 +88,10 @@
                     </div>
                 </div>
                 <div class="col mt-3">
-                    <h5><b>최근 주문내역</b></h5>
+                    <h5><b>내가 작성한 상품평</b></h5>
                 </div>
                 <div class="d-flex flex-row mb-2">
-                    <div class="bundle">
-                        <div class="d-flex flex-column align-items-center border rounded">
-                            <img src="resources\img\아몬드세트.jpg">
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            허니버터아몬드 허니버터아몬드 허니버터아몬드
-                        </div>
-                    </div>
-                    <div class="bundle">
-                        <div class="d-flex flex-column align-items-center border rounded">
-                            <img src="resources\img\아몬드세트.jpg">
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            허니버터아몬드 허니버터아몬드 허니버터아몬드
-                        </div>
-                    </div>
-                </div>
-                <div class="col mt-3">
-                    <h5><b>내가 작성한 후기</b></h5>
-                </div>
-                <div class="d-flex flex-row mb-2">
-                    <div class="bundle">
-                        <div class="d-flex flex-column align-items-center border rounded">
-                            <img src="resources\img\핫브레이크미니.jpg">
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            핫 브레이크 핫 브레이크 핫 브레이크 핫 브레이크
-                        </div>
-                    </div>
-                    <div class="bundle">
-                        <div class="d-flex flex-column align-items-center border rounded">
-                            <img src="resources\img\핫브레이크미니.jpg">
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            핫 브레이크 핫 브레이크 핫 브레이크 핫 브레이크
-                        </div>
-                    </div>
+                    <!-- 여기에 추가 -->
                 </div>
             </div>
 		</div>
