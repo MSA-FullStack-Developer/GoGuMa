@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -142,90 +145,67 @@
                     <a href="#" class="col p-2 active" id="available" style="text-align: center; background-color: rgb(187, 184, 184);">사용가능</a>
                     <a href="#" class="col p-2" id="unavailable" style="text-align: center;">사용완료 & 기간만료</a>
                 </div>
+                
+                <!-- 사용가능 쿠폰 -->
                 <table class="table mb-3 active" style="margin: auto; text-align: center; vertical-align: middle;">
                     <thead class="table-secondary table-group-divider">
                         <tr>
                             <th>쿠폰명</th>
                             <th>혜택</th>
-                            <th>사용조건</th>
+                            <!-- <th>사용조건</th> -->
                             <th>유효기간</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>2022 여름맞이 할인 쿠폰</td>
-                            <td>15,000원 할인</td>
-                            <td>50,000원 이상 구매시</td>
-                            <td>~ 2022/06/17</td>
-                        </tr>
-                        <tr>
-                            <td>생일기념 할인 쿠폰</td>
-                            <td>10,000원 할인</td>
-                            <td>-</td>
-                            <td>~ 2022/06/17</td>
-                        </tr>
-                        <tr>
-                            <td>LACOSTE 여름 세일 쿠폰</td>
-                            <td>5,000원 할인</td>
-                            <td>20,000원 이상 구매시</td>
-                            <td>~ 2022/06/17</td>
-                        </tr>
-                        <tr>
-                            <td>회원가입 기념 1만원 쿠폰</td>
-                            <td>10,000원 할인</td>
-                            <td>10,000원 이상 구매시</td>
-                            <td>~ 2022/06/17</td>
-                        </tr>
+                    	<c:forEach var="couponDTO" items="${availableCouponList}">
+	                        <tr>
+	                            <td>${couponDTO.couponName}</td>
+	                            <td><fmt:formatNumber value="${couponDTO.benefit}" />원 할인</td>
+	                            <!-- <td><fmt:formatNumber value="${couponDTO.restriction}" />원 이상 구매시</td> -->
+	                            <td>~ <fmt:formatDate pattern="yyyy-MM-dd" value="${couponDTO.expirationDate}" /></td>
+	                        </tr>
+	                    </c:forEach>
                     </tbody>
                 </table>
+                
+                <!-- 사용완료 & 기간만료 쿠폰 -->
                 <table class="table mb-3" style="margin: auto; text-align: center; vertical-align: middle;">
                     <thead class="table-secondary table-group-divider">
                         <tr>
                             <th>쿠폰명</th>
                             <th>혜택</th>
-                            <th>사용조건</th>
+                            <!-- <th>사용조건</th> -->
                             <th>유효기간</th>
                             <th>상태</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>2022 여름맞이 할인 쿠폰</td>
-                            <td>15,000원 할인</td>
-                            <td>50,000원 이상 구매시</td>
-                            <td>~ 2022/06/17</td>
-                            <td>사용완료</td>
-                        </tr>
-                        <tr>
-                            <td>생일기념 할인 쿠폰</td>
-                            <td>10,000원 할인</td>
-                            <td>-</td>
-                            <td>~ 2022/06/17</td>
-                            <td>사용완료</td>
-                        </tr>
-                        <tr>
-                            <td>LACOSTE 여름 세일 쿠폰</td>
-                            <td>5,000원 할인</td>
-                            <td>20,000원 이상 구매시</td>
-                            <td>~ 2022/06/17</td>
-                            <td>기간만료</td>
-                        </tr>
-                        <tr>
-                            <td>회원가입 기념 1만원 쿠폰</td>
-                            <td>10,000원 할인</td>
-                            <td>10,000원 이상 구매시</td>
-                            <td>~ 2022/06/17</td>
-                            <td>사용완료</td>
-                        </tr>
+                    	<c:forEach var="couponDTO" items="${unavailableCouponList}">
+                    		<tr>
+                    			<td>${couponDTO.couponName}</td>
+                    			<td><fmt:formatNumber value="${couponDTO.benefit}" />원 할인</td>
+                    			<!-- <td><fmt:formatNumber value="${couponDTO.restriction}" />원 이상 구매시</td> -->
+                    			<td>~ <fmt:formatDate pattern="yyyy-MM-dd" value="${couponDTO.expirationDate}" /></td>
+                    			<td>
+                    				<c:choose>
+                    					<c:when test="${couponDTO.used eq 1}">
+                    						사용완료
+                    					</c:when>
+                    					<c:otherwise>
+                    						기간만료
+                    					</c:otherwise>
+                    				</c:choose>
+                    			</td>
+                    		</tr>
+                    	</c:forEach>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-<!-- <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script> -->
+<script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
 <script type="text/javascript">
 
 </script>
