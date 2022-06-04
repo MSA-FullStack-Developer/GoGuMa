@@ -1,6 +1,6 @@
 @charset "UTF-8";
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
-
+		
 select {
 	width: 100px; 
 	border: 1px solid #999;
@@ -92,6 +92,7 @@ select {
     margin-right: 22px;
     font-size: 13pt;
     color: #111;
+    word-wrap: break-word;
 }
 
 .write-review-content {

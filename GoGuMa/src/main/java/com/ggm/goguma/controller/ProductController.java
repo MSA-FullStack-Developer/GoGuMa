@@ -144,10 +144,11 @@ public class ProductController {
 				UserDetails user = (UserDetails) authentication.getPrincipal();
 				MemberDTO memberDTO = memberService.getMember(user.getUsername());
 				model.addAttribute("memberDTO", memberDTO);
-				long isWrittened = reviewService.isExistReview(productID, memberDTO.getId());
+				
+				long isWritten = reviewService.isExistReview(productID, memberDTO.getId());
 				orderProductID = reviewService.isFinishRcpt(productID, memberDTO.getId());
 				
-				if (isWrittened < 1 && orderProductID != null) {
+				if (isWritten < 1 && orderProductID != null) {
 					showWriteBtn = true; // 상품평 작성 가능
 				}
 			}
@@ -205,6 +206,7 @@ public class ProductController {
 				}
 				
 				reviewService.insertReview(reviewDTO);
+				
 				return "1";
 			}
 			
@@ -258,9 +260,9 @@ public class ProductController {
 			String[] uploadResult = amazonService.uploadFile("upload", multipartFile);
 
 			ImageAttachDTO attachDTO = new ImageAttachDTO();
-			
 			attachDTO.setImageName(uploadResult[0]);
 			attachDTO.setImagePath(uploadResult[1]);
+			
 			list.add(attachDTO);
 		}
 		

@@ -110,11 +110,11 @@
 
             $(function () {
                 // 이미지 클릭시 해당 이미지 모달
-                $(".imgC").click(function () {
+                $(".reviewImg").click(function () {
                     $(".modal").show();
                     // 해당 이미지 가겨오기
-                    var imgSrc = $(this).children("img").attr("src");
-                    var imgAlt = $(this).children("img").attr("alt");
+                    var imgSrc = $(this).attr("src");
+                    var imgAlt = $(this).attr("alt");
                     $(".modalBox img").attr("src", imgSrc);
                     $(".modalBox img").attr("alt", imgAlt);
                 });
@@ -227,6 +227,7 @@
             	var productID = $("#productID").val(); // 구매한 상품 번호
                 var memberID = $("#memberID").val(); // 로그인한 회원 번호
                	var content = $(".write-review-content").val(); // 상품평 내용
+               	var prodThumbNail = $(".thumbnailImg").data("imgurl"); // 상품 썸네일 이미지
                	var list = new Array();
                	
                	$(".uploadResult ul li").each(function(i, obj) {
@@ -242,6 +243,7 @@
         			productID : productID,
         			memberID : memberID,
         			content : content,
+        			prodThumbNail : prodThumbNail,
         			attachList : list
         		};
         		
@@ -420,7 +422,7 @@
 
         <div class="prodInfo">
         	<div class="wrap">
-           		<img class="thumbnailImg" id="thumbnailImg" src="${productInfo.prodimgurl}" style="float: left;" />
+           		<img class="thumbnailImg" id="thumbnailImg" src="${productInfo.prodimgurl}" data-imgurl="${productInfo.prodimgurl}" style="float: left;" />
         	</div>
 
             <div class="product_detail">
@@ -562,7 +564,7 @@
 	                            <div class="modal">
 	                                <button>&times;</button>
 	                                <div class="modalBox">
-	                                    <img src="" alt="">
+                                    	<img src="" alt="">
 	                                </div>
 	                            </div>
 	                        </div>

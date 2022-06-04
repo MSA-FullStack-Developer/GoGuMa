@@ -21,4 +21,7 @@ public interface ReviewService {
 	
 	// 상품평 삭제
 	void deleteReview(@Param("reviewID") long reviewID) throws Exception;
+
+	// 내가 작성한 상품평 목록
+	List<ReviewDTO> getMyReviewList(long memberID) throws Exception;
 }

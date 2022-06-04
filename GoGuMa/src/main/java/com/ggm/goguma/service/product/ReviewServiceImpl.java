@@ -61,4 +61,9 @@ public class ReviewServiceImpl implements ReviewService {
 		}
 	}
 
+	@Override
+	public List<ReviewDTO> getMyReviewList(long memberID) throws Exception {
+		return reviewMapper.getMyReviewList(memberID);
+	}
+
 }

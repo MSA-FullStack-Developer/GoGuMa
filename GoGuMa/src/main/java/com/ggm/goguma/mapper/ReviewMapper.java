@@ -21,4 +21,7 @@ public interface ReviewMapper {
 	
 	// 상품평 삭제
 	int deleteReview(long reviewID) throws Exception;
+
+	// 내가 작성한 상품평 목록
+	List<ReviewDTO> getMyReviewList(long memberID) throws Exception;
 }
