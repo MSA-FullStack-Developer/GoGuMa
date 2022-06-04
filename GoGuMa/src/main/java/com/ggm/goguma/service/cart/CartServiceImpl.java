@@ -49,8 +49,8 @@ public class CartServiceImpl implements CartService{
 	}
 
 	@Override
-	public long isExistCart(long productId) throws Exception {
-		return cartMapper.isExistCart(productId);
+	public long isExistCart(long productId, long memberId) throws Exception {
+		return cartMapper.isExistCart(productId, memberId);
 	}
 
 }

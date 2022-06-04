@@ -144,7 +144,7 @@ public class CartController {
 				log.info("장바구니에서 사용될 사용자 정보: " + memberDTO);
 				long memberId = memberDTO.getId();
 				
-				long isExist = cartService.isExistCart(productId); // 장바구니에 이미 존재하는지 확인
+				long isExist = cartService.isExistCart(productId, memberId); // 장바구니에 이미 존재하는지 확인
 				
 				if (isExist < 1) {
 					// 회원이 카트에 담는다.

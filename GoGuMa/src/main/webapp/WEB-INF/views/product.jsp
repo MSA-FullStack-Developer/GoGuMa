@@ -373,7 +373,7 @@
                 </div>
                 
                 <div class="btnDiv">
-                	<button class="cartBtn" id="cartBtn">장바구니</button>
+                	<button type="button" class="cartBtn" id="cartBtn">장바구니</button>
                     <button type="submit" class="buyBtn" id="buyBtn">바로구매</button>
                 </div>
                 </form>
