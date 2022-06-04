@@ -21,7 +21,15 @@
 		from receipt where receiptid = #{receiptId}
 	</select>
 	
-	<select id="getEarnablePoint" resultType="int">
+	<update id="updateOrderStatus">
+		update orderdetail set orderstatus = #{status} where orderid = #{orderId}
+	</update>
+	
+	<update id="makeInquirable">
+		update pointevent set inquirable = 1 where orderid = #{orderId}
+	</update>
+	
+	<select id="getPointValue" resultType="int">
 		select pointvalue from pointevent where receiptId = #{receiptId}
 	</select>
 	
@@ -36,10 +44,6 @@
 		from pointevent where memberid = #{memberId} and pointtype = #{type} and inquirable = 1
 		order by pointCreatedDate desc
 	</select>
-	
-	<update id="updateOrderStatus">
-		update orderdetail set orderstatus = #{status} where orderid = #{orderId}
-	</update>
 
 	<select id="getAddressList" resultType="DeliveryAddressDTO">
 		select addressId, nickname, recipient, address, contact, isdefault
@@ -78,7 +82,7 @@
 		update deliveryaddress set isdefault = 0 where memberId = #{memberId}
 	</update>
 	
-		<!-- 사용자 포인트를 조회한다. -->
+	<!-- 사용자 포인트를 조회한다. -->
 	<select id="getMemberPoint" resultType="int">
 		SELECT NVL((SELECT sum(pointvalue)
 				FROM pointevent
@@ -90,5 +94,4 @@
 				                            having pointtype='minus'),0) AS point
 		FROM dual
 	</select>
-	
 </mapper>

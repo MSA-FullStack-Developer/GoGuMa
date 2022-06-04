@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
@@ -20,6 +21,7 @@ public class MyPageServiceImpl implements MyPageService {
 	private MyPageMapper mapper;
 
 	@Override
+	@Transactional
 	public List<ReceiptDTO> getReceiptHistory(long memberId) throws Exception {
 		List<ReceiptDTO> receiptList = getReceiptList(memberId);
 		for(ReceiptDTO receipt : receiptList) {
@@ -45,7 +47,7 @@ public class MyPageServiceImpl implements MyPageService {
 
 	@Override
 	public int getEarnablePoint(long receiptId) throws Exception {
-		List<Integer> list = mapper.getEarnablePoint(receiptId);
+		List<Integer> list = mapper.getPointValue(receiptId);
 		int sum = 0;
 		for(int item : list)
 			sum += item;
@@ -59,6 +61,7 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 	
 	@Override
+	@Transactional
 	public ReceiptDTO getReceiptDetail(long receiptId) throws Exception {
 		ReceiptDTO dto = mapper.getReceiptDetail(receiptId);
 		dto.setOrderList(mapper.getOrderList(receiptId));
@@ -66,8 +69,10 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 
 	@Override
+	@Transactional
 	public void updateOrderStatus(long orderId, String status) throws Exception {
 		mapper.updateOrderStatus(orderId, status);
+		if(status.equals("F")) mapper.makeInquirable(orderId);
 	}
 	
 	@Override
@@ -98,6 +103,7 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 	
 	@Override
+	@Transactional
 	public void setDefault(long memberId, long addressId) throws Exception {
 		mapper.cancelDefault(memberId);
 		mapper.setDefault(memberId, addressId);

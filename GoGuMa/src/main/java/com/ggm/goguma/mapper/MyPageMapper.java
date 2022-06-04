@@ -19,13 +19,15 @@ public interface MyPageMapper {
 	
 	ReceiptDTO getReceiptDetail(long receiptId) throws Exception;
 	
-	List<Integer> getEarnablePoint(long receiptId) throws Exception;
+	void updateOrderStatus(@Param("orderId") long orderId, @Param("status") String status) throws Exception;
+	
+	void makeInquirable(long orderId) throws Exception;
+	
+	List<Integer> getPointValue(long receiptId) throws Exception;
 	
 	List<PointDTO> getPointHistory(long memberId) throws Exception;
 
 	List<PointDTO> getSpecificPointHistory(@Param("memberId") long memberId, @Param("type") String type) throws Exception;
-
-	void updateOrderStatus(@Param("orderId") long orderId, @Param("status") String status) throws Exception;
 	
 	List<DeliveryAddressDTO> getAddressList(long memberid) throws Exception;
 
