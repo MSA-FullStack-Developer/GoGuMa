@@ -41,7 +41,7 @@
 	
 	<!-- 작성 가능한 상품평 -->
 	<select id="getWriteableReview" resultType="com.ggm.goguma.dto.ProductDTO">
-		SELECT E.productname, E.optioname AS optionname, E.parentpid, E.productid, E.categoryid, F.prodimgurl
+		SELECT DISTINCT E.productname, E.optioname AS optionname, E.parentpid, E.productid, E.categoryid, F.prodimgurl
 		FROM (SELECT D.productname, C.optionname AS optioname, C.parentpid AS parentpid, D.categoryid AS categoryid, C.productid
 		        FROM (SELECT A.parentpid, A.productid, A.productname AS optionname
 		                FROM (SELECT o.orderstatus, p.parentpid AS parentpid, o.receiptid, o.productid, p.productname
