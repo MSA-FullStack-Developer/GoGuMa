@@ -64,46 +64,50 @@
                	var prodThumbNail = $("#thumbnailImg").val(); // 상품 썸네일 이미지
                	var list = new Array();
                	
-               	$(".uploadResult ul li").each(function(i, obj) {
-        			var jobj = $(obj);
-        			
-        			var attachDTO = new Object();
-        			attachDTO.imageName = jobj.data("imagename");
-        			attachDTO.imagePath = jobj.data("imagepath");
-        			list.push(attachDTO);
-        		});
-               	
-        		var data = {
-        			productID : productID,
-        			memberID : memberID,
-        			content : content,
-        			prodThumbNail : prodThumbNail,
-        			attachList : list
-        		};
-        		
-        		$.ajax({
-		            url: "${contextPath}/category/1/insertReview",
-		            type: "POST",
-		            contentType: 'application/json; charset=utf-8',
-		            data: JSON.stringify(data),
-		            beforeSend : function(xhr) {
-        				xhr.setRequestHeader(header, token);
-        			},
-		            success : function(result){
-		            	if (result == 1) {
-			                $(".modal").hide();
-			                alert("상품평이 등록되었습니다.");
-			                location.reload();
-		            	} else {
-		            		alert("상품평 등록 실패");
-		            	}
-		            },error : function(xhr, status, error) {
-        				var errorResponse = JSON.parse(xhr.responseText);
-        				var errorCode = errorResponse.code;
-        				var message = errorResponse.message;
-        				alert(message);
-        			}
-		        });
+               	if (content != "") {
+               		$(".uploadResult ul li").each(function(i, obj) {
+            			var jobj = $(obj);
+            			
+            			var attachDTO = new Object();
+            			attachDTO.imageName = jobj.data("imagename");
+            			attachDTO.imagePath = jobj.data("imagepath");
+            			list.push(attachDTO);
+            		});
+                   	
+            		var data = {
+            			productID : productID,
+            			memberID : memberID,
+            			content : content,
+            			prodThumbNail : prodThumbNail,
+            			attachList : list
+            		};
+            		
+            		$.ajax({
+    		            url: "${contextPath}/category/1/insertReview",
+    		            type: "POST",
+    		            contentType: 'application/json; charset=utf-8',
+    		            data: JSON.stringify(data),
+    		            beforeSend : function(xhr) {
+            				xhr.setRequestHeader(header, token);
+            			},
+    		            success : function(result){
+    		            	if (result == 1) {
+    			                $(".modal").hide();
+    			                alert("상품평이 등록되었습니다.");
+    			                location.reload();
+    		            	} else {
+    		            		alert("상품평 등록 실패");
+    		            	}
+    		            },error : function(xhr, status, error) {
+            				var errorResponse = JSON.parse(xhr.responseText);
+            				var errorCode = errorResponse.code;
+            				var message = errorResponse.message;
+            				alert(message);
+            			}
+    		        });
+               	} else {
+               		alert("상품평을 작성해주세요.");
+               	}
         	});
             
 			$(".uploadResult").on("click", "button", function(e) {
