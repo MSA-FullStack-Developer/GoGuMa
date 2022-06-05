@@ -19,7 +19,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 	<style>
 		<%@ include file="/resources/css/myreview.css" %>
-<%-- 		<%@ include file="/resources/css/product.css" %> --%>
 		
         a {
             text-decoration: none;
@@ -45,13 +44,13 @@
 				document.querySelector(".modal-background").className = "modal-background";
 			}
 			
-            $(document).on("click", "#show", function(){
-                var productID = $(this).data("productid"); // 구매한 상품 번호
+            $(document).on("click", "#show", function(){
+                var productID = $(this).data("productid"); // 구매한 상품 번호
 				var thumbnailImg = $(this).data("imgurl"); // 상품 썸네일 이미지
 				$("#productID").val(productID);
 				$("#thumbnailImg").val(thumbnailImg);
 			    show();
-            });
+            });
 			
 			document.querySelector(".cancelBtn").addEventListener('click', close); // 모달창 닫기
 			
@@ -128,7 +127,7 @@
         			},
        				success: function(result) {
        					alert("이미지가 삭제되었습니다.");
-       					
+       					$("#file").val(""); // 초기화
        					targetLi.remove();
        				},error : function(xhr, status, error) {
         				var errorResponse = JSON.parse(xhr.responseText);
@@ -299,7 +298,7 @@
 	                        	<input type="hidden" id="thumbnailImg" value="">
 	                       	</h4>
 	                       	<textarea cols="34" rows="5" type="text" class="write-review-content" placeholder="상품평을 작성해주세요. (최대 2,000자)"></textarea>
-	                       	<input type="file" name='uploadFile' style="margin-left: 30px; "multiple>
+	                       	<input type="file" id="file" name='uploadFile' style="margin-left: 30px; "multiple>
 	                       	<div class='uploadResult'>
 								<ul>
 								

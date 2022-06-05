@@ -590,7 +590,7 @@
 						</div>
 					</div>
 					<div class="order-buttons">
-						<button type="button" class="btn text-black continue">쇼핑 계속하기</button>
+						<button type="button" class="btn text-black continue" onClick="location.href='${contextPath}'">쇼핑 계속하기</button>
 						<button type="submit" id="orderBtn" class="btn text-white btn-default purchase">구매하기</button>
 					</div>
 				</form>
