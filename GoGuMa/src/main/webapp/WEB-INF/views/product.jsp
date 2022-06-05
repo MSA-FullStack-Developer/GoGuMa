@@ -120,8 +120,6 @@
                     $(".modalBox img").attr("alt", imgAlt);
                 });
 
-                $(".write-modal").hide();
-
                 // .modal안에 button을 클릭하면 .modal닫기
                 $(".modal button").click(function () {
                     $(".modal").hide();
@@ -134,16 +132,6 @@
                     } else {
                         $(".modal").hide();
                     }
-                });
-
-                // 상품평 쓰기 버튼
-                $(".writeBtn").click(function () {
-                    $(".write-modal").show();
-                });
-
-                // 취소하기 버튼 클릭시 닫기
-                $("#cancelBtn").click(function () {
-                    $(".write-modal").hide();
                 });
             });
             
@@ -217,114 +205,6 @@
         				alert(message);
         			}
     	        });
-        	});
-        	
-        	$(".uploadResult").on("click", "button", function(e) {
-            	var token = $("meta[name='_csrf']").attr("content");
-        		var header = $("meta[name='_csrf_header']").attr("content");
-        		
-        		console.log("delete file");
-        		var targetFile = $(this).data("imagename");
-        		var targetLi = $(this).closest("li");
-        		
-        		var data = {
-        			imageName : targetFile
-        		};
-        		
-        		$.ajax({
-        			url: '${contextPath}/category/1/deleteFile',
-        			data: data,
-        			type: 'POST',
-        			beforeSend : function(xhr) {
-        				xhr.setRequestHeader(header, token);
-        			},
-       				success: function(result) {
-       					alert("이미지가 삭제되었습니다.");
-       					
-       					targetLi.remove();
-       				},error : function(xhr, status, error) {
-        				var errorResponse = JSON.parse(xhr.responseText);
-        				var errorCode = errorResponse.code;
-        				var message = errorResponse.message;
-        				alert(message);
-        			}
-        		});
-        	});
-        	
-        	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
-        	var maxSize = 5242880;
-        	
-        	function checkExtension(fileName, fileSize){
-        		if(fileSize >= maxSize){
-        			alert("파일 사이즈 초과");
-        			return false;
-        		}
-        		if(regex.test(fileName)){
-        			alert("해당 종류의 파일은 업로드 할 수 없습니다.");
-        			return false;
-        		}
-        		return true;
-        	}
-        	
-        	function showUploadResult(uploadResultArr) {
-        		if(!uploadResultArr || uploadResultArr.length == 0) {return;}
-        		
-        		var uploadUL = $(".uploadResult ul");
-        		
-        		var str="";
-        		
-        		$(uploadResultArr).each(function(i, obj){
-        			str += "<li data-imagepath='"+obj.imagePath+"'";
-    				str += " data-imagename='"+obj.imageName+"' ><div>";
-    				str += "<span>"+obj.imageName+"</span>";
-    				str += "<button type='button' data-imagename='"+obj.imageName+"'>X</button><br>";
-    				str += "<img src='" + obj.imagePath + "'>";
-    				str += "</div>";
-    				str += "</li>";
-        		}); 
-        		
-        		uploadUL.append(str);
-        	}
-        	
-        	$("input[type='file']").change(function(e){
-        		var token = $("meta[name='_csrf']").attr("content");
-        		var header = $("meta[name='_csrf_header']").attr("content");
-        		
-        		var formData = new FormData();
-        		var inputFile = $("input[name='uploadFile']");
-        		var files = inputFile[0].files;
-        		console.log(files);
-        		
-        		for(var i = 0; i < files.length ; i++){
-        			if(!checkExtension(files[i].imageName, files[i].size)){
-        				return false;
-        			}
-        			formData.append("uploadFile", files[i]);
-        		}
-        	
-        		$.ajax({
-        			url: '${contextPath}/category/1/uploadAjaxAction',
-        			processData: false,
-        			contentType: false,
-        			data: formData,
-        			beforeSend : function(xhr) {
-        				xhr.setRequestHeader(header, token);
-        			},
-        			type: 'POST',
-        			dataType: 'json',
-       				success: function(result){
-       					console.log(result);
-        				
-       					attachList = result;
-       					
-        				showUploadResult(result);
-        			}, error : function(xhr, status, error) {
-        				var errorResponse = JSON.parse(xhr.responseText);
-        				var errorCode = errorResponse.code;
-        				var message = errorResponse.message;
-        				alert(message);
-        			}
-        		});
         	});
         });
     </script>

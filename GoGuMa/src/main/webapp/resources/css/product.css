@@ -10,31 +10,6 @@ select {
 	margin-right: 15px;
 }
 
-.uploadResult{
-	width: 100%;
-	margin-bottom: 10px;
-}
-
-.uploadResult ul{
-	display: flex;
-	flex-flow: row;
-	justify-content: center;
-	align-items: center;
-}
-
-.uploadResult ul li{
-	list-style: none;
-	padding: 10px;
-	align-content: center;
-	text-align: center;
-}
-
-.uploadResult img{
-	width: 100px;
-	margin-left: 10px;
-	margin-right: 10px;
-}
-
 .selectbox {
 	margin-left: 15px;
     width: 100%;
@@ -81,26 +56,6 @@ select {
     padding-bottom: 65px;
 }
 
-.review {
-	height: auto;
-	margin: 30px 30px 30px 30px;
-}
-
-.review-content {
-    width: 95%;
-    margin-left: 22px;
-    margin-right: 22px;
-    font-size: 13pt;
-    color: #111;
-    word-wrap: break-word;
-}
-
-.write-review-content {
-	width: 1260px;
-	height: 120px;
-    margin: 10px 30px 10px 30px;
-}
-
 .review-create-date {
 	float: right;
     padding-top: 2px;
@@ -119,25 +74,6 @@ input {
     font-size: 13pt;
 }
 
-.review-buttons {
-    position: relative;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.review-button {
-	border-radius: 5pt;
-}
-
-#cancelBtn {
-	width: 90px;
-	height: 40px;
-	border: none;
-	color: #000;
-	background: #fff;
-	margin-right: 5px;
-}
-
 #deleteBtn {
 	width: auto;
 	height: auto;
@@ -147,43 +83,6 @@ input {
 	font-size: 10pt;
 	margin-left: 5px;
 	border-radius: 5pt;
-}
-
-#finishBtn {
-	width: 90px;
-	height: 40px;
-	color: #fff;
-	background: #6426DD;
-	border: none;
-	margin-left: 5px;
-}
-
-.writeBtn {
-    width: 18%;
-    height: 55px;
-    background-color: #F3F3F3;
-    border-color: #F3F3F3;
-    border-radius: 0px;
-    color: #6426DD;
-    font-size: 13pt;
-    font-weight: bold;
-    border: none;
-    margin-right: 22px;
-}
-
-.write-modal {
-    width: 100%;
-    height: auto;
-    background-color: #F3F3F3;
-    padding-bottom: 10px;
-}
-
-.membername {
-    margin-top: 0px;
-    text-align: left;
-    padding-top: 30px;
-    padding-left: 22px;
-    font-size: 14pt;
 }
 
 .imgList {
