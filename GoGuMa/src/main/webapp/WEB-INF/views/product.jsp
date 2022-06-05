@@ -194,6 +194,9 @@
 	            	var token = $("meta[name='_csrf']").attr("content");
 	        		var header = $("meta[name='_csrf_header']").attr("content");
 	                
+	        		var optionID = $("#option option:selected").data("id");
+	                var buyAmount = $("#numBox").val();
+	                
 	        		var data = {
 	        			// *** 바로구매하기 위해 보낼 데이터 ***
 	        		};

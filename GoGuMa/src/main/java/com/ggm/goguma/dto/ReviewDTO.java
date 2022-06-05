@@ -26,6 +26,6 @@ public class ReviewDTO {
 	private String optionName;
 	
 	// 미사용 컬럼
-	private String prodimgurl;
-	private Date updateDate;
+	// private String prodimgurl;
+	// private Date updateDate;
 }
