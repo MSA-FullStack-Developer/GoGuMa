@@ -1,17 +1,29 @@
 package com.ggm.goguma.service.market;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ggm.goguma.amazons3.AmazonS3Utils;
 import com.ggm.goguma.dto.CategoryDTO;
+import com.ggm.goguma.dto.market.ArticleImageDTO;
 import com.ggm.goguma.dto.market.ArticleProudctDTO;
+import com.ggm.goguma.dto.market.CreateArticleDTO;
 import com.ggm.goguma.dto.market.CreateMarketDTO;
 import com.ggm.goguma.dto.market.FollowMarketDTO;
+import com.ggm.goguma.dto.market.MarketArticleDTO;
 import com.ggm.goguma.dto.market.MarketDTO;
 import com.ggm.goguma.exception.NotFoundMarketException;
 import com.ggm.goguma.exception.UploadFileFailException;
@@ -27,6 +39,8 @@ import lombok.extern.log4j.Log4j;
 public class MarketServiceImpl implements MarketService{
 	
 	private final MarketMapper marketMapper;
+	
+	private final AmazonS3Utils amazonService;
 	
 	@Autowired
 	@Qualifier("DefaultFileSerivce")
@@ -116,10 +130,68 @@ public class MarketServiceImpl implements MarketService{
 		}
 		return true;
 	}
-	
-	
-	
 
+
+	@Transactional
+	@Override
+	public void createMarketArticle(CreateArticleDTO article) throws Exception {
+		//0. 썸네일 저장
+		String[] uploadThumbnail = this.amazonService.uploadFile("upload", article.getThumbnail());
+		
+		//1.imageName 추출
+		List<ArticleImageDTO> images = this.extractImage(article.getArticleContent());
+		
+		ArticleImageDTO thumbnail = new ArticleImageDTO();
+		thumbnail.setImageName(uploadThumbnail[0]);
+		thumbnail.setImagePath(uploadThumbnail[1]);
+		thumbnail.setThumbnail(true);
+		images.add(thumbnail);
+		
+		//2. article 생성
+		MarketArticleDTO marketArticle = new MarketArticleDTO();
+		marketArticle.setArticleTitle(article.getArticleTitle());
+		marketArticle.setArticleContent(article.getArticleContent());
+		marketArticle.setMarketId(article.getMarketId());
+		
+		this.marketMapper.insertMarketArticle(marketArticle);
+		
+		long articleId = marketArticle.getArticleId();
+		//3. article 상품 생성
+		for(long productId: article.getProductId()) {
+			this.marketMapper.insertArticleProduct(articleId, productId);
+		}
+		
+		//4. article 이미지 생성
+		for(ArticleImageDTO image: images) {
+			image.setArticleId(articleId);
+			this.marketMapper.insertArticleImage(image);
+		}
+		
+	}
+	
+	
+	
+	private List<ArticleImageDTO> extractImage(String html) throws URISyntaxException {
+		List<ArticleImageDTO> articleImages = new ArrayList<>();
+		Document doc = Jsoup.parse(html);
+		
+		Elements elements = doc.select("img");
+		
+		for(Element element: elements) {
+			String imgUrlSrc = element.attr("src");
+			
+			String path = new URI(imgUrlSrc).getPath();
+			String imageName = path.substring(path.lastIndexOf("/")+1);
+			log.info(imageName);
+			ArticleImageDTO image = new ArticleImageDTO();
+			
+			image.setImageName(imageName);
+			image.setImagePath(imgUrlSrc);
+			articleImages.add(image);
+		}
+		
+		return articleImages;
+	}
 	
 	
 	

@@ -157,10 +157,18 @@ public class MarketController {
 	}
 	
 	@PostMapping(value= "/article/createArticle.do", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public String createArticle(CreateArticleDTO article) {
+	public String createArticle(CreateArticleDTO article, Principal principal) throws Exception {
 		
 		log.info(article);
-		return "redirect:/";
+		MemberDTO member = this.memberService.getMember(principal.getName());
+		
+		if(!this.marketService.isMyMarket(article.getMarketId(), member.getId())) {
+			return "error/error403";
+		}
+		
+		this.marketService.createMarketArticle(article);
+		
+		return "redirect:/market/show.do?marketNum="+article.getMarketId();
 	}
 
 	@PostMapping(value = "/api/updateFollow.do", produces = "application/json; charset=utf-8")

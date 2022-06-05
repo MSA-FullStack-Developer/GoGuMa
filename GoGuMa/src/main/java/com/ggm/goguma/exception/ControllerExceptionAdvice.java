@@ -52,7 +52,9 @@ public class ControllerExceptionAdvice {
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public String ExceptionHandler(Exception e) {
+		e.printStackTrace();
 		log.error(e.getMessage());
+		
 		
 		return "error/error500";
 	}

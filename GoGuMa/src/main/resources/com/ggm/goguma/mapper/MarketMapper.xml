@@ -22,7 +22,7 @@
 		<result property="articleTitle" column="articleTitle"/>
 		<result property="articleContent" column="articleContent"/>
 		<association property="thumbnail" column="articleId" select="com.ggm.goguma.mapper.MarketMapper.findThumbnailImageById"></association>
-		<collection property="products" ></collection>
+		<collection property="products" column="articleId" javaType="java.util.ArrayList" select="com.ggm.goguma.mapper.MarketMapper.findArticleProductsById"></collection>
 	</resultMap>
 	
 	<insert id="insertMarket" parameterType="MarketDTO" useGeneratedKeys="true" keyProperty="marketId" keyColumn="marketId">
@@ -65,7 +65,7 @@
 	
 	<select id="findOrderProduct" resultType="ArticleProudctDTO">
 		SELECT
-			DISTINCT(p.PRODUCTID), pp.PRODUCTID  parentId,  pp.PRODUCTNAME,  p.PRODUCTNAME optionName, p.PRODUCTPRICE , i.PRODIMGURL 
+			DISTINCT p.PRODUCTID, pp.PRODUCTID  parentId,  pp.PRODUCTNAME,  p.PRODUCTNAME optionName, p.PRODUCTPRICE , i.PRODIMGURL 
 		FROM 
 			RECEIPT r , ORDERDETAIL o , PRODUCT p , PRODUCTIMAGE i, PRODUCT pp
 		WHERE 
@@ -81,7 +81,7 @@
 	
 	<insert id="insertMarketArticle" parameterType="MarketArticleDTO" useGeneratedKeys="true" keyColumn="articleId" keyProperty="articleId">
 		INSERT INTO marketArticle(marketId, articleTitle, articleContent)
-		VALUES(#{marketId}, #{articleTitle}, #{articleContent});
+		VALUES(#{marketId}, #{articleTitle}, #{articleContent})
 	</insert>
 	
 	<insert id="insertArticleProduct">
@@ -93,6 +93,12 @@
 		INSERT INTO marketArticleImage(articleId, imageName, isThumbnail, imagePath)
 		VALUES(#{articleId},#{imageName}, #{isThumbnail}, #{imagePath})
 	</insert>
+	
+	<select id="findMarketArticleById" resultMap="MarketArticleResult">
+		SELECT articleId, marketId, articleTitle, articleContent 
+		FROM marketArticle
+		WHERE articleId = #{articleId}
+	</select>
 	
 	<select id="findThumbnailImageById" resultType="ArticleImageDTO">
 		SELECT * 
@@ -110,4 +116,6 @@
 			cp.parentId = pp.productId AND
 			cp.productId = i.productId
 	</select>
+	
+	
 </mapper>
