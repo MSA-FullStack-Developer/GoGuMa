@@ -1,21 +1,31 @@
 package com.ggm.goguma.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
 @Data
 public class ReviewDTO {
 	private long reviewID;
-	private String name; // 회원 이름
+	private String name;
 	private Date createDate;
 	private long productPID;
 	private long productID;
 	private long parentID;
 	private String productName;
 	private String content;
+	private long memberID;
+	private String prodThumbNail;
+
+	// 상품평 후기 이미지
+	private List<ImageAttachDTO> attachList;
 	
-	private String prodimgurl;
-	private String thumbnailUrl;
-	private Date updateDate;
+	// 마이페이지 상품평
+	private long categoryID;
+	private String optionName;
+	
+	// 미사용 컬럼
+	// private String prodimgurl;
+	// private Date updateDate;
 }

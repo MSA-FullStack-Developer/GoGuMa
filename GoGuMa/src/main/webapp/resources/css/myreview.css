@@ -1,0 +1,74 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
+.myReviewImg {
+    width: 60px;
+    height: 60px;
+    float: left;
+}
+
+.myReviewProduct {
+	margin-left: 20px;
+	color: #010101;
+}
+
+.myReview {
+	width: 100%;
+    height: auto;
+    background-color: #F8F8F8;
+    border-radius: 8pt;
+    margin: 10px 5px 10px 5px;
+}
+
+.myReview-writeable {
+	width: 470px;
+    height: auto;
+    background-color: #F8F8F8;
+    border-radius: 8pt;
+    margin: 10px 5px 10px 5px;
+}
+
+.myReviewTop {
+    height: 80px;
+    margin: 17px 10px 13px 20px;
+    padding: 10px 10px 10px 10px;
+}
+
+.myReviewBottom {
+	width: 100%;
+	height: auto;
+}
+
+.myReviewMemeberImg {
+    float: right;
+    width: 185px;
+    margin-left: 20px;
+    margin-right: 20px;
+    object-fit: contain;
+    margin: 10px 20px 20px 20px;
+}
+
+.review-create-date {
+	float: left;
+	margin-left: 20px;
+    padding-top: 2px;
+    color: #aaa;
+}
+
+.review-content {
+	color: #000;
+    margin: 20px 5px 20px 5px;
+    font-size: 13pt;
+    width: 620px;
+    word-wrap: break-word;
+}
+
+#deleteBtn {
+    background: #F8F8F8;
+    border: none;
+    float: right;
+}
+
+.productlink:hover>span {
+	color: #FF493C;
+}

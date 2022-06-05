@@ -94,6 +94,7 @@
 		</c:if>
 		<div class="fa-solid" style="width: 100%"></div>
     </div>
-     <%@ include file="./footer.jsp" %>
+    
+    <%@ include file="footer.jsp" %>
 </body>
 </html>
