@@ -44,10 +44,13 @@ public class CartServiceImpl implements CartService{
 
 	@Override
 	public void insertCart(long productId, int cartAmount, long memberId) throws Exception {
-		// TODO Auto-generated method stub
 		cartMapper.insertCart(productId, cartAmount, memberId);
 	}
 
+	/* *
+	 * 작성자 : 경민영
+	 * 작업일 : 22.05.27
+	 * */
 	@Override
 	public long isExistCart(long productId) throws Exception {
 		return cartMapper.isExistCart(productId);

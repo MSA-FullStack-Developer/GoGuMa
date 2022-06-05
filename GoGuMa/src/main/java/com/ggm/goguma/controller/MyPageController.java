@@ -193,7 +193,7 @@ public class MyPageController {
 	
 	/* *
 	 * 작성자 : 경민영
-	 * 작업 날짜 : 22.06.04
+	 * 작업일 : 22.06.04
 	 * */
 	// 내가 작성한 상품평
 	@RequestMapping(value="/myReview", method=RequestMethod.GET)

@@ -63,5 +63,7 @@
 		        ORDER BY A.createdate DESC) C, product D 
 		WHERE C.parentid = D.productid
 	</select>
+	
+	<!-- 작성 가능한 상품평 -->
 
 </mapper>
