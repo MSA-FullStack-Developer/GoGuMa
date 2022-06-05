@@ -32,7 +32,7 @@
             <a href="${contextPath}/mypage/myReview">내가 작성한 상품평</a>
         </div>
         <div>
-            <a href="${contextPath}/mypage/myReview">작성 가능한 상품평</a>
+            <a href="${contextPath}/mypage/writeableReview">작성 가능한 상품평</a>
         </div>
     </div>
     <div class="col">

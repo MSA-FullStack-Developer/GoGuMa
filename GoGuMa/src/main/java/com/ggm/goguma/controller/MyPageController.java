@@ -229,4 +229,30 @@ public class MyPageController {
 		}
 		return "mypage/myReview";
 	}
+	
+	/* *
+	 * 작성자 : 경민영
+	 * 작업일 : 22.06.05
+	 * */
+	// 작성 가능한 상품평
+	@RequestMapping(value="/writeableReview", method=RequestMethod.GET)
+	public String getWriteableReview(Model model, Authentication authentication) throws Exception {
+		try {
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+			model.addAttribute("parentCategory", parentCategory);
+			
+			if (authentication != null) {
+				UserDetails user = (UserDetails) authentication.getPrincipal();
+				MemberDTO memberDTO = memberService.getMember(user.getUsername());
+				model.addAttribute("memberDTO", memberDTO);
+				
+				// 작성 가능한 상품평 목록 불러오기
+				List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
+				model.addAttribute("writeableList", writeableList);
+			}
+		} catch(Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/writeableReview";
+	}
 }

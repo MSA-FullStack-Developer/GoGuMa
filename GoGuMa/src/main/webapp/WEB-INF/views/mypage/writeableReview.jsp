@@ -10,7 +10,7 @@
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 <head>
 	<meta charset="utf-8">
-	<title>My Review</title>
+	<title>WriteableReview</title>
     <!-- bootstrap icon -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 	<!-- bootstrap css -->
@@ -34,45 +34,11 @@
 	        height: 25%;
 	    }
 	</style>
-	<script>
-		$(document).ready(function () {
-			$('#deleteBtn').on("click", function() { // 상품평 삭제
-				var token = $("meta[name='_csrf']").attr("content");
-				var header = $("meta[name='_csrf_header']").attr("content");
-				
-				var reviewID = $("#reviewID").val(); // 삭제할 상품 번호
-			    
-				var data = {
-					"reviewID" : reviewID
-				};
-				
-				$.ajax({
-			        url: "${contextPath}/category/1/deleteReview",
-			        type: "POST",
-			        data: data,
-			        beforeSend : function(xhr) {
-						xhr.setRequestHeader(header, token);
-					},
-			        success : function(result){
-			        	if (result) {
-			        		alert("상품평이 삭제되었습니다.");
-			                location.reload();
-			        	}
-			        },error : function(xhr, status, error) {
-						var errorResponse = JSON.parse(xhr.responseText);
-						var errorCode = errorResponse.code;
-						var message = errorResponse.message;
-						alert(message);
-					}
-			    });
-			});
-		});
-	</script>
 </head>
 <body>
 	<%@ include file="../header.jsp" %>
 	
-	<div class="container mt-5" style="min-width: 1200px">
+	<div class="container mt-5" style="min-width: 1200px;">
 		<div class="row">
 			<%@ include file="mypageMenu.jsp" %>
             <div class="col" style="width: 900px;">
@@ -122,32 +88,19 @@
                     </div>
                 </div>
                 <div class="col mt-3">
-                    <h5><b>내가 작성한 상품평</b></h5>
+                    <h5><b>작성 가능한 상품평</b></h5>
                 </div>
-                <div class="d-flex flex-column">
-                    <c:forEach items="${reviewList}" var="review">
+                <div class="d-flex col-16">
+                    <c:forEach items="${writeableList}" var="product">
                     <div class="myReview">
 	                    <div style="width: 100%; margin-bottom: 10px;">
-	               		 		<div class="myReviewTop">
-		               		 		<a href="${contextPath}/category/1/${review.categoryID}/detail/${review.productID}">
-		               		 			<input type="hidden" id="reviewID" name="${review.reviewID}" value="${review.reviewID}">
-										<img class="myReviewImg" src="${review.prodThumbNail}" alt="${review.prodThumbNail}">
-			                            <span class="myReviewProduct" style="font-size: 14pt; font-weight: bold;">${review.productName}</span><br>
-			                            <span class="myReviewProduct">${review.optionName}</span>
-		               		 		</a>
-	               		 		</div>
-	             		 	<hr>
-	             		 		<div class="myReviewBottom">
-		                            <h6 class="review-create-date">
-		                            	<fmt:formatDate value="${review.createDate}" pattern="yyyy-MM-dd" />
-		                            	<br>
-	                            		<p class="review-content">${review.content}</p>
-	                            	</h6>
-	               		 			<button type="button" class="deleteBtn" id="deleteBtn"><i class="fa-solid fa-x"></i></button>
-		                            <c:forEach items="${review.attachList}" var="attach" varStatus="i">
-		                                <c:if test="${i.first}"><img class="myReviewMemeberImg" src="${attach.imagePath}" alt="${attach.imagePath}"></c:if>
-		                            </c:forEach>
-	                            </div>
+               		 		<div class="myReviewTop">
+	               		 		<a class="productlink" href="${contextPath}/category/1/${product.categoryID}/detail/${product.parentPID}">
+									<img class="myReviewImg" src="${product.prodimgurl}" alt="${product.prodimgurl}">
+		                            <span class="myReviewProduct" style="font-size: 14pt; font-weight: bold;">${product.productName}</span><br>
+		                            <span class="myReviewProduct">${product.optionName}</span>
+	               		 		</a>
+               		 		</div>
                         </div>
                     </div>
                     </c:forEach>

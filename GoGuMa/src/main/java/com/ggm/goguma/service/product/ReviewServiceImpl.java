@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ggm.goguma.dto.ProductDTO;
 import com.ggm.goguma.dto.ReviewDTO;
 import com.ggm.goguma.mapper.ImageAttachMapper;
 import com.ggm.goguma.mapper.ReviewMapper;
@@ -64,6 +65,11 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public List<ReviewDTO> getMyReviewList(long memberID) throws Exception {
 		return reviewMapper.getMyReviewList(memberID);
+	}
+
+	@Override
+	public List<ProductDTO> getWriteableReview(long memberID) throws Exception {
+		return reviewMapper.getWriteableReview(memberID);
 	}
 
 }
