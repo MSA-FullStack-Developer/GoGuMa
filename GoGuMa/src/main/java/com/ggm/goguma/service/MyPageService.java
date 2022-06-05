@@ -19,9 +19,11 @@ public interface MyPageService {
 	
 	void updateOrderStatus(long orderId, String status) throws Exception;	
 	
-	int getEarnablePoint(long receiptId) throws Exception;
+	long getEarnablePoint(long receiptId) throws Exception;
 	
-	List<PointDTO> getPointHistory(long memberId, String type, String startDate, String endDate) throws Exception;
+	long getPointHistoryCount(long memberId, String type, String startDate, String endDate) throws Exception;
+	
+	List<PointDTO> getPointHistory(long memberId, String type, long page, String startDate, String endDate) throws Exception;
 
 	List<CouponDTO> getCouponHistory(long memberId, boolean available) throws Exception;
 	
@@ -40,4 +42,5 @@ public interface MyPageService {
 	void cancelDefault(long memberId) throws Exception;
 
 	int getMemberPoint(long memberId) throws Exception;
+
 }

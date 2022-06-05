@@ -55,7 +55,7 @@
                         <h5><b>MY 혜택</b></h5>
                     </div>
                     <div>
-                        <a href="${contextPath}/mypage/pointHistory/all">포인트</a>
+                        <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
                     </div>
                     <div >
                         예치금
@@ -104,7 +104,7 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            <a href="${contextPath}/mypage/pointHistory/all">포인트</a>
+                            <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
                         </div>
                         <div>
                             1,000P

@@ -3,6 +3,7 @@ package com.ggm.goguma.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,9 @@ import com.ggm.goguma.mapper.MyPageMapper;
 
 @Service
 public class MyPageServiceImpl implements MyPageService {
+//	@Value("${contentPerPage}")
+	private int contentPerPage = 10;
+	
 	@Autowired
 	private MyPageMapper mapper;
 
@@ -44,23 +48,37 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 
 	@Override
-	public int getEarnablePoint(long receiptId) throws Exception {
-		List<Integer> list = mapper.getPointValue(receiptId);
-		int sum = 0;
-		for(int item : list)
+	public long getEarnablePoint(long receiptId) throws Exception {
+		List<Long> list = mapper.getPointValue(receiptId);
+		long sum = 0;
+		for(long item : list)
 			sum += item;
 		return sum;
 	}
 
 	@Override
-	public List<PointDTO> getPointHistory(long memberId, String type, String startDate, String endDate) throws Exception {
+	public long getPointHistoryCount(long memberId, String type, String startDate, String endDate) throws Exception {
 		if(startDate==null || endDate==null) {
-			if(type.equals("all")) return mapper.getPointHistory(memberId);
-			return mapper.getSpecificPointHistory(memberId, type);
+			if(type.equals("all")) return mapper.getPointHistoryCount(memberId);
+			return mapper.getSpecificPointHistoryCount(memberId, type);
 		}
 		else {
-			if(type.equals("all")) return mapper.getPointHistoryByPeriod(memberId, startDate, endDate);
-			return mapper.getSpecificPointHistoryByPeriod(memberId, type, startDate, endDate);
+			if(type.equals("all")) return mapper.getPointHistoryCountByPeriod(memberId, startDate, endDate);
+			return mapper.getSpecificPointHistoryCountByPeriod(memberId, type, startDate, endDate);
+		}
+	}
+	
+	@Override
+	public List<PointDTO> getPointHistory(long memberId, String type, long page, String startDate, String endDate) throws Exception {
+		long startNum = (page-1) * contentPerPage + 1;
+		long endNum = page * contentPerPage;
+		if(startDate==null || endDate==null) {
+			if(type.equals("all")) return mapper.getPointHistory(memberId, startNum, endNum);
+			return mapper.getSpecificPointHistory(memberId, type, startNum, endNum);
+		}
+		else {
+			if(type.equals("all")) return mapper.getPointHistoryByPeriod(memberId, startDate, endDate, startNum, endNum);
+			return mapper.getSpecificPointHistoryByPeriod(memberId, type, startDate, endDate, startNum, endNum);
 		}
 	}
 	

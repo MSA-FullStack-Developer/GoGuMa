@@ -58,7 +58,7 @@
                         <h5><b>MY 혜택</b></h5>
                     </div>
                     <div>
-                        <a href="${contextPath}/mypage/pointHistory/all">포인트</a>
+                        <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
                     </div>
                     <div >
                         예치금
@@ -107,7 +107,7 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            <a href="${contextPath}/mypage/pointHistory/all">포인트</a>
+                            <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
                         </div>
                         <div>
                             1,000P
@@ -144,32 +144,33 @@
                 <div class="d-flex flex-row align-items-center border border-2 p-3 mb-2">
                     <b>조회기간 설정</b>
                 	<form id="inquirePeriodForm" method="GET" action="${contextPath}/mypage/pointHistory/${type}">
-	                    <input type="text" name="startDate" class="ms-2 me-1"> ~ <input type="text" name="endDate" class="ms-1">
+	                    <input type="text" name="startDate" class="ms-2 me-1" /> ~ <input type="text" name="endDate" class="ms-1" />
 	                    <button type="button" class="btn btn-sm btn-secondary ms-2" onclick="inquireHistory()">조회</button>
+	                    <input type="hidden" name="page" value="1" />
                 	</form>
                 </div>
                 
                 <div class="d-flex flex-row mb-2">
                     <div class="d-flex flex-column me-2">
-                        <a href="${contextPath}/mypage/pointHistory/all"><b>전체내역</b></a>
+                        <a href="${contextPath}/mypage/pointHistory/all?page=1"><b>전체내역</b></a>
                     </div>
                     <div class="d-flex flex-column me-2">
                         |
                     </div>
                     <div class="d-flex flex-column me-2">
-                        <a href="${contextPath}/mypage/pointHistory/earn"><b>적립내역</b></a>
+                        <a href="${contextPath}/mypage/pointHistory/earn?page=1"><b>적립내역</b></a>
                     </div>
                     <div class="d-flex flex-column me-2">
                         |
                     </div>
                     <div class="d-flex flex-column me-2">
-                        <a href="${contextPath}/mypage/pointHistory/usage"><b>사용내역</b></a>
+                        <a href="${contextPath}/mypage/pointHistory/usage?page=1"><b>사용내역</b></a>
                     </div>
                     <div class="d-flex flex-column me-2">
                         |
                     </div>
                     <div class="d-flex flex-column me-2">
-                        <a href="${contextPath}/mypage/pointHistory/refund"><b>환급내역</b></a>
+                        <a href="${contextPath}/mypage/pointHistory/refund?page=1"><b>환급내역</b></a>
                     </div>
                 </div>
                 <table class="table mb-3" style="margin: auto; text-align: center">
@@ -234,6 +235,38 @@
 	                    </c:forEach>
 	                </tbody>
                 </table>
+                <ul class="pagination justify-content-center">
+                	<c:if test="${startPage ne 1}">
+	                	<li class="page-item">
+	                		<a class="page-link" href="${contextPath}/mypage/pointHistory/${type}?startDate=${startDate}&endDate=${endDate}&page=${startPage-1}" aria-label="Previous">
+	                			<span aria-hidden="true">&laquo;</span>
+	                		</a>
+					    </li>
+                	</c:if>
+                	<c:forEach begin="${startPage}" end="${endPage}" var="pageNum">
+                		<c:choose>
+                			<c:when test="${page == pageNum}">
+                				<li class="page-item active">
+                					<p class="page-link">${pageNum}</p>
+                				</li>
+                			</c:when>
+                			<c:otherwise>
+                				<li class="page-item">
+                					<a class="page-link" href="${contextPath}/mypage/pointHistory/${type}?startDate=${startDate}&endDate=${endDate}&page=${pageNum}">
+                						${pageNum}
+                					</a>
+                				</li>
+                			</c:otherwise>
+                		</c:choose>
+                	</c:forEach>
+                	<c:if test="${endPage ne pageCount}">
+                		<li class="page-item">
+					    	<a class="page-link" href="${contextPath}/mypage/pointHistory/${type}?startDate=${startDate}&endDate=${endDate}&page=${endPage+1}" aria-label="Next">
+					    		<span aria-hidden="true">&raquo;</span>
+					    	</a>
+					    </li>
+                	</c:if>
+				</ul>
             </div>
         </div>
     </div>

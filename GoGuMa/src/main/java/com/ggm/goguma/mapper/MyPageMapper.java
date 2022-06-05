@@ -24,15 +24,23 @@ public interface MyPageMapper {
 	
 	void makeInquirable(long orderId) throws Exception;
 	
-	List<Integer> getPointValue(long receiptId) throws Exception;
+	List<Long> getPointValue(long receiptId) throws Exception;
 	
-	List<PointDTO> getPointHistory(long memberId) throws Exception;
+	long getPointHistoryCount(long memberId) throws Exception;
+	
+	long getSpecificPointHistoryCount(@Param("memberId") long memberId, @Param("type") String type) throws Exception;
+	
+	long getPointHistoryCountByPeriod(@Param("memberId") long memberId, @Param("startDate") String startDate, @Param("endDate") String endDate) throws Exception;
+	
+	long getSpecificPointHistoryCountByPeriod(@Param("memberId") long memberId, @Param("type") String type, @Param("startDate") String startDate, @Param("endDate") String endDate) throws Exception;
+	
+	List<PointDTO> getPointHistory(@Param("memberId") long memberId, @Param("startNum") long startNum, @Param("endNum") long endNum) throws Exception;
 
-	List<PointDTO> getSpecificPointHistory(@Param("memberId") long memberId, @Param("type") String type) throws Exception;
+	List<PointDTO> getSpecificPointHistory(@Param("memberId") long memberId, @Param("type") String type, @Param("startNum") long startNum, @Param("endNum") long endNum) throws Exception;
 
-	List<PointDTO> getPointHistoryByPeriod(@Param("memberId") long memberId, @Param("startDate") String startDate, @Param("endDate") String endDate) throws Exception;
+	List<PointDTO> getPointHistoryByPeriod(@Param("memberId") long memberId, @Param("startDate") String startDate, @Param("endDate") String endDate, @Param("startNum") long startNum, @Param("endNum") long endNum) throws Exception;
 
-	List<PointDTO> getSpecificPointHistoryByPeriod(@Param("memberId") long memberId, @Param("type") String type, @Param("startDate") String startDate, @Param("endDate") String endDate) throws Exception;
+	List<PointDTO> getSpecificPointHistoryByPeriod(@Param("memberId") long memberId, @Param("type") String type, @Param("startDate") String startDate, @Param("endDate") String endDate, @Param("startNum") long startNum, @Param("endNum") long endNum) throws Exception;
 	
 	List<CouponDTO> getAvailableCoupon(long memberId) throws Exception;
 

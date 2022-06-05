@@ -3,6 +3,7 @@ package com.ggm.goguma.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +26,12 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @RequestMapping("/mypage")
 public class MyPageController {
+//	@Value("${contentPerPage}")
+	private int contentPerPage=10; // 한 페이지에 보여지는 게시물의 개수
+	
+//	@Value("${blockPerPage}")
+	private int blockPerPage=10; // 한 페이지에 보여지는 페이지 블록의 개수
+	
 	@Autowired
 	private MyPageService service;
 	
@@ -52,7 +59,7 @@ public class MyPageController {
 	public String getOrderDetail(@PathVariable("receiptId") long receiptId, Model model) {
 		try {
 			ReceiptDTO receiptDTO = service.getReceiptDetail(receiptId); // 결제상세 가져오기
-			int earnablePoint = service.getEarnablePoint(receiptId);
+			long earnablePoint = service.getEarnablePoint(receiptId);
 			model.addAttribute("receiptDTO", receiptDTO);
 			model.addAttribute("earnablePoint", earnablePoint);
 			log.info(receiptDTO);
@@ -76,14 +83,36 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/pointHistory/{type}", method=RequestMethod.GET)
-	public String getPointHistory(
+	public String getPointHistory(@PathVariable("type") String type, @RequestParam("page") long page,
 			@RequestParam(value="startDate", required=false) String startDate,
 			@RequestParam(value="endDate", required=false) String endDate,
-			@PathVariable("type") String type, Model model) {
+			Model model) {
 		try {
-			List<PointDTO> pointHistory = service.getPointHistory(1, type, startDate, endDate);
+			// 특정 포인트 내역의 개수
+			long historyCount = service.getPointHistoryCount(1, type, startDate, endDate);
+			// 전체 페이지 개수 = 전체 페이지 개수 / 한 페이지에 보여지는 내역의 수
+			long pageCount = historyCount / contentPerPage;
+			// 예를 들어, 내역이 101개인 경우, 11개의 페이지가 필요하므로 총 페이지 개수를 증가시켜준다.
+			if(historyCount % contentPerPage != 0) pageCount++;
+			
+			// 시작 페이지 = (현재 페이지-1) / 페이지 블록 크기 * 페이지 블록 크기 + 1
+			long startPage = (page-1) / blockPerPage * blockPerPage + 1;
+			// 마지막 페이지 (현재 페이지-1) / 페이지 블록 크기 * 페이지 블록 크기 + 페이지 블록 크기
+			long endPage = (page-1) / blockPerPage * blockPerPage + blockPerPage;
+			// 마지막 페이지 개수가 전체 페이지 개수보다 많은 경우, 마지막 페이지를 전체 페이지 개수로 맞춰준다.
+			if(endPage > pageCount) endPage = pageCount;
+			
+			List<PointDTO> pointHistory = service.getPointHistory(1, type, page, startDate, endDate);
 			model.addAttribute("pointHistory", pointHistory);
 			model.addAttribute("type", type);
+			model.addAttribute("page", page);
+			model.addAttribute("startDate", startDate);
+			model.addAttribute("endDate", endDate);
+			model.addAttribute("startPage", startPage);
+			model.addAttribute("endPage", endPage);
+			model.addAttribute("pageCount", pageCount);
+			model.addAttribute("historyCount", historyCount);
+			model.addAttribute("contentPerPage", contentPerPage);
 		} catch (Exception e) {
 			log.info(e.getMessage());
 		}
