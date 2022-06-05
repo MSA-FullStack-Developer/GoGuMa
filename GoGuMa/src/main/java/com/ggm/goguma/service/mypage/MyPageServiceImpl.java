@@ -1,4 +1,4 @@
-package com.ggm.goguma.service;
+package com.ggm.goguma.service.mypage;
 
 import java.util.List;
 
@@ -46,6 +46,21 @@ public class MyPageServiceImpl implements MyPageService {
 	public List<OrderDTO> getOrderList(long receiptId) throws Exception {
 		return mapper.getOrderList(receiptId);
 	}
+	
+	@Override
+	@Transactional
+	public ReceiptDTO getReceiptDetail(long receiptId) throws Exception {
+		ReceiptDTO dto = mapper.getReceiptDetail(receiptId);
+		dto.setOrderList(mapper.getOrderList(receiptId));
+		return dto;
+	}
+
+	@Override
+	@Transactional
+	public void updateOrderStatus(long orderId, String status) throws Exception {
+		mapper.updateOrderStatus(orderId, status);
+		if(status.equals("F")) mapper.makeInquirable(orderId);
+	}
 
 	@Override
 	public long getEarnablePoint(long receiptId) throws Exception {
@@ -69,6 +84,12 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 	
 	@Override
+	public long getCouponCount(long memberId, String type) throws Exception {
+		if(type.equals("available")) return mapper.getAvailableCouponCount(memberId);
+		return mapper.getUnavailableCouponCount(memberId);
+	}
+	
+	@Override
 	public List<PointDTO> getPointHistory(long memberId, String type, long page, String startDate, String endDate) throws Exception {
 		long startNum = (page-1) * contentPerPage + 1;
 		long endNum = page * contentPerPage;
@@ -81,26 +102,13 @@ public class MyPageServiceImpl implements MyPageService {
 			return mapper.getSpecificPointHistoryByPeriod(memberId, type, startDate, endDate, startNum, endNum);
 		}
 	}
-	
-	@Override
-	@Transactional
-	public ReceiptDTO getReceiptDetail(long receiptId) throws Exception {
-		ReceiptDTO dto = mapper.getReceiptDetail(receiptId);
-		dto.setOrderList(mapper.getOrderList(receiptId));
-		return dto;
-	}
 
 	@Override
-	@Transactional
-	public void updateOrderStatus(long orderId, String status) throws Exception {
-		mapper.updateOrderStatus(orderId, status);
-		if(status.equals("F")) mapper.makeInquirable(orderId);
-	}
-
-	@Override
-	public List<CouponDTO> getCouponHistory(long memberId, boolean available) throws Exception {
-		if(available) return mapper.getAvailableCoupon(memberId);
-		return mapper.getUnavailableCoupon(memberId);
+	public List<CouponDTO> getCouponHistory(long memberId, String type, long page) throws Exception {
+		long startNum = (page-1) * contentPerPage + 1;
+		long endNum = page * contentPerPage;
+		if(type.equals("available")) return mapper.getAvailableCoupon(memberId, startNum, endNum);
+		return mapper.getUnavailableCoupon(memberId, startNum, endNum);
 	}
 	
 	@Override

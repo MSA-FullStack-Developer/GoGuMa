@@ -57,6 +57,20 @@
 		]]>
 	</select>
 	
+	<select id="getAvailableCouponCount" resultType="long">
+		select count(*) from couponview where memberid = #{memberId}
+		<![CDATA[
+			and used = 0 and sysdate <= expirationdate
+		]]>
+	</select>
+	
+	<select id="getUnavailableCouponCount" resultType="long">
+		select count(*) from couponview where memberId = #{memberId}
+		<![CDATA[
+			and used = 1 or (used = 0 and sysdate > expirationdate)
+		]]>
+	</select>
+	
 	<select id="getPointHistory" resultType="PointDTO">
 		select b.*
 		from
@@ -110,21 +124,31 @@
 	</select>
 
 	<select id="getAvailableCoupon" resultType="CouponDTO">
-		select couponid, couponname, benefit, restriction, createddate, expirationdate, used
-		from couponview where memberid = #{memberId}
-		<![CDATA[
-			and used = 0 and sysdate < expirationdate
-		]]>
-		order by createddate
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+			 	 (select couponid, couponname, benefit, restriction, createddate, expirationdate, used
+				  from couponview where memberid = #{memberId}
+				  <![CDATA[
+					  and used = 0 and sysdate <= expirationdate
+				  ]]>
+				  order by createddate desc) a) b
+		where rnum between #{startNum} and #{endNum}
 	</select>
 	
 	<select id="getUnavailableCoupon" resultType="CouponDTO">
-		select couponid, couponname, benefit, restriction, createddate, expirationdate, used
-		from couponview where memberid = #{memberId}
-		<![CDATA[
-			and (used = 1 or sysdate >= expirationdate)
-		]]>
-		order by createddate
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+				 (select couponid, couponname, benefit, restriction, createddate, expirationdate, used
+			  	  from couponview where memberid = #{memberId}
+			  	  <![CDATA[
+			 	  	  and used = 1 or (used = 0 and sysdate > expirationdate)
+			  	  ]]>
+			  	  order by createddate desc) a) b
+		where rnum between #{startNum} and #{endNum}
 	</select>
 
 	<select id="getAddressList" resultType="DeliveryAddressDTO">

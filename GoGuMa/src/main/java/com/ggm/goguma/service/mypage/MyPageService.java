@@ -1,4 +1,4 @@
-package com.ggm.goguma.service;
+package com.ggm.goguma.service.mypage;
 
 import java.util.List;
 
@@ -23,9 +23,11 @@ public interface MyPageService {
 	
 	long getPointHistoryCount(long memberId, String type, String startDate, String endDate) throws Exception;
 	
+	long getCouponCount(long memberId, String type) throws Exception;
+	
 	List<PointDTO> getPointHistory(long memberId, String type, long page, String startDate, String endDate) throws Exception;
 
-	List<CouponDTO> getCouponHistory(long memberId, boolean available) throws Exception;
+	List<CouponDTO> getCouponHistory(long memberId, String type, long page) throws Exception;
 	
 	List<DeliveryAddressDTO> getAddressList(long memberId) throws Exception;
 
@@ -42,5 +44,4 @@ public interface MyPageService {
 	void cancelDefault(long memberId) throws Exception;
 
 	int getMemberPoint(long memberId) throws Exception;
-
 }

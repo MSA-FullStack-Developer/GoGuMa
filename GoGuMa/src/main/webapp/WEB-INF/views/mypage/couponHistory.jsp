@@ -64,7 +64,7 @@
                         예치금
                     </div>
                     <div>
-                        <a href="${contextPath}/mypage/couponHistory">쿠폰</a>
+                        <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
                     </div>
                 </div>
                 <div class="mb-4">
@@ -123,7 +123,7 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            <a href="${contextPath}/mypage/couponHistory">쿠폰</a>
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
                         </div>
                         <div>
                             3장
@@ -142,64 +142,100 @@
                     <h5><b>쿠폰</b></h5>
                 </div>
                 <div class="d-flex flex-row border border-2 mb-3">
-                    <a href="#" class="col p-2 active" id="available" style="text-align: center; background-color: rgb(187, 184, 184);">사용가능</a>
-                    <a href="#" class="col p-2" id="unavailable" style="text-align: center;">사용완료 & 기간만료</a>
+                    <a href="${contextPath}/mypage/couponHistory/available?page=1" class="col p-2 active" style="text-align: center; background-color: rgb(187, 184, 184);">사용가능</a>
+                    <a href="${contextPath}/mypage/couponHistory/unavailable?page=1" class="col p-2" style="text-align: center;">사용완료 & 기간만료</a>
                 </div>
-                
-                <!-- 사용가능 쿠폰 -->
-                <table class="table mb-3 active" style="margin: auto; text-align: center; vertical-align: middle;">
-                    <thead class="table-secondary table-group-divider">
-                        <tr>
-                            <th>쿠폰명</th>
-                            <th>혜택</th>
-                            <!-- <th>사용조건</th> -->
-                            <th>유효기간</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    	<c:forEach var="couponDTO" items="${availableCouponList}">
-	                        <tr>
-	                            <td>${couponDTO.couponName}</td>
-	                            <td><fmt:formatNumber value="${couponDTO.benefit}" />원 할인</td>
-	                            <!-- <td><fmt:formatNumber value="${couponDTO.restriction}" />원 이상 구매시</td> -->
-	                            <td>~ <fmt:formatDate pattern="yyyy-MM-dd" value="${couponDTO.expirationDate}" /></td>
-	                        </tr>
-	                    </c:forEach>
-                    </tbody>
-                </table>
-                
-                <!-- 사용완료 & 기간만료 쿠폰 -->
-                <table class="table mb-3" style="margin: auto; text-align: center; vertical-align: middle;">
-                    <thead class="table-secondary table-group-divider">
-                        <tr>
-                            <th>쿠폰명</th>
-                            <th>혜택</th>
-                            <!-- <th>사용조건</th> -->
-                            <th>유효기간</th>
-                            <th>상태</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    	<c:forEach var="couponDTO" items="${unavailableCouponList}">
-                    		<tr>
-                    			<td>${couponDTO.couponName}</td>
-                    			<td><fmt:formatNumber value="${couponDTO.benefit}" />원 할인</td>
-                    			<!-- <td><fmt:formatNumber value="${couponDTO.restriction}" />원 이상 구매시</td> -->
-                    			<td>~ <fmt:formatDate pattern="yyyy-MM-dd" value="${couponDTO.expirationDate}" /></td>
-                    			<td>
-                    				<c:choose>
-                    					<c:when test="${couponDTO.used eq 1}">
-                    						사용완료
-                    					</c:when>
-                    					<c:otherwise>
-                    						기간만료
-                    					</c:otherwise>
-                    				</c:choose>
-                    			</td>
-                    		</tr>
-                    	</c:forEach>
-                    </tbody>
-                </table>
+                <c:choose>
+                	<c:when test="${type eq 'available'}">
+	                	<!-- 사용가능 쿠폰 -->
+		                <table class="table mb-3 active" style="margin: auto; text-align: center; vertical-align: middle;">
+		                    <thead class="table-secondary table-group-divider">
+		                        <tr>
+		                            <th>쿠폰명</th>
+		                            <th>혜택</th>
+		                            <!-- <th>사용조건</th> -->
+		                            <th>유효기간</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                    	<c:forEach var="couponDTO" items="${couponList}">
+			                        <tr>
+			                            <td>${couponDTO.couponName}</td>
+			                            <td><fmt:formatNumber value="${couponDTO.benefit}" />원 할인</td>
+			                            <!-- <td><fmt:formatNumber value="${couponDTO.restriction}" />원 이상 구매시</td> -->
+			                            <td>~ <fmt:formatDate pattern="yyyy-MM-dd" value="${couponDTO.expirationDate}" /></td>
+			                        </tr>
+			                    </c:forEach>
+		                    </tbody>
+		                </table>
+                	</c:when>
+                	<c:otherwise>
+	                	<!-- 사용완료 & 기간만료 쿠폰 -->
+		                <table class="table mb-3" style="margin: auto; text-align: center; vertical-align: middle;">
+		                    <thead class="table-secondary table-group-divider">
+		                        <tr>
+		                            <th>쿠폰명</th>
+		                            <th>혜택</th>
+		                            <!-- <th>사용조건</th> -->
+		                            <th>유효기간</th>
+		                            <th>상태</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                    	<c:forEach var="couponDTO" items="${couponList}">
+		                    		<tr>
+		                    			<td>${couponDTO.couponName}</td>
+		                    			<td><fmt:formatNumber value="${couponDTO.benefit}" />원 할인</td>
+		                    			<!-- <td><fmt:formatNumber value="${couponDTO.restriction}" />원 이상 구매시</td> -->
+		                    			<td>~ <fmt:formatDate pattern="yyyy-MM-dd" value="${couponDTO.expirationDate}" /></td>
+		                    			<td>
+		                    				<c:choose>
+		                    					<c:when test="${couponDTO.used eq 1}">
+		                    						사용완료
+		                    					</c:when>
+		                    					<c:otherwise>
+		                    						기간만료
+		                    					</c:otherwise>
+		                    				</c:choose>
+		                    			</td>
+		                    		</tr>
+		                    	</c:forEach>
+		                    </tbody>
+		                </table>
+                	</c:otherwise>
+                </c:choose>
+                <ul class="pagination justify-content-center">
+                	<c:if test="${startPage ne 1}">
+                		<li class="page-item">
+                			<a class="page-link" href="${contextPath}/mypage/couponHistory/${type}?page=${startPage-1}" aria-label="Previous">
+	                			<span aria-hidden="true">&laquo;</span>
+	                		</a>
+                		</li>
+                	</c:if>
+                	<c:forEach begin="${startPage}" end="${endPage}" var="pageNum">
+                		<c:choose>
+                			<c:when test="${page == pageNum}">
+                				<li class="page-item active">
+                					<p class="page-link">${pageNum}</p>
+                				</li>
+                			</c:when>
+                			<c:otherwise>
+                				<li class="page-item">
+                					<a class="page-link" href="${contextPath}/mypage/couponHistory/${type}?page=${pageNum}">
+                						${pageNum}
+                					</a>
+                				</li>
+                			</c:otherwise>
+                		</c:choose>
+                	</c:forEach>
+                	<c:if test="${endPage ne pageCount}">
+                		<li class="page-item">
+                			<a class="page-link" href="${contextPath}/mypage/couponHistory/${type}?page=${endPage+1}" aria-label="Next">
+					    		<span aria-hidden="true">&raquo;</span>
+					    	</a>
+                		</li>
+                	</c:if>
+                </ul>
             </div>
         </div>
     </div>

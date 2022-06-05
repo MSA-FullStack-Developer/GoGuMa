@@ -18,7 +18,7 @@ import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
-import com.ggm.goguma.service.MyPageService;
+import com.ggm.goguma.service.mypage.MyPageService;
 
 import lombok.extern.log4j.Log4j;
 
@@ -119,15 +119,32 @@ public class MyPageController {
 		return "mypage/pointHistory";
 	}
 	
-	@RequestMapping(value="/couponHistory", method=RequestMethod.GET)
-	public String getCouponHistory(Model model) {
+	@RequestMapping(value="/couponHistory/{type}", method=RequestMethod.GET)
+	public String getCouponHistory(@PathVariable("type") String type, @RequestParam("page") long page, Model model) {
 		try {
-			List<CouponDTO> unavailableCouponList = service.getCouponHistory(1, false);
-			List<CouponDTO> availableCouponList = service.getCouponHistory(1, true);
-			model.addAttribute("unavailableCouponList", unavailableCouponList);
-			model.addAttribute("availableCouponList", availableCouponList);
-			log.info(unavailableCouponList);
-			log.info(availableCouponList);
+			// 특정 쿠폰의 개수
+			long couponCount = service.getCouponCount(1, type);
+			// 전체 페이지 개수 = 전체 페이지 개수 / 한 페이지에 보여지는 내역의 수
+			long pageCount = couponCount / contentPerPage;
+			// 예를 들어, 내역이 101개인 경우, 11개의 페이지가 필요하므로 총 페이지 개수를 증가시켜준다.
+			if(couponCount % contentPerPage != 0) pageCount++;
+			
+			// 시작 페이지 = (현재 페이지-1) / 페이지 블록 크기 * 페이지 블록 크기 + 1
+			long startPage = (page-1) / blockPerPage * blockPerPage + 1;
+			// 마지막 페이지 (현재 페이지-1) / 페이지 블록 크기 * 페이지 블록 크기 + 페이지 블록 크기
+			long endPage = (page-1) / blockPerPage * blockPerPage + blockPerPage;
+			// 마지막 페이지 개수가 전체 페이지 개수보다 많은 경우, 마지막 페이지를 전체 페이지 개수로 맞춰준다.
+			if(endPage > pageCount) endPage = pageCount;
+			
+			List<CouponDTO> couponList = service.getCouponHistory(1, type, page);
+			model.addAttribute("couponList", couponList);
+			model.addAttribute("type", type);
+			model.addAttribute("page", page);
+			model.addAttribute("startPage", startPage);
+			model.addAttribute("endPage", endPage);
+			model.addAttribute("pageCount", pageCount);
+			model.addAttribute("historyCount", couponCount);
+			model.addAttribute("contentPerPage", contentPerPage);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}
