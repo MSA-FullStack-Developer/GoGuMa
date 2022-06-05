@@ -61,7 +61,7 @@
                         예치금
                     </div>
                     <div>
-                        <a href="${contextPath}/mypage/couponHistory">쿠폰</a>
+                        <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
                     </div>
                 </div>
                 <div class="col mb-4">
@@ -120,7 +120,7 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            <a href="${contextPath}/mypage/couponHistory">쿠폰</a>
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
                         </div>
                         <div>
                             3장
