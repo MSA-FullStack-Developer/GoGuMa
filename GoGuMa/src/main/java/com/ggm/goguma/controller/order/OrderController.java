@@ -220,4 +220,9 @@ public class OrderController {
 	public String ReceiveFormData()throws Exception {
 		return "redirect:/";
 	}
+	
+	@GetMapping("receipt")
+	public String receipt() {
+		return "receipt";
+	}
 }

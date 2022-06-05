@@ -45,10 +45,12 @@
   });
 
   $(document).ready(function() {
-	
-    console.log($('.pProductName').text());
-    //총 판매 금액, 총 멤버십 할인
 
+    console.log($('.pProductName').text());
+    //총 판매 금액, 총 멤버십 할인, 적립예정 G.Point
+    console.log("적립예정 포인트: " + $('#pregp').val());
+    var gp = parseInt($('#pregp').val());
+    $('#pre-gp').text(numFormatComma(gp));
     
     var total = $('#total').val();
     $('#total-price').text(numFormatComma(total));
@@ -59,6 +61,7 @@
     $('#all-discount').text(numFormatComma(membershipDiscount));
     
     $('#lastStlAmtDd').text(numFormatComma(total-membershipDiscount));
+    
     //쿠폰 조회 버튼
     $('#getCoupon-btn').on('click', function() {
       let token = $("meta[name='_csrf']").attr("content");
@@ -198,7 +201,7 @@
       console.log($('.requirement-in').val());
     });
   });
-
+  
 	//결제
 	function iamport(){
 		//가맹점 식별코드
@@ -297,8 +300,7 @@
 			},
 			success : function(result) {
 				alert("결제가 완료되었습니다.");
-				let new_url ='${contextPath}/'
-				window.location.href = 'receipt.jsp';
+				window.location.href = '/receipt';
 			},
 			error : function(xhr, status, error) {
 				var errorResponse = JSON.parse(xhr.responseText);
@@ -407,7 +409,7 @@
 							</li>
 							<li>
 								<div id="calculateList_upoint" class="hpoint">
-									<span class="tit">적립예정 H.Point</span> <span class="txt"><strong>0</strong>p</span>
+									<span class="tit">적립예정 G.Point</span> <span class="txt"><strong id="pre-gp">0</strong>p</span>
 								</div>
 							</li>
 						</ul>
@@ -436,7 +438,7 @@
 					<div class="accordion accordion-flush">
 						<div class="accordion-item">
 							<h3 class="accordion-header order-products" id="panelsStayOpen-headingOne">
-								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">주문 상품정보</button>
+								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne"><strong>주문 상품정보</strong></button>
 							</h3>
 							<div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
 								<div class="accordion-body">
@@ -451,6 +453,7 @@
 											</tr>
 											<c:set var = "total" value = "0" />
 											<c:set var = "membershipDiscount" value = "0" />
+											<c:set var = "preGPoint" value="0" />
 											<c:forEach var="i" items="${list }" begin="0" step="1" varStatus="status">
 												<tr class="order-product">
 													<td class="order-product_box">
@@ -479,6 +482,7 @@
 															<c:set var="proPrice" value="${dtoList[status.index].nrmOriPrc * dtoList[status.index].ordQty}"></c:set>
 															<em><fmt:formatNumber value="${proPrice}" type="currency" currencySymbol="" /></em>원
 															<c:set var= "total" value="${total + proPrice}"/>
+															<c:set var= "preGPoint" value="${preGPoint + (proPrice * (memberDTO.grade.pointPercent / 100)) }"/>
 														</div>
 													</td>
 													<td class="cart-discount">
@@ -498,6 +502,7 @@
 											</c:forEach>
 										</thead>
 									</table>
+									<input type="hidden" id="pregp" value="${preGPoint }" />
 									<input type="hidden" id="total" value="${total }"/>
 									<input type="hidden" id="membershipDiscount" value="${membershipDiscount }"/>
 									<input type="hidden" id="use-coupon-id" value="0" />
@@ -509,7 +514,7 @@
 						</div>
 						<div class="accordion-item">
 							<h3 class="accordion-header discount-info" id="panelsStayOpen-headingTwo">
-								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">할인 혜택 선택</button>
+								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo"><strong>할인 혜택 선택</strong></button>
 							</h3>
 							<!-- 쿠폰 조회 Modal -->
 							<div class="modal fade" id="couponModal" aria-labelledby="couponModalLabel" tabindex="-1">
@@ -551,7 +556,7 @@
 												<button class="btn text-white btn-default" id="point-cancel">사용취소</button>
 											</div>
 											<div class="col-md-4">[보유 G.Point: <fmt:formatNumber value="${point}"
-																type="currency" currencySymbol="" />원]</div>
+																type="currency" currencySymbol="" />p]</div>
 										</div>
 									</div>
 								</div>
@@ -559,7 +564,7 @@
 						</div>
 						<div class="accordion-item">
 							<h3 class="accordion-header member-info" id="panelsStayOpen-headingThree">
-								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="true" aria-controls="panelsStayOpen-collapseThree">받는사람정보</button>
+								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="true" aria-controls="panelsStayOpen-collapseThree"><strong>받는사람정보</strong></button>
 							</h3>
 							<!-- 배송정보 조회 Modal -->
 							<div class="modal fade" id="myModal" aria-labelledby="ModalLabel1" tabindex="-1">
@@ -722,7 +727,7 @@
 						</div>
 						<div class="accordion-item">
 							<h3 class="accordion-header pay-info" id="panelsStayOpen-headine">
-								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="true" aria-controls="panelsStayOpen-collapseFour">결제 정보 선택</button>
+								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="true" aria-controls="panelsStayOpen-collapseFour"><strong>결제 정보 선택</strong></button>
 							</h3>
 							<div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingFour">
 								<div class="accordion-body">

@@ -22,6 +22,8 @@
 	padding: 50px 0 60px 0;
 }
 
+
+
 .cart-head .cart-top .cart-all strong {
 	font-size: 30px;
 	line-height: 40px;
@@ -92,6 +94,7 @@ ul, ol, menu, li {
 	position: relative;
 }
 .cart-bottom{
+	margin-bottom: 50px;
 	margin-top: 30px;
 }
 .cart-bottom .btngroup .btn span {
@@ -155,8 +158,7 @@ ul, ol, menu, li {
 }
 
 .cart-info {
-	width: 800px;
-	margin: 80px auto;
+	margin: auto;
 	padding: 0;
 	border: 1px solid #eee;
 	border-radius: 5px;
@@ -311,6 +313,9 @@ ul, ol, menu, li {
 	vertical-align: middle;
 	width: 12%;
 }
+.hpoint{
+    margin-bottom: 20px;
+}
 #th-product-name{
 	text-align: center;
 	vertical-align: middle;
@@ -324,7 +329,7 @@ ul, ol, menu, li {
 #th-product-price{
 	text-align: center;
 	vertical-align: middle;
-	width: 12%;
+	width: 10%;
 }
 #th-discount-price{
 	text-align: center;
