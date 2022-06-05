@@ -83,7 +83,7 @@
                             작성 가능한 상품평
                         </div>
                         <div>
-                            5건
+                            ${writeableCount}건
                         </div>
                     </div>
                 </div>

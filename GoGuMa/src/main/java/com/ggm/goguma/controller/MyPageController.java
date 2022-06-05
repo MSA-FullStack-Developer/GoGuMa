@@ -248,7 +248,10 @@ public class MyPageController {
 				
 				// 작성 가능한 상품평 목록 불러오기
 				List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
+				long writeableCount = writeableList.size();
+				
 				model.addAttribute("writeableList", writeableList);
+				model.addAttribute("writeableCount", writeableCount);
 			}
 		} catch(Exception e) {
 			log.info(e.getMessage());
