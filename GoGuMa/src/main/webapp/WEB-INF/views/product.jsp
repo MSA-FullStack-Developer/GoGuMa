@@ -188,58 +188,6 @@
                 }
         	});
             
-            $('#finishBtn').on("click", function() { // 상품평 작성하기
-            	var token = $("meta[name='_csrf']").attr("content");
-        		var header = $("meta[name='_csrf_header']").attr("content");
-        		
-            	var productID = $("#productID").val(); // 구매한 상품 번호
-                var memberID = $("#memberID").val(); // 로그인한 회원 번호
-               	var content = $(".write-review-content").val(); // 상품평 내용
-               	var prodThumbNail = $(".thumbnailImg").data("imgurl"); // 상품 썸네일 이미지
-               	var list = new Array();
-               	
-               	$(".uploadResult ul li").each(function(i, obj) {
-        			var jobj = $(obj);
-        			
-        			var attachDTO = new Object();
-        			attachDTO.imageName = jobj.data("imagename");
-        			attachDTO.imagePath = jobj.data("imagepath");
-        			list.push(attachDTO);
-        		});
-               	
-        		var data = {
-        			productID : productID,
-        			memberID : memberID,
-        			content : content,
-        			prodThumbNail : prodThumbNail,
-        			attachList : list
-        		};
-        		
-        		$.ajax({
-		            url: "${contextPath}/category/1/insertReview",
-		            type: "POST",
-		            contentType: 'application/json; charset=utf-8',
-		            data: JSON.stringify(data),
-		            beforeSend : function(xhr) {
-        				xhr.setRequestHeader(header, token);
-        			},
-		            success : function(result){
-		            	if (result == 1) {
-			                $(".modal").hide();
-			                alert("상품평이 등록되었습니다.");
-			                location.reload();
-		            	} else {
-		            		alert("상품평 등록 실패");
-		            	}
-		            },error : function(xhr, status, error) {
-        				var errorResponse = JSON.parse(xhr.responseText);
-        				var errorCode = errorResponse.code;
-        				var message = errorResponse.message;
-        				alert(message);
-        			}
-		        });
-        	});
-            
             $('#deleteBtn').on("click", function() { // 상품평 삭제
             	var token = $("meta[name='_csrf']").attr("content");
         		var header = $("meta[name='_csrf_header']").attr("content");
@@ -487,33 +435,6 @@
                 </div>
                 <div id="tab02">
    					<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
-   					
-                    <!-- 상품평 -->
-					<c:if test="${showWriteBtn == true}">
-	                    <div>
-	                        <button class="writeBtn" id="writeBtn">상품평 작성하기</button>
-	                    </div>
-	                    
-	                    <div class="write-modal">
-	                    	<input type="hidden" id="memberID" name="${memberDTO.id}" value="${memberDTO.id}">
-	                    	<input type="hidden" id="productID" name="${orderProductID}" value="${orderProductID}">
-	                        <h4 class="membername"><i class="fa-solid fa-heart" style="color: FF493C"></i>
-	                        	<b>${memberDTO.name}</b>님, 이번 상품은 어떠셨나요?
-	                       	</h4>
-	                       	<textarea cols="34" rows="5" type="text" class="write-review-content" placeholder="상품평을 작성해주세요. (최대 2,000자)"></textarea>
-	                       	<input type="file" name='uploadFile' style="margin-left: 30px; "multiple>
-	                       	<div class='uploadResult'>
-								<ul>
-								
-								</ul>
-							</div>
-	                       	<div class="review-buttons">
-	                            <button type="button" class="review-button" id="cancelBtn">취소</button>
-	                            <button type="button" class="review-button" id="finishBtn">작성 완료</button>
-	                          </div>
-	                    </div>
-	                </c:if>
-                    
                     <c:forEach items="${reviewList}" var="review">
 	                    <div class="review" id="review">
 	                        <div>
