@@ -212,6 +212,8 @@ public class OrderController {
 		// 상품 결제 완료 후 DB에서 필요한 작업 실행
 		log.info("카트 정보 리스트: " +transactionDTO);
 		orderService.paytransaction(transactionDTO, memberId);
+		log.info("컨트롤러에서 모든 결제 트랜잭션 처리가 완료됨");
+		
 	}
 	
 	@PostMapping("/orderResult")

@@ -297,8 +297,7 @@
 			},
 			success : function(result) {
 				alert("결제가 완료되었습니다.");
-				let new_url ='${contextPath}/'
-				window.location.href = 'receipt.jsp';
+
 			},
 			error : function(xhr, status, error) {
 				var errorResponse = JSON.parse(xhr.responseText);
