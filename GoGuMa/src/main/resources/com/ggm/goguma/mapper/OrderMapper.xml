@@ -162,4 +162,9 @@
 		SET used = 1
 		WHERE couponid = ${couponId} and memberid = #{memberId}
 	</update>
+	
+	<delete id="deleteCartOrder">
+		DELETE FROM cart
+		WHERE cartid = #{cartId}
+	</delete>
 </mapper>

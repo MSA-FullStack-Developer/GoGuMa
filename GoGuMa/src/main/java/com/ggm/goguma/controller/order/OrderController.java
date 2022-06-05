@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.ggm.goguma.controller.cart.CartController;
+import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.cart.CartItemDTO;
 import com.ggm.goguma.dto.cart.CartOrderDTO;
@@ -39,6 +40,7 @@ import com.ggm.goguma.service.MyPageService;
 import com.ggm.goguma.service.cart.CartService;
 import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.order.OrderService;
+import com.ggm.goguma.service.product.CategoryService;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
@@ -60,12 +62,17 @@ public class OrderController {
 	@Autowired
 	private MyPageService myPageService;
 	
+	@Autowired
+	private CategoryService categoryService;
+	
 	@RequestMapping(value="/", method = {RequestMethod.POST, RequestMethod.GET})
 	public String showOrderList(@ModelAttribute CartOrderDTO cartOrderDTO, Model model, Authentication authentication, BindingResult errors) throws Exception{
 		if ( errors.hasErrors() ){
 			log.info(errors.getAllErrors() );
 			}	
 		String memberEmail = "";
+		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+		model.addAttribute("parentCategory", parentCategory);
 			// 사용자가 권한이 있는 경우
 			if (authentication != null){
 				UserDetails user = (UserDetails)authentication.getPrincipal();

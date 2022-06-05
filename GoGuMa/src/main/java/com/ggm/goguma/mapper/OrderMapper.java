@@ -38,4 +38,6 @@ public interface OrderMapper {
 
 	List<CartItemDTO> getOrder(List<CartOrderListDTO> dtoList)throws Exception;
 
+	void deleteCartOrder(@Param("cartId") long cartId)throws Exception;
+
 }

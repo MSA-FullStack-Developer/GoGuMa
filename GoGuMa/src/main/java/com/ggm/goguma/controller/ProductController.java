@@ -165,6 +165,7 @@ public class ProductController {
 			
 			return "product";
 		} catch (Exception e) {
+			e.printStackTrace();
 			model.addAttribute("msg", "상품 상세 화면 출력 에러");
 			return "product";
 		}
