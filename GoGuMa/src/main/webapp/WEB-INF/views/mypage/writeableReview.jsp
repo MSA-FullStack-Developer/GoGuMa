@@ -90,9 +90,9 @@
                 <div class="col mt-3">
                     <h5><b>작성 가능한 상품평</b></h5>
                 </div>
-                <div class="d-flex col-16">
+                <div class="d-flex flex-wrap">
                     <c:forEach items="${writeableList}" var="product">
-                    <div class="myReview">
+                    <div class="myReview-writeable">
 	                    <div style="width: 100%; margin-bottom: 10px;">
                		 		<div class="myReviewTop">
 	               		 		<a class="productlink" href="${contextPath}/category/1/${product.categoryID}/detail/${product.parentPID}">
