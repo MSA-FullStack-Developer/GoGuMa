@@ -127,7 +127,7 @@
         			},
        				success: function(result) {
        					alert("이미지가 삭제되었습니다.");
-       					
+       					$("#file").val(""); // 초기화
        					targetLi.remove();
        				},error : function(xhr, status, error) {
         				var errorResponse = JSON.parse(xhr.responseText);
@@ -298,7 +298,7 @@
 	                        	<input type="hidden" id="thumbnailImg" value="">
 	                       	</h4>
 	                       	<textarea cols="34" rows="5" type="text" class="write-review-content" placeholder="상품평을 작성해주세요. (최대 2,000자)"></textarea>
-	                       	<input type="file" name='uploadFile' style="margin-left: 30px; "multiple>
+	                       	<input type="file" id="file" name='uploadFile' style="margin-left: 30px; "multiple>
 	                       	<div class='uploadResult'>
 								<ul>
 								
