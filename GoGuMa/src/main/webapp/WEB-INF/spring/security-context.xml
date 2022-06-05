@@ -40,6 +40,8 @@
 		<security:intercept-url pattern="/order/**" access="isAuthenticated()" />	
 		<security:intercept-url pattern="/market/write.do" access="isAuthenticated()" />	
 		<security:intercept-url pattern="/market/createMarket.do" access="isAuthenticated()" />	
+		<security:intercept-url pattern="/market/**/article/**" access="isAuthenticated()" />	
+		<security:intercept-url pattern="/market/article/show.do" access="permitAll()" />	
 	</security:http>
 	
 	<security:authentication-manager>

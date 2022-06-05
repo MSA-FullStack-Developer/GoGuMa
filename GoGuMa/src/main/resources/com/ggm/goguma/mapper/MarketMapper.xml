@@ -15,6 +15,16 @@
 	</resultMap>
 	
 	
+	<resultMap type="MarketArticleDTO" id="MarketArticleResult">
+		<id property="articleId" column="articleId"/>
+		<result property="articleId" column="articleId"/>
+		<result property="marketId" column="marketId"/>
+		<result property="articleTitle" column="articleTitle"/>
+		<result property="articleContent" column="articleContent"/>
+		<association property="thumbnail" column="articleId" select="com.ggm.goguma.mapper.MarketMapper.findThumbnailImageById"></association>
+		<collection property="products" ></collection>
+	</resultMap>
+	
 	<insert id="insertMarket" parameterType="MarketDTO" useGeneratedKeys="true" keyProperty="marketId" keyColumn="marketId">
 	
 		INSERT INTO market(MEMBERID, CATEGORYID, MARKETNAME, MARKETDETAIL, MARKETTHUMB,MARKETBANNER)
@@ -28,6 +38,14 @@
 		FROM
 			Market 
 		WHERE marketId = #{id} 
+	</select>
+	
+	<select id="findMarketIdByMemberId" resultType="long">
+		SELECT 
+			marketId
+		FROM
+			Market 
+		WHERE memberId = #{id} 
 	</select>
 	
 	<select id="findFollwMarketCountByMarketIdAndMemberId" parameterType="FollowMarketDTO" resultType="int">
@@ -44,4 +62,52 @@
 		DELETE followMarket
 		WHERE marketId = #{marketId} AND memberId = #{memberId}
 	</delete>
+	
+	<select id="findOrderProduct" resultType="ArticleProudctDTO">
+		SELECT
+			DISTINCT(p.PRODUCTID), pp.PRODUCTID  parentId,  pp.PRODUCTNAME,  p.PRODUCTNAME optionName, p.PRODUCTPRICE , i.PRODIMGURL 
+		FROM 
+			RECEIPT r , ORDERDETAIL o , PRODUCT p , PRODUCTIMAGE i, PRODUCT pp
+		WHERE 
+			r.MEMBERID = #{id} AND 
+			o.ORDERSTATUS = 'F' AND 
+			o.RECEIPTID = r.RECEIPTID AND 
+			o.PRODUCTID = p.PRODUCTID AND 
+			p.PRODUCTID = i.PRODUCTID AND
+			p.PARENTPID = pp.PRODUCTID AND
+			pp.PRODUCTNAME LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	
+	<insert id="insertMarketArticle" parameterType="MarketArticleDTO" useGeneratedKeys="true" keyColumn="articleId" keyProperty="articleId">
+		INSERT INTO marketArticle(marketId, articleTitle, articleContent)
+		VALUES(#{marketId}, #{articleTitle}, #{articleContent});
+	</insert>
+	
+	<insert id="insertArticleProduct">
+		INSERT INTO articleProduct(articleId, productId)
+		VALUES(#{articleId}, #{productId})
+	</insert>
+	
+	<insert id="insertArticleImage" parameterType="ArticleImageDTO">
+		INSERT INTO marketArticleImage(articleId, imageName, isThumbnail, imagePath)
+		VALUES(#{articleId},#{imageName}, #{isThumbnail}, #{imagePath})
+	</insert>
+	
+	<select id="findThumbnailImageById" resultType="ArticleImageDTO">
+		SELECT * 
+		FROM marketArticleImage
+		WHERE articleId = #{articleId} AND isThumbnail = 1;
+	</select>
+	
+	<select id="findArticleProductsById" resultType="ArticleProudctDTO">
+		SELECT 
+			cp.prodcutId, pp.productId parentId, pp.productName productName, cp.productName optionName, cp.productPrice, i.prodimgUrl
+		FROM articleProduct ap, product cp, product pp, productImage i
+		WHERE
+			ap.articleId = #{articleId} AND
+			ap.productId = cp.productId AND
+			cp.parentId = pp.productId AND
+			cp.productId = i.productId
+	</select>
 </mapper>

@@ -144,7 +144,8 @@
                                             </div>
                                             <div name="prod-name" class="col-8">
                                                 <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                                <span  style="font-size: 13px;">31,000원</span>
+                                                <p class="text-secondary text-truncate mb-0" style="font-size: 13px;">상품 이름 이름 이름상품 름상름상름상</p>
+                                                <span  style="font-size: 10px;">31,000원</span>
                                             </div>
                                         </div>
                                     </a>
