@@ -53,7 +53,6 @@
 		<load-on-startup>1</load-on-startup>
 		
 		<multipart-config>
-			<location>/Users/kyungmin-young/upload/temp</location>
 			<max-file-size>20971520</max-file-size>
 			<max-request-size>41943040</max-request-size>
 			<file-size-threshold>10971520</file-size-threshold>
