@@ -42,7 +42,7 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/orderHistory", method=RequestMethod.GET)
-	public String getOrderHistory(Model model) {
+	public String getOrderHistory(Model model) throws Exception {
 		try {
 			List<ReceiptDTO> receiptHistory = service.getReceiptHistory(1); // 회원ID로 결제정보DTO를 모두 불러오기
 			for(ReceiptDTO dto : receiptHistory) {
@@ -56,7 +56,7 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/orderHistory/{receiptId}", method=RequestMethod.GET)
-	public String getOrderDetail(@PathVariable("receiptId") long receiptId, Model model) {
+	public String getOrderDetail(@PathVariable("receiptId") long receiptId, Model model) throws Exception {
 		try {
 			ReceiptDTO receiptDTO = service.getReceiptDetail(receiptId); // 결제상세 가져오기
 			long earnablePoint = service.getEarnablePoint(receiptId);
@@ -71,7 +71,7 @@ public class MyPageController {
 
 	@ResponseBody
 	@RequestMapping(value="/orderHistory/updateOrderStatus", method=RequestMethod.POST)
-	public String updateOrderStatus(@RequestParam("orderId") long orderId, @RequestParam("status") String status) {
+	public String updateOrderStatus(@RequestParam("orderId") long orderId, @RequestParam("status") String status) throws Exception {
 		try {
 			log.info(orderId+" "+status);
 			service.updateOrderStatus(orderId, status);
@@ -86,7 +86,7 @@ public class MyPageController {
 	public String getPointHistory(@PathVariable("type") String type, @RequestParam("page") long page,
 			@RequestParam(value="startDate", required=false) String startDate,
 			@RequestParam(value="endDate", required=false) String endDate,
-			Model model) {
+			Model model) throws Exception {
 		try {
 			// 특정 포인트 내역의 개수
 			long historyCount = service.getPointHistoryCount(1, type, startDate, endDate);
@@ -120,7 +120,7 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/couponHistory/{type}", method=RequestMethod.GET)
-	public String getCouponHistory(@PathVariable("type") String type, @RequestParam("page") long page, Model model) {
+	public String getCouponHistory(@PathVariable("type") String type, @RequestParam("page") long page, Model model) throws Exception {
 		try {
 			// 특정 쿠폰의 개수
 			long couponCount = service.getCouponCount(1, type);
@@ -152,7 +152,7 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/manageAddress", method=RequestMethod.GET)
-	public String getAddressList(Model model) {
+	public String getAddressList(Model model) throws Exception {
 		try {
 			DeliveryAddressDTO defaultAddress = service.getDefaultAddress(1);
 			log.info(defaultAddress);
@@ -234,5 +234,16 @@ public class MyPageController {
 			return "2";
 		}
 		return "1";
+	}
+	
+	@RequestMapping(value="/confirmPassword/{type}", method=RequestMethod.GET)
+	public String getConfirmForm(@PathVariable("type") String type, Model model) throws Exception {
+		try {
+			log.info("비밀번호확인 페이지");
+			model.addAttribute("type", type);
+		} catch(Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/confirmPassword";
 	}
 }
