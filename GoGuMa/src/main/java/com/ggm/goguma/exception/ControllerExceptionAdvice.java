@@ -42,6 +42,14 @@ public class ControllerExceptionAdvice {
 		return "redirect:/member/login.do";
 	}
 	
+	@ExceptionHandler({NotFoundMarketArticleException.class, NotFoundMarketException.class})
+	public String NotFoundMarketOrArticleExceptionHandler(RuntimeException e) {
+		log.error("[NotFoundMarketOrArticleExceptionHandler] error : "+ e.getMessage());
+		
+		return "error/error404";
+	}
+	
+	
 	@ExceptionHandler(NoHandlerFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public String NoHandlerFoundExceptionHandler(NoHandlerFoundException e) {

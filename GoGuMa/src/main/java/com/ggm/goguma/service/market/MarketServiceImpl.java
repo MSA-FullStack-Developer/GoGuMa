@@ -25,6 +25,7 @@ import com.ggm.goguma.dto.market.CreateMarketDTO;
 import com.ggm.goguma.dto.market.FollowMarketDTO;
 import com.ggm.goguma.dto.market.MarketArticleDTO;
 import com.ggm.goguma.dto.market.MarketDTO;
+import com.ggm.goguma.exception.NotFoundMarketArticleException;
 import com.ggm.goguma.exception.NotFoundMarketException;
 import com.ggm.goguma.exception.UploadFileFailException;
 import com.ggm.goguma.mapper.MarketMapper;
@@ -151,7 +152,10 @@ public class MarketServiceImpl implements MarketService{
 		MarketArticleDTO marketArticle = new MarketArticleDTO();
 		marketArticle.setArticleTitle(article.getArticleTitle());
 		marketArticle.setArticleContent(article.getArticleContent());
-		marketArticle.setMarketId(article.getMarketId());
+		
+		MarketDTO market = new MarketDTO();
+		market.setMarketId(article.getMarketId());
+		marketArticle.setMarket(market);
 		
 		this.marketMapper.insertMarketArticle(marketArticle);
 		
@@ -192,6 +196,13 @@ public class MarketServiceImpl implements MarketService{
 		
 		return articleImages;
 	}
+
+
+	@Override
+	public MarketArticleDTO getMarketArticle(long articleId) {
+		return this.marketMapper.findMarketArticleById(articleId).orElseThrow(NotFoundMarketArticleException::new);
+	}
+	
 	
 	
 	

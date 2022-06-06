@@ -1,5 +1,6 @@
 package com.ggm.goguma.dto.market;
 
+import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
@@ -9,11 +10,13 @@ public class MarketArticleDTO {
 
 	private long articleId;
 	
-	private long marketId;
+	private MarketDTO market;
 	
 	private String articleTitle;
 	
 	private String articleContent;
+	
+	private Date regDate;
 	
 	private ArticleImageDTO thumbnail;
 	

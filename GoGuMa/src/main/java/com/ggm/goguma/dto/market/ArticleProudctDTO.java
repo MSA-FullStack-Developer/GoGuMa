@@ -16,4 +16,6 @@ public class ArticleProudctDTO {
 	private int productPrice;
 	
 	private String prodImgUrl;
+	
+	private long categoryId;
 }

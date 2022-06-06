@@ -7,6 +7,7 @@ import com.ggm.goguma.dto.market.ArticleProudctDTO;
 import com.ggm.goguma.dto.market.CreateArticleDTO;
 import com.ggm.goguma.dto.market.CreateMarketDTO;
 import com.ggm.goguma.dto.market.FollowMarketDTO;
+import com.ggm.goguma.dto.market.MarketArticleDTO;
 import com.ggm.goguma.dto.market.MarketDTO;
 import com.ggm.goguma.exception.UploadFileFailException;
 
@@ -26,5 +27,7 @@ public interface MarketService {
 	List<ArticleProudctDTO> getArticleProducts(String keyword, long memberId);
 	
 	void createMarketArticle(CreateArticleDTO article) throws Exception;
+	
+	MarketArticleDTO getMarketArticle(long articleId);
 	
 }

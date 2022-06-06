@@ -26,6 +26,7 @@ import com.ggm.goguma.dto.market.ArticleProudctDTO;
 import com.ggm.goguma.dto.market.CreateArticleDTO;
 import com.ggm.goguma.dto.market.CreateMarketDTO;
 import com.ggm.goguma.dto.market.FollowMarketDTO;
+import com.ggm.goguma.dto.market.MarketArticleDTO;
 import com.ggm.goguma.dto.market.MarketDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.exception.UploadFileFailException;
@@ -92,9 +93,14 @@ public class MarketController {
 		return "market/showMarket";
 	}
 
-	@GetMapping("/article/show.do")
-	public String showArticle(@RequestParam long articleNum, Model model) {
+	@GetMapping("/article/{articleId}/show.do")
+	public String showArticle(@PathVariable long articleId, Model model) {
 
+		MarketArticleDTO article = this.marketService.getMarketArticle(articleId);
+		
+		log.info(article);
+		model.addAttribute("article", article);
+		
 		return "market/showArticle";
 	}
 
@@ -134,7 +140,7 @@ public class MarketController {
 
 		return "market/searchMyProduct";
 	}
-
+	
 	@PostMapping(value = "/createMarket.do", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
 	public String createMarket(CreateMarketDTO data, Principal principal, RedirectAttributes ra) throws Exception {
 

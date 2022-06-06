@@ -18,9 +18,10 @@
 	<resultMap type="MarketArticleDTO" id="MarketArticleResult">
 		<id property="articleId" column="articleId"/>
 		<result property="articleId" column="articleId"/>
-		<result property="marketId" column="marketId"/>
 		<result property="articleTitle" column="articleTitle"/>
 		<result property="articleContent" column="articleContent"/>
+		<result property="regDate" column="regDate" />
+		<association property="market" column="marketId" select="com.ggm.goguma.mapper.MarketMapper.findMarketById"></association>
 		<association property="thumbnail" column="articleId" select="com.ggm.goguma.mapper.MarketMapper.findThumbnailImageById"></association>
 		<collection property="products" column="articleId" javaType="java.util.ArrayList" select="com.ggm.goguma.mapper.MarketMapper.findArticleProductsById"></collection>
 	</resultMap>
@@ -81,7 +82,7 @@
 	
 	<insert id="insertMarketArticle" parameterType="MarketArticleDTO" useGeneratedKeys="true" keyColumn="articleId" keyProperty="articleId">
 		INSERT INTO marketArticle(marketId, articleTitle, articleContent)
-		VALUES(#{marketId}, #{articleTitle}, #{articleContent})
+		VALUES(#{market. marketId}, #{articleTitle}, #{articleContent})
 	</insert>
 	
 	<insert id="insertArticleProduct">
@@ -95,7 +96,7 @@
 	</insert>
 	
 	<select id="findMarketArticleById" resultMap="MarketArticleResult">
-		SELECT articleId, marketId, articleTitle, articleContent 
+		SELECT articleId, marketId, articleTitle, articleContent, regDate
 		FROM marketArticle
 		WHERE articleId = #{articleId}
 	</select>
@@ -103,18 +104,18 @@
 	<select id="findThumbnailImageById" resultType="ArticleImageDTO">
 		SELECT * 
 		FROM marketArticleImage
-		WHERE articleId = #{articleId} AND isThumbnail = 1;
+		WHERE articleId = #{articleId} AND isThumbnail = 1
 	</select>
 	
 	<select id="findArticleProductsById" resultType="ArticleProudctDTO">
 		SELECT 
-			cp.prodcutId, pp.productId parentId, pp.productName productName, cp.productName optionName, cp.productPrice, i.prodimgUrl
+			cp.productId, pp.productId parentId, pp.productName productName, cp.productName optionName, cp.productPrice, i.prodimgUrl, cp.categoryId
 		FROM articleProduct ap, product cp, product pp, productImage i
 		WHERE
 			ap.articleId = #{articleId} AND
 			ap.productId = cp.productId AND
-			cp.parentId = pp.productId AND
-			cp.productId = i.productId
+			cp.parentpId = pp.productId AND
+			cp.productId = i.productId 
 	</select>
 	
 	

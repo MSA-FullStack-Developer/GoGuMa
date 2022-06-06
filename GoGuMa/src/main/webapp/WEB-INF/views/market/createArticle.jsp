@@ -133,7 +133,9 @@
 				console.log(data);
 				
 				var imageURL = data.imagePath;
+				//var img = $("<img>").attr({src: imageURL, width: '100%'});
 				$(editor).summernote('insertImage', imageURL);
+				//$(editor).summernote('insertNode', img[0]);
 			},
 			error: function() {
 				alert("이미지 업로드에 실패하였습니다.");
