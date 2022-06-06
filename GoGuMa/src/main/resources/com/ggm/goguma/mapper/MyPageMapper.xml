@@ -200,4 +200,8 @@
 				                            having pointtype='minus'),0) AS point
 		FROM dual
 	</select>
+	
+	<select id="confirmPassword" resultType="String">
+		select password from member where memberid = #{memberId}
+	</select>
 </mapper>

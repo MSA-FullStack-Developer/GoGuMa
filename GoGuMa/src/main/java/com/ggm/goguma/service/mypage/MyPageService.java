@@ -44,4 +44,6 @@ public interface MyPageService {
 	void cancelDefault(long memberId) throws Exception;
 
 	int getMemberPoint(long memberId) throws Exception;
+
+	boolean confirmPassword(long memberId, String userPassword) throws Exception;
 }

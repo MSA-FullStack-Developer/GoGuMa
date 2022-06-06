@@ -246,4 +246,37 @@ public class MyPageController {
 		}
 		return "mypage/confirmPassword";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="/confirmPassword/{type}", method=RequestMethod.POST)
+	public String confirmPassword(@PathVariable("type") String type, @RequestParam("userPassword") String userPassword) throws Exception {
+		try {
+			log.info("테스트");
+			if(service.confirmPassword(1, userPassword)) return "1";
+			return "2";
+		} catch(Exception e) {
+			log.info(e.getMessage());
+			return "3";
+		}
+	}
+	
+	@RequestMapping(value="/changeInfo", method=RequestMethod.GET)
+	public String getInfoChangeForm(Model model) throws Exception {
+		try {
+			log.info("회원정보변경 페이지");
+		} catch(Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/changeInfo";
+	}
+	
+	@RequestMapping(value="/changePassword", method=RequestMethod.GET)
+	public String getPasswordChangeForm(Model model) throws Exception {
+		try {
+			log.info("비밀번호변경 페이지");
+		} catch(Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/changePassword";
+	}
 }

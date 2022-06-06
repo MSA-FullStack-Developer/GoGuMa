@@ -154,4 +154,9 @@ public class MyPageServiceImpl implements MyPageService {
 	public int getMemberPoint(long memberId) throws Exception {
 		return mapper.getMemberPoint(memberId);
 	}
+
+	@Override
+	public boolean confirmPassword(long memberId, String userPassword) throws Exception {
+		return userPassword.equals(mapper.confirmPassword(memberId));
+	}
 }
