@@ -204,10 +204,13 @@
   
 	//카카오페이 결제
 	function iamport(){
+	  	//선택한 라디오 버튼에 따른 pg 선택
+	  	var radioVal = $('input[name="card-type"]:checked').val();
 		//가맹점 식별코드
+		console.log(radioVal);
 		IMP.init('imp37623879');
 		IMP.request_pay({
-		    pg : 'kakaopay',
+		    pg : radioVal,
 		    pay_method : 'card',
 		    merchant_uid : 'merchant_' + new Date().getTime(),
 		    name : $('.pProductName').text(), //결제창에서 보여질 이름
@@ -240,19 +243,10 @@
 		        	$('#ipUid').val(data.response.impUid);
 		        	console.log("uid로그 : " + $('#ipUid').val());
 		        	$('#finOrder').submit();
-/* 		        	let url = "${contextPath}/order/receipt?imp_uid="+data.response.impUid;
-		        	location.replace(url); */
 	        	} else {
 	        		alert("결제 실패");
-	        		//환불처리 되어야함
+	        		//임의로 금액이 변경되었기 때문에 전체 환불처리 되어야함
 	        	}
-		        /* var msg = '결제가 완료되었습니다.';
-		        msg += '고유ID : ' + rsp.imp_uid;
-		        msg += '상점 거래ID : ' + rsp.merchant_uid;
-		        msg += '결제 수단 : ' + rsp.pay_method;
-		        msg += '결제 금액 : ' + rsp.paid_amount;
-		        msg += '카드 승인번호 : ' + rsp.apply_num;
-		        alert(msg); */
 		      });
 		    
 		});
@@ -733,7 +727,7 @@
 							<button type="button" class="btn text-white btn-change-address" id="btn-change-address" data-bs-toggle="modal" data-bs-target="#myModal">배송지변경</button>
 						</div>
 						<div class="accordion-item">
-							<h3 class="accordion-header pay-info" id="panelsStayOpen-headine">
+							<h3 class="accordion-header select-pay-info" id="panelsStayOpen-headine">
 								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="true" aria-controls="panelsStayOpen-collapseFour"><strong>결제 정보 선택</strong></button>
 							</h3>
 							<div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingFour">
@@ -741,7 +735,11 @@
 									<table>
 										<tr>
 											<td class="pay-type">
-												<div class="select-pay-type">카카오페이</div>
+												<div class="select-pay-type">
+													<input type='radio' name='card-type' value='kakaopay'/> 카카오페이(간편결제)
+													<input type='radio' name='card-type' value='html5_inicis'/> KG이니시스(표준결제)
+													<input type='radio' name='card-type' value=''/> 무통장 입금
+												</div>
 											</td>
 										</tr>
 									</table>

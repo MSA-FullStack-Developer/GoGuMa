@@ -226,7 +226,7 @@ public class OrderController {
 	}
 	
 	@PostMapping("receipt")
-	public String receipt(@RequestParam("ipUid") String ipUid, Model model) throws IamportResponseException, IOException {
+	public String receipt(@RequestParam(value="ipUid") String ipUid, Model model) throws IamportResponseException, IOException {
 
 		//결제 번호
 		String uid = ipUid.substring(4);

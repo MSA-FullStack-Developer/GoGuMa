@@ -45,6 +45,15 @@
 			}
 	    }).done(function(data){
 	      console.log(data);
+	      $('#bname').text(data.response.buyerName);
+	      $('#bemail').text(data.response.buyerEmail);
+	      $('#baddress').text(data.response.buyerAddr);
+	      $('#bphone').text(data.response.buyerTel);
+	      
+	      $('#pamount').text(data.response.amount);
+	      $('#pname').text(data.response.name);
+	      $('#ptype').text(data.response.pgProvider);
+	     
 		});
 	});
 
@@ -112,14 +121,49 @@
 								</ol>
 							</div>
 						</div>
-					<div class="all-cart-total-price">
-						<div class="all-price-area">
-							<strong>고구마 쇼핑몰을 이용해주셔서 감사합니다.</strong> 
+					<div class="all-fin">
+						<div class="all-fin-ment">
+							<strong class="fin-txt">고구마 쇼핑몰을 이용해주셔서 감사합니다.</strong> 
 							<p>주문하신 내역은 마이페이지 > 나의 쇼핑내역 > 주문/배송조회에서 확인하실 수 있습니다.</p>
 							<strong>주문번호: </strong>${uid}
 						</div>
 					</div>
-
+					
+					<h4>구매자 정보</h4>
+					<div class="payman-info">
+						<div class="row">
+							<div class="col-md-4"><strong>구매자 이름</strong></div>
+							<div class="col-md-8" id="bname"></div>
+						</div>
+						<div class="row">
+							<div class="col-md-4"><strong>구매자 이메일</strong></div>
+							<div class="col-md-8" id="bemail"></div>
+						</div>
+						<div class="row">
+							<div class="col-md-4"><strong>구매자 주소</strong></div>
+							<div class="col-md-8" id="baddress"></div>
+						</div>
+						<div class="row">
+							<div class="col-md-4"><strong>구매자 연락처</strong></div>
+							<div class="col-md-8" id="bphone"></div>
+						</div>
+					</div>	
+					
+					<h4>결제 내역</h4>
+					<div class="pay-info">
+						<div class="row">
+							<div class="col-md-4"><strong>결제 금액</strong></div>
+							<div class="col-md-8"><span id="pamount"></span>원</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4"><strong>결제 상품명</strong></div>
+							<div class="col-md-8" id="pname"></div>
+						</div>
+						<div class="row">
+							<div class="col-md-4"><strong>결제 방법</strong></div>
+							<div class="col-md-8" id="ptype"></div>
+						</div>
+					</div>		
 					<div class="order-buttons">
 						<button type="button" class="btn text-black continue" onClick="location.href='${contextPath}'">쇼핑 계속하기</button>
 						<button type="submit" id="orderBtn" class="btn text-white btn-default purchase">나의 쇼핑 내역</button>
