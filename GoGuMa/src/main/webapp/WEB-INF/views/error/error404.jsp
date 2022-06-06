@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>  
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +27,7 @@
                 <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_kcsr6fcp.json"
                     background="transparent" speed="1" style="width: 100%; height: 70%;" loop autoplay></lottie-player>
             </div>
-            <a type="button" class="btn btn-primary">홈으로 이동하기</a>
+            <a type="button" class="btn btn-primary" href="${contextPath}/main.do">홈으로 이동하기</a>
         </div>
     </div>
 </body>
