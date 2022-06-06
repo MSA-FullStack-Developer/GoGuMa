@@ -79,10 +79,10 @@
                 <div>
                     <h5><b>MY 정보</b></h5>
                     <div>
-                        회원정보변경
+                        <a href="${contextPath}/mypage/confirmPassword/changeInfo">회원정보변경</a>
                     </div>
                     <div>
-                        비밀번호변경
+                        <a href="${contextPath}/mypage/confirmPassword/changePassword">비밀번호변경</a>
                     </div>
                     <div>
                         <a href="${contextPath}/mypage/manageAddress">배송지관리</a>
