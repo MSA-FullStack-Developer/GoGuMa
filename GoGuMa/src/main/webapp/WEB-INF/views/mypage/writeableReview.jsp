@@ -168,7 +168,7 @@
         			str += "<li data-imagepath='"+obj.imagePath+"'";
     				str += " data-imagename='"+obj.imageName+"' ><div>";
     				str += "<span>"+obj.imageName+"</span>";
-    				str += "<button type='button' data-imagename='"+obj.imageName+"'>X</button><br>";
+    				str += "<button class='imgDeleteBtn' type='button' data-imagename='"+obj.imageName+"'>X</button><br>";
     				str += "<img src='" + obj.imagePath + "'>";
     				str += "</div>";
     				str += "</li>";
