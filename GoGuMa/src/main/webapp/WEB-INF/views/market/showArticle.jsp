@@ -78,7 +78,7 @@
             <div id="market-info-area" class="row mt-2">
                 <div class="col-2">
                 	<a href="${contextPath}/market/show.do?marketNum=${article.market.marketId}" class="h4 text-decoration-none text-dark">
-                    	<img class="w-100 rounded-circle" src="${article.thumbnail.imagePath}" />
+                    	<img class="w-100 rounded-circle" src="${article.market.marketThumbnail}" />
                     </a>
                 </div>
                 <div class="col d-flex flex-column justify-content-center">

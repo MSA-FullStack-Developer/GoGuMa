@@ -38,4 +38,8 @@ public interface MarketMapper {
 	ArticleImageDTO findThumbnailImageById(@Param("articleId") long articleId);
 	
 	List<ArticleProudctDTO> findArticleProductsById(@Param("articleId") long articleId);
+	
+	List<MarketArticleDTO> findMarketArticles(@Param("marketId") long marketId, @Param("offset") long offset, @Param("limit") long limit);
+	
+	int countMarketArticles(@Param("marketId") long marketId);
 }

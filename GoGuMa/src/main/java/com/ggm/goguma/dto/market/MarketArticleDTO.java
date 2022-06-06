@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class MarketArticleDTO {
+public class MarketArticleDTO{
 
 	private long articleId;
 	

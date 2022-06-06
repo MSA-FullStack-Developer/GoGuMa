@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <script src="https://kit.fontawesome.com/a4f59ea730.js"
 	crossorigin="anonymous"></script>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
@@ -85,11 +86,11 @@
 		<input name="marketId" type="hidden" value="${market.marketId}" />
         <section name="head-area" class="w-100 border border-secondary rounded">
             <div class="w-100"
-                style="background-image: url(${contextPath}/image/${market.marketBanner}); background-repeat: no-repeat; background-size: cover; background-position: center center; height: 200px;">
+                style="background-image: url(${market.marketBanner}); background-repeat: no-repeat; background-size: cover; background-position: center center; height: 200px;">
             </div>
             <div class="row p-4">
                 <div class="col-1">
-                    <img class="w-100 border border-secondary rounded-circle" src="${contextPath}/image/${market.marketThumbnail}" />
+                    <img class="w-100 border border-secondary rounded-circle" src="${market.marketThumbnail}" />
                 </div>
                 <div class="col-9">
                     <h5>${market.marketName}</h5>
@@ -114,66 +115,57 @@
             <div class="d-flex justify-content-between">
                 <h2>${market.marketName}의 진열대</h2>
                 <c:if test="${isMine}">
-                	 <button type="button" class="btn btn-success">글 작성하기</button>
+                	 <a type="button" class="btn btn-success" href="${contextPath}/market/${market.marketId}/article/write.do">글 작성하기</a>
                 </c:if>
                
             </div>
           
             <div class="d-flex flex-wrap">
+            	<c:forEach items="${pagination.data}" var="article">
+            	
+            	
 
                 <div class="card border border-dark mt-2" style="width: 18rem;">
-                    <a href="https://www.hmall.com/p/pda/itemPtc.do?sectId=2731163&slitmCd=2010286604"
+                    <a href="${contextPath}/market/article/${article.articleId}/show.do"
                         class="text-decoration-none text-dark">
-                        <img src="https://image.hmall.com/static/6/6/28/10/2010286604_0.jpg?RS=400x400&AR=0"
+                        <img src="${article.thumbnail.imagePath}"
                             class="card-img-top" alt="...">
                         <div class="card-body">
-                            <p class="card-text">조 말론 다크 앰버 진저 릴리 콜롱 인텐스 스프레이 (원래 박스 없음)100ml/3.4oz</p>
+                            <p class="card-text">${article.articleTitle}</p>
 
                         </div>
                     </a>
                     <div class="card-footer bg-dark">
 
+						<!-- carouselProducts 아이디 교유하게 하기 -->
                         <div id="carouselProducts" class="carousel slide" data-bs-touch="false"
                             data-bs-interval="false">
                             <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <a class="text-decoration-none text-light" href="https://www.hmall.com/p/pda/itemPtc.do?sectId=2731163&slitmCd=2010286604">
+                            	<c:forEach items="${article.products}" var="product" varStatus="status">
+                            	<c:if test="${status.first}">
+                                	<div class="carousel-item active">
+                                </c:if>
+                                <c:if test="${not status.first}">
+                                	<div class="carousel-item">
+                                </c:if>
+                                    <a class="text-decoration-none text-light" href="${contextPath}/category/1/${product.categoryId}/detail/${product.parentId}">
                                         <div class="row d-flex align-items-center">
                                             <div name="prod-thumb" class="col">
-                                                <img class="w-100 rounded" src="./웰시코기.jpeg" />
+                                                <img class="w-100 rounded" src="${product.prodImgUrl}" />
                                             </div>
                                             <div name="prod-name" class="col-8">
-                                                <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                                <p class="text-secondary text-truncate mb-0" style="font-size: 13px;">상품 이름 이름 이름상품 름상름상름상</p>
-                                                <span  style="font-size: 10px;">31,000원</span>
+                                                <p class="text-truncate mb-0">${product.productName}</p>
+                                                <p class="text-secondary text-truncate mb-0" style="font-size: 13px;">${product.optionName}</p>
+                                                <span  style="font-size: 10px;">${product.productPrice}원</span>
                                             </div>
                                         </div>
                                     </a>
                                 </div>
-                                <div class="carousel-item">
-                                    <div class="row d-flex align-items-center">
-                                        <div name="prod-thumb" class="col">
-                                            <img class="w-100 rounded" src="./웰시코기.jpeg" />
-                                        </div>
-                                        <div name="prod-name" class="col-8">
-                                            <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                            <span class="text-secondary" style="font-size: 13px;">32,000원</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <div class="row d-flex align-items-center">
-                                        <div name="prod-thumb" class="col">
-                                            <img class="w-100 rounded" src="./웰시코기.jpeg" />
-                                        </div>
-                                        <div name="prod-name" class="col-8">
-                                            <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                            <span class="text-secondary" style="font-size: 13px;">33,000원</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                </c:forEach>
                             </div>
+                         
 
+							<c:if test="${fn:length(article.products) > 1}">
                             <!-- 데이터가 2개 이상일 경우 보여주기 -->
                             <button class="carousel-control-prev" type="button" data-bs-target="#carouselProducts"
                                 data-bs-slide="prev">
@@ -185,298 +177,53 @@
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden">Next</span>
                             </button>
+                            </c:if>
+                         
                         </div> <!--carouselProducts 끝-->
 
                     </div> <!-- card footer 끝-->
                 </div> <!--card 영역 끝-->
 
-                <div class="card border border-dark mt-2 ms-auto" style="width: 18rem;">
-                    <a href="https://www.hmall.com/p/pda/itemPtc.do?sectId=2731163&slitmCd=2010286604"
-                        class="text-decoration-none text-dark">
-                        <img src="https://image.hmall.com/static/6/6/28/10/2010286604_0.jpg?RS=400x400&AR=0"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">조 말론 다크 앰버 진저 릴리 콜롱 인텐스 스프레이 (원래 박스 없음)100ml/3.4oz</p>
-
-                        </div>
-                    </a>
-                    <div class="card-footer bg-dark">
-
-                        <div id="carouselProducts" class="carousel slide" data-bs-touch="false"
-                            data-bs-interval="false">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <a class="text-decoration-none text-light" href="https://www.hmall.com/p/pda/itemPtc.do?sectId=2731163&slitmCd=2010286604">
-                                        <div class="row d-flex align-items-center">
-                                            <div name="prod-thumb" class="col">
-                                                <img class="w-100 rounded" src="./웰시코기.jpeg" />
-                                            </div>
-                                            <div name="prod-name" class="col-8">
-                                                <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                                <span  style="font-size: 13px;">31,000원</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="carousel-item">
-                                    <div class="row d-flex align-items-center">
-                                        <div name="prod-thumb" class="col">
-                                            <img class="w-100 rounded" src="./웰시코기.jpeg" />
-                                        </div>
-                                        <div name="prod-name" class="col-8">
-                                            <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                            <span class="text-secondary" style="font-size: 13px;">32,000원</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <div class="row d-flex align-items-center">
-                                        <div name="prod-thumb" class="col">
-                                            <img class="w-100 rounded" src="./웰시코기.jpeg" />
-                                        </div>
-                                        <div name="prod-name" class="col-8">
-                                            <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                            <span class="text-secondary" style="font-size: 13px;">33,000원</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 데이터가 2개 이상일 경우 보여주기 -->
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProducts"
-                                data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselProducts"
-                                data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        </div> <!--carouselProducts 끝-->
-
-                    </div> <!-- card footer 끝-->
-                </div> <!--card 영역 끝-->
-
-                <div class="card border border-dark mt-2 ms-auto" style="width: 18rem;">
-                    <a href="https://www.hmall.com/p/pda/itemPtc.do?sectId=2731163&slitmCd=2010286604"
-                        class="text-decoration-none text-dark">
-                        <img src="https://image.hmall.com/static/6/6/28/10/2010286604_0.jpg?RS=400x400&AR=0"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">조 말론 다크 앰버 진저 릴리 콜롱 인텐스 스프레이 (원래 박스 없음)100ml/3.4oz</p>
-
-                        </div>
-                    </a>
-                    <div class="card-footer bg-dark">
-
-                        <div id="carouselProducts" class="carousel slide" data-bs-touch="false"
-                            data-bs-interval="false">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <a class="text-decoration-none text-light" href="https://www.hmall.com/p/pda/itemPtc.do?sectId=2731163&slitmCd=2010286604">
-                                        <div class="row d-flex align-items-center">
-                                            <div name="prod-thumb" class="col">
-                                                <img class="w-100 rounded" src="./웰시코기.jpeg" />
-                                            </div>
-                                            <div name="prod-name" class="col-8">
-                                                <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                                <span  style="font-size: 13px;">31,000원</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="carousel-item">
-                                    <div class="row d-flex align-items-center">
-                                        <div name="prod-thumb" class="col">
-                                            <img class="w-100 rounded" src="./웰시코기.jpeg" />
-                                        </div>
-                                        <div name="prod-name" class="col-8">
-                                            <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                            <span class="text-secondary" style="font-size: 13px;">32,000원</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <div class="row d-flex align-items-center">
-                                        <div name="prod-thumb" class="col">
-                                            <img class="w-100 rounded" src="./웰시코기.jpeg" />
-                                        </div>
-                                        <div name="prod-name" class="col-8">
-                                            <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                            <span class="text-secondary" style="font-size: 13px;">33,000원</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 데이터가 2개 이상일 경우 보여주기 -->
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProducts"
-                                data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselProducts"
-                                data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        </div> <!--carouselProducts 끝-->
-
-                    </div> <!-- card footer 끝-->
-                </div> <!--card 영역 끝-->
-
-                <div class="card border border-dark mt-2 ms-auto" style="width: 18rem;">
-                    <a href="https://www.hmall.com/p/pda/itemPtc.do?sectId=2731163&slitmCd=2010286604"
-                        class="text-decoration-none text-dark">
-                        <img src="https://image.hmall.com/static/6/6/28/10/2010286604_0.jpg?RS=400x400&AR=0"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">조 말론 다크 앰버 진저 릴리 콜롱 인텐스 스프레이 (원래 박스 없음)100ml/3.4oz</p>
-
-                        </div>
-                    </a>
-                    <div class="card-footer bg-dark">
-
-                        <div id="carouselProducts" class="carousel slide" data-bs-touch="false"
-                            data-bs-interval="false">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <a class="text-decoration-none text-light" href="https://www.hmall.com/p/pda/itemPtc.do?sectId=2731163&slitmCd=2010286604">
-                                        <div class="row d-flex align-items-center">
-                                            <div name="prod-thumb" class="col">
-                                                <img class="w-100 rounded" src="./웰시코기.jpeg" />
-                                            </div>
-                                            <div name="prod-name" class="col-8">
-                                                <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                                <span  style="font-size: 13px;">31,000원</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="carousel-item">
-                                    <div class="row d-flex align-items-center">
-                                        <div name="prod-thumb" class="col">
-                                            <img class="w-100 rounded" src="./웰시코기.jpeg" />
-                                        </div>
-                                        <div name="prod-name" class="col-8">
-                                            <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                            <span class="text-secondary" style="font-size: 13px;">32,000원</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <div class="row d-flex align-items-center">
-                                        <div name="prod-thumb" class="col">
-                                            <img class="w-100 rounded" src="./웰시코기.jpeg" />
-                                        </div>
-                                        <div name="prod-name" class="col-8">
-                                            <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                            <span class="text-secondary" style="font-size: 13px;">33,000원</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 데이터가 2개 이상일 경우 보여주기 -->
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProducts"
-                                data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselProducts"
-                                data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        </div> <!--carouselProducts 끝-->
-
-                    </div> <!-- card footer 끝-->
-                </div> <!--card 영역 끝-->
-
-                <div class="card border border-dark mt-2" style="width: 18rem;">
-                    <a href="https://www.hmall.com/p/pda/itemPtc.do?sectId=2731163&slitmCd=2010286604"
-                        class="text-decoration-none text-dark">
-                        <img src="https://image.hmall.com/static/6/6/28/10/2010286604_0.jpg?RS=400x400&AR=0"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">조 말론 다크 앰버 진저 릴리 콜롱 인텐스 스프레이 (원래 박스 없음)100ml/3.4oz</p>
-
-                        </div>
-                    </a>
-                    <div class="card-footer bg-dark">
-
-                        <div id="carouselProducts" class="carousel slide" data-bs-touch="false"
-                            data-bs-interval="false">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <a class="text-decoration-none text-light" href="https://www.hmall.com/p/pda/itemPtc.do?sectId=2731163&slitmCd=2010286604">
-                                        <div class="row d-flex align-items-center">
-                                            <div name="prod-thumb" class="col">
-                                                <img class="w-100 rounded" src="./웰시코기.jpeg" />
-                                            </div>
-                                            <div name="prod-name" class="col-8">
-                                                <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                                <span  style="font-size: 13px;">31,000원</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="carousel-item">
-                                    <div class="row d-flex align-items-center">
-                                        <div name="prod-thumb" class="col">
-                                            <img class="w-100 rounded" src="./웰시코기.jpeg" />
-                                        </div>
-                                        <div name="prod-name" class="col-8">
-                                            <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                            <span class="text-secondary" style="font-size: 13px;">32,000원</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <div class="row d-flex align-items-center">
-                                        <div name="prod-thumb" class="col">
-                                            <img class="w-100 rounded" src="./웰시코기.jpeg" />
-                                        </div>
-                                        <div name="prod-name" class="col-8">
-                                            <p class="text-truncate mb-0">상품 이름 이름 이름상품 름상름상름상</p>
-                                            <span class="text-secondary" style="font-size: 13px;">33,000원</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 데이터가 2개 이상일 경우 보여주기 -->
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProducts"
-                                data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselProducts"
-                                data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        </div> <!--carouselProducts 끝-->
-
-                    </div> <!-- card footer 끝-->
-                </div> <!--card 영역 끝-->
+                </c:forEach>
             </div>
         </section>
         <section name="pagination-area" class="w-100 mt-3 d-flex justify-content-center">
             <nav>
                 <ul class="pagination">
-                  <li class="page-item disabled">
-                    <span class="page-link">Previous</span>
-                  </li>
-                  <li class="page-item"><a class="page-link" href="#">1</a></li>
-                  <li class="page-item active" aria-current="page">
-                    <span class="page-link">2</span>
-                  </li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                  </li>
+                  <c:if test="${pagination.startPage == 1}">
+                    <li class="page-item disabled">
+                      <span class="page-link">이전</span>
+                  	</li>
+                  </c:if>
+                  <c:if test="${pagination.startPage != 1}">
+                  	 <li class="page-item">
+                      <a class="page-link" href="${contextPath}/market/show.do?marketNum=${market.marketId}&pg=${pg-1}">이전</a>
+                  	</li>
+                  </c:if>
+                  <c:forEach begin="${pagination.startPage}" end="${pagination.endPage + 1}" step="1" var="pg">
+                  	<c:if test="${pg == pagination.currentPage}">
+                  		<li class="page-item active">
+							<span class="page-link">${pg}</span>
+                  		</li>
+                  	</c:if>
+                  	<c:if test="${pg != pagination.currentPage}">
+                  		<li class="page-item">
+                  	 		<a class="page-link" href="${contextPath}/market/show.do?marketNum=${market.marketId}&pg=${pg}">${pg}</a>
+                  		</li>
+                  	</c:if>
+                  	 
+                  </c:forEach>
+                 	
+                  <c:if test="${pagination.endPage == pagination.pageCount}">
+                    <li class="page-item disabled">
+                      <span class="page-link">다음</span>
+                  	</li>
+                  </c:if>
+                  <c:if test="${pagination.endPage != pagination.pageCount}">
+                  	 <li class="page-item">
+                      <a class="page-link" href="${contextPath}/market/show.do?marketNum=${market.marketId}&pg=${pg+1}">다음</a>
+                  	</li>
+                  </c:if>
                 </ul>
               </nav>
         </section>

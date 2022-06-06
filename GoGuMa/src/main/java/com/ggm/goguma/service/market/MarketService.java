@@ -3,6 +3,7 @@ package com.ggm.goguma.service.market;
 
 import java.util.List;
 
+import com.ggm.goguma.dto.PaginationDTO;
 import com.ggm.goguma.dto.market.ArticleProudctDTO;
 import com.ggm.goguma.dto.market.CreateArticleDTO;
 import com.ggm.goguma.dto.market.CreateMarketDTO;
@@ -29,5 +30,7 @@ public interface MarketService {
 	void createMarketArticle(CreateArticleDTO article) throws Exception;
 	
 	MarketArticleDTO getMarketArticle(long articleId);
+	
+	PaginationDTO<MarketArticleDTO> getMarketArticles(long marketId, long page);
 	
 }

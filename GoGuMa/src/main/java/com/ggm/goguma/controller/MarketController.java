@@ -22,6 +22,7 @@ import com.ggm.goguma.amazons3.AmazonS3Utils;
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.DefaultResponseDTO;
 import com.ggm.goguma.dto.ImageAttachDTO;
+import com.ggm.goguma.dto.PaginationDTO;
 import com.ggm.goguma.dto.market.ArticleProudctDTO;
 import com.ggm.goguma.dto.market.CreateArticleDTO;
 import com.ggm.goguma.dto.market.CreateMarketDTO;
@@ -68,7 +69,7 @@ public class MarketController {
 	}
 
 	@GetMapping("/show.do")
-	public String showMarket(@RequestParam long marketNum, Model model, Principal principal) throws Exception {
+	public String showMarket(@RequestParam long marketNum, @RequestParam(defaultValue = "1") long pg, Model model, Principal principal) throws Exception {
 
 		MarketDTO market = this.marketService.getMarket(marketNum);
 		log.info("[showMarket] market : " + market);
@@ -86,10 +87,14 @@ public class MarketController {
 			isAlreadyFollow = this.marketService.isAlreadyFollowMarket(followMarket);
 		}
 
+		PaginationDTO<MarketArticleDTO> paginationDTO = this.marketService.getMarketArticles(marketNum, pg);
+		
+		log.info(paginationDTO);
+		
 		model.addAttribute("isAlreadyFollow", isAlreadyFollow);
 		model.addAttribute("isMine", isMine);
 		model.addAttribute("market", market);
-
+		model.addAttribute("pagination", paginationDTO);
 		return "market/showMarket";
 	}
 

@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ggm.goguma.amazons3.AmazonS3Utils;
 import com.ggm.goguma.dto.CategoryDTO;
+import com.ggm.goguma.dto.PaginationDTO;
 import com.ggm.goguma.dto.market.ArticleImageDTO;
 import com.ggm.goguma.dto.market.ArticleProudctDTO;
 import com.ggm.goguma.dto.market.CreateArticleDTO;
@@ -43,17 +44,17 @@ public class MarketServiceImpl implements MarketService{
 	
 	private final AmazonS3Utils amazonService;
 	
-	@Autowired
-	@Qualifier("DefaultFileSerivce")
-	private FileService FileService;
-
+	private final long PAGESIZE = 8;
+	private final long BLOCKSIZE = 10;
 	
 	@Override
 	public MarketDTO createMarket(CreateMarketDTO data) throws UploadFileFailException, Exception {
 		
 		MultipartFile[] multipartFiles = {data.getThumbnail(), data.getBanner()};
+				
+		String[] savedThumbnail = this.amazonService.uploadFile("upload", multipartFiles[0]);
 		
-		List<String> savedFiles = this.FileService.uploadFile(multipartFiles);
+		String[] savedBanner = this.amazonService.uploadFile("upload", multipartFiles[1]);
 		
 		CategoryDTO category = new CategoryDTO();
 		category.setCategoryID(data.getCategoryId());
@@ -62,8 +63,8 @@ public class MarketServiceImpl implements MarketService{
 				.category(category)
 				.marketName(data.getMarketName())
 				.marketDetail(data.getMarketDetail())
-				.marketThumbnail(savedFiles.get(0))
-				.marketBanner(savedFiles.get(1))
+				.marketThumbnail(savedThumbnail[1])
+				.marketBanner(savedBanner[1])
 				.build();
 		
 		this.marketMapper.insertMarket(market);
@@ -202,6 +203,38 @@ public class MarketServiceImpl implements MarketService{
 	public MarketArticleDTO getMarketArticle(long articleId) {
 		return this.marketMapper.findMarketArticleById(articleId).orElseThrow(NotFoundMarketArticleException::new);
 	}
+
+
+	@Override
+	public PaginationDTO<MarketArticleDTO> getMarketArticles(long marketId, long page) {
+		
+		long offset = page - 1;
+	
+		List<MarketArticleDTO> articles = this.marketMapper.findMarketArticles(marketId, offset, this.PAGESIZE);
+		
+		long totalCount = this.marketMapper.countMarketArticles(marketId);
+
+		long pageCount = (long) Math.ceil(totalCount / this.PAGESIZE);  
+
+		long startPage = (offset) / this.BLOCKSIZE * this.BLOCKSIZE + 1;
+		if(startPage < 0) startPage = 1;
+		
+		long endPage = startPage + this.BLOCKSIZE - 1;
+		if(endPage > pageCount) endPage = pageCount;
+		
+		PaginationDTO<MarketArticleDTO> paginationDTO = new PaginationDTO<>();
+		
+		paginationDTO.setTotalCount(totalCount);
+		paginationDTO.setPageSize(this.PAGESIZE);
+		paginationDTO.setBlockSize(this.BLOCKSIZE);
+		paginationDTO.setStartPage(startPage);
+		paginationDTO.setEndPage(endPage);
+		paginationDTO.setData(articles);
+		paginationDTO.setCurrentPage(page);
+		
+		return paginationDTO;
+	}
+	
 	
 	
 	
