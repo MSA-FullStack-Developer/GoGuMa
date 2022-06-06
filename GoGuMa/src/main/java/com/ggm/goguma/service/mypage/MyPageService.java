@@ -46,4 +46,6 @@ public interface MyPageService {
 	int getMemberPoint(long memberId) throws Exception;
 
 	boolean confirmPassword(long memberId, String userPassword) throws Exception;
+
+	boolean changePassword(long memberId, String curPassword, String newPassword) throws Exception;
 }

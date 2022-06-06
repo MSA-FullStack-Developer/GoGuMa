@@ -159,4 +159,13 @@ public class MyPageServiceImpl implements MyPageService {
 	public boolean confirmPassword(long memberId, String userPassword) throws Exception {
 		return userPassword.equals(mapper.confirmPassword(memberId));
 	}
+
+	@Override
+	public boolean changePassword(long memberId, String curPassword, String newPassword) throws Exception {
+		if(!curPassword.equals(mapper.confirmPassword(memberId))) return false;
+		else {
+			mapper.changePassword(memberId, newPassword);
+			return true;
+		}
+	}
 }

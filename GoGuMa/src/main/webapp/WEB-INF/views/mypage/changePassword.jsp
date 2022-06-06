@@ -147,7 +147,7 @@
                     <tbody class="table-group-divider">
                         <tr>
                             <th class="col-2 table-active" style="text-align: center;">기존 비밀번호</th>
-                            <td><input type="password" class="ms-3" minlength="12" maxlength="16" style="width:200px; height:25px"/></td>
+                            <td><input type="password" class="ms-3" id="curPassword" minlength="12" maxlength="16" style="width:200px; height:25px"/></td>
                         </tr>
                     </tbody>
                 </table>
@@ -158,16 +158,16 @@
                     <tbody class="table-group-divider">
                         <tr>
                             <th class="col-2 table-active" style="text-align: center;">새 비밀번호</th>
-                            <td><input type="password" class="ms-3" minlength="12" maxlength="16" style="width:200px; height:25px"/></td>
+                            <td><input type="password" class="ms-3" id="newPassword" maxlength="16" style="width:200px; height:25px"/></td>
                         </tr>
                         <tr>
                             <th class="col-2 table-active" style="text-align: center;">새 비밀번호 확인</th>
-                            <td><input type="password" class="ms-3" minlength="12" maxlength="16" style="width:200px; height:25px"/></td>
+                            <td><input type="password" class="ms-3" id="newConfirm" maxlength="16" style="width:200px; height:25px"/></td>
                         </tr>
                     </tbody>
                 </table>
                 <div align="center">
-                    <button type="button" class="btn btn-dark">변경</button>
+                    <button type="button" class="btn btn-dark" onclick="changePassword()">변경</button>
                     <button type="button" class="btn btn-secondary">취소</button>
                 </div>
             </div>
@@ -177,5 +177,34 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
 <script type="text/javascript">
+	function changePassword() {
+		if($("#newPassword").val() != $("#newConfirm").val()) alert('새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.');
+		else {
+			let token = $("meta[name='_csrf']").attr("content");
+		    let header = $("meta[name='_csrf_header']").attr("content");
+			$.ajax({
+				url : "${contextPath}/mypage/changePassword",
+				type : "POST",
+				data : {
+					curPassword : $("#curPassword").val(),
+					newPassword : $("#newPassword").val()
+				},
+				beforeSend : function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
+		        success:function(result) {
+		        	if(result==1) window.location.href = "${contextPath}/mypage";
+		        	else if(result==2) alert('비밀번호 오류');
+		        	else alert("서버 오류");
+		        },
+				error:function(xhr, status, error) {
+					var errorResponse = JSON.parse(xhr.responseText);
+					var errorCode = errorResponse.code;
+					var message = errorResponse.message;
+					alert(message);
+				}
+			});
+		}
+	}
 </script>
 </html>

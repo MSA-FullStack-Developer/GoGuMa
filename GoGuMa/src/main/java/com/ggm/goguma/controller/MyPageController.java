@@ -36,7 +36,7 @@ public class MyPageController {
 	private MyPageService service;
 	
 	@RequestMapping(value="", method=RequestMethod.GET)
-	public String getMainPage() {
+	public String getMainPage() throws Exception {
 		log.info("페이지 접근 테스트");
 		return "mypage/main";
 	}
@@ -84,9 +84,9 @@ public class MyPageController {
 	
 	@RequestMapping(value="/pointHistory/{type}", method=RequestMethod.GET)
 	public String getPointHistory(@PathVariable("type") String type, @RequestParam("page") long page,
-			@RequestParam(value="startDate", required=false) String startDate,
-			@RequestParam(value="endDate", required=false) String endDate,
-			Model model) throws Exception {
+		@RequestParam(value="startDate", required=false) String startDate,
+		@RequestParam(value="endDate", required=false) String endDate,
+		Model model) throws Exception {
 		try {
 			// 특정 포인트 내역의 개수
 			long historyCount = service.getPointHistoryCount(1, type, startDate, endDate);
@@ -251,7 +251,6 @@ public class MyPageController {
 	@RequestMapping(value="/confirmPassword/{type}", method=RequestMethod.POST)
 	public String confirmPassword(@PathVariable("type") String type, @RequestParam("userPassword") String userPassword) throws Exception {
 		try {
-			log.info("테스트");
 			if(service.confirmPassword(1, userPassword)) return "1";
 			return "2";
 		} catch(Exception e) {
@@ -261,22 +260,26 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/changeInfo", method=RequestMethod.GET)
-	public String getInfoChangeForm(Model model) throws Exception {
-		try {
-			log.info("회원정보변경 페이지");
-		} catch(Exception e) {
-			log.info(e.getMessage());
-		}
+	public String getInfoChangeForm() throws Exception {
+		log.info("회원정보변경 페이지");
 		return "mypage/changeInfo";
 	}
 	
 	@RequestMapping(value="/changePassword", method=RequestMethod.GET)
-	public String getPasswordChangeForm(Model model) throws Exception {
+	public String getPasswordChangeForm() throws Exception {
+		log.info("비밀번호변경 페이지");
+		return "mypage/changePassword";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/changePassword", method=RequestMethod.POST)
+	public String changePassword(@RequestParam("curPassword") String curPassword, @RequestParam("newPassword") String newPassword) throws Exception {
 		try {
-			log.info("비밀번호변경 페이지");
+			if(service.changePassword(1, curPassword, newPassword)) return "1";
+			return "2";
 		} catch(Exception e) {
 			log.info(e.getMessage());
+			return "3";
 		}
-		return "mypage/changePassword";
 	}
 }

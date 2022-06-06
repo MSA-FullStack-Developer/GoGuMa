@@ -175,6 +175,6 @@
 				alert(message);
 			}
 		});
-	};
+	}
 </script>
 </html>

@@ -62,9 +62,11 @@ public interface MyPageMapper {
 	
 	void setDefault(@Param("memberId") long memberId, @Param("addressId") long addressId) throws Exception;
 
-	void cancelDefault(@Param("memberId") long memberId) throws Exception;
+	void cancelDefault(long memberId) throws Exception;
 
-	int getMemberPoint(@Param("memberId") long memberId) throws Exception;
+	int getMemberPoint(long memberId) throws Exception;
 
-	String confirmPassword(@Param("memberId") long memberId) throws Exception;
+	String confirmPassword(long memberId) throws Exception;
+
+	void changePassword(@Param("memberId") long memberId, @Param("newPassword") String newPassword) throws Exception;
 }
