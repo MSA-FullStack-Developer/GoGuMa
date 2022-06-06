@@ -30,9 +30,8 @@
             margin-top: 15%;
             margin-bottom: 15%;
         }
-        .bundle {
-            width: 25%;
-            height: 25%;
+        table tbody tr {
+            line-height: 2rem;
         }
     </style>
 </head>
@@ -77,10 +76,10 @@
                 <div>
                     <h5><b>MY 정보</b></h5>
                     <div>
-                        회원정보변경
+                        <a href="${contextPath}/mypage/confirmPassword/changeInfo">회원정보변경</a>
                     </div>
                     <div>
-                        비밀번호변경
+                        <a href="${contextPath}/mypage/confirmPassword/changePassword">비밀번호변경</a>
                     </div>
                     <div>
                         <a href="${contextPath}/mypage/manageAddress">배송지관리</a>
@@ -92,7 +91,7 @@
 			</div>
             <div class="col">
                 <div>
-                    <h5><b>👨‍💻 송진호님</b></h5>
+                    <h4><b>송진호님</b></h4>
                 </div>
                 <div class="d-flex flex-row justify-content-evenly border border-2 mb-3 rounded">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -108,7 +107,7 @@
                             <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
                         </div>
                         <div>
-                            1,000P
+                            <a href="${contextPath}/mypage/pointHistory/all?page=1">1,000P</a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -124,7 +123,7 @@
                             <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
                         </div>
                         <div>
-                            3장
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">3장</a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -188,7 +187,7 @@
                     			<td>${addressDTO.contact}</td>
                     			<td>
 	                                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#modal${addressDTO.addressId}">수정</button>
-	                                <button type="button" class="btn btn-outline-dark btn-sm" onclick="deleteAddress(this)">삭제</button>
+	                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="deleteAddress(this)">삭제</button>
 	                                <input type="hidden" value="${addressDTO.addressId}" />
 	                            </td>
                     		</tr>
