@@ -82,7 +82,7 @@
 	
 	<insert id="insertMarketArticle" parameterType="MarketArticleDTO" useGeneratedKeys="true" keyColumn="articleId" keyProperty="articleId">
 		INSERT INTO marketArticle(marketId, articleTitle, articleContent)
-		VALUES(#{market. marketId}, #{articleTitle}, #{articleContent})
+		VALUES(#{market.marketId}, #{articleTitle}, #{articleContent})
 	</insert>
 	
 	<insert id="insertArticleProduct">

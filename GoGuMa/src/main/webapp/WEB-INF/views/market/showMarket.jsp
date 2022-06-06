@@ -121,24 +121,27 @@
             </div>
           
             <div class="d-flex flex-wrap">
-            	<c:forEach items="${pagination.data}" var="article">
+            	<c:forEach items="${pagination.data}" var="article" varStatus="articleStatus">
             	
-            	
-
-                <div class="card border border-dark mt-2" style="width: 18rem;">
+            	<c:if test="${articleStatus.index % 4 == 0}">
+            	<div class="card border border-dark mt-2" style="width: 18rem;">
+            	</c:if>
+				<c:if test="${articleStatus.index % 4 != 0}">
+                <div class="card border border-dark mt-2 ms-5" style="width: 18rem;">
+                </c:if>
                     <a href="${contextPath}/market/article/${article.articleId}/show.do"
                         class="text-decoration-none text-dark">
                         <img src="${article.thumbnail.imagePath}"
                             class="card-img-top" alt="...">
                         <div class="card-body">
-                            <p class="card-text">${article.articleTitle}</p>
+                            <p class="card-text text-truncate">${article.articleTitle}</p>
 
                         </div>
                     </a>
                     <div class="card-footer bg-dark">
 
 						<!-- carouselProducts 아이디 교유하게 하기 -->
-                        <div id="carouselProducts" class="carousel slide" data-bs-touch="false"
+                        <div id="carouselProducts${articleStatus.index}" class="carousel slide" data-bs-touch="false"
                             data-bs-interval="false">
                             <div class="carousel-inner">
                             	<c:forEach items="${article.products}" var="product" varStatus="status">
@@ -156,7 +159,7 @@
                                             <div name="prod-name" class="col-8">
                                                 <p class="text-truncate mb-0">${product.productName}</p>
                                                 <p class="text-secondary text-truncate mb-0" style="font-size: 13px;">${product.optionName}</p>
-                                                <span  style="font-size: 10px;">${product.productPrice}원</span>
+                                                <span  style="font-size: 10px;"><fmt:formatNumber value="${product.productPrice}"/>원</span>
                                             </div>
                                         </div>
                                     </a>
@@ -165,20 +168,19 @@
                             </div>
                          
 
-							<c:if test="${fn:length(article.products) > 1}">
-                            <!-- 데이터가 2개 이상일 경우 보여주기 -->
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProducts"
+						
+                          	<c:if test="${fn:length(article.products) > 1}">
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProducts${articleStatus.index}"
                                 data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden">Previous</span>
                             </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselProducts"
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselProducts${articleStatus.index}"
                                 data-bs-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden">Next</span>
                             </button>
                             </c:if>
-                         
                         </div> <!--carouselProducts 끝-->
 
                     </div> <!-- card footer 끝-->
