@@ -202,7 +202,7 @@
     });
   });
   
-	//결제
+	//카카오페이 결제
 	function iamport(){
 		//가맹점 식별코드
 		IMP.init('imp37623879');
@@ -216,7 +216,7 @@
 		    buyer_name : $('#name').text(),
 		    buyer_tel : $('#phonenumber').text(),
 		    buyer_addr : $('#addressName').text(),
-		    buyer_postcode : '123-456'
+		    buyer_postcode : '123-456',
 		}, function(rsp) {
 			  console.log("결제 완료 후 로그 : " + rsp);
 		      //아임포트 검증절차
@@ -235,7 +235,13 @@
 		         	console.log("결제 및 결제검증완료");
 		          	console.log(rsp);
 		          	console.log(data);
-		        	paytransaction();
+		        	paytransaction (data.response.impUid);
+		        	console.log("다시 진행중");
+		        	$('#ipUid').val(data.response.impUid);
+		        	console.log("uid로그 : " + $('#ipUid').val());
+		        	$('#finOrder').submit();
+/* 		        	let url = "${contextPath}/order/receipt?imp_uid="+data.response.impUid;
+		        	location.replace(url); */
 	        	} else {
 	        		alert("결제 실패");
 	        		//환불처리 되어야함
@@ -253,7 +259,7 @@
 	}
 
 	//결제가 완료 된 후 트랜잭션처리
-	function paytransaction(){
+	function paytransaction(impUid){
 	  	var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		var parr = [];
@@ -279,6 +285,7 @@
 		var usePoint = $('#GPoint').val();
 		var totprc = parseInt($('#finalPrice').val());
 		var data = {
+		    impUid: impUid,
 		    products: parr,
 		    address: addr,
 		    requirement: req,
@@ -295,12 +302,13 @@
 			url : "${contextPath}/order/api/paytransaction",
 			contentType: "application/json; charset=UTF-8",
 			data : JSON.stringify(data),
+			async: false,
 			beforeSend : function(xhr) {
 				xhr.setRequestHeader(header, token);
 			},
 			success : function(result) {
-				alert("결제가 완료되었습니다.");
-				window.location.href = '/receipt';
+			  console.log("결제 ajax 완료");
+			  return;
 			},
 			error : function(xhr, status, error) {
 				var errorResponse = JSON.parse(xhr.responseText);
@@ -309,7 +317,6 @@
 				alert(message);
 			}
 		});
-		
 	}
 	
 	function numFormatComma(nNumber, nDetail) {
@@ -733,14 +740,18 @@
 								<div class="accordion-body">
 									<table>
 										<tr>
-											<td class="cart-price">
-												<div class="cart-product-price">아아아아아아</div>
+											<td class="pay-type">
+												<div class="select-pay-type">카카오페이</div>
 											</td>
 										</tr>
 									</table>
 								</div>
 							</div>
 						</div>
+						<form id="finOrder" action="${contextPath}/order/receipt" method="POST">
+							<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
+							<input type="hidden" id="ipUid" name="ipUid" value=""/>
+						</form>
 					</div>
 				</div>
 			</div>

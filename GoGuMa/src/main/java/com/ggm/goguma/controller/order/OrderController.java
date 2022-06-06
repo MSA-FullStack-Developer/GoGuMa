@@ -35,12 +35,14 @@ import com.ggm.goguma.dto.cart.CartOrderDTO;
 import com.ggm.goguma.dto.cart.CartOrderListDTO;
 import com.ggm.goguma.dto.cart.TransactionDTO;
 import com.ggm.goguma.dto.coupon.MemberCouponOrderDTO;
+import com.ggm.goguma.dto.member.IamportCertificateTokenRspDTO.Response;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.service.MyPageService;
 import com.ggm.goguma.service.cart.CartService;
 import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.order.OrderService;
 import com.ggm.goguma.service.product.CategoryService;
+import com.google.gson.JsonObject;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
@@ -188,12 +190,13 @@ public class OrderController {
 	@Value("${iamport.secretPay}")
 	private String paySecretKey;
 	
-	//아임포트 결제 검증
+	//아임포트 결제 검증, 결제 내역 조회
 	@ResponseBody
 	@RequestMapping(value="api/verifyIamport/{imp_uid}")
 	public IamportResponse<Payment> paymentByImpUid(Model model, Locale locale, HttpSession session, @PathVariable(value="imp_uid") String imp_uid) throws IamportResponseException, IOException{
 		System.out.println("결제 검증중");
 		api = new IamportClient(payKey, paySecretKey);
+		
 		//imp_uid에 해당하는 거래내역이 있는지 확인한다.
 		return api.paymentByImpUid(imp_uid);
 	}
@@ -209,11 +212,12 @@ public class OrderController {
 		MemberDTO memberDTO = memberService.getMember(memberEmail);
 		long memberId = memberDTO.getId();
 		
+		String impUid = transactionDTO.getImpUid();
+		log.info("주문 컨트롤러에서 아임포트 결제 번호 : " + impUid);
 		// 상품 결제 완료 후 DB에서 필요한 작업 실행
-		log.info("카트 정보 리스트: " +transactionDTO);
+		log.info("주문에서 카트 정보 리스트: " +transactionDTO);
 		orderService.paytransaction(transactionDTO, memberId);
 		log.info("컨트롤러에서 모든 결제 트랜잭션 처리가 완료됨");
-		
 	}
 	
 	@PostMapping("/orderResult")
@@ -221,8 +225,13 @@ public class OrderController {
 		return "redirect:/";
 	}
 	
-	@GetMapping("receipt")
-	public String receipt() {
+	@PostMapping("receipt")
+	public String receipt(@RequestParam("ipUid") String ipUid, Model model) throws IamportResponseException, IOException {
+
+		//결제 번호
+		String uid = ipUid.substring(4);
+		model.addAttribute("uid", uid);
+		
 		return "receipt";
 	}
 }
