@@ -46,25 +46,29 @@
 					"reviewID" : reviewID
 				};
 				
-				$.ajax({
-			        url: "${contextPath}/category/1/deleteReview",
-			        type: "POST",
-			        data: data,
-			        beforeSend : function(xhr) {
-						xhr.setRequestHeader(header, token);
-					},
-			        success : function(result){
-			        	if (result) {
-			        		alert("상품평이 삭제되었습니다.");
-			                location.reload();
-			        	}
-			        },error : function(xhr, status, error) {
-						var errorResponse = JSON.parse(xhr.responseText);
-						var errorCode = errorResponse.code;
-						var message = errorResponse.message;
-						alert(message);
-					}
-			    });
+				if (confirm("상품평을 삭제하시겠습니까?")) {
+            		$.ajax({
+        	            url: "${contextPath}/category/1/deleteReview",
+        	            type: "POST",
+        	            data: data,
+        	            beforeSend : function(xhr) {
+            				xhr.setRequestHeader(header, token);
+            			},
+        	            success : function(result){
+        	            	if (result) {
+        	            		alert("상품평이 삭제되었습니다.");
+        		                location.reload();
+        	            	}
+        	            },error : function(xhr, status, error) {
+            				var errorResponse = JSON.parse(xhr.responseText);
+            				var errorCode = errorResponse.code;
+            				var message = errorResponse.message;
+            				alert(message);
+            			}
+        	        });	
+        		} else {
+        			return;
+        		}
 			});
 		});
 	</script>

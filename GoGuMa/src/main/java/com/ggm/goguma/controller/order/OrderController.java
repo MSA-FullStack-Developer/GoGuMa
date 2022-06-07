@@ -69,12 +69,14 @@ public class OrderController {
 	
 	@RequestMapping(value="/", method = {RequestMethod.POST, RequestMethod.GET})
 	public String showOrderList(@ModelAttribute CartOrderDTO cartOrderDTO, Model model, Authentication authentication, BindingResult errors) throws Exception{
-		if ( errors.hasErrors() ){
-			log.info(errors.getAllErrors() );
-			}	
-		String memberEmail = "";
+		if (errors.hasErrors()) {
+			log.info(errors.getAllErrors());
+		}
+		
 		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 		model.addAttribute("parentCategory", parentCategory);
+		
+		String memberEmail = "";
 			// 사용자가 권한이 있는 경우
 			if (authentication != null){
 				UserDetails user = (UserDetails)authentication.getPrincipal();
