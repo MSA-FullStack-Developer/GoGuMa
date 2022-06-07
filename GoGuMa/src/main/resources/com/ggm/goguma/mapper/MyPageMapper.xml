@@ -3,7 +3,7 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ggm.goguma.mapper.MyPageMapper">
-		<select id="getReceiptList" resultType="ReceiptDTO">
+	<select id="getReceiptList" resultType="ReceiptDTO">
 		select receiptid, orderdate, memberid
 		from receipt where memberid = #{memberId}
 		order by orderdate desc
@@ -21,14 +21,135 @@
 		from receipt where receiptid = #{receiptId}
 	</select>
 	
-	<select id="getEarnedPoint" resultType="PointDTO">
-		select pointeventid, pointtype, pointvalue, pointcreateddate, orderid, receiptid
-		from pointevent where receiptid = #{receiptId} and pointtype = 'plus'
-	</select>
-	
 	<update id="updateOrderStatus">
 		update orderdetail set orderstatus = #{status} where orderid = #{orderId}
 	</update>
+	
+	<update id="makeInquirable">
+		update pointevent set inquirable = 1 where orderid = #{orderId}
+	</update>
+	
+	<select id="getPointValue" resultType="long">
+		select pointvalue from pointevent where receiptId = #{receiptId}
+	</select>
+	
+	<select id="getPointHistoryCount" resultType="long">
+		select count(*) from pointevent where memberid = #{memberId} and inquirable = 1
+	</select>
+	
+	<select id="getSpecificPointHistoryCount" resultType="long">
+		select count(*) from pointevent where memberid = #{memberId} and pointtype = #{type} and inquirable = 1
+	</select>
+
+	<select id="getPointHistoryCountByPeriod" resultType="long">
+		select count(*) from pointevent where memberid = #{memberId} and inquirable = 1
+		<![CDATA[
+			and pointcreateddate >= to_date(#{startDate}, 'yyyy-mm-dd hh24:mi:ss')
+			and pointcreateddate <= (to_date(#{endDate}, 'yyyy-mm-dd hh24:mi:ss') + 0.99999)
+		]]>
+	</select>
+	
+	<select id="getSpecificPointHistoryCountByPeriod" resultType="long">
+		select count(*) from pointevent where memberid = #{memberId} and pointtype = #{type} and inquirable = 1
+		<![CDATA[
+			and pointcreateddate >= to_date(#{startDate}, 'yyyy-mm-dd hh24:mi:ss')
+			and pointcreateddate <= (to_date(#{endDate}, 'yyyy-mm-dd hh24:mi:ss') + 0.99999)
+		]]>
+	</select>
+	
+	<select id="getAvailableCouponCount" resultType="long">
+		select count(*) from couponview where memberid = #{memberId}
+		<![CDATA[
+			and used = 0 and sysdate <= expirationdate
+		]]>
+	</select>
+	
+	<select id="getUnavailableCouponCount" resultType="long">
+		select count(*) from couponview where memberId = #{memberId}
+		<![CDATA[
+			and used = 1 or (used = 0 and sysdate > expirationdate)
+		]]>
+	</select>
+	
+	<select id="getPointHistory" resultType="PointDTO">
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+			 	 (select pointeventid, pointtype, pointvalue, inquirable, pointCreatedDate, receiptid, orderid
+				  from pointevent where memberid = #{memberId} and inquirable = 1
+				  order by pointcreateddate desc) a) b
+		where rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<select id="getSpecificPointHistory" resultType="PointDTO">
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+			 	 (select pointeventid, pointtype, pointvalue, inquirable, pointCreatedDate, receiptid, orderid
+				  from pointevent where memberid = #{memberId} and pointtype = #{type} and inquirable = 1
+				  order by pointcreateddate desc) a) b
+		where rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<select id="getPointHistoryByPeriod" resultType="PointDTO">
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+			 	 (select pointeventid, pointtype, pointvalue, inquirable, pointCreatedDate, receiptid, orderid
+				  from pointevent where memberid = #{memberId} and inquirable = 1
+		  		  <![CDATA[
+					  and pointcreateddate >= to_date(#{startDate}, 'yyyy-mm-dd hh24:mi:ss')
+					  and pointcreateddate <= (to_date(#{endDate}, 'yyyy-mm-dd hh24:mi:ss') + 0.99999)
+				  ]]>
+				  order by pointcreateddate desc) a) b
+		where rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<select id="getSpecificPointHistoryByPeriod" resultType="PointDTO">
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+			 	 (select pointeventid, pointtype, pointvalue, inquirable, pointCreatedDate, receiptid, orderid
+			 	  from pointevent where memberid = #{memberId} and pointtype = #{type} and inquirable = 1
+  		  		  <![CDATA[
+					  and pointcreateddate >= to_date(#{startDate}, 'yyyy-mm-dd hh24:mi:ss')
+					  and pointcreateddate <= (to_date(#{endDate}, 'yyyy-mm-dd hh24:mi:ss') + 0.99999)
+				  ]]>
+				  order by pointcreateddate desc) a) b
+		where rnum between #{startNum} and #{endNum}
+	</select>
+
+	<select id="getAvailableCoupon" resultType="CouponDTO">
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+			 	 (select couponid, couponname, benefit, restriction, createddate, expirationdate, used
+				  from couponview where memberid = #{memberId}
+				  <![CDATA[
+					  and used = 0 and sysdate <= expirationdate
+				  ]]>
+				  order by createddate desc) a) b
+		where rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<select id="getUnavailableCoupon" resultType="CouponDTO">
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+				 (select couponid, couponname, benefit, restriction, createddate, expirationdate, used
+			  	  from couponview where memberid = #{memberId}
+			  	  <![CDATA[
+			 	  	  and used = 1 or (used = 0 and sysdate > expirationdate)
+			  	  ]]>
+			  	  order by createddate desc) a) b
+		where rnum between #{startNum} and #{endNum}
+	</select>
 
 	<select id="getAddressList" resultType="DeliveryAddressDTO">
 		select addressId, nickname, recipient, address, contact, isdefault
@@ -67,7 +188,7 @@
 		update deliveryaddress set isdefault = 0 where memberId = #{memberId}
 	</update>
 	
-		<!-- 사용자 포인트를 조회한다. -->
+	<!-- 사용자 포인트를 조회한다. -->
 	<select id="getMemberPoint" resultType="int">
 		SELECT ((SELECT NVL((SELECT sum(pointvalue)
 				FROM pointevent
@@ -83,4 +204,11 @@
 		FROM DUAL
 	</select>
 	
+	<select id="confirmPassword" resultType="String">
+		select password from member where memberid = #{memberId}
+	</select>
+	
+	<update id="changePassword">
+		update member set password = #{newPassword} where memberid = #{memberId}
+	</update>
 </mapper>

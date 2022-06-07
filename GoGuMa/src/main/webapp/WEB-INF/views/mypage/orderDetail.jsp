@@ -40,13 +40,12 @@
 </head>
 <body>
 	<%@ include file="../header.jsp" %>
-	
 	<div class="container mt-5" style="min-width: 1200px">
 		<div class="row">
             <%@ include file="mypageMenu.jsp" %>
             <div class="col">
                 <div>
-                    <h5><b>👨‍💻 송진호님</b></h5>
+                    <h4><b>송진호님</b></h4>
                 </div>
                 <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-3">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -59,10 +58,10 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            포인트
+                            <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
                         </div>
                         <div>
-                            1,000P
+                            <a href="${contextPath}/mypage/pointHistory/all?page=1">1,000P</a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -75,10 +74,10 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            쿠폰
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
                         </div>
                         <div>
-                            3장
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">3장</a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -223,7 +222,7 @@
                         </tr>
                         <tr>
                             <th>예상 적립 포인트</th>
-                            <td>+<fmt:formatNumber value="${pointDTO.pointValue}" />P</td>
+                            <td>+<fmt:formatNumber value="${earnablePoint}" />P</td>
                         </tr>
                         <tr>
                             <th>최종 결제금액</th>
@@ -238,7 +237,6 @@
             </div>
         </div>
     </div>
-    
     <%@ include file="../footer.jsp" %>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
@@ -264,7 +262,13 @@
 					} else {
 						alert('구매확정 오류');
 					}
-				}
+				},
+				error:function(xhr, status, error) {
+    				var errorResponse = JSON.parse(xhr.responseText);
+    				var errorCode = errorResponse.code;
+    				var message = errorResponse.message;
+    				alert(message);
+    			}
 			})
 		}
 	}
@@ -288,7 +292,13 @@
 					} else {
 						alert('주문취소 오류');
 					}
-				}
+				},
+				error:function(xhr, status, error) {
+    				var errorResponse = JSON.parse(xhr.responseText);
+    				var errorCode = errorResponse.code;
+    				var message = errorResponse.message;
+    				alert(message);
+    			}
 			})
 		}
 	}
