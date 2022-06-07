@@ -25,6 +25,16 @@
 			</foreach>
 	</select>
 	
+	<select id="getOrder" parameterType="list" resultType="CartItemDTO">
+		SELECT *
+		FROM productinfo
+		WHERE productid = 
+		<foreach collection="list" item="arr">
+			#{arr.productId}
+		</foreach>
+
+	</select>
+	
 	<select id="getMemberCoupon" resultType="MemberCouponOrderDTO">
 		SELECT 
 			memberid,
@@ -39,4 +49,124 @@
 		WHERE
 			memberid = #{memberId} and used = 0 and expiration > sysdate
 	</select>
+	
+	<insert id="saveReceipt" parameterType="map">
+		INSERT INTO receipt(
+							memberid, 
+							recipient, 
+							rcptcontact, 
+							rcptaddress,
+							rcptnickname,
+							requirement,
+							originalprice, 
+							membershipdiscount,
+							coupondiscount,
+							usagepoint, 
+							totalprice,
+							couponid,
+							impuid
+							)
+		VALUES(
+		#{memberId}, 
+		#{transactionDTO.address.recipient}, 
+		#{transactionDTO.address.contact}, 
+		#{transactionDTO.address.address},
+		#{transactionDTO.address.nickName},
+		#{transactionDTO.requirement},
+		#{transactionDTO.originalPrice},
+		#{transactionDTO.membershipDiscount},
+		#{transactionDTO.couponDiscount}, 
+		#{transactionDTO.usagePoint},
+		#{transactionDTO.totalPrice},
+		#{transactionDTO.couponId},
+		#{transactionDTO.impUid}
+		 )
+		 <selectKey keyProperty="transactionDTO.receiptId" resultType="long" order="AFTER">SELECT ISEQ$$_92238.CURRVAL FROM DUAL</selectKey>
+	</insert>
+	
+	<!-- PK의 값을 sequence의 nextval을 사용해서 생성할 경우 시퀀스 증가함수 사용.-->
+ 	<insert id="saveOrderDetail" parameterType="hashmap">
+ 	INSERT ALL
+ 		<foreach collection="productOrderList" item="item" open="" separator=" " close="SELECT * FROM DUAL">
+			INTO orderdetail(
+									orderid,
+									receiptid,
+									productid,
+									ordercount,
+									orderstatus,
+									cartid
+									)
+			VALUES(
+					get_orderdetail_access_id('ISEQ$$_92317'), #{receiptKey}, #{item.productId}, #{item.ordQty}, 'N', #{item.cartId}
+				)
+		</foreach>
+	</insert>
+	
+	<select id="getBeforePoint" parameterType="long" resultType="PointDTO">
+		SELECT O.memberid memberid, O.receiptid receiptid, O.orderid orderid, FLOOR(O.productprice * (MI.pointpercent/100)) AS pointvalue
+		FROM orderview O JOIN membergradeINFO MI
+		ON O.memberid = MI.memberid
+		WHERE O.receiptid = #{receiptKey} and O.memberid=#{memberId}
+	</select>
+	
+	<insert id="savePointEvent" parameterType="list">
+		INSERT ALL
+		<foreach collection="list" item="item" open="" separator=" " close="SELECT * FROM DUAL">
+			INTO pointevent(
+				pointeventid,
+				memberid,
+				receiptid,
+				orderid,
+				pointtype,
+				pointvalue,
+				inquirable
+			)
+			VALUES(
+				get_orderdetail_access_id('ISEQ$$_92242'),
+				#{item.memberId},
+				#{item.receiptId},
+				#{item.orderId},
+				'earn',
+				#{item.pointValue},
+				0
+			)
+		</foreach>
+	</insert>
+	
+	<insert id="minusPointEvent">
+		INSERT INTO pointevent(
+				memberid,
+				receiptid,
+				pointtype,
+				pointvalue,
+				inquirable
+		)
+		VALUES(
+			#{memberId},
+			#{receiptKey},
+			'usage',
+			#{point},
+			1
+		)
+	</insert>
+	
+	<update id="minusProductStock" parameterType="hashmap">
+		<foreach collection="productOrderList" item="item" open="DECLARE BEGIN" separator=";" close=";END;">
+			UPDATE product SET stock = stock - #{item.ordQty}
+			<where>
+				productid = #{item.productId}
+			</where>
+		</foreach>
+	</update>
+	
+	<update id="usageCoupon">
+		UPDATE membercoupon
+		SET used = 1
+		WHERE couponid = ${couponId} and memberid = #{memberId}
+	</update>
+	
+	<delete id="deleteCartOrder">
+		DELETE FROM cart
+		WHERE cartid = #{cartId}
+	</delete>
 </mapper>

@@ -190,15 +190,18 @@
 	
 	<!-- 사용자 포인트를 조회한다. -->
 	<select id="getMemberPoint" resultType="int">
-		SELECT NVL((SELECT sum(pointvalue)
+		SELECT ((SELECT NVL((SELECT sum(pointvalue)
 				FROM pointevent
-				WHERE memberid= #{memberId}
+				WHERE memberid= #{memberId} AND inquirable=1
 				GROUP BY pointtype
-				having pointtype='plus') - (SELECT sum(pointvalue)
-				                            FROM pointevent
-				                            GROUP BY pointtype
-				                            having pointtype='minus'),0) AS point
-		FROM dual
+				having pointtype='earn'), 0)
+            FROM DUAL) - (SELECT NVL((SELECT sum(pointvalue)
+                FROM pointevent
+                WHERE memberid= #{memberId} AND inquirable=1
+                GROUP BY pointtype
+                having pointtype='usage'), 0)
+            FROM DUAL)) AS point
+		FROM DUAL
 	</select>
 	
 	<select id="confirmPassword" resultType="String">

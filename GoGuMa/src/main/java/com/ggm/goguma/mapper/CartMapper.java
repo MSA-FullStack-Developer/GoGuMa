@@ -20,10 +20,13 @@ public interface CartMapper {
 
 	void insertCart(@Param("productId") long productId, @Param("cartAmount") int cartAmount, @Param("memberId") long memberId) throws Exception;
 
-	/* *
-	 * 작성자 : 경민영
-	 * 작업일 : 22.05.27
-	 * */
-	// 장바구니에 존재하는 상품인지 확인
-	long isExistCart(@Param("productId") long productId);
+	/*
+	작성자 : 경민영
+	수정자 : 문석호
+	작업일 : 22.05.27
+	수정일 : 22.06.05
+	회원 장바구니에 이미 존재하는 상품인지 확인
+	수정 내용: 장바구니 회원별 구분
+	*/
+	long isExistCart(@Param("productId") long productId, @Param("memberId") long memberId) throws Exception;
 }

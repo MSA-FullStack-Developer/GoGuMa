@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="com.ggm.goguma.mapper.MarketMapper">
+	<resultMap type="MarketDTO" id="MarketResult">
+		<id property="marketId" column="marketId"/>
+		<result property="marketId" column="marketId"/>
+		<result property="marketName" column="marketName"/>
+		<result property="marketDetail" column="marketDetail"/>
+		<result property="marketThumbnail" column="marketThumb"/>
+		<result property="marketBanner" column="marketBanner"/>
+		<result property="memberId" column="memberId"/>
+		<association property="category" column="categoryId" select="com.ggm.goguma.mapper.CategoryMapper.findCategoryById"></association>
+	</resultMap>
+	
+	
+	<resultMap type="MarketArticleDTO" id="MarketArticleResult">
+		<id property="articleId" column="articleId"/>
+		<result property="articleId" column="articleId"/>
+		<result property="articleTitle" column="articleTitle"/>
+		<result property="articleContent" column="articleContent"/>
+		<result property="regDate" column="regDate" />
+		<association property="market" column="marketId" select="com.ggm.goguma.mapper.MarketMapper.findMarketById"></association>
+		<association property="thumbnail" column="articleId" select="com.ggm.goguma.mapper.MarketMapper.findThumbnailImageById"></association>
+		<collection property="products" column="articleId" javaType="java.util.ArrayList" select="com.ggm.goguma.mapper.MarketMapper.findArticleProductsById"></collection>
+	</resultMap>
+	
+	<insert id="insertMarket" parameterType="MarketDTO" useGeneratedKeys="true" keyProperty="marketId" keyColumn="marketId">
+	
+		INSERT INTO market(MEMBERID, CATEGORYID, MARKETNAME, MARKETDETAIL, MARKETTHUMB,MARKETBANNER)
+		VALUES(#{memberId}, #{category.categoryID}, #{marketName}, #{marketDetail}, #{marketThumbnail}, #{marketBanner})
+	</insert>
+
+
+	<select id="findMarketById" parameterType="long" resultMap="MarketResult">
+		SELECT 
+			marketId,memberId, marketName, marketDetail,marketThumb,marketBanner,categoryId
+		FROM
+			Market 
+		WHERE marketId = #{id} 
+	</select>
+	
+	<select id="findMarketIdByMemberId" resultType="long">
+		SELECT 
+			marketId
+		FROM
+			Market 
+		WHERE memberId = #{id} 
+	</select>
+	
+	<select id="findFollwMarketCountByMarketIdAndMemberId" parameterType="FollowMarketDTO" resultType="int">
+		SELECT count(*) FROM followMarket
+		WHERE marketId = #{marketId} AND memberId = #{memberId}
+	</select>
+	
+	<insert id="insertFollowMarket" parameterType="FollowMarketDTO">
+		INSERT INTO followMarket(marketId, memberId) 
+		VALUES (#{marketId},#{memberId})
+	</insert>
+	
+	<delete id="deleteFollowMarket" parameterType="FollowMarketDTO">
+		DELETE followMarket
+		WHERE marketId = #{marketId} AND memberId = #{memberId}
+	</delete>
+	
+	<select id="findOrderProduct" resultType="ArticleProudctDTO">
+		SELECT
+			DISTINCT p.PRODUCTID, pp.PRODUCTID  parentId,  pp.PRODUCTNAME,  p.PRODUCTNAME optionName, p.PRODUCTPRICE , i.PRODIMGURL 
+		FROM 
+			RECEIPT r , ORDERDETAIL o , PRODUCT p , PRODUCTIMAGE i, PRODUCT pp
+		WHERE 
+			r.MEMBERID = #{id} AND 
+			o.ORDERSTATUS = 'F' AND 
+			o.RECEIPTID = r.RECEIPTID AND 
+			o.PRODUCTID = p.PRODUCTID AND 
+			p.PRODUCTID = i.PRODUCTID AND
+			p.PARENTPID = pp.PRODUCTID AND
+			pp.PRODUCTNAME LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	
+	<insert id="insertMarketArticle" parameterType="MarketArticleDTO" useGeneratedKeys="true" keyColumn="articleId" keyProperty="articleId">
+		INSERT INTO marketArticle(marketId, articleTitle, articleContent)
+		VALUES(#{market.marketId}, #{articleTitle}, #{articleContent})
+	</insert>
+	
+	<insert id="insertArticleProduct">
+		INSERT INTO articleProduct(articleId, productId)
+		VALUES(#{articleId}, #{productId})
+	</insert>
+	
+	<insert id="insertArticleImage" parameterType="ArticleImageDTO">
+		INSERT INTO marketArticleImage(articleId, imageName, isThumbnail, imagePath)
+		VALUES(#{articleId},#{imageName}, #{isThumbnail}, #{imagePath})
+	</insert>
+	
+	<select id="findMarketArticleById" resultMap="MarketArticleResult">
+		SELECT articleId, marketId, articleTitle, articleContent, regDate
+		FROM marketArticle
+		WHERE articleId = #{articleId}
+	</select>
+	
+	<select id="findThumbnailImageById" resultType="ArticleImageDTO">
+		SELECT * 
+		FROM marketArticleImage
+		WHERE articleId = #{articleId} AND isThumbnail = 1
+	</select>
+	
+	<select id="findArticleProductsById" resultType="ArticleProudctDTO">
+		SELECT 
+			cp.productId, pp.productId parentId, pp.productName productName, cp.productName optionName, cp.productPrice, i.prodimgUrl, cp.categoryId
+		FROM articleProduct ap, product cp, product pp, productImage i
+		WHERE
+			ap.articleId = #{articleId} AND
+			ap.productId = cp.productId AND
+			cp.parentpId = pp.productId AND
+			cp.productId = i.productId 
+	</select>
+	
+	<select id="findMarketArticles" resultMap="MarketArticleResult">
+		SELECT articleId, marketId, articleTitle, regDate
+		FROM marketArticle
+		WHERE marketId = #{marketId}
+		OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+	</select>
+	
+	<select id="countMarketArticles" resultType="int">
+		SELECT count(articleId)
+		FROM marketArticle
+		WHERE marketId = #{marketId}
+	</select>
+	
+</mapper>

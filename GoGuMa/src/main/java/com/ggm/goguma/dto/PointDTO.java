@@ -13,4 +13,5 @@ public class PointDTO {
 	private Date pointCreatedDate;
 	private long receiptId;
 	private long orderId;
+	private long memberId;
 }
