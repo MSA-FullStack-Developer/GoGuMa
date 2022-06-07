@@ -169,7 +169,13 @@
 #deleteBtn {
     background: #F8F8F8;
     border: none;
-    float: right;
+    width: 25px;
+}
+
+#editBtn {
+	background: #F8F8F8;
+    border: none;
+    width: 25px;
 }
 
 .productlink:hover>span {

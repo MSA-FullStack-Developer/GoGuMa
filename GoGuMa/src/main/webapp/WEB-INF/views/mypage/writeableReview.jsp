@@ -295,9 +295,9 @@
                     </div>
                     </c:forEach>
                 </div>
-					<div class="modal-background">
-						<div class="modal-window">
-							<div class="popup">
+				<div class="modal-background">
+					<div class="modal-window">
+						<div class="popup">
 	                        <h4 class="membername"><i class="fa-solid fa-heart" style="color: FF493C"></i>
 	                        	<b>${memberDTO.name}</b>님, 이번 상품은 어떠셨나요?
 	                        	<input type="hidden" id="productID" value="">
@@ -307,16 +307,13 @@
 	                       	<input type="file" id="file" name='uploadFile' style="margin-left: 30px; "multiple>
 	                       	<div class='uploadResult'>
 								<ul>
-								
 								</ul>
-							</div>
-	                       	<div class="review-buttons">
+							</div>	
+                       		<div class="review-buttons">
 	                            <button type="button" class="cancelBtn" id="cancelBtn">취소</button>
 	                            <button type="button" class="finishBtn" id="finishBtn">작성 완료</button>
-	                          </div>
-							</div>
-						<div>
-					</div>
+                           </div>
+						</div>
 					</div>
 				</div>
 			</div>
