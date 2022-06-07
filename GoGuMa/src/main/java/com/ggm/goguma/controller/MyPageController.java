@@ -69,7 +69,7 @@ public class MyPageController {
 	public String getOrderHistory(Model model) throws Exception {
 		try {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-			List<ReceiptDTO> receiptHistory = service.getReceiptHistory(1); // 회원ID로 결제정보DTO를 모두 불러오기
+			List<ReceiptDTO> receiptHistory = service.getReceiptHistory(121); // 회원ID로 결제정보DTO를 모두 불러오기
 			for(ReceiptDTO dto : receiptHistory) {
 				log.info(dto);
 			}
@@ -117,7 +117,7 @@ public class MyPageController {
 		Model model) throws Exception {
 		try {
 			// 특정 포인트 내역의 개수
-			long historyCount = service.getPointHistoryCount(1, type, startDate, endDate);
+			long historyCount = service.getPointHistoryCount(121, type, startDate, endDate);
 			// 전체 페이지 개수 = 전체 페이지 개수 / 한 페이지에 보여지는 내역의 수
 			long pageCount = historyCount / contentPerPage;
 			// 예를 들어, 내역이 101개인 경우, 11개의 페이지가 필요하므로 총 페이지 개수를 증가시켜준다.
@@ -164,7 +164,7 @@ public class MyPageController {
 			// 마지막 페이지 개수가 전체 페이지 개수보다 많은 경우, 마지막 페이지를 전체 페이지 개수로 맞춰준다.
 			if(endPage > pageCount) endPage = pageCount;
 			
-			List<CouponDTO> couponList = service.getCouponHistory(1, type, page);
+			List<CouponDTO> couponList = service.getCouponHistory(121, type, page);
 			model.addAttribute("couponList", couponList);
 			model.addAttribute("type", type);
 			model.addAttribute("page", page);
@@ -183,9 +183,9 @@ public class MyPageController {
 	public String getAddressList(Model model) throws Exception {
 		try {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-			DeliveryAddressDTO defaultAddress = service.getDefaultAddress(1);
+			DeliveryAddressDTO defaultAddress = service.getDefaultAddress(121);
 			log.info(defaultAddress);
-			List<DeliveryAddressDTO> addressList = service.getAddressList(1);
+			List<DeliveryAddressDTO> addressList = service.getAddressList(121);
 			for(DeliveryAddressDTO dto : addressList) {
 				log.info(dto);
 			}
@@ -203,7 +203,7 @@ public class MyPageController {
 	public String addAddress(@RequestBody DeliveryAddressDTO dto) throws Exception {
 		try {
 			log.info(dto);
-			dto.setMemberId(1);
+			dto.setMemberId(121);
 			service.addAddress(dto);
 		} catch(Exception e) {
 			log.info(e.getMessage());
@@ -217,7 +217,7 @@ public class MyPageController {
 	public String updateAddress(@RequestBody DeliveryAddressDTO dto) throws Exception {
 		try {
 			log.info("테스트 : " +dto);
-			dto.setMemberId(1);
+			dto.setMemberId(121);
 			service.updateAddress(dto);
 		} catch (Exception e) {
 			return "2";
@@ -231,7 +231,7 @@ public class MyPageController {
 		try {
 			log.info(list);
 			for(long addressId : list) {
-				service.deleteAddress(1, addressId);
+				service.deleteAddress(121, addressId);
 			}
 		} catch (Exception e) {
 			log.info(e.getMessage());
@@ -245,7 +245,7 @@ public class MyPageController {
 	public String setDefault(@RequestParam long addressId) throws Exception {
 		try {
 			log.info(addressId);
-			service.setDefault(1, addressId);
+			service.setDefault(121, addressId);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 			return "2";
@@ -258,7 +258,7 @@ public class MyPageController {
 	public String cancelDefault(@RequestParam long addressId) throws Exception {
 		try {
 			log.info(addressId);
-			service.cancelDefault(1);			
+			service.cancelDefault(121);			
 		} catch(Exception e) {
 			log.info(e.getMessage());
 			return "2";
@@ -350,7 +350,7 @@ public class MyPageController {
 	@RequestMapping(value="/confirmPassword/{type}", method=RequestMethod.POST)
 	public String confirmPassword(@PathVariable("type") String type, @RequestParam("userPassword") String userPassword) throws Exception {
 		try {
-			if(service.confirmPassword(1, userPassword)) return "1";
+			if(service.confirmPassword(121, userPassword)) return "1";
 			return "2";
 		} catch(Exception e) {
 			log.info(e.getMessage());
@@ -374,7 +374,7 @@ public class MyPageController {
 	@RequestMapping(value="/changePassword", method=RequestMethod.POST)
 	public String changePassword(@RequestParam("curPassword") String curPassword, @RequestParam("newPassword") String newPassword) throws Exception {
 		try {
-			if(service.changePassword(1, curPassword, newPassword)) return "1";
+			if(service.changePassword(121, curPassword, newPassword)) return "1";
 			return "2";
 		} catch(Exception e) {
 			log.info(e.getMessage());

@@ -37,7 +37,6 @@
 </head>
 <body>
 	<%@ include file="../header.jsp" %>
-	
 	<div class="container mt-5" style="min-width: 1200px">
 		<div class="row">
 			<%@ include file="mypageMenu.jsp" %>
@@ -132,6 +131,6 @@
             </div>
 		</div>
 	</div>
-     <%@ include file="../footer.jsp" %>
+    <%@ include file="../footer.jsp" %>
 </body>
 </html>
