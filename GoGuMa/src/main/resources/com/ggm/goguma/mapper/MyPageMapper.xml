@@ -207,4 +207,8 @@
 	<update id="changePassword">
 		update member set password = #{newPassword} where memberid = #{memberId}
 	</update>
+	
+	<update id="changeInfo">
+		update member set birthDate = #{birthDate}, gender = #{gender} where memberid = #{memberId}
+	</update>
 </mapper>

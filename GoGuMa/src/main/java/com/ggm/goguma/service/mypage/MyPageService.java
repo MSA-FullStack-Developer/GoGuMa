@@ -49,4 +49,6 @@ public interface MyPageService {
 	boolean confirmPassword(String userPassword, String comparePassword) throws Exception;
 
 	boolean changePassword(String curPassword, String newPassword, MemberDTO dto) throws Exception;
+	
+	boolean changeInfo(String birthDate, String gender, String userPassword, MemberDTO dto) throws Exception;
 }

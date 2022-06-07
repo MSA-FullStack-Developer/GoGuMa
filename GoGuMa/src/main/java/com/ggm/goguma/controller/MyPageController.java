@@ -350,7 +350,8 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/confirmPassword/{type}", method=RequestMethod.POST)
-	public String confirmPassword(@PathVariable("type") String type, @RequestParam("userPassword") String userPassword, Principal principal, Model model) throws Exception {
+	public String confirmPassword(@PathVariable("type") String type,
+		@RequestParam("userPassword") String userPassword, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			String phoneNum = memberDTO.getPhone().substring(0, 3) + "-"
@@ -372,20 +373,28 @@ public class MyPageController {
 			return "redirect:/mypage/confirmPassword"+type;
 		}
 	}
-
-//	@RequestMapping(value="/changeInfo", method=RequestMethod.GET)
-//	public String getInfoChangeForm(Model model) throws Exception {
-//		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-//		model.addAttribute("parentCategory", parentCategory);
-//		return "mypage/changeInfo";
-//	}
 	
 	@ResponseBody
 	@RequestMapping(value="/changePassword", method=RequestMethod.POST)
-	public String changePassword(@RequestParam("curPassword") String curPassword, @RequestParam("newPassword") String newPassword, Principal principal) throws Exception {
+	public String changePassword(@RequestParam("curPassword") String curPassword,
+		@RequestParam("newPassword") String newPassword, Principal principal) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			if(service.changePassword(curPassword, newPassword, memberDTO)) return "1";
+			return "2";
+		} catch(Exception e) {
+			log.info(e.getMessage());
+			return "3";
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/changeInfo", method=RequestMethod.POST)
+	public String changeInfo(@RequestParam("birthDate") String birthDate, @RequestParam("gender") String gender,
+		@RequestParam("userPassword") String userPassword, Principal principal) throws Exception {
+		try {
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			if(service.changeInfo(birthDate, gender, userPassword, memberDTO)) return "1";
 			return "2";
 		} catch(Exception e) {
 			log.info(e.getMessage());

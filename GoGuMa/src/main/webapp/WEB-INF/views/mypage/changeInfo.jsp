@@ -101,14 +101,14 @@
                             <th class="col-2">성별</th>
                             <td>
                             	<c:if test="${memberDTO.gender eq 'M'}">
-                           			<label><input type="radio" name="gender" value="male" checked>&nbsp;남</label>
+                           			<label><input type="radio" name="gender" value="M" checked>&nbsp;남</label>
                                 	&nbsp;
-                                	<label><input type="radio" name="gender" value="female">&nbsp;여</label>
+                                	<label><input type="radio" name="gender" value="F">&nbsp;여</label>
                             	</c:if>
                             	<c:if test="${memberDTO.gender eq 'F'}">
-                            		<label><input type="radio" name="gender" value="male">&nbsp;남</label>
+                            		<label><input type="radio" name="gender" value="M">&nbsp;남</label>
                                 	&nbsp;
-                                	<label><input type="radio" name="gender" value="female">&nbsp;여</label>
+                                	<label><input type="radio" name="gender" value="F">&nbsp;여</label>
                             	</c:if>
                             </td>
                         </tr>
@@ -197,7 +197,31 @@
 <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
 <script type="text/javascript">
 	function changeInfo() {
-		
+		let token = $("meta[name='_csrf']").attr("content");
+	    let header = $("meta[name='_csrf_header']").attr("content");
+		$.ajax({
+			url : "${contextPath}/mypage/changeInfo",
+			type : "POST",
+			data : {
+				birthDate : $("#years :selected").val()+'-'+$("#months :selected").val()+'-'+$("#days :selected").val(),
+				gender : $('input[name="gender"]:checked').val(),
+				userPassword : $("#userPassword").val()
+			},
+			beforeSend : function(xhr) {
+	            xhr.setRequestHeader(header, token);
+	        },
+	        success:function(result) {
+	        	if(result==1) window.location.href = "${contextPath}/mypage";
+	        	else if(result==2) alert('비밀번호 오류');
+	        	else alert("서버 오류");
+	        },
+			error:function(xhr, status, error) {
+				var errorResponse = JSON.parse(xhr.responseText);
+				var errorCode = errorResponse.code;
+				var message = errorResponse.message;
+				alert(message);
+			}
+		});
 	}
 </script>
 </html>

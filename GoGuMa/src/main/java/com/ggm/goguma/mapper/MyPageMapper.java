@@ -69,4 +69,6 @@ public interface MyPageMapper {
 	String confirmPassword(long memberId) throws Exception;
 
 	void changePassword(@Param("memberId") long memberId, @Param("newPassword") String newPassword) throws Exception;
+
+	void changeInfo(@Param("memberId") long memberId, @Param("birthDate") String birthDate, @Param("gender") String gender) throws Exception;
 }
