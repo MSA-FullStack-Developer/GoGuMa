@@ -1,32 +1,19 @@
 package com.ggm.goguma.controller;
 
 import java.util.List;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.file.Files;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,7 +34,6 @@ import com.ggm.goguma.service.product.ReviewService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import net.coobird.thumbnailator.Thumbnailator;
 
 @Log4j
 @Controller
@@ -134,22 +120,10 @@ public class ProductController {
 				}
 			});
 			
-			// 상품평을 작성할 수 있는 조건 (= 상품평 쓰기 버튼이 보이는 조건)
-			// 1. 사용자가 권한이 있고,		
-			// 2. 해당 상품을 '구매확정'한 경우
-			// 2. 이전에 해당 상품의 상품평을 작성한 적이 없는 경우
-			boolean showWriteBtn = false;
-			Integer orderProductID = null; // 상품이 '구매확정'이면 구매확정한 상품의 ID를 저장
 			if (authentication != null) {
 				UserDetails user = (UserDetails) authentication.getPrincipal();
 				MemberDTO memberDTO = memberService.getMember(user.getUsername());
 				model.addAttribute("memberDTO", memberDTO);
-				long isWrittened = reviewService.isExistReview(productID, memberDTO.getId());
-				orderProductID = reviewService.isFinishRcpt(productID, memberDTO.getId());
-				
-				if (isWrittened < 1 && orderProductID != null) {
-					showWriteBtn = true; // 상품평 작성 가능
-				}
 			}
 	
 			model.addAttribute("parentCategory", parentCategory);
@@ -159,11 +133,10 @@ public class ProductController {
 			model.addAttribute("optionList", optionList);
 			model.addAttribute("optionCount", optionCount);
 			model.addAttribute("reviewList", reviewList);
-			model.addAttribute("orderProductID", orderProductID);
-			model.addAttribute("showWriteBtn", showWriteBtn);
 			
 			return "product";
 		} catch (Exception e) {
+			e.printStackTrace();
 			model.addAttribute("msg", "상품 상세 화면 출력 에러");
 			return "product";
 		}
@@ -205,6 +178,7 @@ public class ProductController {
 				}
 				
 				reviewService.insertReview(reviewDTO);
+				
 				return "1";
 			}
 			
@@ -258,9 +232,9 @@ public class ProductController {
 			String[] uploadResult = amazonService.uploadFile("upload", multipartFile);
 
 			ImageAttachDTO attachDTO = new ImageAttachDTO();
-			
 			attachDTO.setImageName(uploadResult[0]);
 			attachDTO.setImagePath(uploadResult[1]);
+			
 			list.add(attachDTO);
 		}
 		
@@ -276,4 +250,5 @@ public class ProductController {
 		
 		return new ResponseEntity<String>("deleted",HttpStatus.OK);
 	}
+	
 }

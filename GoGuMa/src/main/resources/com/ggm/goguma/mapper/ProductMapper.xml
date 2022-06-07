@@ -22,7 +22,7 @@
 		FROM (SELECT DISTINCT B.categoryid, A.productname, A.productprice, A.prodimgurl, A.productid, rownum AS rnum
 				FROM (SELECT p.productid, p.productname, p.productprice, i.prodimgurl, p.categoryid
 						FROM product p, productimage i
-						WHERE p.productid = i.productid AND p.parentpid is null
+						WHERE p.productid = i.productid AND p.parentpid IS NULL
 						<include refid="sort"></include>) A, category B
 				WHERE B.categoryid = A.categoryid AND A.categoryid = #{categoryID}
 				<include refid="sort"></include>) C
@@ -83,7 +83,7 @@
 	<select id="getSearchCount" parameterType="String" resultType="long">
 		SELECT count(*) AS cnt
 		FROM product
-		WHERE parentpid is null AND productname LIKE '%'||#{keyword}||'%'
+		WHERE parentpid IS NULL AND productname LIKE '%'||#{keyword}||'%'
 	</select>
 	
 </mapper>

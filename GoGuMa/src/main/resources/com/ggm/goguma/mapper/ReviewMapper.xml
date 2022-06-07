@@ -14,35 +14,10 @@
         ORDER BY A.createdate DESC
 	</select>
 	
-	<!-- 회원이 상품의 상품평을 작성한 적이 있는지 확인
-		 'resultType < 1' 인 경우 상품평 작성 가능 -->
-	<select id="isExistReview" resultType="long">
-		SELECT COUNT(*) AS cnt
-        FROM (SELECT r.productid, m.memberid
-                FROM review r, member m
-                WHERE r.memberid = m.memberid) A, product B
-        WHERE B.productid = A.productid
-        AND B.parentpid = #{productID}
-        AND A.memberid = #{memberID}
-	</select>
-	
-	<!-- 회원이 상품을 구매 확정한 상태인지 확인
-		 'resultType != null' 인 경우 상품평 작성 가능 -->
-	<select id="isFinishRcpt" resultType="Integer">
-		SELECT A.productid AS productid
-		FROM (SELECT o.orderstatus, p.parentpid, o.receiptid, o.productid
-			    FROM orderdetail o, product p
-			    WHERE p.productid = o.productid
-			    AND o.orderstatus = 'F'
-			    AND p.parentpid = #{productID}) A, receipt B
-		WHERE A.receiptid = B.receiptid
-		AND B.memberid = #{memberID}
-	</select>
-	
 	<!-- 상품평 작성 -->
 	<insert id="insertReview" useGeneratedKeys="true" keyProperty="reviewID" keyColumn="reviewID">
-		INSERT INTO review(productid, memberid, content)
-		VALUES (#{productID}, #{memberID}, #{content})
+		INSERT INTO review(productid, memberid, content, prodthumbnail)
+		VALUES (#{productID}, #{memberID}, #{content}, #{prodThumbNail})
 	</insert>
 	
 	<!-- 상품평 삭제 -->
@@ -50,5 +25,34 @@
 		DELETE FROM review
 		WHERE reviewid = #{reviewID}
 	</delete>
+	
+	<!-- 내가 작성한 상품평 목록 -->
+	<select id="getMyReviewList" resultType="com.ggm.goguma.dto.ReviewDTO">
+		SELECT C.reviewid, D.productname, C.productname AS optionname, D.productid, C.content, C.createdate, D.categoryid, C.prodthumbnail
+		FROM (SELECT A.reviewid, B.productname, B.parentpid AS parentid, A.content, A.createdate, A.prodthumbnail
+		        FROM (SELECT *
+		                FROM review r, member m
+		                WHERE r.memberid = m.memberid
+		                AND m.memberid = #{memberID}) A, product B
+		        WHERE B.productid = A.productid
+		        ORDER BY A.createdate DESC) C, product D 
+		WHERE C.parentid = D.productid
+	</select>
+	
+	<!-- 작성 가능한 상품평 -->
+	<select id="getWriteableReview" resultType="com.ggm.goguma.dto.ProductDTO">
+		SELECT DISTINCT E.productname, E.optioname AS optionname, E.parentpid, E.productid, E.categoryid, F.prodimgurl
+		FROM (SELECT D.productname, C.optionname AS optioname, C.parentpid AS parentpid, D.categoryid AS categoryid, C.productid
+		        FROM (SELECT A.parentpid, A.productid, A.productname AS optionname
+		                FROM (SELECT o.orderstatus, p.parentpid AS parentpid, o.receiptid, o.productid, p.productname
+		                        FROM orderdetail o, product p
+		                        WHERE p.productid = o.productid
+		                        AND o.orderstatus = 'F') A, receipt B
+		                WHERE A.receiptid = B.receiptid
+		                AND B.memberid = #{memberID}) C, product D
+		        WHERE C.parentpid = D.productid) E, productimage F
+		WHERE E.parentpid = F.productid
+        AND NOT EXISTS (SELECT * FROM review R WHERE memberid = #{memberID} AND E.productid = R.productid)
+	</select>
 
 </mapper>
