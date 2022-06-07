@@ -25,7 +25,7 @@
         a:visited {
             color: black;
         }
-        img {
+        .orderHistoryImg {
             width: 100%;
             height: 100%;
         }
@@ -104,7 +104,7 @@
 		                                <!-- 주문 forEach 시작 -->
 		                                <tr class="border-bottom">
 		                                    <td class="col-1 p-3">
-		                                        <img src="${orderDTO.image}" style="width:100px; height:100px;">
+		                                        <img class="orderHistoryImg" src="${orderDTO.image}" style="width:100px; height:100px;">
 		                                    </td>
 		                                    <td class="col-5 border-end">
 		                                    	${orderDTO.name}
