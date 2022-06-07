@@ -202,7 +202,7 @@
     });
   });
   
-	//카카오페이 결제
+	//카드 결제
 	function iamport(){
 	  	//선택한 라디오 버튼에 따른 pg 선택
 	  	var radioVal = $('input[name="card-type"]:checked').val();
@@ -251,7 +251,53 @@
 		    
 		});
 	}
-
+	//무통장 입금
+	function nobankbookiamport(){
+	//가맹점 식별코드
+	console.log(radioVal);
+	IMP.init('imp37623879');
+	IMP.request_pay({
+	    pg : html5_inicis,
+	    pay_method : 'vbank',
+	    merchant_uid : 'merchant_' + new Date().getTime(),
+	    name : $('.pProductName').text(), //결제창에서 보여질 이름
+	    amount : 100,//$('#lastStlAmtDd').text(), //실제 결제되는 가격
+	    buyer_email : "${memberDTO.email}",
+	    buyer_name : $('#name').text(),
+	    buyer_tel : $('#phonenumber').text(),
+	    buyer_addr : $('#addressName').text(),
+	    buyer_postcode : '123-456',
+	}, function(rsp) {
+		  console.log("결제 완료 후 로그 : " + rsp);
+	      //아임포트 검증절차
+	      var token = $("meta[name='_csrf']").attr("content");
+		  var header = $("meta[name='_csrf_header']").attr("content");
+		  
+	      $.ajax({
+	        type: "POST",
+	        url: "${contextPath}/order/api/verifyIamport/" + rsp.imp_uid,
+	        beforeSend : function(xhr) {
+						xhr.setRequestHeader(header,token);
+					}
+	      }).done(function(data){
+	        console.log("done Data : " + data);
+	        if(rsp.paid_amount == data.response.amount){
+	         	console.log("결제 및 결제검증완료");
+	          	console.log(rsp);
+	          	console.log(data);
+	        	paytransaction (data.response.impUid);
+	        	console.log("다시 진행중");
+	        	$('#ipUid').val(data.response.impUid);
+	        	console.log("uid로그 : " + $('#ipUid').val());
+	        	$('#finOrder').submit();
+        	} else {
+        		alert("결제 실패");
+        		//임의로 금액이 변경되었기 때문에 전체 환불처리 되어야함
+        	}
+	      });
+	    
+	});
+}
 	//결제가 완료 된 후 트랜잭션처리
 	function paytransaction(impUid){
 	  	var token = $("meta[name='_csrf']").attr("content");
@@ -736,9 +782,9 @@
 										<tr>
 											<td class="pay-type">
 												<div class="select-pay-type">
-													<input type='radio' name='card-type' value='kakaopay'/> 카카오페이(간편결제)
 													<input type='radio' name='card-type' value='html5_inicis'/> KG이니시스(표준결제)
-													<input type='radio' name='card-type' value=''/> 무통장 입금
+													<input type='radio' name='card-type' value='kakaopay'/> 카카오페이(간편결제)
+													<input type='radio' name='card-type' value='html5_inicis'/> 무통장 입금
 												</div>
 											</td>
 										</tr>
