@@ -281,23 +281,24 @@
                 	
                 	<fmt:parseNumber var="totPrc" value="${productInfo.productPrice - disPrc}" integerOnly="true"/>
                 	<input type="hidden" id="product-discount" name="productOrder.totOriPrc" value="${totPrc}" />
-                <div class="selectedInfo">
-                	<h5 class="selectedOption">선택 없음</h5>
-                	<input type="hidden" name="productOrder.productId" id="product-id" value= />
-                	<p class="cartStock">
-                        <button type="button" class="calc" id="minus">-</button>
-                        <span style="text-align: center;">
-                        
-                        	<input type="number" name="productOrder.ordQty" id="numBox" min="1" max="${productInfo.stock}" value="1" readonly="readonly" />
-                        </span>
-                        <button type="button" class="calc" id="plus">+</button>
-                     </p>
-                </div>
+                	
+	                <div class="selectedInfo">
+	                	<h5 class="selectedOption">선택 없음</h5>
+	                	<input type="hidden" name="productOrder.productId" id="product-id" value= />
+	                	<p class="cartStock">
+	                        <button type="button" class="calc" id="minus">-</button>
+	                        <span style="text-align: center;">
+	                        
+	                        	<input type="number" name="productOrder.ordQty" id="numBox" min="1" max="${productInfo.stock}" value="1" readonly="readonly" />
+	                        </span>
+	                        <button type="button" class="calc" id="plus">+</button>
+	                     </p>
+	                </div>
                 
-                <div class="btnDiv">
-                	<button type="button" class="cartBtn" id="cartBtn">장바구니</button>
-                    <button type="submit" class="buyBtn" id="buyBtn">바로구매</button>
-                </div>
+	                <div class="btnDiv">
+	                	<button type="button" class="cartBtn" id="cartBtn">장바구니</button>
+	                    <button type="submit" class="buyBtn" id="buyBtn">바로구매</button>
+	                </div>
                 </form>
             </div>
             
