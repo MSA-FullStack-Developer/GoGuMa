@@ -103,7 +103,7 @@
 	</insert>
 	
 	<select id="getBeforePoint" parameterType="long" resultType="PointDTO">
-		SELECT O.memberid memberid, O.receiptid receiptid, O.orderid orderid, FLOOR(O.productprice * (MI.pointpercent/100)) AS pointvalue
+		SELECT O.memberid memberid, O.receiptid receiptid, O.orderid orderid, FLOOR(O.price * (MI.pointpercent/100)) AS pointvalue
 		FROM orderview O JOIN membergradeINFO MI
 		ON O.memberid = MI.memberid
 		WHERE O.receiptid = #{receiptKey} and O.memberid=#{memberId}

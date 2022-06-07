@@ -55,7 +55,7 @@ public class OrderServiceImpl implements OrderService{
 		log.info(map);
 		orderMapper.saveOrderDetail(map);
 		//2-1. 포인트 이벤트에 주문 상세 번호 별로 적립된 포인트가 적립예정인 상태로 저장된다.
-			//주문 상세에서 포인트 적입 예정인 상품들을 담는다.
+		//주문 상세에서 포인트 적입 예정인 상품들을 담는다.
 		List<PointDTO> pointList = orderMapper.getBeforePoint(memberId, receiptKey);
 		orderMapper.savePointEvent(pointList);
 		//2-2. 포인트를 사용한 경우 포인트 이벤트에 주문상세번호 없이 차감 데이터를 저장한다.
@@ -75,6 +75,7 @@ public class OrderServiceImpl implements OrderService{
 		log.info("오더서비스에서 상품 정보 : " + transactionDTO.getProducts());
 		for(int i=0; i<transactionDTO.getProducts().size(); i++) {
 			if(transactionDTO.getProducts().get(i).getCartId() != 0) {
+				log.info("결제완료후 장바구니 삭제");
 				long cartId = transactionDTO.getProducts().get(i).getCartId();
 				orderMapper.deleteCartOrder(cartId);
 			}

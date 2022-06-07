@@ -196,6 +196,36 @@
 			})
 		}
 	}
+	function cancelPay(){
+	  	let token = $("meta[name='_csrf']").attr("content");
+    	let header = $("meta[name='_csrf_header']").attr("content");
+		$.ajax({
+		  url : "${contextPath}/mypage/api/payment/cancel",
+		  type : "POST",
+		  data : {
+		    // 여기 부분 해당하는 상품 데이터 넣어주면 됩니다
+		    uid : 'imp_230189108880',
+		  	cancelAmount : 90,
+		  	reason : "그냥 바꾸고 싶어요",
+		  	refundHolder : "",
+		  	refundBank : "",
+		  	refundAccount : "",
+		  },
+		beforeSend : function(xhr) {
+        	xhr.setRequestHeader(header, token);
+      	},
+		success:function(result) {
+			return;
+		},
+		error:function(xhr, status, error) {
+				var errorResponse = JSON.parse(xhr.responseText);
+				var errorCode = errorResponse.code;
+				var message = errorResponse.message;
+				alert(message);
+			}
+		});
+	}
+	
 	function cancelBtn(orderId) {
 		if(confirm("주문을 취소하시겠습니까?")) {
 			let token = $("meta[name='_csrf']").attr("content");
@@ -212,6 +242,7 @@
 	            },
 				success:function(result) {
 					if(result==1) {
+				  		cancelPay();
 						window.location.href = "${contextPath}/mypage/orderHistory";
 					} else {
 						alert('주문취소 오류');

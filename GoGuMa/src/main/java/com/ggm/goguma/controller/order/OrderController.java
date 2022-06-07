@@ -222,6 +222,7 @@ public class OrderController {
 	}
 	
 	//아임포트 웹훅 url
+	@ResponseBody
 	@PostMapping("api/nobankcomplete")
 	public void noBankComplete() {
 		log.info("리퀘스트 확인");
