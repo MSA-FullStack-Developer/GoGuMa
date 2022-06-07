@@ -53,7 +53,16 @@ public class OrderServiceImpl implements OrderService{
 		map.put("receiptKey", receiptKey);
 		
 		log.info(map);
-		orderMapper.saveOrderDetail(map);
+		//주문 완료 상태라면 N으로 저장
+		if(transactionDTO.getStatus() == "paid") {
+			log.info("정상적으로 paid상태이고, orderDetail에 저장합니다.");
+			orderMapper.saveOrderDetail(map);
+		}else {
+			//주문 완료가 아니라면 (ready 상태) V로 저장
+			log.info("현재 무통장이라서 여기서 보여요");
+			orderMapper.saveOrderDetailVbank(map);
+		}
+		
 		//2-1. 포인트 이벤트에 주문 상세 번호 별로 적립된 포인트가 적립예정인 상태로 저장된다.
 		//주문 상세에서 포인트 적입 예정인 상품들을 담는다.
 		List<PointDTO> pointList = orderMapper.getBeforePoint(memberId, receiptKey);
@@ -88,6 +97,11 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public List<CartItemDTO> getOrder(List<CartOrderListDTO> dtoList) throws Exception {
 		return orderMapper.getOrder(dtoList);
+	}
+
+	@Override
+	public void checkOrderDetail(String impUid) throws Exception {
+		orderMapper.checkOrderDetail(impUid);
 	}
 
 }

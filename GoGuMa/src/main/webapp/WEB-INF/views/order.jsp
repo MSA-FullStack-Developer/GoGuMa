@@ -237,14 +237,14 @@
 		        url: "${contextPath}/order/api/verifyIamport/" + rsp.imp_uid,
 		        beforeSend : function(xhr) {
 							xhr.setRequestHeader(header,token);
-						}
+						},
 		      }).done(function(data){
 		        console.log("done Data : " + data);
 		        if(rsp.paid_amount == data.response.amount){
 		         	console.log("결제 및 결제검증완료");
 		          	console.log(rsp);
 		          	console.log(data);
-		        	paytransaction (data.response.impUid);
+		        	paytransaction (data.response.impUid, data.rsponse.status);
 		        	console.log("uid로그 : " + $('#ipUid').val());
 		        	console.log("다시 진행중");
 		        	$('#ipUid').val(data.response.impUid);
@@ -279,6 +279,7 @@
 	      var token = $("meta[name='_csrf']").attr("content");
 		  var header = $("meta[name='_csrf_header']").attr("content");
 	      if(rsp.pay_method == "vbank"){
+	        paytransaction (rsp.imp_uid, rsp.status);
 	        $('#ipUid').val(rsp.imp_uid);
         	$('#finOrder').submit();
 	      }
@@ -311,7 +312,7 @@
 	  return val_time;
 	  }
 	//결제가 완료 된 후 트랜잭션처리
-	function paytransaction(impUid){
+	function paytransaction(impUid, status){
 	  	var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		var parr = [];
@@ -336,8 +337,10 @@
 		var couponDis = $('#couponDiscount').val();
 		var usePoint = $('#GPoint').val();
 		var totprc = parseInt($('#finalPrice').val());
+		
 		var data = {
 		    impUid: impUid,
+		    status: status,
 		    products: parr,
 		    address: addr,
 		    requirement: req,

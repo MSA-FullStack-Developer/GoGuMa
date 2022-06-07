@@ -162,10 +162,7 @@
 							<div class="col-md-4"><strong>결제 방법</strong></div>
 							<div class="col-md-8" id="ptype">${resp.payMethod}</div>
 						</div>
-						<div class="row">
-							<div class="col-md-4"><strong>결제 날짜</strong></div>
-							<div class="col-md-8" id="pdate"><fmt:formatDate value="" pattern="yyyy-MM-dd KK:mm:ss"/></div>
-						</div>
+						<c:if test="${resp.payMethod =='vbank'}">
 						<div class="row">
 							<div class="col-md-4"><strong>수취인</strong></div>
 							<div class="col-md-8" id="vbankholder">${resp.vbankHolder}</div>
@@ -178,6 +175,7 @@
 							<div class="col-md-4"><strong>은행계좌</strong></div>
 							<div class="col-md-8" id="vbanknum">${resp.vbankNum}</div>
 						</div>
+						</c:if>
 						<div class="row">
 							<div class="col-md-4"><strong>입금 유효기간</strong></div>
 							<div class="col-md-8" id="vbankdate">~<fmt:formatDate value="${resp.vbankDate}" pattern="yyyy-MM-dd KK:mm:ss"/>

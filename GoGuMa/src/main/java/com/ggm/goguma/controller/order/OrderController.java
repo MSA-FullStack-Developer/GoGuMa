@@ -229,10 +229,15 @@ public class OrderController {
 	//아임포트 웹훅 url
 	@ResponseBody
 	@PostMapping("nobankcomplete")
-	public HashMap<String, Object> noBankComplete(@RequestBody HashMap<String, Object> webhook_param, HttpServletRequest request, HttpServletResponse response) {
+	public void noBankComplete(@RequestBody HashMap<String, Object> webhook_param, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		log.info("리퀘스트 확인");
 		log.info(webhook_param);
-		return webhook_param;
+		if(webhook_param.get("status").equals("paid")) {
+			System.out.println("입금이 확인 되었습니다.");
+			//결제 예정이었던 orderdetail의 상품 상태를 N으로 돌려 둔다.
+			String impUid = (String)webhook_param.get("imp_uid");
+			orderService.checkOrderDetail(impUid);
+		}
 	}
 	
 	@PostMapping("/orderResult")

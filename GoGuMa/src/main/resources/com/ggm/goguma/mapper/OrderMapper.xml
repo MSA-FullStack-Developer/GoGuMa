@@ -102,6 +102,24 @@
 		</foreach>
 	</insert>
 	
+	<!-- PK의 값을 sequence의 nextval을 사용해서 생성할 경우 시퀀스 증가함수 사용.-->
+ 	<insert id="saveOrderDetailVbank" parameterType="hashmap">
+ 	INSERT ALL
+ 		<foreach collection="productOrderList" item="item" open="" separator=" " close="SELECT * FROM DUAL">
+			INTO orderdetail(
+									orderid,
+									receiptid,
+									productid,
+									ordercount,
+									orderstatus,
+									cartid
+									)
+			VALUES(
+					get_orderdetail_access_id('ISEQ$$_92317'), #{receiptKey}, #{item.productId}, #{item.ordQty}, 'V', #{item.cartId}
+				)
+		</foreach>
+	</insert>
+	
 	<select id="getBeforePoint" parameterType="long" resultType="PointDTO">
 		SELECT O.memberid memberid, O.receiptid receiptid, O.orderid orderid, FLOOR(O.price * (MI.pointpercent/100)) AS pointvalue
 		FROM orderview O JOIN membergradeINFO MI
@@ -169,4 +187,16 @@
 		DELETE FROM cart
 		WHERE cartid = #{cartId}
 	</delete>
+	
+	<update id="checkOrderDetail">
+		UPDATE orderdetail
+		SET orderstatus = 'N'
+		WHERE receiptid IN (
+		                    SELECT receiptid
+		                    FROM orderdetail
+		                    WHERE receiptid = (SELECT receiptid
+		                                        FROM receipt
+		                                        WHERE impuid = #{impUid})
+		                    )
+	</update>
 </mapper>
