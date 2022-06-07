@@ -58,16 +58,16 @@ public class MyPageController {
 	private CategoryService categoryService;
 	
 	@RequestMapping(value="", method=RequestMethod.GET)
-	public String getMainPage() throws Exception {
-		log.info("페이지 접근 테스트");
+	public String getMainPage(Principal principal, Model model) throws Exception {
+		MemberDTO memberDTO = memberService.getMember(principal.getName());
+		model.addAttribute("memberDTO", memberDTO);
 		return "mypage/main";
 	}
 	
 	@RequestMapping(value="/orderHistory", method=RequestMethod.GET)
-	public String getOrderHistory(Model model, Principal principal) throws Exception {
+	public String getOrderHistory(Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			List<ReceiptDTO> receiptHistory = service.getReceiptHistory(memberDTO.getId()); // 회원ID로 결제정보DTO를 모두 불러오기
 			for(ReceiptDTO dto : receiptHistory) {
@@ -75,6 +75,7 @@ public class MyPageController {
 			}
 			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("receiptHistory", receiptHistory);
+			model.addAttribute("memberDTO", memberDTO);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}
@@ -82,14 +83,16 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/orderHistory/{receiptId}", method=RequestMethod.GET)
-	public String getOrderDetail(@PathVariable("receiptId") long receiptId, Model model) throws Exception {
+	public String getOrderDetail(@PathVariable("receiptId") long receiptId, Principal principal, Model model) throws Exception {
 		try {
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			ReceiptDTO receiptDTO = service.getReceiptDetail(receiptId); // 결제상세 가져오기
 			long earnablePoint = service.getEarnablePoint(receiptId);
 			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("receiptDTO", receiptDTO);
 			model.addAttribute("earnablePoint", earnablePoint);
+			model.addAttribute("memberDTO", memberDTO);
 			log.info(receiptDTO);
 		} catch (Exception e) {
 			log.info(e.getMessage());
@@ -114,7 +117,7 @@ public class MyPageController {
 	public String getPointHistory(@PathVariable("type") String type, @RequestParam("page") long page,
 		@RequestParam(value="startDate", required=false) String startDate,
 		@RequestParam(value="endDate", required=false) String endDate,
-		Model model, Principal principal) throws Exception {
+		Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			
@@ -145,6 +148,7 @@ public class MyPageController {
 			model.addAttribute("pageCount", pageCount);
 			model.addAttribute("historyCount", historyCount);
 			model.addAttribute("contentPerPage", contentPerPage);
+			model.addAttribute("memberDTO", memberDTO);
 		} catch (Exception e) {
 			log.info(e.getMessage());
 		}
@@ -152,7 +156,7 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/couponHistory/{type}", method=RequestMethod.GET)
-	public String getCouponHistory(@PathVariable("type") String type, @RequestParam("page") long page, Model model, Principal principal) throws Exception {
+	public String getCouponHistory(@PathVariable("type") String type, @RequestParam("page") long page, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			
@@ -181,6 +185,7 @@ public class MyPageController {
 			model.addAttribute("pageCount", pageCount);
 			model.addAttribute("historyCount", couponCount);
 			model.addAttribute("contentPerPage", contentPerPage);
+			model.addAttribute("memberDTO", memberDTO);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}
@@ -188,7 +193,7 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/manageAddress", method=RequestMethod.GET)
-	public String getAddressList(Model model, Principal principal) throws Exception {
+	public String getAddressList(Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
@@ -200,6 +205,7 @@ public class MyPageController {
 			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("defaultAddress", defaultAddress);
 			model.addAttribute("addressList", addressList);
+			model.addAttribute("memberDTO", memberDTO);
 		} catch (Exception e) {
 			log.info(e.getMessage());
 		}
@@ -338,11 +344,13 @@ public class MyPageController {
 	
 	
 	@RequestMapping(value="/confirmPassword/{type}", method=RequestMethod.GET)
-	public String getConfirmForm(@PathVariable("type") String type, Model model) throws Exception {
+	public String getConfirmForm(@PathVariable("type") String type, Principal principal, Model model) throws Exception {
 		try {
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("type", type);
+			model.addAttribute("memberDTO", memberDTO);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}

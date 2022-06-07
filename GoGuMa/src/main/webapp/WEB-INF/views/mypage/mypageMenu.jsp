@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <style>
 	a:hover {
 		color: #FF493C;
@@ -7,7 +9,7 @@
 </style>
 <div class="col-3">
     <div class="col mb-4">
-        <h3><b>마이페이지</b></h3>
+        <h3><a href="${contextPath}/mypage/"><b>마이페이지</b></a></h3>
     </div>
     <div class="col mb-4">
         <div>

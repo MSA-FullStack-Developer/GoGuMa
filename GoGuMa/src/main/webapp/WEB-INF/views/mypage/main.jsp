@@ -42,7 +42,7 @@
 			<%@ include file="mypageMenu.jsp" %>
             <div class="col">
                 <div class="col">
-                    <h4><b>송진호님</b></h4>
+                    <h4><b>${memberDTO.name}님</b></h4>
                 </div>
                 <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-2">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
