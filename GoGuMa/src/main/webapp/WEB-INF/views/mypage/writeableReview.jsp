@@ -281,12 +281,14 @@
                     <div class="myReview-writeable">
 	                    <div style="width: 100%; margin-bottom: 10px;">
                		 		<div class="myReviewTop">
-	               		 		<a class="productlink" href="${contextPath}/category/1/${product.categoryID}/detail/${product.parentPID}">
-									<img class="myReviewImg" src="${product.prodimgurl}" alt="${product.prodimgurl}">
-		                            <span class="myReviewProduct" style="font-size: 14pt; font-weight: bold;">${product.productName}</span>
-		                            <br>
-		                            <span class="myReviewProduct">${product.optionName}</span>
-	               		 		</a>
+               		 			<div class="text-truncate" style="width: 370px;">
+		               		 		<a class="productlink" href="${contextPath}/category/1/${product.categoryID}/detail/${product.parentPID}">
+										<img class="myReviewImg" src="${product.prodimgurl}" alt="${product.prodimgurl}">
+			                            <span class="myReviewProduct" style="font-size: 14pt; font-weight: bold;">${product.productName}</span>
+			                            <br>
+			                            <span class="myReviewProduct">${product.optionName}</span>
+		               		 		</a>
+	               		 		</div>
 	               		 		<button class="show" id="show" data-productid="${product.productID}" data-imgurl="${product.prodimgurl}">작성</button>
                		 		</div>
                         </div>

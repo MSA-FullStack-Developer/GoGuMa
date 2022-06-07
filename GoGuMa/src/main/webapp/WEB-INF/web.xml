@@ -56,7 +56,6 @@
 			<max-file-size>41943040</max-file-size>
 			<max-request-size>83886080</max-request-size>
 			<file-size-threshold>20971520</file-size-threshold>
-
 		</multipart-config>
 		
 		<init-param>
