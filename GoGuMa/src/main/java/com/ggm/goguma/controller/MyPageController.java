@@ -116,6 +116,7 @@ public class MyPageController {
 		@RequestParam(value="endDate", required=false) String endDate,
 		Model model) throws Exception {
 		try {
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			// 특정 포인트 내역의 개수
 			long historyCount = service.getPointHistoryCount(121, type, startDate, endDate);
 			// 전체 페이지 개수 = 전체 페이지 개수 / 한 페이지에 보여지는 내역의 수
@@ -130,7 +131,8 @@ public class MyPageController {
 			// 마지막 페이지 개수가 전체 페이지 개수보다 많은 경우, 마지막 페이지를 전체 페이지 개수로 맞춰준다.
 			if(endPage > pageCount) endPage = pageCount;
 			
-			List<PointDTO> pointHistory = service.getPointHistory(1, type, page, startDate, endDate);
+			List<PointDTO> pointHistory = service.getPointHistory(121, type, page, startDate, endDate);
+			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("pointHistory", pointHistory);
 			model.addAttribute("type", type);
 			model.addAttribute("page", page);
@@ -150,8 +152,9 @@ public class MyPageController {
 	@RequestMapping(value="/couponHistory/{type}", method=RequestMethod.GET)
 	public String getCouponHistory(@PathVariable("type") String type, @RequestParam("page") long page, Model model) throws Exception {
 		try {
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			// 특정 쿠폰의 개수
-			long couponCount = service.getCouponCount(1, type);
+			long couponCount = service.getCouponCount(121, type);
 			// 전체 페이지 개수 = 전체 페이지 개수 / 한 페이지에 보여지는 내역의 수
 			long pageCount = couponCount / contentPerPage;
 			// 예를 들어, 내역이 101개인 경우, 11개의 페이지가 필요하므로 총 페이지 개수를 증가시켜준다.
@@ -165,6 +168,7 @@ public class MyPageController {
 			if(endPage > pageCount) endPage = pageCount;
 			
 			List<CouponDTO> couponList = service.getCouponHistory(121, type, page);
+			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("couponList", couponList);
 			model.addAttribute("type", type);
 			model.addAttribute("page", page);
@@ -338,6 +342,9 @@ public class MyPageController {
 	@RequestMapping(value="/confirmPassword/{type}", method=RequestMethod.GET)
 	public String getConfirmForm(@PathVariable("type") String type, Model model) throws Exception {
 		try {
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+			model.addAttribute("parentCategory", parentCategory);
+			
 			log.info("비밀번호확인 페이지");
 			model.addAttribute("type", type);
 		} catch(Exception e) {
@@ -359,13 +366,19 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/changeInfo", method=RequestMethod.GET)
-	public String getInfoChangeForm() throws Exception {
+	public String getInfoChangeForm(Model model) throws Exception {
+		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+		model.addAttribute("parentCategory", parentCategory);
+		
 		log.info("회원정보변경 페이지");
 		return "mypage/changeInfo";
 	}
 	
 	@RequestMapping(value="/changePassword", method=RequestMethod.GET)
-	public String getPasswordChangeForm() throws Exception {
+	public String getPasswordChangeForm(Model model) throws Exception {
+		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+		model.addAttribute("parentCategory", parentCategory);
+		
 		log.info("비밀번호변경 페이지");
 		return "mypage/changePassword";
 	}
