@@ -22,4 +22,7 @@ public interface ReviewService {
 
 	// 작성 가능한 상품평
 	List<ProductDTO> getWriteableReview(long memberID) throws Exception;
+
+	// 상품평 수정
+	void updateReview(ReviewDTO reviewDTO) throws Exception;
 }

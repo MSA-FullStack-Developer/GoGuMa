@@ -251,4 +251,39 @@ public class ProductController {
 		return new ResponseEntity<String>("deleted",HttpStatus.OK);
 	}
 	
+	
+	// 상품평 이미지 불러오기
+	@GetMapping(value="getAttachList", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<ImageAttachDTO>> getAttachList(long reviewID) throws Exception {
+		List<ImageAttachDTO> attachList = attachService.attachListByReviewID(reviewID);
+		log.info(attachList);
+		
+		return new ResponseEntity<>(attachList, HttpStatus.OK);
+	}
+	
+	// 상품평 수정하기
+	@ResponseBody
+	@PostMapping(value="/update", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public String updateBoard(@RequestBody ReviewDTO reviewDTO, Authentication authentication) throws Exception {
+		try {
+			if (authentication != null) {
+				log.info("상품평 이미지 목록 : " + reviewDTO.getAttachList());
+				
+				if (reviewDTO.getAttachList() != null) {
+					reviewDTO.getAttachList().forEach(attach -> log.info(attach));
+				}
+				
+				reviewService.updateReview(reviewDTO);
+				
+				return "1";
+			}
+			
+			return "2";
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
 }
