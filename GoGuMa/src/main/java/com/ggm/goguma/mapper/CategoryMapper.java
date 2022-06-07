@@ -2,6 +2,8 @@ package com.ggm.goguma.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.ggm.goguma.dto.CategoryDTO;
 
 public interface CategoryMapper {
@@ -16,4 +18,10 @@ public interface CategoryMapper {
 	 * 작업일 : 22.05.25
 	 * */
 	public List<CategoryDTO> findCategoryByMd();
+	
+	/* *
+	 * 작성자 : 이승준
+	 * 작업일 : 22.06.03
+	 * */
+	public CategoryDTO findCategoryById(@Param("id") long categoryId);
 }

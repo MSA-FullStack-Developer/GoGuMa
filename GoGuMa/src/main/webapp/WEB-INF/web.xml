@@ -53,15 +53,26 @@
 		<load-on-startup>1</load-on-startup>
 		
 		<multipart-config>
-			<max-file-size>20971520</max-file-size>
-			<max-request-size>41943040</max-request-size>
-			<file-size-threshold>10971520</file-size-threshold>
+
+
+			<location>/Users/tmdwns/Documents/file_repo/goguma</location>
+			<max-file-size>41943040</max-file-size>
+			<max-request-size>83886080</max-request-size>
+			<file-size-threshold>20971520</file-size-threshold>
+
 		</multipart-config>
+		
+		<init-param>
+			<param-name>throwExceptionIfNoHandlerFound</param-name>
+			<param-value>true</param-value>
+		</init-param>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	
+
 
 </web-app>
