@@ -132,7 +132,8 @@ public class MarketController {
 			return "market/searchMyProduct";
 		}
 
-		String email = "msh1273@gmail.com"; // only for test!!
+		//String email = "msh1273@gmail.com"; // only for test!!
+		String email = principal.getName();
 
 		MemberDTO member = this.memberService.getMember(email);
 		List<ArticleProudctDTO> result = this.marketService.getArticleProducts(keyword, member.getId());
