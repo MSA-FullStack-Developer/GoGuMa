@@ -133,7 +133,7 @@
                     <div class="myReview">
 	                    <div style="width: 100%; margin-bottom: 10px;">
 	               		 		<div class="myReviewTop">
-		               		 		<a href="${contextPath}/category/1/${review.categoryID}/detail/${review.productID}">
+		               		 		<a class="productlink" href="${contextPath}/category/1/${review.categoryID}/detail/${review.productID}">
 		               		 			<input type="hidden" id="reviewID" name="${review.reviewID}" value="${review.reviewID}">
 										<img class="myReviewImg" src="${review.prodThumbNail}" alt="${review.prodThumbNail}">
 			                            <span class="myReviewProduct" style="font-size: 14pt; font-weight: bold;">${review.productName}</span><br>

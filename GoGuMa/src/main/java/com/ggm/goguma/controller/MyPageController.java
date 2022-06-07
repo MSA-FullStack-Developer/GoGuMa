@@ -1,5 +1,6 @@
 package com.ggm.goguma.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,10 +67,12 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/orderHistory", method=RequestMethod.GET)
-	public String getOrderHistory(Model model) throws Exception {
+	public String getOrderHistory(Model model, Principal principal) throws Exception {
 		try {
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-			List<ReceiptDTO> receiptHistory = service.getReceiptHistory(121); // 회원ID로 결제정보DTO를 모두 불러오기
+			List<ReceiptDTO> receiptHistory = service.getReceiptHistory(memberDTO.getId()); // 회원ID로 결제정보DTO를 모두 불러오기
 			for(ReceiptDTO dto : receiptHistory) {
 				log.info(dto);
 			}
@@ -114,10 +117,13 @@ public class MyPageController {
 	public String getPointHistory(@PathVariable("type") String type, @RequestParam("page") long page,
 		@RequestParam(value="startDate", required=false) String startDate,
 		@RequestParam(value="endDate", required=false) String endDate,
-		Model model) throws Exception {
+		Model model, Principal principal) throws Exception {
 		try {
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			// 특정 포인트 내역의 개수
-			long historyCount = service.getPointHistoryCount(121, type, startDate, endDate);
+			long historyCount = service.getPointHistoryCount(memberDTO.getId(), type, startDate, endDate);
 			// 전체 페이지 개수 = 전체 페이지 개수 / 한 페이지에 보여지는 내역의 수
 			long pageCount = historyCount / contentPerPage;
 			// 예를 들어, 내역이 101개인 경우, 11개의 페이지가 필요하므로 총 페이지 개수를 증가시켜준다.
@@ -130,7 +136,8 @@ public class MyPageController {
 			// 마지막 페이지 개수가 전체 페이지 개수보다 많은 경우, 마지막 페이지를 전체 페이지 개수로 맞춰준다.
 			if(endPage > pageCount) endPage = pageCount;
 			
-			List<PointDTO> pointHistory = service.getPointHistory(1, type, page, startDate, endDate);
+			List<PointDTO> pointHistory = service.getPointHistory(memberDTO.getId(), type, page, startDate, endDate);
+			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("pointHistory", pointHistory);
 			model.addAttribute("type", type);
 			model.addAttribute("page", page);
@@ -148,10 +155,13 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/couponHistory/{type}", method=RequestMethod.GET)
-	public String getCouponHistory(@PathVariable("type") String type, @RequestParam("page") long page, Model model) throws Exception {
+	public String getCouponHistory(@PathVariable("type") String type, @RequestParam("page") long page, Model model, Principal principal) throws Exception {
 		try {
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			// 특정 쿠폰의 개수
-			long couponCount = service.getCouponCount(1, type);
+			long couponCount = service.getCouponCount(memberDTO.getId(), type);
 			// 전체 페이지 개수 = 전체 페이지 개수 / 한 페이지에 보여지는 내역의 수
 			long pageCount = couponCount / contentPerPage;
 			// 예를 들어, 내역이 101개인 경우, 11개의 페이지가 필요하므로 총 페이지 개수를 증가시켜준다.
@@ -164,7 +174,8 @@ public class MyPageController {
 			// 마지막 페이지 개수가 전체 페이지 개수보다 많은 경우, 마지막 페이지를 전체 페이지 개수로 맞춰준다.
 			if(endPage > pageCount) endPage = pageCount;
 			
-			List<CouponDTO> couponList = service.getCouponHistory(121, type, page);
+			List<CouponDTO> couponList = service.getCouponHistory(memberDTO.getId(), type, page);
+			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("couponList", couponList);
 			model.addAttribute("type", type);
 			model.addAttribute("page", page);
@@ -180,12 +191,12 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/manageAddress", method=RequestMethod.GET)
-	public String getAddressList(Model model) throws Exception {
+	public String getAddressList(Model model, Principal principal) throws Exception {
 		try {
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-			DeliveryAddressDTO defaultAddress = service.getDefaultAddress(121);
-			log.info(defaultAddress);
-			List<DeliveryAddressDTO> addressList = service.getAddressList(121);
+			DeliveryAddressDTO defaultAddress = service.getDefaultAddress(memberDTO.getId());
+			List<DeliveryAddressDTO> addressList = service.getAddressList(memberDTO.getId());
 			for(DeliveryAddressDTO dto : addressList) {
 				log.info(dto);
 			}
@@ -200,10 +211,10 @@ public class MyPageController {
 	
 	@ResponseBody
 	@RequestMapping(value="/manageAddress/addAddress", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String addAddress(@RequestBody DeliveryAddressDTO dto) throws Exception {
+	public String addAddress(@RequestBody DeliveryAddressDTO dto, Principal principal) throws Exception {
 		try {
-			log.info(dto);
-			dto.setMemberId(121);
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			dto.setMemberId(memberDTO.getId());
 			service.addAddress(dto);
 		} catch(Exception e) {
 			log.info(e.getMessage());
@@ -214,10 +225,10 @@ public class MyPageController {
 	
 	@ResponseBody
 	@RequestMapping(value="/manageAddress/updateAddress", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String updateAddress(@RequestBody DeliveryAddressDTO dto) throws Exception {
+	public String updateAddress(@RequestBody DeliveryAddressDTO dto, Principal principal) throws Exception {
 		try {
-			log.info("테스트 : " +dto);
-			dto.setMemberId(121);
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			dto.setMemberId(memberDTO.getId());
 			service.updateAddress(dto);
 		} catch (Exception e) {
 			return "2";
@@ -227,11 +238,11 @@ public class MyPageController {
 	
 	@ResponseBody
 	@RequestMapping(value="/manageAddress/deleteAddress", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String deleteAddress(@RequestBody List<Integer> list) throws Exception {
+	public String deleteAddress(@RequestBody List<Integer> list, Principal principal) throws Exception {
 		try {
-			log.info(list);
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			for(long addressId : list) {
-				service.deleteAddress(121, addressId);
+				service.deleteAddress(memberDTO.getId(), addressId);
 			}
 		} catch (Exception e) {
 			log.info(e.getMessage());
@@ -242,10 +253,10 @@ public class MyPageController {
 	
 	@ResponseBody
 	@RequestMapping(value="/manageAddress/setDefault", method=RequestMethod.POST)
-	public String setDefault(@RequestParam long addressId) throws Exception {
+	public String setDefault(@RequestParam long addressId, Principal principal) throws Exception {
 		try {
-			log.info(addressId);
-			service.setDefault(121, addressId);
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			service.setDefault(memberDTO.getId(), addressId);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 			return "2";
@@ -255,10 +266,10 @@ public class MyPageController {
 	
 	@ResponseBody
 	@RequestMapping(value="/manageAddress/cancelDefault", method=RequestMethod.POST)
-	public String cancelDefault(@RequestParam long addressId) throws Exception {
+	public String cancelDefault(@RequestParam long addressId, Principal principal) throws Exception {
 		try {
-			log.info(addressId);
-			service.cancelDefault(121);			
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			service.cancelDefault(memberDTO.getId());			
 		} catch(Exception e) {
 			log.info(e.getMessage());
 			return "2";
@@ -272,33 +283,30 @@ public class MyPageController {
 	 * */
 	// 내가 작성한 상품평
 	@RequestMapping(value="/myReview", method=RequestMethod.GET)
-	public String getMyReview(Model model, Authentication authentication) throws Exception {
+	public String getMyReview(Model model, Principal principal) throws Exception {
 		try {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
-			if (authentication != null) {
-				UserDetails user = (UserDetails) authentication.getPrincipal();
-				MemberDTO memberDTO = memberService.getMember(user.getUsername());
-				model.addAttribute("memberDTO", memberDTO);
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			model.addAttribute("memberDTO", memberDTO);
+			
+			// 로그인한 회원 아이디로 내가 작성한 상품평 불러오기
+			List<ReviewDTO> reviewList = reviewService.getMyReviewList(memberDTO.getId());
+			log.info(reviewList);
+			
+			// 상품평 이미지 불러오기
+			reviewList.forEach(review -> {
+				try {
+					List<ImageAttachDTO> attachList = attachService.attachListByReviewID(review.getReviewID());
+					review.setAttachList(attachList);
+					review.setCategoryID(review.getCategoryID()); // 카테고리 번호
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
 				
-				// 로그인한 회원 아이디로 내가 작성한 상품평 불러오기
-				List<ReviewDTO> reviewList = reviewService.getMyReviewList(memberDTO.getId());
-				log.info(reviewList);
-				
-				// 상품평 이미지 불러오기
-				reviewList.forEach(review -> {
-					try {
-						List<ImageAttachDTO> attachList = attachService.attachListByReviewID(review.getReviewID());
-						review.setAttachList(attachList);
-						review.setCategoryID(review.getCategoryID()); // 카테고리 번호
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				});
-				
-				model.addAttribute("reviewList", reviewList);
-			}
+			model.addAttribute("reviewList", reviewList);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}
@@ -311,23 +319,20 @@ public class MyPageController {
 	 * */
 	// 작성 가능한 상품평
 	@RequestMapping(value="/writeableReview", method=RequestMethod.GET)
-	public String getWriteableReview(Model model, Authentication authentication) throws Exception {
+	public String getWriteableReview(Model model, Principal principal) throws Exception {
 		try {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
-			if (authentication != null) {
-				UserDetails user = (UserDetails) authentication.getPrincipal();
-				MemberDTO memberDTO = memberService.getMember(user.getUsername());
-				model.addAttribute("memberDTO", memberDTO);
-				
-				// 작성 가능한 상품평 목록 불러오기
-				List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
-				long writeableCount = writeableList.size();
-				
-				model.addAttribute("writeableList", writeableList);
-				model.addAttribute("writeableCount", writeableCount);
-			}
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			model.addAttribute("memberDTO", memberDTO);
+			
+			// 작성 가능한 상품평 목록 불러오기
+			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
+			long writeableCount = writeableList.size();
+			
+			model.addAttribute("writeableList", writeableList);
+			model.addAttribute("writeableCount", writeableCount);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}
@@ -338,6 +343,9 @@ public class MyPageController {
 	@RequestMapping(value="/confirmPassword/{type}", method=RequestMethod.GET)
 	public String getConfirmForm(@PathVariable("type") String type, Model model) throws Exception {
 		try {
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+			model.addAttribute("parentCategory", parentCategory);
+			
 			log.info("비밀번호확인 페이지");
 			model.addAttribute("type", type);
 		} catch(Exception e) {
@@ -348,9 +356,10 @@ public class MyPageController {
 	
 	@ResponseBody
 	@RequestMapping(value="/confirmPassword/{type}", method=RequestMethod.POST)
-	public String confirmPassword(@PathVariable("type") String type, @RequestParam("userPassword") String userPassword) throws Exception {
+	public String confirmPassword(@PathVariable("type") String type, @RequestParam("userPassword") String userPassword, Principal principal) throws Exception {
 		try {
-			if(service.confirmPassword(121, userPassword)) return "1";
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			if(service.confirmPassword(memberDTO.getId(), userPassword)) return "1";
 			return "2";
 		} catch(Exception e) {
 			log.info(e.getMessage());
@@ -359,22 +368,29 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/changeInfo", method=RequestMethod.GET)
-	public String getInfoChangeForm() throws Exception {
+	public String getInfoChangeForm(Model model) throws Exception {
+		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+		model.addAttribute("parentCategory", parentCategory);
+		
 		log.info("회원정보변경 페이지");
 		return "mypage/changeInfo";
 	}
 	
 	@RequestMapping(value="/changePassword", method=RequestMethod.GET)
-	public String getPasswordChangeForm() throws Exception {
+	public String getPasswordChangeForm(Model model) throws Exception {
+		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+		model.addAttribute("parentCategory", parentCategory);
+		
 		log.info("비밀번호변경 페이지");
 		return "mypage/changePassword";
 	}
 	
 	@ResponseBody
 	@RequestMapping(value="/changePassword", method=RequestMethod.POST)
-	public String changePassword(@RequestParam("curPassword") String curPassword, @RequestParam("newPassword") String newPassword) throws Exception {
+	public String changePassword(@RequestParam("curPassword") String curPassword, @RequestParam("newPassword") String newPassword, Principal principal) throws Exception {
 		try {
-			if(service.changePassword(121, curPassword, newPassword)) return "1";
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			if(service.changePassword(memberDTO.getId(), curPassword, newPassword)) return "1";
 			return "2";
 		} catch(Exception e) {
 			log.info(e.getMessage());

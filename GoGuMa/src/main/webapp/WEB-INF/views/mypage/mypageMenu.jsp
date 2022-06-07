@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<style>
+	a:hover {
+		color: #FF493C;
+	}
+</style>
 <div class="col-3">
     <div class="col mb-4">
         <h3><b>마이페이지</b></h3>

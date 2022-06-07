@@ -7,7 +7,7 @@
 <meta name="_csrf_header" content="${_csrf.headerName}">
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.js"></script>
 <head>
     <title>Product</title>
     

@@ -23,7 +23,7 @@
         a:visited {
             color: black;
         }
-	    img {
+	    .mainImg {
 	        width: 70%;
 	        height: 70%;
 	        margin-top: 15%;
@@ -92,7 +92,7 @@
                 <div class="d-flex flex-row mb-2">
                     <div class="bundle">
                         <div class="d-flex flex-column align-items-center border rounded">
-                            <img src="resources\img\아몬드세트.jpg">
+                            <img class="mainImg" src="resources\img\아몬드세트.jpg">
                         </div>
                         <div class="d-flex flex-column align-items-center">
                             허니버터아몬드 허니버터아몬드 허니버터아몬드
@@ -100,7 +100,7 @@
                     </div>
                     <div class="bundle">
                         <div class="d-flex flex-column align-items-center border rounded">
-                            <img src="resources\img\아몬드세트.jpg">
+                            <img class="mainImg" src="resources\img\아몬드세트.jpg">
                         </div>
                         <div class="d-flex flex-column align-items-center">
                             허니버터아몬드 허니버터아몬드 허니버터아몬드
@@ -113,7 +113,7 @@
                 <div class="d-flex flex-row mb-2">
                     <div class="bundle">
                         <div class="d-flex flex-column align-items-center border rounded">
-                            <img src="resources\img\핫브레이크미니.jpg">
+                            <img class="mainImg" src="resources\img\핫브레이크미니.jpg">
                         </div>
                         <div class="d-flex flex-column align-items-center">
                             핫 브레이크 핫 브레이크 핫 브레이크 핫 브레이크
@@ -121,7 +121,7 @@
                     </div>
                     <div class="bundle">
                         <div class="d-flex flex-column align-items-center border rounded">
-                            <img src="resources\img\핫브레이크미니.jpg">
+                            <img class="mainImg" src="resources\img\핫브레이크미니.jpg">
                         </div>
                         <div class="d-flex flex-column align-items-center">
                             핫 브레이크 핫 브레이크 핫 브레이크 핫 브레이크

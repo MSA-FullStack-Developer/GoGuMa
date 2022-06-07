@@ -24,12 +24,6 @@
         a:visited {
             color: black;
         }
-        img {
-            width: 70%;
-            height: 70%;
-            margin-top: 15%;
-            margin-bottom: 15%;
-        }
         table tbody tr {
             line-height: 2rem;
         }

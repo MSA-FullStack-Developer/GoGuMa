@@ -26,10 +26,6 @@
         a:visited {
             color: black;
         }
-        img {
-            width: 100%;
-            height: 100%;
-        }
         table {
             table-layout: fixed;
         }
