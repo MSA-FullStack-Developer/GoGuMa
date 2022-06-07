@@ -36,4 +36,19 @@
 			parentid IS NULL AND categorytype = 'M' AND md = 1
 	</select>
 	
+	<!--  
+		작성자 : 이승준
+		작업일 : 22.06.03
+	
+		categoryId 로 category 정보 조회
+	-->
+	<select id="findCategoryById" resultType="com.ggm.goguma.dto.CategoryDTO">
+		SELECT 
+			*
+		FROM
+			category
+		WHERE
+			categoryId = #{id}
+	</select>
+	
 </mapper>

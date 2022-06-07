@@ -49,6 +49,10 @@
 	    	$('.total_price').text(optionPrice.format() + "원"); // 초기화
 	    }
 	    
+	    $(window).bind("pageshow", function (event) {
+	    	$('#option option:eq(0)').attr('selected', 'selected');
+	    });
+	    
         $(document).ready(function () {
         	$('.option-img').click(function() {
         		var src = $(this).data("src");
@@ -69,7 +73,7 @@
 	                if(plusNum > stock) { // 남은 재고를 넘은 경우
 	                	$("#numBox").val(num);
 	                	$('.total_price').text((optionPrice * num).format() + "원");
-	                	alert("더이상 구매하실 수 업습니다.");
+	                	alert("더이상 구매하실 수 없습니다.");
 	                } else {
 	                	$("#numBox").val(plusNum);        
 	                	$('.total_price').text((optionPrice * plusNum).format() + "원");

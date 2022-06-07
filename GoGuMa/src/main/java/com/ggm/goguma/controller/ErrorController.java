@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequestMapping("/error")
 public class ErrorController {
 
-	@GetMapping("/error404")
+	@GetMapping("/error404.do")
 	@ResponseStatus(code = HttpStatus.NOT_FOUND)
 	public String errorNotFoundPage() {
 		
@@ -18,10 +18,18 @@ public class ErrorController {
 	}
 	
 	
-//	@GetMapping("/error500")
-//	@ResponseStatus(code = HttpStatus)
-//	public String errorAccessDenied() {
-//		
-//		return "error/error403";
-//	}
+	@GetMapping("/error500.do")
+	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+	public String errorServerError() {
+	
+		return "error/error500";
+	}
+	
+	@GetMapping("/error403.do")
+	@ResponseStatus(code = HttpStatus.FORBIDDEN)
+	public String errorAccessDenied() {
+		
+		return "error/error404";
+	}
+	
 }

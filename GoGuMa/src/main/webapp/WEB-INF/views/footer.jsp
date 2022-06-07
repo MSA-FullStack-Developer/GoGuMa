@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-  <footer class="w-100 border-top mt-5" style="min-width: 1320px;">
+
+  <footer class="w-100 mt-5" style="min-width: 1400px;">
 
         <!-- 회사 링크 영역 -->
         <section class="w-100 border-secondary">
@@ -65,6 +66,7 @@
         </section>  <!-- 회사 링크 영역 -->
 
         <section class="w-100 bg-secondary">
+
             <div class="row pt-4 pb-4" style="width: 1320px; margin: 0 auto;">
                 <div class="col-1">
                     <img src="https://image.hmall.com/p/img/co/footer-logo.jpg" width=auto height=auto alt="현대백화점 로고"/>

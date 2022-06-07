@@ -25,6 +25,10 @@
 
     <!-- bootstrap icon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+    
+    <style>
+    	<%@ include file="/resources/css/bootstrap-custom.css" %>
+    </style>
 </head>
 
 <body>
@@ -175,75 +179,127 @@
             <!-- 상품 리스트 화면 -->
             <div class="w-100 mt-4">
                 <div id="list-products" class="d-flex justify-content-between align-content-between flex-wrap">
+                	<div class="card mt-3" aria-hidden="true" style="width: 18rem;">
+						<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" fill="currentColor" class="bi bi-file-earmark-image" viewBox="0 0 16 16">
+	  						<path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+	 						<path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z"/>
+						</svg>
+					  	<div class="card-body">
+					  		<div class="h5 card-title placeholder-glow">
+					  			<span class="placeholder col-8"></span>
+					  		</div>
+						    <p class="card-text placeholder-glow">
+						      <span class="placeholder col-6"></span>
+						    </p>
+				  		</div>
+				
+					</div>
                    
-                        <div class="card mt-3" style="width: 18rem;">
-                         <a href="https://www.hmall.com/p/pda/itemPtc.do?sectId=2731163&slitmCd=2010286604"
-                        class="text-decoration-none text-dark">
-                            <img src="https://image.hmall.com/static/6/6/28/10/2010286604_0.jpg?RS=400x400&AR=0"
-                                class="card-img-top" alt="...">
-                                 </a>
-                            <div class="card-body">
-                                <p class="card-text">조 말론 다크 앰버 진저 릴리 콜롱 인텐스 스프레이 (원래 박스 없음)100ml/3.4oz</p>
-                                <strong>315,301</strong>원
-                            </div>
-                        </div>
-                   
-                    <div class="card mt-3" style="width: 18rem;">
-                        <img src="https://image.hmall.com/static/6/6/28/10/2010286604_0.jpg?RS=400x400&AR=0"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">조 말론 다크 앰버 진저 릴리 콜롱 인텐스 스프레이 (원래 박스 없음)100ml/3.4oz</p>
-                            <strong>315,301</strong>원
-                        </div>
-                    </div>
-                    <div class="card mt-3" style="width: 18rem;">
-                        <img src="https://image.hmall.com/static/6/6/28/10/2010286604_0.jpg?RS=400x400&AR=0"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">조 말론 다크 앰버 진저 릴리 콜롱 인텐스 스프레이 (원래 박스 없음)100ml/3.4oz</p>
-                            <strong>315,301</strong>원
-                        </div>
-                    </div>
-                    <div class="card mt-3" style="width: 18rem;">
-                        <img src="https://image.hmall.com/static/6/6/28/10/2010286604_0.jpg?RS=400x400&AR=0"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">조 말론 다크 앰버 진저 릴리 콜롱 인텐스 스프레이 (원래 박스 없음)100ml/3.4oz</p>
-                            <strong>315,301</strong>원
-                        </div>
-                    </div>
-                    <div class="card mt-3" style="width: 18rem;">
-                        <img src="https://image.hmall.com/static/6/6/28/10/2010286604_0.jpg?RS=400x400&AR=0"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">조 말론 다크 앰버 진저 릴리 콜롱 인텐스 스프레이 (원래 박스 없음)100ml/3.4oz</p>
-                            <strong>315,301</strong>원
-                        </div>
-                    </div>
-                    <div class="card mt-3" style="width: 18rem;">
-                        <img src="https://image.hmall.com/static/6/6/28/10/2010286604_0.jpg?RS=400x400&AR=0"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">조 말론 다크 앰버 진저 릴리 콜롱 인텐스 스프레이 (원래 박스 없음)100ml/3.4oz</p>
-                            <strong>315,301</strong>원
-                        </div>
-                    </div>
-                    <div class="card mt-3" style="width: 18rem;">
-                        <img src="https://image.hmall.com/static/6/6/28/10/2010286604_0.jpg?RS=400x400&AR=0"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">조 말론 다크 앰버 진저 릴리 콜롱 인텐스 스프레이 (원래 박스 없음)100ml/3.4oz</p>
-                            <strong>315,301</strong>원
-                        </div>
-                    </div>
-                    <div class="card mt-3" style="width: 18rem;">
-                        <img src="https://image.hmall.com/static/6/6/28/10/2010286604_0.jpg?RS=400x400&AR=0"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text">조 말론 다크 앰버 진저 릴리 콜롱 인텐스 스프레이 (원래 박스 없음)100ml/3.4oz</p>
-                            <strong>315,301</strong>원
-                        </div>
-                    </div>
+                    <div class="card mt-3" aria-hidden="true">
+						<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" fill="currentColor" class="bi bi-file-earmark-image" viewBox="0 0 16 16">
+	  						<path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+	 						<path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z"/>
+						</svg>
+					  	<div class="card-body">
+					  		<div class="h5 card-title placeholder-glow">
+					  			<span class="placeholder col-8"></span>
+					  		</div>
+						    <p class="card-text placeholder-glow">
+						      <span class="placeholder col-6"></span>
+						    </p>
+				  		</div>
+				
+					</div>
+					<div class="card mt-3" aria-hidden="true">
+						<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" fill="currentColor" class="bi bi-file-earmark-image" viewBox="0 0 16 16">
+	  						<path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+	 						<path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z"/>
+						</svg>
+					  	<div class="card-body">
+					  		<div class="h5 card-title placeholder-glow">
+					  			<span class="placeholder col-8"></span>
+					  		</div>
+						    <p class="card-text placeholder-glow">
+						      <span class="placeholder col-6"></span>
+						    </p>
+				  		</div>
+				
+					</div>
+					<div class="card mt-3" aria-hidden="true">
+						<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" fill="currentColor" class="bi bi-file-earmark-image" viewBox="0 0 16 16">
+	  						<path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+	 						<path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z"/>
+						</svg>
+					  	<div class="card-body">
+					  		<div class="h5 card-title placeholder-glow">
+					  			<span class="placeholder col-8"></span>
+					  		</div>
+						    <p class="card-text placeholder-glow">
+						      <span class="placeholder col-6"></span>
+						    </p>
+				  		</div>
+				
+					</div>
+					<div class="card mt-3" aria-hidden="true">
+						<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" fill="currentColor" class="bi bi-file-earmark-image" viewBox="0 0 16 16">
+	  						<path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+	 						<path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z"/>
+						</svg>
+					  	<div class="card-body mt-3">
+					  		<div class="h5 card-title placeholder-glow">
+					  			<span class="placeholder col-8"></span>
+					  		</div>
+						    <p class="card-text placeholder-glow">
+						      <span class="placeholder col-6"></span>
+						    </p>
+				  		</div>
+				
+					</div>
+					<div class="card mt-3" aria-hidden="true">
+						<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" fill="currentColor" class="bi bi-file-earmark-image" viewBox="0 0 16 16">
+	  						<path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+	 						<path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z"/>
+						</svg>
+					  	<div class="card-body">
+					  		<div class="h5 card-title placeholder-glow">
+					  			<span class="placeholder col-8"></span>
+					  		</div>
+						    <p class="card-text placeholder-glow">
+						      <span class="placeholder col-6"></span>
+						    </p>
+				  		</div>
+				
+					</div>
+					<div class="card mt-3" aria-hidden="true">
+						<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" fill="currentColor" class="bi bi-file-earmark-image" viewBox="0 0 16 16">
+	  						<path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+	 						<path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z"/>
+						</svg>
+					  	<div class="card-body">
+					  		<div class="h5 card-title placeholder-glow">
+					  			<span class="placeholder col-8"></span>
+					  		</div>
+						    <p class="card-text placeholder-glow">
+						      <span class="placeholder col-6"></span>
+						    </p>
+				  		</div>
+				
+					</div>
+					<div class="card mt-3" aria-hidden="true">
+						<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" fill="currentColor" class="bi bi-file-earmark-image" viewBox="0 0 16 16">
+	  						<path d="M6.502 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+	 						<path d="M14 14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5V14zM4 1a1 1 0 0 0-1 1v10l2.224-2.224a.5.5 0 0 1 .61-.075L8 11l2.157-3.02a.5.5 0 0 1 .76-.063L13 10V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4z"/>
+						</svg>
+					  	<div class="card-body">
+					  		<div class="h5 card-title placeholder-glow">
+					  			<span class="placeholder col-8"></span>
+					  		</div>
+						    <p class="card-text placeholder-glow">
+						      <span class="placeholder col-6"></span>
+						    </p>
+				  		</div>
+				
+					</div>
                 </div>
             </div> <!-- 상품 리스트 화면 끝  -->
         </section>
