@@ -163,7 +163,17 @@
       $('#myModal').modal('hide');
       alert("배송지가 적용되었습니다.");
     });
-    
+    // 결제 버튼 클릭시
+    $('#pay-onclick').click(function(){
+      var radioVal = $('input[name="card-type"]:checked').val();
+      if(radioVal == "nobank"){
+        console.log("무통장");
+        nobankbookiamport();
+      }else{
+        console.log("카드결제");
+        iamport(radioVal);
+      }
+    });
     $("#g-point").on("input propertychange paste", function(){
     	var point = parseInt($('#g-point').val());
     	var limitpoint = Number($('#member-point').val());
@@ -202,11 +212,8 @@
   });
   
 	//카드 결제
-	function iamport(){
-	  	//선택한 라디오 버튼에 따른 pg 선택
-	  	var radioVal = $('input[name="card-type"]:checked').val();
+	function iamport(radioVal){
 		//가맹점 식별코드
-		console.log(radioVal);
 		IMP.init('imp37623879');
 		IMP.request_pay({
 		    pg : radioVal,
@@ -238,9 +245,9 @@
 		          	console.log(rsp);
 		          	console.log(data);
 		        	paytransaction (data.response.impUid);
+		        	console.log("uid로그 : " + $('#ipUid').val());
 		        	console.log("다시 진행중");
 		        	$('#ipUid').val(data.response.impUid);
-		        	console.log("uid로그 : " + $('#ipUid').val());
 		        	$('#finOrder').submit();
 	        	} else {
 	        		alert("결제 실패");
@@ -253,10 +260,9 @@
 	//무통장 입금
 	function nobankbookiamport(){
 	//가맹점 식별코드
-	console.log(radioVal);
 	IMP.init('imp37623879');
 	IMP.request_pay({
-	    pg : html5_inicis,
+	    pg : 'html5_inicis',
 	    pay_method : 'vbank',
 	    merchant_uid : 'merchant_' + new Date().getTime(),
 	    name : $('.pProductName').text(), //결제창에서 보여질 이름
@@ -267,36 +273,43 @@
 	    buyer_addr : $('#addressName').text(),
 	    buyer_postcode : '123-456',
 	}, function(rsp) {
-		  console.log("결제 완료 후 로그 : " + rsp);
+	  	console.log("결제 완료 후 로그 : ");
+		  console.log(rsp);
 	      //아임포트 검증절차
 	      var token = $("meta[name='_csrf']").attr("content");
 		  var header = $("meta[name='_csrf_header']").attr("content");
-		  
-	      $.ajax({
+	      if(rsp.pay_method == "vbank"){
+	        $('#ipUid').val(rsp.imp_uid);
+        	$('#finOrder').submit();
+	      }
+	      /* $.ajax({
 	        type: "POST",
-	        url: "${contextPath}/order/api/verifyIamport/" + rsp.imp_uid,
+	        url: "${contextPath}/order/api/nobankcomplete",
 	        beforeSend : function(xhr) {
 						xhr.setRequestHeader(header,token);
 					}
 	      }).done(function(data){
-	        console.log("done Data : " + data);
-	        if(rsp.paid_amount == data.response.amount){
-	         	console.log("결제 및 결제검증완료");
-	          	console.log(rsp);
-	          	console.log(data);
-	        	paytransaction (data.response.impUid);
-	        	console.log("다시 진행중");
-	        	$('#ipUid').val(data.response.impUid);
-	        	console.log("uid로그 : " + $('#ipUid').val());
-	        	$('#finOrder').submit();
-        	} else {
-        		alert("결제 실패");
-        		//임의로 금액이 변경되었기 때문에 전체 환불처리 되어야함
-        	}
-	      });
+	        console.log("무통장 Data : " + data);
+	      }); */
 	    
 	});
 }
+	 //  unix time stamp to Date
+	  function UnixTimeToDate(UnixTime){
+	  var origin = new Date(UnixTime);
+	  
+	  var year = origin.getFullYear();
+	  var month = ('0' + (origin.getMonth() + 1)).slice(-2);
+	  var day = ('0' + origin.getDate()).slice(-2);
+	  
+	  var hours = ('0' + today.getHours()).slice(-2); 
+	  var minutes = ('0' + today.getMinutes()).slice(-2);
+	  var seconds = ('0' + today.getSeconds()).slice(-2);
+	   
+	  var val_time = year+"-"+month+"-"+day + " " + hours + ":"+minutes + ":" + seconds;
+	  
+	  return val_time;
+	  }
 	//결제가 완료 된 후 트랜잭션처리
 	function paytransaction(impUid){
 	  	var token = $("meta[name='_csrf']").attr("content");
@@ -460,7 +473,7 @@
 							</li>
 						</ul>
 						<div class="btngroup agreeCheck">
-							<button type="button" class="btn text-white btn-default medium" onclick="iamport()">
+							<button type="button" id="pay-onclick" class="btn text-white btn-default medium">
 								<span>결제</span>
 							</button>
 						</div>
@@ -783,7 +796,7 @@
 												<div class="select-pay-type">
 													<input type='radio' name='card-type' value='html5_inicis'/> KG이니시스(표준결제)
 													<input type='radio' name='card-type' value='kakaopay'/> 카카오페이(간편결제)
-													<input type='radio' name='card-type' value='html5_inicis'/> 무통장 입금
+													<input type='radio' name='card-type' value='nobank'/> 무통장 입금
 												</div>
 											</td>
 										</tr>

@@ -243,6 +243,7 @@
 				success:function(result) {
 					if(result==1) {
 				  		cancelPay();
+				  		alert("상품 주문이 취소되었습니다. 결제 환불 처리됩니다.");
 						window.location.href = "${contextPath}/mypage/orderHistory";
 					} else {
 						alert('주문취소 오류');

@@ -2,10 +2,13 @@ package com.ggm.goguma.controller.order;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeanUtils;
@@ -42,6 +45,8 @@ import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.mypage.MyPageService;
 import com.ggm.goguma.service.order.OrderService;
 import com.ggm.goguma.service.product.CategoryService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
@@ -223,9 +228,11 @@ public class OrderController {
 	
 	//아임포트 웹훅 url
 	@ResponseBody
-	@PostMapping("api/nobankcomplete")
-	public void noBankComplete() {
+	@PostMapping("nobankcomplete")
+	public HashMap<String, Object> noBankComplete(@RequestBody HashMap<String, Object> webhook_param, HttpServletRequest request, HttpServletResponse response) {
 		log.info("리퀘스트 확인");
+		log.info(webhook_param);
+		return webhook_param;
 	}
 	
 	@PostMapping("/orderResult")
@@ -239,6 +246,12 @@ public class OrderController {
 		//결제 번호
 		String uid = ipUid.substring(4);
 		model.addAttribute("uid", uid);
+		
+		api = new IamportClient(payKey, paySecretKey);
+		
+		IamportResponse<Payment> res = api.paymentByImpUid(ipUid);
+		Payment p = res.getResponse();
+		model.addAttribute("resp", p); 
 		
 		return "receipt";
 	}
