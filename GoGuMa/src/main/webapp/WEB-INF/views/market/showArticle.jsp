@@ -25,7 +25,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+	
+	<style>
+		.profile-img {
+			width: 100px;
+		    height: 100px;
+		    object-fit: cover;
+		    margin-right: 10px;
+		    border-radius: 50%;
+		    margin-left: 25px;
+		}
+	</style>
 </head>
 
 <body>
@@ -54,10 +64,10 @@
                                    		<li class="list-group-item list-group-item-action">
                                  			<a href="${contextPath}/category/1/${product.categoryId}/detail/${product.parentId}" class="text-decoration-none text-dark">
                         					<div class="row">
-                            					<div class="col-2">
+                            					<div class="col-2" style="padding-right: 0px;">
                                 					<img src="${product.prodImgUrl}" class="w-100 h-100" />
                             					</div>
-					                            <div class="col">
+					                            <div class="col" style="margin-top: 12px; margin-left: 10px;">
 					                                <p>${product.productName}</p>
 					                                <p class="text-secondary">${product.optionName}</p>
 					                                <p class="text-text-secondary"><fmt:formatNumber value="${product.productPrice}"/>원</p>
@@ -78,7 +88,7 @@
             <div id="market-info-area" class="row mt-2">
                 <div class="col-2">
                 	<a href="${contextPath}/market/show.do?marketNum=${article.market.marketId}" class="h4 text-decoration-none text-dark">
-                    	<img class="w-100 rounded-circle" src="${article.market.marketThumbnail}" />
+                    	<img class="border border-secondary rounded-circle profile-img" src="${article.market.marketThumbnail}" />
                     </a>
                 </div>
                 <div class="col d-flex flex-column justify-content-center">
