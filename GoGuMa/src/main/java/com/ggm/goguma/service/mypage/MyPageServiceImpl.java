@@ -2,8 +2,7 @@ package com.ggm.goguma.service.mypage;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,15 +11,20 @@ import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
 import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
+import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.mapper.MyPageMapper;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class MyPageServiceImpl implements MyPageService {
 //	@Value("${contentPerPage}")
 	private int contentPerPage = 10;
 	
-	@Autowired
-	private MyPageMapper mapper;
+	private final MyPageMapper mapper;
+	
+	private final BCryptPasswordEncoder passwordEncoder;
 
 	@Override
 	@Transactional
@@ -156,15 +160,15 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 
 	@Override
-	public boolean confirmPassword(long memberId, String userPassword) throws Exception {
-		return userPassword.equals(mapper.confirmPassword(memberId));
+	public boolean confirmPassword(String userPassword, String comparePassword) throws Exception {
+		return passwordEncoder.matches(userPassword, comparePassword);
 	}
 
 	@Override
-	public boolean changePassword(long memberId, String curPassword, String newPassword) throws Exception {
-		if(!curPassword.equals(mapper.confirmPassword(memberId))) return false;
+	public boolean changePassword(String curPassword, String newPassword, MemberDTO dto) throws Exception {
+		if(!confirmPassword(curPassword, dto.getPassword())) return false;
 		else {
-			mapper.changePassword(memberId, newPassword);
+			mapper.changePassword(dto.getId(), passwordEncoder.encode(newPassword));
 			return true;
 		}
 	}

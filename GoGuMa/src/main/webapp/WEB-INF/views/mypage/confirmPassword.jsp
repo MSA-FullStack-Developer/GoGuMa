@@ -84,12 +84,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-flex flex-column border border-2 rounded mb-2">
-                    <div style="padding: 150px" align="center">
-                        <h5 style="width: 390px"><b>고객님의 소중한 개인정보를 보호하기 위해 비밀번호를 다시 한번 확인합니다.</b></h5>
-                        <input type="password" class="form-control mb-2" id="userPassword" style="width: 390px"/>
-                        <button type="button" class="btn btn-primary" style="width: 390px" onclick="submitPassword()">확인</button>
-                    </div>
+                <div class="d-flex flex-column border border-2 rounded mb-2" align="center">
+                    <form action="${contextPath}/mypage/confirmPassword/${type}" method="POST" style="padding: 150px">
+                        <h5 style="width: 400px"><b>고객님의 소중한 개인정보를 보호하기 위해 비밀번호를 다시 한번 확인합니다.</b></h5>
+                        <input type="password" class="form-control mb-2" name="userPassword" style="width: 400px"/>
+                        <button type="submit" class="btn btn-primary" style="width: 400px">확인</button>
+                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                    </form>
                 </div>
             </div>
         </div>
@@ -98,31 +99,4 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
-<script type="text/javascript">
-	function submitPassword() {
-		let token = $("meta[name='_csrf']").attr("content");
-	    let header = $("meta[name='_csrf_header']").attr("content");
-		$.ajax({
-			url : "${contextPath}/mypage/confirmPassword/${type}",
-			type : "POST",
-			data : {
-				userPassword : $("#userPassword").val()
-			},
-			beforeSend : function(xhr) {
-	            xhr.setRequestHeader(header, token);
-	        },
-	        success:function(result) {
-	        	if(result==1) window.location.href = "${contextPath}/mypage/${type}";
-	        	else if(result==2) alert('비밀번호 오류');
-	        	else alert("서버 오류");
-	        },
-			error:function(xhr, status, error) {
-				var errorResponse = JSON.parse(xhr.responseText);
-				var errorCode = errorResponse.code;
-				var message = errorResponse.message;
-				alert(message);
-			}
-		});
-	}
-</script>
 </html>

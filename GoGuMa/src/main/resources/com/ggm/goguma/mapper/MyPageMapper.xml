@@ -204,10 +204,6 @@
 		FROM DUAL
 	</select>
 	
-	<select id="confirmPassword" resultType="String">
-		select password from member where memberid = #{memberId}
-	</select>
-	
 	<update id="changePassword">
 		update member set password = #{newPassword} where memberid = #{memberId}
 	</update>

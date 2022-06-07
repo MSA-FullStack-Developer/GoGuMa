@@ -6,8 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +27,6 @@ import com.ggm.goguma.dto.ReviewDTO;
 import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.product.CategoryService;
 import com.ggm.goguma.service.product.ImageAttachService;
-import com.ggm.goguma.service.product.ProductService;
 import com.ggm.goguma.service.product.ReviewService;
 import com.ggm.goguma.service.mypage.MyPageService;
 
@@ -345,8 +342,6 @@ public class MyPageController {
 		try {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
-			
-			log.info("비밀번호확인 페이지");
 			model.addAttribute("type", type);
 		} catch(Exception e) {
 			log.info(e.getMessage());
@@ -354,43 +349,43 @@ public class MyPageController {
 		return "mypage/confirmPassword";
 	}
 	
-	@ResponseBody
 	@RequestMapping(value="/confirmPassword/{type}", method=RequestMethod.POST)
-	public String confirmPassword(@PathVariable("type") String type, @RequestParam("userPassword") String userPassword, Principal principal) throws Exception {
+	public String confirmPassword(@PathVariable("type") String type, @RequestParam("userPassword") String userPassword, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			if(service.confirmPassword(memberDTO.getId(), userPassword)) return "1";
-			return "2";
+			String phoneNum = memberDTO.getPhone().substring(0, 3) + "-"
+				+ memberDTO.getPhone().substring(3, 7) + "-" + memberDTO.getPhone().substring(7);
+			if(service.confirmPassword(userPassword, memberDTO.getPassword())) {
+				if(type.equals("changeInfo")) {
+					String[] birthdate = memberDTO.getBirthDate().split("-");
+					model.addAttribute("memberDTO", memberDTO);
+					model.addAttribute("birthYear", birthdate[0]);
+					model.addAttribute("birthMonth", birthdate[1]);
+					model.addAttribute("birthDay", birthdate[2]);
+					model.addAttribute("phoneNum", phoneNum);
+				}
+				return "mypage/"+type;
+			}
+			return "redirect:/mypage/confirmPassword/"+type;
 		} catch(Exception e) {
 			log.info(e.getMessage());
-			return "3";
+			return "redirect:/mypage/confirmPassword"+type;
 		}
 	}
-	
-	@RequestMapping(value="/changeInfo", method=RequestMethod.GET)
-	public String getInfoChangeForm(Model model) throws Exception {
-		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-		model.addAttribute("parentCategory", parentCategory);
-		
-		log.info("회원정보변경 페이지");
-		return "mypage/changeInfo";
-	}
-	
-	@RequestMapping(value="/changePassword", method=RequestMethod.GET)
-	public String getPasswordChangeForm(Model model) throws Exception {
-		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-		model.addAttribute("parentCategory", parentCategory);
-		
-		log.info("비밀번호변경 페이지");
-		return "mypage/changePassword";
-	}
+
+//	@RequestMapping(value="/changeInfo", method=RequestMethod.GET)
+//	public String getInfoChangeForm(Model model) throws Exception {
+//		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+//		model.addAttribute("parentCategory", parentCategory);
+//		return "mypage/changeInfo";
+//	}
 	
 	@ResponseBody
 	@RequestMapping(value="/changePassword", method=RequestMethod.POST)
 	public String changePassword(@RequestParam("curPassword") String curPassword, @RequestParam("newPassword") String newPassword, Principal principal) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			if(service.changePassword(memberDTO.getId(), curPassword, newPassword)) return "1";
+			if(service.changePassword(curPassword, newPassword, memberDTO)) return "1";
 			return "2";
 		} catch(Exception e) {
 			log.info(e.getMessage());
