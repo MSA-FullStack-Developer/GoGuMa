@@ -44,13 +44,13 @@
 				document.querySelector(".modal-background").className = "modal-background";
 			}
 			
-            $(document).on("click", "#show", function(){
-                var productID = $(this).data("productid"); // 구매한 상품 번호
+            $(document).on("click", "#show", function(){
+                var productID = $(this).data("productid"); // 구매한 상품 번호
 				var thumbnailImg = $(this).data("imgurl"); // 상품 썸네일 이미지
 				$("#productID").val(productID);
 				$("#thumbnailImg").val(thumbnailImg);
 			    show();
-            });
+            });
 			
 			document.querySelector(".cancelBtn").addEventListener('click', close); // 모달창 닫기
 			

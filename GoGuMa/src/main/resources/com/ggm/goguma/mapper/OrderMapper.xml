@@ -63,7 +63,8 @@
 							coupondiscount,
 							usagepoint, 
 							totalprice,
-							couponid
+							couponid,
+							impuid
 							)
 		VALUES(
 		#{memberId}, 
@@ -77,7 +78,8 @@
 		#{transactionDTO.couponDiscount}, 
 		#{transactionDTO.usagePoint},
 		#{transactionDTO.totalPrice},
-		#{transactionDTO.couponId}
+		#{transactionDTO.couponId},
+		#{transactionDTO.impUid}
 		 )
 		 <selectKey keyProperty="transactionDTO.receiptId" resultType="long" order="AFTER">SELECT ISEQ$$_92238.CURRVAL FROM DUAL</selectKey>
 	</insert>
@@ -162,4 +164,9 @@
 		SET used = 1
 		WHERE couponid = ${couponId} and memberid = #{memberId}
 	</update>
+	
+	<delete id="deleteCartOrder">
+		DELETE FROM cart
+		WHERE cartid = #{cartId}
+	</delete>
 </mapper>

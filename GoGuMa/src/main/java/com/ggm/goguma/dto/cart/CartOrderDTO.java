@@ -21,9 +21,9 @@ public class CartOrderDTO{
 	
 	private int TNP;
 	
-	private int TDP;
+	private double TDP;
 	
-	private int TOP;
+	private double TOP;
 	
 	private CartOrderListDTO productOrder;
 }

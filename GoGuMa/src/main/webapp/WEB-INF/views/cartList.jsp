@@ -478,7 +478,7 @@
 											<th scope="col" id="th-product-price">상품가격</th>
 											<th scope="col" id="th-discount-price">할인금액</th>
 											<th scope="col" id="th-total-price">합계</th>
-											<th scope="col" id="th-order-delete">구매/삭제</th>
+											<th scope="col" id="th-order-delete">삭제</th>
 										</tr>
 										<c:forEach var="i" items="${list}" begin="0" step="1"
 											varStatus="status">
@@ -491,7 +491,7 @@
 													value="${i.cartId}"> 
 													
 													<label for="oneSel${status.count}"></label></td>
-												<td class="cart-product_box">
+												<td class="cart-product-box">
 													<div class="product-image">
 														<a href="${contextPath}/category/1/${i.categoryId}/detail/${i.parentProductId}" class="moveProduct">
 															<img src="${i.prodImgUrl}" width="78" height="78"
@@ -554,7 +554,6 @@
 												</td>
 												<td class="cart-purchase-delete">
 													<div class="cart-pur-del">
-														<button type="button" class="btn text-white btn-default btn-purchase">구매</button>
 														<button type="button" class="btn text-black btn-delete"
 															onclick="oneCartDel(this)">삭제</button>
 													</div>
@@ -591,7 +590,7 @@
 						</div>
 					</div>
 					<div class="order-buttons">
-						<button type="button" class="btn text-black continue">쇼핑 계속하기</button>
+						<button type="button" class="btn text-black continue" onClick="location.href='${contextPath}'">쇼핑 계속하기</button>
 						<button type="submit" id="orderBtn" class="btn text-white btn-default purchase">구매하기</button>
 					</div>
 				</form>
