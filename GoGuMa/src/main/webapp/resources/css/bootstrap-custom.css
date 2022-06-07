@@ -4,3 +4,8 @@
 	width: 1320px;
 	max-width: none !important;
 }
+
+.card-img-top {
+ 	width: 100%;
+    height: 300px;
+}

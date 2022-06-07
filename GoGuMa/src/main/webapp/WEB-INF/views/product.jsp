@@ -227,25 +227,39 @@
             	var productID = $("#productID").val(); // 구매한 상품 번호
                 var memberID = $("#memberID").val(); // 로그인한 회원 번호
                	var content = $(".write-review-content").val(); // 상품평 내용
-                
+               	var list = new Array();
+               	
+               	$(".uploadResult ul li").each(function(i, obj) {
+        			var jobj = $(obj);
+        			
+        			var attachDTO = new Object();
+        			attachDTO.imageName = jobj.data("imagename");
+        			attachDTO.imagePath = jobj.data("imagepath");
+        			list.push(attachDTO);
+        		});
+               	
         		var data = {
-        			"productID" : productID,
-        			"memberID" : memberID,
-        			"content" : content
+        			productID : productID,
+        			memberID : memberID,
+        			content : content,
+        			attachList : list
         		};
         		
         		$.ajax({
 		            url: "${contextPath}/category/1/insertReview",
 		            type: "POST",
-		            data: data,
+		            contentType: 'application/json; charset=utf-8',
+		            data: JSON.stringify(data),
 		            beforeSend : function(xhr) {
         				xhr.setRequestHeader(header, token);
         			},
 		            success : function(result){
-		            	if (result) {
+		            	if (result == 1) {
 			                $(".modal").hide();
 			                alert("상품평이 등록되었습니다.");
 			                location.reload();
+		            	} else {
+		            		alert("상품평 등록 실패");
 		            	}
 		            },error : function(xhr, status, error) {
         				var errorResponse = JSON.parse(xhr.responseText);
@@ -285,6 +299,114 @@
         				alert(message);
         			}
     	        });
+        	});
+        	
+        	$(".uploadResult").on("click", "button", function(e) {
+            	var token = $("meta[name='_csrf']").attr("content");
+        		var header = $("meta[name='_csrf_header']").attr("content");
+        		
+        		console.log("delete file");
+        		var targetFile = $(this).data("imagename");
+        		var targetLi = $(this).closest("li");
+        		
+        		var data = {
+        			imageName : targetFile
+        		};
+        		
+        		$.ajax({
+        			url: '${contextPath}/category/1/deleteFile',
+        			data: data,
+        			type: 'POST',
+        			beforeSend : function(xhr) {
+        				xhr.setRequestHeader(header, token);
+        			},
+       				success: function(result) {
+       					alert("이미지가 삭제되었습니다.");
+       					
+       					targetLi.remove();
+       				},error : function(xhr, status, error) {
+        				var errorResponse = JSON.parse(xhr.responseText);
+        				var errorCode = errorResponse.code;
+        				var message = errorResponse.message;
+        				alert(message);
+        			}
+        		});
+        	});
+        	
+        	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+        	var maxSize = 5242880;
+        	
+        	function checkExtension(fileName, fileSize){
+        		if(fileSize >= maxSize){
+        			alert("파일 사이즈 초과");
+        			return false;
+        		}
+        		if(regex.test(fileName)){
+        			alert("해당 종류의 파일은 업로드 할 수 없습니다.");
+        			return false;
+        		}
+        		return true;
+        	}
+        	
+        	function showUploadResult(uploadResultArr) {
+        		if(!uploadResultArr || uploadResultArr.length == 0) {return;}
+        		
+        		var uploadUL = $(".uploadResult ul");
+        		
+        		var str="";
+        		
+        		$(uploadResultArr).each(function(i, obj){
+        			str += "<li data-imagepath='"+obj.imagePath+"'";
+    				str += " data-imagename='"+obj.imageName+"' ><div>";
+    				str += "<span>"+obj.imageName+"</span>";
+    				str += "<button type='button' data-imagename='"+obj.imageName+"'>X</button><br>";
+    				str += "<img src='" + obj.imagePath + "'>";
+    				str += "</div>";
+    				str += "</li>";
+        		}); 
+        		
+        		uploadUL.append(str);
+        	}
+        	
+        	$("input[type='file']").change(function(e){
+        		var token = $("meta[name='_csrf']").attr("content");
+        		var header = $("meta[name='_csrf_header']").attr("content");
+        		
+        		var formData = new FormData();
+        		var inputFile = $("input[name='uploadFile']");
+        		var files = inputFile[0].files;
+        		console.log(files);
+        		
+        		for(var i = 0; i < files.length ; i++){
+        			if(!checkExtension(files[i].imageName, files[i].size)){
+        				return false;
+        			}
+        			formData.append("uploadFile", files[i]);
+        		}
+        	
+        		$.ajax({
+        			url: '${contextPath}/category/1/uploadAjaxAction',
+        			processData: false,
+        			contentType: false,
+        			data: formData,
+        			beforeSend : function(xhr) {
+        				xhr.setRequestHeader(header, token);
+        			},
+        			type: 'POST',
+        			dataType: 'json',
+       				success: function(result){
+       					console.log(result);
+        				
+       					attachList = result;
+       					
+        				showUploadResult(result);
+        			}, error : function(xhr, status, error) {
+        				var errorResponse = JSON.parse(xhr.responseText);
+        				var errorCode = errorResponse.code;
+        				var message = errorResponse.message;
+        				alert(message);
+        			}
+        		});
         	});
         });
     </script>
@@ -399,12 +521,18 @@
 	                        	<b>${memberDTO.name}</b>님, 이번 상품은 어떠셨나요?
 	                       	</h4>
 	                       	<textarea cols="34" rows="5" type="text" class="write-review-content" placeholder="상품평을 작성해주세요. (최대 2,000자)"></textarea>
+	                       	<input type="file" name='uploadFile' style="margin-left: 30px; "multiple>
+	                       	<div class='uploadResult'>
+								<ul>
+								
+								</ul>
+							</div>
 	                       	<div class="review-buttons">
 	                            <button type="button" class="review-button" id="cancelBtn">취소</button>
 	                            <button type="button" class="review-button" id="finishBtn">작성 완료</button>
 	                          </div>
 	                    </div>
-	                 </c:if>
+	                </c:if>
                     
                     <c:forEach items="${reviewList}" var="review">
 	                    <div class="review" id="review">
@@ -424,10 +552,9 @@
                             
 	                            <div class="imgList">
 	                                <div class="imgC">
-	                                    <img class="reviewImg" src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
-	                                        alt="모달할 이미지">
-                                        <img class="reviewImg" src="https://image.hmall.com/static/0/6/89/33/2133896030_0.jpg?RS=400x400&AR=0"
-	                                        alt="모달할 이미지">
+		                                <c:forEach items="${review.attachList}" var="attach">
+		                                    <img class="reviewImg" src="${attach.imagePath}" alt="${attach.imagePath}">
+	                                    </c:forEach>
 	                                </div>
 	                            </div>
 	
@@ -446,6 +573,5 @@
             </div>
         </div>
     </div>
-    <%@ include file="./footer.jsp" %>
 </body>
 </html>

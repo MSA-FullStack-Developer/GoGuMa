@@ -2,9 +2,12 @@ package com.ggm.goguma.exception;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import lombok.extern.log4j.Log4j;
 
@@ -37,5 +40,30 @@ public class ControllerExceptionAdvice {
 		
 		log.info(request.getPathInfo());
 		return "redirect:/member/login.do";
+	}
+	
+	@ExceptionHandler({NotFoundMarketArticleException.class, NotFoundMarketException.class})
+	public String NotFoundMarketOrArticleExceptionHandler(RuntimeException e) {
+		log.error("[NotFoundMarketOrArticleExceptionHandler] error : "+ e.getMessage());
+		
+		return "error/error404";
+	}
+	
+	
+	@ExceptionHandler(NoHandlerFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public String NoHandlerFoundExceptionHandler(NoHandlerFoundException e) {
+		log.error(e.getMessage());
+		return "error/error404";
+	}
+	
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public String ExceptionHandler(Exception e) {
+		e.printStackTrace();
+		log.error(e.getMessage());
+		
+		
+		return "error/error500";
 	}
 }

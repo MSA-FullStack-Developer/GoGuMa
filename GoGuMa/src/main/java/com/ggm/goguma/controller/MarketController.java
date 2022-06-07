@@ -3,6 +3,7 @@ package com.ggm.goguma.controller;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,12 +15,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.ggm.goguma.amazons3.AmazonS3Utils;
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.DefaultResponseDTO;
+import com.ggm.goguma.dto.ImageAttachDTO;
+import com.ggm.goguma.dto.PaginationDTO;
+import com.ggm.goguma.dto.market.ArticleProudctDTO;
+import com.ggm.goguma.dto.market.CreateArticleDTO;
 import com.ggm.goguma.dto.market.CreateMarketDTO;
 import com.ggm.goguma.dto.market.FollowMarketDTO;
+import com.ggm.goguma.dto.market.MarketArticleDTO;
 import com.ggm.goguma.dto.market.MarketDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.exception.UploadFileFailException;
@@ -41,6 +49,8 @@ public class MarketController {
 	private final MarketService marketService;
 
 	private final MemberService memberService;
+	
+	private final AmazonS3Utils amazonService;
 
 	@GetMapping("/main.do")
 	public String main() {
@@ -57,18 +67,18 @@ public class MarketController {
 		model.addAttribute("error", error);
 		return "market/createMarket";
 	}
-	
+
 	@GetMapping("/show.do")
-	public String showMarket(@RequestParam long marketNum, Model model, Principal principal) throws Exception {
-		
+	public String showMarket(@RequestParam long marketNum, @RequestParam(defaultValue = "1") long pg, Model model, Principal principal) throws Exception {
+
 		MarketDTO market = this.marketService.getMarket(marketNum);
 		log.info("[showMarket] market : " + market);
 		boolean isMine = false;
-		boolean isAlreadyFollow  = false;
-		
-		if(principal != null) {
+		boolean isAlreadyFollow = false;
+
+		if (principal != null) {
 			MemberDTO member = this.memberService.getMember(principal.getName());
-			if(member.getId() == market.getMemberId()) {
+			if (member.getId() == market.getMemberId()) {
 				isMine = true;
 			}
 			FollowMarketDTO followMarket = new FollowMarketDTO();
@@ -76,16 +86,67 @@ public class MarketController {
 			followMarket.setMemberId(member.getId());
 			isAlreadyFollow = this.marketService.isAlreadyFollowMarket(followMarket);
 		}
+
+		PaginationDTO<MarketArticleDTO> paginationDTO = this.marketService.getMarketArticles(marketNum, pg);
 		
+		log.info(paginationDTO);
 		
 		model.addAttribute("isAlreadyFollow", isAlreadyFollow);
 		model.addAttribute("isMine", isMine);
 		model.addAttribute("market", market);
-	
+		model.addAttribute("pagination", paginationDTO);
 		return "market/showMarket";
 	}
 
-	@PostMapping(path =  "/createMarket.do" , consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	@GetMapping("/article/{articleId}/show.do")
+	public String showArticle(@PathVariable long articleId, Model model) {
+
+		MarketArticleDTO article = this.marketService.getMarketArticle(articleId);
+		
+		log.info(article);
+		model.addAttribute("article", article);
+		
+		return "market/showArticle";
+	}
+
+	@GetMapping("/{marketId}/article/write.do")
+	public String createArticleForm(@PathVariable long marketId, @RequestParam(required = false) String error, Model model, Principal principal) {
+		
+		MemberDTO member = this.memberService.getMember(principal.getName());
+		
+		if(!this.marketService.isMyMarket(marketId, member.getId())) {
+			return "error/error403";
+		}
+		
+		if(error != null) model.addAttribute("error", error);
+		model.addAttribute("marketId", marketId);
+		return "market/createArticle";
+	}
+
+	@GetMapping("/article/searchProudct.do")
+	public String searchProduct(@RequestParam(required = false) String keyword, Model model, Principal principal) {
+
+		if (keyword == null) {
+			model.addAttribute("keyword", keyword);
+			model.addAttribute("products", null);
+			return "market/searchMyProduct";
+		}
+
+		String email = "msh1273@gmail.com"; // only for test!!
+
+		MemberDTO member = this.memberService.getMember(email);
+		List<ArticleProudctDTO> result = this.marketService.getArticleProducts(keyword, member.getId());
+
+		log.info("[searchProduct] result : " + result);
+		model.addAttribute("keyword", keyword);
+		
+		if(result.size() == 0) result = null;
+		model.addAttribute("products", result);
+
+		return "market/searchMyProduct";
+	}
+	
+	@PostMapping(value = "/createMarket.do", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
 	public String createMarket(CreateMarketDTO data, Principal principal, RedirectAttributes ra) throws Exception {
 
 		log.info("[createMarket] CreateMarketDTO : " + data);
@@ -106,27 +167,55 @@ public class MarketController {
 
 	}
 	
+	@PostMapping(value= "/article/createArticle.do", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public String createArticle(CreateArticleDTO article, Principal principal) throws Exception {
+		
+		log.info(article);
+		MemberDTO member = this.memberService.getMember(principal.getName());
+		
+		if(!this.marketService.isMyMarket(article.getMarketId(), member.getId())) {
+			return "error/error403";
+		}
+		
+		this.marketService.createMarketArticle(article);
+		
+		return "redirect:/market/show.do?marketNum="+article.getMarketId();
+	}
+
 	@PostMapping(value = "/api/updateFollow.do", produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public DefaultResponseDTO updateFollowMarket(@RequestParam long marketId, Principal principal) {
-	
+
 		log.info("[updateFollowMarket] marketId : " + marketId);
-		
+
 		MemberDTO member = this.memberService.getMember(principal.getName());
-		
+
 		FollowMarketDTO followMarket = new FollowMarketDTO();
 		followMarket.setMarketId(marketId);
 		followMarket.setMemberId(member.getId());
-		
+
 		boolean isCreated = this.marketService.createOrDeleteFollowMarket(followMarket);
-		
+
 		String message = isCreated ? "follow" : "cancel";
-		
-		
-		
+
 		return DefaultResponseDTO.builder().status(200).message(message).build();
-		
+
 	}
 	
+	
+	
+	
+	@PostMapping(value = "/api/uploadArticleImage.do", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public ResponseEntity<ImageAttachDTO> uploadImage(MultipartFile file) throws Exception {
+		String[] uploadResult = this.amazonService.uploadFile("upload", file);
+		
+		ImageAttachDTO attachDTO = new ImageAttachDTO();
+		attachDTO.setImageName(uploadResult[0]);
+		attachDTO.setImagePath(uploadResult[1]);
+		
+		
+		return new ResponseEntity<>(attachDTO, HttpStatus.CREATED);
+	}
 
 }
