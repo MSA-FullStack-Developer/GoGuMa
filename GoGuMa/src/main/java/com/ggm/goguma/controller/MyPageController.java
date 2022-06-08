@@ -38,7 +38,6 @@ import lombok.extern.log4j.Log4j;
  * @시작일자 : 2022.05.04
  * @완료일자 : 2022.06.10
  */
-
 @Log4j
 @Controller
 @RequestMapping("/mypage")
@@ -65,7 +64,7 @@ public class MyPageController {
 	private CategoryService categoryService;
 	
 	@RequestMapping(value="", method=RequestMethod.GET)
-	public String getMainPage(Principal principal, Model model) throws Exception {
+	public String getMyPageMain(Principal principal, Model model) throws Exception {
 		MemberDTO memberDTO = memberService.getMember(principal.getName());
 		model.addAttribute("memberDTO", memberDTO);
 		return "mypage/main";
@@ -430,11 +429,13 @@ public class MyPageController {
 	
 	@RequestMapping(value="/resignMember", method=RequestMethod.POST)
 	public String resignMember(@RequestParam("resignDetail") String resignDetail,
-		@RequestParam("userPassword") String userPassword, Principal principal) throws Exception {
+		@RequestParam("userPassword") String userPassword, Principal principal, Model model) throws Exception {
 		try {
-			log.info(resignDetail+" "+userPassword);
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			if(service.resignMember(resignDetail, userPassword, memberDTO)) return "mypage/resignResult";
+			if(service.resignMember(resignDetail, userPassword, memberDTO)) {
+				model.addAttribute("memberDTO", memberDTO);
+				return "mypage/resignResult";
+			}
 			return "redirect:/mypage/resignMember";
 		} catch(Exception e) {
 			log.info(e.getMessage());

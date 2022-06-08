@@ -129,7 +129,7 @@
 	                </table>
 	                <div align="center">
 	                    <button type="submit" class="btn btn-dark">회원탈퇴</button>
-	                    <button type="button" class="btn btn-secondary">취소</button>
+	                    <button type="button" class="btn btn-secondary">돌아가기</button>
 	                </div>
 	                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 </form>

@@ -133,7 +133,7 @@ public class ProductController {
 			model.addAttribute("optionList", optionList);
 			model.addAttribute("optionCount", optionCount);
 			model.addAttribute("reviewList", reviewList);
-			
+			model.addAttribute("productID", productID);
 			return "product";
 		} catch (Exception e) {
 			e.printStackTrace();

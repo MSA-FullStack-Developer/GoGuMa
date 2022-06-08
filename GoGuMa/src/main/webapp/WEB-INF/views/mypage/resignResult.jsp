@@ -33,7 +33,7 @@
                 <div class="d-flex flex-column justify-content-center border border-2 rounded mb-2" style="padding: 200px">
                     <div class="mb-2">
                         <h5><b>고구마몰 회원탈퇴가 완료되었습니다.</b></h5>
-                        고구마몰을 이용해주신 송진호 고객님께 감사드립니다.
+                        고구마몰을 이용해주신 ${memberDTO.name} 고객님께 감사드립니다.
                         <br>
                         고객님의 소중한 의견을 통해 더욱 좋은 서비스와
                         <br>
