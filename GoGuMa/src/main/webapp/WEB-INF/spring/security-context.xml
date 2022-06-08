@@ -9,7 +9,6 @@
 
 	<bean id="bcryptPasswordEncoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
-
 	
 	<bean id="customUserDetailsService" class="com.ggm.goguma.security.CustomUserDetailsService" />
 	
@@ -17,7 +16,9 @@
 	
 	<bean id="customAuthenticationEntryPoint" class="com.ggm.goguma.security.CustomAuthenticationEntryPoint"/>
 
-	
+	<security:http pattern="/category/*/api/**" entry-point-ref="customAuthenticationEntryPoint" use-expressions="true">
+		<security:intercept-url pattern="/category/*/api/**" access="isAuthenticated()" />
+	</security:http>
 
 	<security:http pattern="/cart/api/**" entry-point-ref="customAuthenticationEntryPoint" use-expressions="true">
 		<security:intercept-url pattern="/cart/api/**" access="isAuthenticated()" />

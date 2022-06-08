@@ -167,22 +167,18 @@ public class ProductController {
 	
 	// 상품평 작성
 	@ResponseBody
-	@PostMapping(value="/insertReview", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String insertReview(@RequestBody ReviewDTO reviewDTO, Authentication authentication) throws Exception{
+	@PostMapping(value="api/insertReview", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public String insertReview(@RequestBody ReviewDTO reviewDTO) throws Exception{
 		try {
-			if (authentication != null) {
-				log.info("상품평 이미지 목록 : " + reviewDTO.getAttachList());
-				
-				if (reviewDTO.getAttachList() != null) {
-					reviewDTO.getAttachList().forEach(attach -> log.info(attach));
-				}
-				
-				reviewService.insertReview(reviewDTO);
-				
-				return "1";
+			log.info("상품평 이미지 목록 : " + reviewDTO.getAttachList());
+			
+			if (reviewDTO.getAttachList() != null) {
+				reviewDTO.getAttachList().forEach(attach -> log.info(attach));
 			}
 			
-			return "2";
+			reviewService.insertReview(reviewDTO);
+			
+			return "1";
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -190,27 +186,24 @@ public class ProductController {
 	}
 	
 	// 상품평 삭제
-	@PostMapping("/deleteReview")
+	@PostMapping("api/deleteReview")
 	@ResponseBody
-	public Boolean deleteReview(@RequestParam("reviewID") long reviewID, Authentication authentication) throws Exception {
+	public Boolean deleteReview(@RequestParam("reviewID") long reviewID) throws Exception {
 		try {
-			if (authentication != null) {
-				// 상품평 이미지 삭제
-				List<ImageAttachDTO> attachList = attachService.attachListByReviewID(reviewID);
-				attachList.forEach(review -> {
-					try {
-						amazonService.deleteFile(review.getImageName());
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				});
-				
-				// 상품평 삭제
-				reviewService.deleteReview(reviewID);
-				
-				return true;
-			}
-			return false;
+			// 상품평 이미지 삭제
+			List<ImageAttachDTO> attachList = attachService.attachListByReviewID(reviewID);
+			attachList.forEach(review -> {
+				try {
+					amazonService.deleteFile(review.getImageName());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
+			
+			// 상품평 삭제
+			reviewService.deleteReview(reviewID);
+			
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
@@ -264,22 +257,18 @@ public class ProductController {
 	
 	// 상품평 수정하기
 	@ResponseBody
-	@PostMapping(value="/update", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String updateBoard(@RequestBody ReviewDTO reviewDTO, Authentication authentication) throws Exception {
+	@PostMapping(value="api/update", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public String updateBoard(@RequestBody ReviewDTO reviewDTO) throws Exception {
 		try {
-			if (authentication != null) {
-				log.info("상품평 이미지 목록 : " + reviewDTO.getAttachList());
-				
-				if (reviewDTO.getAttachList() != null) {
-					reviewDTO.getAttachList().forEach(attach -> log.info(attach));
-				}
-				
-				reviewService.updateReview(reviewDTO);
-				
-				return "1";
+			log.info("상품평 이미지 목록 : " + reviewDTO.getAttachList());
+			
+			if (reviewDTO.getAttachList() != null) {
+				reviewDTO.getAttachList().forEach(attach -> log.info(attach));
 			}
 			
-			return "2";
+			reviewService.updateReview(reviewDTO);
+			
+			return "1";
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

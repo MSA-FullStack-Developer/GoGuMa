@@ -153,5 +153,16 @@
 		ON m.marketid = f.marketid
 		WHERE f.marketid IS NULL
 	 </select>
+	 
+	 <!-- 
+		작성자 : 경민영
+		작업일 : 22.06.08
+		메인 화면 - 최근 게시글 모두 불러오기
+	 -->
+	 <select id ="getAllArticle" resultMap="MarketArticleResult">
+	 	SELECT *
+	 	FROM marketarticle
+	 	ORDER BY regdate DESC
+	 </select>
 	
 </mapper>

@@ -27,7 +27,9 @@
     <script type="text/javascript"
         src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.min.js"></script>
     <style>
-        <%@ include file="/resources/css/bootstrap-custom.css" %>.btn-primary {
+        <%@ include file="/resources/css/bootstrap-custom.css" %>
+        
+        .btn-primary {
             --bs-btn-color: #fff;
             --bs-btn-bg: #6426DD;
             --bs-btn-border-color: #6426DD;
@@ -46,20 +48,33 @@
 
         .btn-secondary {
             --bs-btn-color: #fff;
-            --bs-btn-bg: #6c757d;
-            --bs-btn-border-color: #6c757d;
+            --bs-btn-bg: #FF493C;
+            --bs-btn-border-color: #FF493C;
             --bs-btn-hover-color: #fff;
-            --bs-btn-hover-bg: #5c636a;
-            --bs-btn-hover-border-color: #565e64;
-            --bs-btn-focus-shadow-rgb: 86, 94, 100;
+            --bs-btn-hover-bg: #FF493C;
+            --bs-btn-hover-border-color: #FF493C;
+            --bs-btn-focus-shadow-rgb: 255, 73, 60;
             --bs-btn-active-color: #fff;
-            --bs-btn-active-bg: #565e64;
-            --bs-btn-active-border-color: #51585e;
+            --bs-btn-active-bg: #FF493C;
+            --bs-btn-active-border-color: #FF493C;
             --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
             --bs-btn-disabled-color: #fff;
-            --bs-btn-disabled-bg: #6c757d;
-            --bs-btn-disabled-border-color: #6c757d;
+            --bs-btn-disabled-bg: #FF493C;
+            --bs-btn-disabled-border-color: #FF493C;
         }
+        
+        .articleWriteBtn {
+        	width: 100px;
+		    height: 40px;
+		    background-color: #6426DD;
+		    color: white;
+        }
+        
+		.card-img-top {
+		    width: 100%;
+		    height: 300px;
+		    object-fit: cover;
+		}
     </style>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -124,7 +139,7 @@
                 <div class="col-9" style="margin-left: 10px;">
                     <h5>${market.marketName}</h5>
                     <p class="text-secondary">${market.marketDetail}</p>
-                    <span class="badge bg-info text-dark">${market.category.categoryName}</span>
+                    <span class="badge text-light" style="background-color: #FF493C;">${market.category.categoryName}</span>
                 </div>
                 
                 <div class="col d-flex justify-content-center align-items-center">
@@ -142,70 +157,69 @@
             <div class="d-flex justify-content-between">
                 <h2>${market.marketName}의 진열대</h2>
                 <c:if test="${isMine}">
-                	 <a type="button" class="btn btn-success" href="${contextPath}/market/${market.marketId}/article/write.do">글 작성하기</a>
+                	 <a type="button" class="btn articleWriteBtn" href="${contextPath}/market/${market.marketId}/article/write.do">글 작성하기</a>
                 </c:if>
             </div>
           
             <div class="d-flex flex-wrap">
             	<c:forEach items="${pagination.data}" var="article" varStatus="articleStatus">
-            	
-            	<c:if test="${articleStatus.index % 4 == 0}">
-            	<div class="card border border-dark mt-2" style="width: 18rem;">
-            	</c:if>
-				<c:if test="${articleStatus.index % 4 != 0}">
-                <div class="card border border-dark mt-2 ms-5" style="width: 18rem;">
-                </c:if>
-                    <a href="${contextPath}/market/article/${article.articleId}/show.do"
-                        class="text-decoration-none text-dark">
-                        <img src="${article.thumbnail.imagePath}"
-                            class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <p class="card-text text-truncate">${article.articleTitle}</p>
-                        </div>
-                    </a>
-                    <div class="card-footer bg-dark">
-						<!-- carouselProducts 아이디 교유하게 하기 -->
-                        <div id="carouselProducts${articleStatus.index}" class="carousel slide" data-bs-touch="false"
-                            data-bs-interval="false">
-                            <div class="carousel-inner">
-                            	<c:forEach items="${article.products}" var="product" varStatus="status">
-                            	<c:if test="${status.first}">
-                                	<div class="carousel-item active">
-                                </c:if>
-                                <c:if test="${not status.first}">
-                                	<div class="carousel-item">
-                                </c:if>
-                                    <a class="text-decoration-none text-light" href="${contextPath}/category/1/${product.categoryId}/detail/${product.parentId}">
-                                        <div class="row d-flex align-items-center">
-                                            <div name="prod-thumb" class="col">
-                                                <img class="w-100 rounded" src="${product.prodImgUrl}" />
-                                            </div>
-                                            <div name="prod-name" class="col-8">
-                                                <p class="text-truncate mb-0">${product.productName}</p>
-                                                <p class="text-secondary text-truncate mb-0" style="font-size: 13px;">${product.optionName}</p>
-                                                <span  style="font-size: 10px;"><fmt:formatNumber value="${product.productPrice}"/>원</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                            		</div>
-                                </c:forEach>
-                            </div>
-                         
-                          	<c:if test="${fn:length(article.products) > 1}">
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProducts${articleStatus.index}"
-                                data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselProducts${articleStatus.index}"
-                                data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                            </c:if>
-                        </div> <!--carouselProducts 끝-->
-                    </div> <!-- card footer 끝-->
-                </div> <!--card 영역 끝-->
+	            	<c:if test="${articleStatus.index % 4 == 0}">
+	            	<div class="card border border-dark mt-2" style="width: 18rem;">
+	            	</c:if>
+					<c:if test="${articleStatus.index % 4 != 0}">
+	                <div class="card border border-dark mt-2 ms-5" style="width: 18rem;">
+	                </c:if>
+	                    <a href="${contextPath}/market/article/${article.articleId}/show.do"
+	                        class="text-decoration-none text-dark">
+	                        <img src="${article.thumbnail.imagePath}"
+	                            class="card-img-top" alt="...">
+	                        <div class="card-body">
+	                            <p class="card-text text-truncate">${article.articleTitle}</p>
+	                        </div>
+	                    </a>
+	                    <div class="card-footer bg-dark">
+							<!-- carouselProducts 아이디 교유하게 하기 -->
+	                        <div id="carouselProducts${articleStatus.index}" class="carousel slide" data-bs-touch="false"
+	                            data-bs-interval="false">
+	                            <div class="carousel-inner">
+	                            	<c:forEach items="${article.products}" var="product" varStatus="status">
+	                            	<c:if test="${status.first}">
+	                                	<div class="carousel-item active">
+	                                </c:if>
+	                                <c:if test="${not status.first}">
+	                                	<div class="carousel-item">
+	                                </c:if>
+	                                    <a class="text-decoration-none text-light" href="${contextPath}/category/1/${product.categoryId}/detail/${product.parentId}">
+	                                        <div class="row d-flex align-items-center">
+	                                            <div name="prod-thumb" class="col">
+	                                                <img class="w-100 rounded" src="${product.prodImgUrl}" />
+	                                            </div>
+	                                            <div name="prod-name" class="col-8">
+	                                                <p class="text-truncate mb-0">${product.productName}</p>
+	                                                <p class="text-secondary text-truncate mb-0" style="font-size: 13px;">${product.optionName}</p>
+	                                                <span  style="font-size: 10px;"><fmt:formatNumber value="${product.productPrice}"/>원</span>
+	                                            </div>
+	                                        </div>
+	                                    </a>
+	                            		</div>
+	                                </c:forEach>
+	                            </div>
+	                         
+	                          	<c:if test="${fn:length(article.products) > 1}">
+	                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProducts${articleStatus.index}"
+	                                data-bs-slide="prev">
+	                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+	                                <span class="visually-hidden">Previous</span>
+	                            </button>
+	                            <button class="carousel-control-next" type="button" data-bs-target="#carouselProducts${articleStatus.index}"
+	                                data-bs-slide="next">
+	                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+	                                <span class="visually-hidden">Next</span>
+	                            </button>
+	                            </c:if>
+	                        </div> <!--carouselProducts 끝-->
+	                    </div> <!-- card footer 끝-->
+	                </div> <!--card 영역 끝-->
                 </c:forEach>
             </div>
         </section>

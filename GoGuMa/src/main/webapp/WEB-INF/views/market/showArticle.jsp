@@ -42,7 +42,7 @@
             	<strong>${article.market.marketName}</strong> 
             	<span class="ms-1 text-secondary"><fmt:formatDate value="${article.regDate}" pattern="yyyy-MM-dd HH:mm"/></span>
             </p>
-            <div class="badge text-bg-info">${article.market.category.categoryName}</div>
+            <div class="badge" style="background-color: #FF493C;">${article.market.category.categoryName}</div>
             <div id="article-area">
                 <div class="accordion mb-3 mt-3" id="accordionSelectedProducts">
                     <div class="accordion-item">

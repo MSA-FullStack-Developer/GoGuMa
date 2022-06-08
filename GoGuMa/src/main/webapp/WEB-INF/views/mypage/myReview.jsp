@@ -36,6 +36,11 @@
 	</style>
 	<script>
 		$(document).ready(function () {
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			console.log(token);
+			console.log(header);
+			
 			$('#deleteBtn').on("click", function() { // 상품평 삭제
 				var token = $("meta[name='_csrf']").attr("content");
 				var header = $("meta[name='_csrf_header']").attr("content");
@@ -48,7 +53,7 @@
 				
 				if (confirm("상품평을 삭제하시겠습니까?")) {
             		$.ajax({
-        	            url: "${contextPath}/category/1/deleteReview",
+        	            url: "${contextPath}/category/1/api/deleteReview",
         	            type: "POST",
         	            data: data,
         	            beforeSend : function(xhr) {
@@ -132,7 +137,7 @@
             		};
             		
             		$.ajax({
-    		            url: "${contextPath}/category/1/update",
+    		            url: "${contextPath}/category/1/api/update",
     		            type: "POST",
     		            contentType: 'application/json; charset=utf-8',
     		            data: JSON.stringify(data),

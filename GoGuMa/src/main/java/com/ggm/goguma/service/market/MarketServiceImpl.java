@@ -232,5 +232,10 @@ public class MarketServiceImpl implements MarketService{
 	public List<MarketDTO> getUnfollowMarket(long memberId) throws Exception {
 		return this.marketMapper.getUnfollowMarket(memberId);
 	}
+
+	@Override
+	public List<MarketArticleDTO> getAllArticle() throws Exception {
+		return this.marketMapper.getAllArticle();
+	}
 	
 }

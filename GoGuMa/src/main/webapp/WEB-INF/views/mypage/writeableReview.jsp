@@ -83,7 +83,7 @@
             		};
             		
             		$.ajax({
-    		            url: "${contextPath}/category/1/insertReview",
+    		            url: "${contextPath}/category/1/api/insertReview",
     		            type: "POST",
     		            contentType: 'application/json; charset=utf-8',
     		            data: JSON.stringify(data),

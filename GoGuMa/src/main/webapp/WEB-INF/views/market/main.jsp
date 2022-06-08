@@ -20,10 +20,18 @@
     <!-- bootstrap icon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	
+    <!-- jquery -->
+    <script type="text/javascript"
+        src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.min.js"></script>
+        
     <style>
   		<%@ include file="/resources/css/market.css" %>
+  		
+		.card-img-top {
+		    width: 100%;
+		    height: 300px;
+		    object-fit: cover;
+		}
     </style>
     <script>
     	
@@ -34,7 +42,7 @@
     <div class="w-100" style="min-width: 1400px;">
         <section id="main-section" class="container-xxl pt-5 pb-5">
             <div>
-                <h3>☀️ ${memberName}님이 팔로우한 마켓 ☀️</h3>
+                <h3>️❤️ ${memberName}님이 팔로우한 마켓 ❤️️</h3>
             </div>
 
             <div class="w-100 mt-4">
@@ -62,6 +70,74 @@
                 </div>
             </div>
         </section>
-    </div>
+        
+        <section id="main-section" class="container-xxl pt-5 pb-5">
+            <div>
+                <h3>❤️ 최근 마켓 게시글들 모아보기 ❤️️</h3>
+            </div>
+            
+            <div class="d-flex flex-wrap">
+            	<c:forEach items="${recentArticleList}" var="article" varStatus="articleStatus">
+	            	<c:if test="${articleStatus.index % 4 == 0}">
+	            	<div class="card border border-dark mt-2" style="width: 18rem;">
+	            	</c:if>
+					<c:if test="${articleStatus.index % 4 != 0}">
+	                <div class="card border border-dark mt-2 ms-5" style="width: 18rem;">
+	                </c:if>
+	                    <a href="${contextPath}/market/article/${article.articleId}/show.do"
+	                        class="text-decoration-none text-dark">
+	                        <img src="${article.thumbnail.imagePath}"
+	                            class="card-img-top" alt="...">
+	                        <div class="card-body">
+	                            <p class="card-text text-truncate">${article.articleTitle}</p>
+	                        </div>
+	                    </a>
+	                    <div class="card-footer bg-dark">
+							<!-- carouselProducts 아이디 교유하게 하기 -->
+	                        <div id="carouselProducts${articleStatus.index}" class="carousel slide" data-bs-touch="false"
+	                            data-bs-interval="false">
+	                            <div class="carousel-inner">
+	                            	<c:forEach items="${article.products}" var="product" varStatus="status">
+	                            	<c:if test="${status.first}">
+	                                	<div class="carousel-item active">
+	                                </c:if>
+	                                <c:if test="${not status.first}">
+	                                	<div class="carousel-item">
+	                                </c:if>
+	                                    <a class="text-decoration-none text-light" href="${contextPath}/category/1/${product.categoryId}/detail/${product.parentId}">
+	                                        <div class="row d-flex align-items-center">
+	                                            <div name="prod-thumb" class="col">
+	                                                <img class="w-100 rounded" src="${product.prodImgUrl}" />
+	                                            </div>
+	                                            <div name="prod-name" class="col-8">
+	                                                <p class="text-truncate mb-0">${product.productName}</p>
+	                                                <p class="text-secondary text-truncate mb-0" style="font-size: 13px;">${product.optionName}</p>
+	                                                <span  style="font-size: 10px;"><fmt:formatNumber value="${product.productPrice}"/>원</span>
+	                                            </div>
+	                                        </div>
+	                                    </a>
+	                            		</div>
+	                                </c:forEach>
+	                            </div>
+	                         
+	                          	<c:if test="${article.products.size() > 1}">
+	                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselProducts${articleStatus.index}"
+	                                data-bs-slide="prev">
+	                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+	                                <span class="visually-hidden">Previous</span>
+	                            </button>
+	                            <button class="carousel-control-next" type="button" data-bs-target="#carouselProducts${articleStatus.index}"
+	                                data-bs-slide="next">
+	                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+	                                <span class="visually-hidden">Next</span>
+	                            </button>
+	                            </c:if>
+	                        </div> <!--carouselProducts 끝-->
+	                    </div> <!-- card footer 끝-->
+	                </div> <!--card 영역 끝-->
+                </c:forEach>
+            </div>
+        </section>
+	</div>
 </body>
 </html>

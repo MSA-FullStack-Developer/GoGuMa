@@ -50,4 +50,6 @@ public interface MarketMapper {
 	List<MarketDTO> getMyMarket(long memberId) throws Exception;
 	
 	List<MarketDTO> getUnfollowMarket(long memberId) throws Exception;
+	
+	List<MarketArticleDTO> getAllArticle() throws Exception;
 }

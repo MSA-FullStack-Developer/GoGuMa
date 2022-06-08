@@ -60,19 +60,38 @@ public class MarketController {
 	@GetMapping("/main.do")
 	public String main(Model model, Principal principal) throws Exception {
 		
-		MemberDTO member = this.memberService.getMember(principal.getName());
-		List<MarketDTO> myMarketList = this.marketService.getMyMarket(member.getId());
-		long marketCount = 4 - myMarketList.size(); // 팔로우한 마켓은 4개까지 보여주기
-		String memberName = member.getName();
+		String memberName = "";
 		
-		model.addAttribute("myMarketList", myMarketList);
-		model.addAttribute("marketCount", marketCount);
+		if (principal != null) {
+			MemberDTO member = this.memberService.getMember(principal.getName());
+			memberName = member.getName();
+			
+			// 팔로우한 마켓 불러오기
+			List<MarketDTO> myMarketList = this.marketService.getMyMarket(member.getId());
+			long marketCount = 4 - myMarketList.size(); // 상단 4개 배치
+
+			model.addAttribute("myMarketList", myMarketList);
+			model.addAttribute("marketCount", marketCount);
+		} else {
+			memberName = "게스트";
+		}
+		
+		// 최신순으로 전체 게시글 불러오기
+		List<MarketArticleDTO> recentArticleList = this.marketService.getAllArticle();
+
+		log.info("전체 게시글" + recentArticleList);
+		
 		model.addAttribute("memberName", memberName);
+		model.addAttribute("recentArticleList", recentArticleList);
 		
 		return "market/main";
 	}
 	
-	// 팔로우하지 않은 고구마 마켓 보여주기
+	/* *
+	 * 작성자 : 경민영
+	 * 작성일 : 2022.06.08
+	 * 팔로우하지 않은 마켓 보여주기
+	 * */
 	@GetMapping("/unFollowMarket.do")
 	public String everyMarket(Model model, Principal principal) throws Exception {
 		

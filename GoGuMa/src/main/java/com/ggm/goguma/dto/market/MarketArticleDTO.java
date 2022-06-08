@@ -21,4 +21,5 @@ public class MarketArticleDTO{
 	private ArticleImageDTO thumbnail;
 	
 	private List<ArticleProudctDTO> products;
+	
 }
