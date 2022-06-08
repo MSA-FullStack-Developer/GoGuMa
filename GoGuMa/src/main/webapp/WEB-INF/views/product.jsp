@@ -7,7 +7,7 @@
 <meta name="_csrf_header" content="${_csrf.headerName}">
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.js"></script>
 <head>
     <title>Product</title>
     
@@ -49,6 +49,10 @@
 	    	$('.total_price').text(optionPrice.format() + "원"); // 초기화
 	    }
 	    
+	    $(window).bind("pageshow", function (event) {
+	    	$('#option option:eq(0)').attr('selected', 'selected');
+	    });
+	    
         $(document).ready(function () {
         	$('.option-img').click(function() {
         		var src = $(this).data("src");
@@ -69,7 +73,7 @@
 	                if(plusNum > stock) { // 남은 재고를 넘은 경우
 	                	$("#numBox").val(num);
 	                	$('.total_price').text((optionPrice * num).format() + "원");
-	                	alert("더이상 구매하실 수 업습니다.");
+	                	alert("더이상 구매하실 수 없습니다.");
 	                } else {
 	                	$("#numBox").val(plusNum);        
 	                	$('.total_price').text((optionPrice * plusNum).format() + "원");
@@ -277,23 +281,24 @@
                 	
                 	<fmt:parseNumber var="totPrc" value="${productInfo.productPrice - disPrc}" integerOnly="true"/>
                 	<input type="hidden" id="product-discount" name="productOrder.totOriPrc" value="${totPrc}" />
-                <div class="selectedInfo">
-                	<h5 class="selectedOption">선택 없음</h5>
-                	<input type="hidden" name="productOrder.productId" id="product-id" value= />
-                	<p class="cartStock">
-                        <button type="button" class="calc" id="minus">-</button>
-                        <span style="text-align: center;">
-                        
-                        	<input type="number" name="productOrder.ordQty" id="numBox" min="1" max="${productInfo.stock}" value="1" readonly="readonly" />
-                        </span>
-                        <button type="button" class="calc" id="plus">+</button>
-                     </p>
-                </div>
+                	
+	                <div class="selectedInfo">
+	                	<h5 class="selectedOption">선택 없음</h5>
+	                	<input type="hidden" name="productOrder.productId" id="product-id" value= />
+	                	<p class="cartStock">
+	                        <button type="button" class="calc" id="minus">-</button>
+	                        <span style="text-align: center;">
+	                        
+	                        	<input type="number" name="productOrder.ordQty" id="numBox" min="1" max="${productInfo.stock}" value="1" readonly="readonly" />
+	                        </span>
+	                        <button type="button" class="calc" id="plus">+</button>
+	                     </p>
+	                </div>
                 
-                <div class="btnDiv">
-                	<button type="button" class="cartBtn" id="cartBtn">장바구니</button>
-                    <button type="submit" class="buyBtn" id="buyBtn">바로구매</button>
-                </div>
+	                <div class="btnDiv">
+	                	<button type="button" class="cartBtn" id="cartBtn">장바구니</button>
+	                    <button type="submit" class="buyBtn" id="buyBtn">바로구매</button>
+	                </div>
                 </form>
             </div>
             

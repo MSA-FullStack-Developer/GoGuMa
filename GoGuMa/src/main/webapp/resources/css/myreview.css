@@ -48,10 +48,14 @@
 }
 
 #show {
-	border: none;
-	background-color: #6426DD;
-	color: white;
-	border-radius: 5pt;
+    border: none;
+    background-color: #6426DD;
+    color: white;
+    border-radius: 5pt;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    right: 0%;
+    position: absolute;
 }
 
 .uploadResult{
@@ -130,6 +134,7 @@
     height: 80px;
     margin: 17px 10px 13px 20px;
     padding: 10px 10px 10px 10px;
+    position: relative;
 }
 
 .myReviewBottom {
@@ -164,7 +169,13 @@
 #deleteBtn {
     background: #F8F8F8;
     border: none;
-    float: right;
+    width: 25px;
+}
+
+#editBtn {
+	background: #F8F8F8;
+    border: none;
+    width: 25px;
 }
 
 .productlink:hover>span {

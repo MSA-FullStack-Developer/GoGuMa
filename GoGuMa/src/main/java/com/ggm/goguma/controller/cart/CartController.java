@@ -25,9 +25,9 @@ import com.ggm.goguma.dto.cart.CartDTO;
 import com.ggm.goguma.dto.cart.CartItemDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.mapper.CartMapper;
-import com.ggm.goguma.service.MyPageService;
 import com.ggm.goguma.service.cart.CartService;
 import com.ggm.goguma.service.member.MemberService;
+import com.ggm.goguma.service.mypage.MyPageService;
 import com.ggm.goguma.service.product.CategoryService;
 
 import lombok.extern.log4j.Log4j;

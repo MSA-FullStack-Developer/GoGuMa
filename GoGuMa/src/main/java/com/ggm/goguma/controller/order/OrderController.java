@@ -37,9 +37,9 @@ import com.ggm.goguma.dto.cart.TransactionDTO;
 import com.ggm.goguma.dto.coupon.MemberCouponOrderDTO;
 import com.ggm.goguma.dto.member.IamportCertificateTokenRspDTO.Response;
 import com.ggm.goguma.dto.member.MemberDTO;
-import com.ggm.goguma.service.MyPageService;
 import com.ggm.goguma.service.cart.CartService;
 import com.ggm.goguma.service.member.MemberService;
+import com.ggm.goguma.service.mypage.MyPageService;
 import com.ggm.goguma.service.order.OrderService;
 import com.ggm.goguma.service.product.CategoryService;
 import com.google.gson.JsonObject;
@@ -111,7 +111,6 @@ public class OrderController {
 					 model.addAttribute("addressList", addressList); return "order";
 					 
 				} 
-				log.info("어어어ㅓ어어어어어엉여영");
 				List<CartOrderListDTO> dtoList = new ArrayList<CartOrderListDTO>();
 				//상품 주문 dto에서 선택한 상품만 추려내기 위한 작업
 				for(int i = 0; i < cartOrderDTO.getCartOrderListDTO().size(); i++) {
@@ -220,6 +219,12 @@ public class OrderController {
 		log.info("주문에서 카트 정보 리스트: " +transactionDTO);
 		orderService.paytransaction(transactionDTO, memberId);
 		log.info("컨트롤러에서 모든 결제 트랜잭션 처리가 완료됨");
+	}
+	
+	//아임포트 웹훅 url
+	@PostMapping("api/nobankcomplete")
+	public void noBankComplete() {
+		log.info("리퀘스트 확인");
 	}
 	
 	@PostMapping("/orderResult")

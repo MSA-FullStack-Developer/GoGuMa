@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
 import com.ggm.goguma.dto.PointDTO;
@@ -19,9 +20,35 @@ public interface MyPageMapper {
 	
 	ReceiptDTO getReceiptDetail(long receiptId) throws Exception;
 	
-	PointDTO getEarnedPoint(long receiptId) throws Exception;
-
 	void updateOrderStatus(@Param("orderId") long orderId, @Param("status") String status) throws Exception;
+	
+	void makeInquirable(long orderId) throws Exception;
+	
+	List<Long> getPointValue(long receiptId) throws Exception;
+	
+	long getPointHistoryCount(long memberId) throws Exception;
+	
+	long getSpecificPointHistoryCount(@Param("memberId") long memberId, @Param("type") String type) throws Exception;
+	
+	long getPointHistoryCountByPeriod(@Param("memberId") long memberId, @Param("startDate") String startDate, @Param("endDate") String endDate) throws Exception;
+	
+	long getSpecificPointHistoryCountByPeriod(@Param("memberId") long memberId, @Param("type") String type, @Param("startDate") String startDate, @Param("endDate") String endDate) throws Exception;
+	
+	long getAvailableCouponCount(long memberId) throws Exception;
+
+	long getUnavailableCouponCount(long memberId) throws Exception;
+	
+	List<PointDTO> getPointHistory(@Param("memberId") long memberId, @Param("startNum") long startNum, @Param("endNum") long endNum) throws Exception;
+
+	List<PointDTO> getSpecificPointHistory(@Param("memberId") long memberId, @Param("type") String type, @Param("startNum") long startNum, @Param("endNum") long endNum) throws Exception;
+
+	List<PointDTO> getPointHistoryByPeriod(@Param("memberId") long memberId, @Param("startDate") String startDate, @Param("endDate") String endDate, @Param("startNum") long startNum, @Param("endNum") long endNum) throws Exception;
+
+	List<PointDTO> getSpecificPointHistoryByPeriod(@Param("memberId") long memberId, @Param("type") String type, @Param("startDate") String startDate, @Param("endDate") String endDate, @Param("startNum") long startNum, @Param("endNum") long endNum) throws Exception;
+	
+	List<CouponDTO> getAvailableCoupon(@Param("memberId") long memberId, @Param("startNum") long startNum, @Param("endNum") long endNum) throws Exception;
+
+	List<CouponDTO> getUnavailableCoupon(@Param("memberId") long memberId, @Param("startNum") long startNum, @Param("endNum") long endNum) throws Exception;
 	
 	List<DeliveryAddressDTO> getAddressList(long memberid) throws Exception;
 
@@ -35,8 +62,11 @@ public interface MyPageMapper {
 	
 	void setDefault(@Param("memberId") long memberId, @Param("addressId") long addressId) throws Exception;
 
-	void cancelDefault(@Param("memberId") long memberId) throws Exception;
+	void cancelDefault(long memberId) throws Exception;
 
-	int getMemberPoint(@Param("memberId") long memberId) throws Exception;
+	int getMemberPoint(long memberId) throws Exception;
 
+	String confirmPassword(long memberId) throws Exception;
+
+	void changePassword(@Param("memberId") long memberId, @Param("newPassword") String newPassword) throws Exception;
 }

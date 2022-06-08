@@ -1,7 +1,8 @@
-package com.ggm.goguma.service;
+package com.ggm.goguma.service.mypage;
 
 import java.util.List;
 
+import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
 import com.ggm.goguma.dto.PointDTO;
@@ -16,10 +17,18 @@ public interface MyPageService {
 	
 	ReceiptDTO getReceiptDetail(long receiptId) throws Exception;
 	
-	PointDTO getEarnedPoint(long receiptId) throws Exception;
-
 	void updateOrderStatus(long orderId, String status) throws Exception;	
+	
+	long getEarnablePoint(long receiptId) throws Exception;
+	
+	long getPointHistoryCount(long memberId, String type, String startDate, String endDate) throws Exception;
+	
+	long getCouponCount(long memberId, String type) throws Exception;
+	
+	List<PointDTO> getPointHistory(long memberId, String type, long page, String startDate, String endDate) throws Exception;
 
+	List<CouponDTO> getCouponHistory(long memberId, String type, long page) throws Exception;
+	
 	List<DeliveryAddressDTO> getAddressList(long memberId) throws Exception;
 
 	DeliveryAddressDTO getDefaultAddress(long memberId) throws Exception;
@@ -35,4 +44,8 @@ public interface MyPageService {
 	void cancelDefault(long memberId) throws Exception;
 
 	int getMemberPoint(long memberId) throws Exception;
+
+	boolean confirmPassword(long memberId, String userPassword) throws Exception;
+
+	boolean changePassword(long memberId, String curPassword, String newPassword) throws Exception;
 }

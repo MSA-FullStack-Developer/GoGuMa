@@ -23,7 +23,7 @@
         a:visited {
             color: black;
         }
-	    img {
+	    .mainImg {
 	        width: 70%;
 	        height: 70%;
 	        margin-top: 15%;
@@ -37,13 +37,12 @@
 </head>
 <body>
 	<%@ include file="../header.jsp" %>
-	
 	<div class="container mt-5" style="min-width: 1200px">
 		<div class="row">
 			<%@ include file="mypageMenu.jsp" %>
             <div class="col">
                 <div class="col">
-                    <h5><b>👨‍💻 송진호님</b></h5>
+                    <h4><b>송진호님</b></h4>
                 </div>
                 <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-2">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -56,10 +55,10 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            포인트
+                            <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
                         </div>
                         <div>
-                            1,000P
+                            <a href="${contextPath}/mypage/pointHistory/all?page=1">1,000P</a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -72,10 +71,10 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            쿠폰
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
                         </div>
                         <div>
-                            3장
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">3장</a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -93,7 +92,7 @@
                 <div class="d-flex flex-row mb-2">
                     <div class="bundle">
                         <div class="d-flex flex-column align-items-center border rounded">
-                            <img src="resources\img\아몬드세트.jpg">
+                            <img class="mainImg" src="resources\img\아몬드세트.jpg">
                         </div>
                         <div class="d-flex flex-column align-items-center">
                             허니버터아몬드 허니버터아몬드 허니버터아몬드
@@ -101,7 +100,7 @@
                     </div>
                     <div class="bundle">
                         <div class="d-flex flex-column align-items-center border rounded">
-                            <img src="resources\img\아몬드세트.jpg">
+                            <img class="mainImg" src="resources\img\아몬드세트.jpg">
                         </div>
                         <div class="d-flex flex-column align-items-center">
                             허니버터아몬드 허니버터아몬드 허니버터아몬드
@@ -114,7 +113,7 @@
                 <div class="d-flex flex-row mb-2">
                     <div class="bundle">
                         <div class="d-flex flex-column align-items-center border rounded">
-                            <img src="resources\img\핫브레이크미니.jpg">
+                            <img class="mainImg" src="resources\img\핫브레이크미니.jpg">
                         </div>
                         <div class="d-flex flex-column align-items-center">
                             핫 브레이크 핫 브레이크 핫 브레이크 핫 브레이크
@@ -122,7 +121,7 @@
                     </div>
                     <div class="bundle">
                         <div class="d-flex flex-column align-items-center border rounded">
-                            <img src="resources\img\핫브레이크미니.jpg">
+                            <img class="mainImg" src="resources\img\핫브레이크미니.jpg">
                         </div>
                         <div class="d-flex flex-column align-items-center">
                             핫 브레이크 핫 브레이크 핫 브레이크 핫 브레이크
@@ -132,6 +131,6 @@
             </div>
 		</div>
 	</div>
-     <%@ include file="../footer.jsp" %>
+    <%@ include file="../footer.jsp" %>
 </body>
 </html>

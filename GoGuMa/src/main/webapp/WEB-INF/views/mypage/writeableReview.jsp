@@ -281,21 +281,23 @@
                     <div class="myReview-writeable">
 	                    <div style="width: 100%; margin-bottom: 10px;">
                		 		<div class="myReviewTop">
-	               		 		<a class="productlink" href="${contextPath}/category/1/${product.categoryID}/detail/${product.parentPID}">
-									<img class="myReviewImg" src="${product.prodimgurl}" alt="${product.prodimgurl}">
-		                            <span class="myReviewProduct" style="font-size: 14pt; font-weight: bold;">${product.productName}</span>
-		                            <br>
-		                            <span class="myReviewProduct">${product.optionName}</span>
-	               		 		</a>
+               		 			<div class="text-truncate" style="width: 370px;">
+		               		 		<a class="productlink" href="${contextPath}/category/1/${product.categoryID}/detail/${product.parentPID}">
+										<img class="myReviewImg" src="${product.prodimgurl}" alt="${product.prodimgurl}">
+			                            <span class="myReviewProduct" style="font-size: 14pt; font-weight: bold;">${product.productName}</span>
+			                            <br>
+			                            <span class="myReviewProduct">${product.optionName}</span>
+		               		 		</a>
+	               		 		</div>
 	               		 		<button class="show" id="show" data-productid="${product.productID}" data-imgurl="${product.prodimgurl}">작성</button>
                		 		</div>
                         </div>
                     </div>
                     </c:forEach>
                 </div>
-					<div class="modal-background">
-						<div class="modal-window">
-							<div class="popup">
+				<div class="modal-background">
+					<div class="modal-window">
+						<div class="popup">
 	                        <h4 class="membername"><i class="fa-solid fa-heart" style="color: FF493C"></i>
 	                        	<b>${memberDTO.name}</b>님, 이번 상품은 어떠셨나요?
 	                        	<input type="hidden" id="productID" value="">
@@ -305,16 +307,13 @@
 	                       	<input type="file" id="file" name='uploadFile' style="margin-left: 30px; "multiple>
 	                       	<div class='uploadResult'>
 								<ul>
-								
 								</ul>
-							</div>
-	                       	<div class="review-buttons">
+							</div>	
+                       		<div class="review-buttons">
 	                            <button type="button" class="cancelBtn" id="cancelBtn">취소</button>
 	                            <button type="button" class="finishBtn" id="finishBtn">작성 완료</button>
-	                          </div>
-							</div>
-						<div>
-					</div>
+                           </div>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -25,7 +25,7 @@
         a:visited {
             color: black;
         }
-        img {
+        .orderHistoryImg {
             width: 100%;
             height: 100%;
         }
@@ -37,13 +37,12 @@
 </head>
 <body>
 	<%@ include file="../header.jsp" %>
-	
 	<div class="container mt-5" style="min-width: 1200px">
 		<div class="row">
 			<%@ include file="mypageMenu.jsp" %>
             <div class="col">
                 <div>
-                    <h5><b>👨‍💻 송진호님</b></h5>
+                    <h4><b>송진호님</b></h4>
                 </div>
                 <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-3">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -56,10 +55,10 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            포인트
+                            <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
                         </div>
                         <div>
-                            1,000P
+                            <a href="${contextPath}/mypage/pointHistory/all?page=1">1,000P</a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -72,10 +71,10 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            쿠폰
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
                         </div>
                         <div>
-                            3장
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">3장</a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -105,7 +104,7 @@
 		                                <!-- 주문 forEach 시작 -->
 		                                <tr class="border-bottom">
 		                                    <td class="col-1 p-3">
-		                                        <img src="${orderDTO.image}" style="width:100px; height:100px;">
+		                                        <img class="orderHistoryImg" src="${orderDTO.image}" style="width:100px; height:100px;">
 		                                    </td>
 		                                    <td class="col-5 border-end">
 		                                    	${orderDTO.name}
@@ -113,7 +112,7 @@
 		                                    <td class="border-end">
 		                                        <div class="col" align="center">
 		                                            <div>
-		                                                ${orderDTO.price}원
+		                                                <fmt:formatNumber value="${orderDTO.price}" />원
 		                                            </div>
 		                                            <div>
 		                                                (${orderDTO.count}개)
@@ -162,7 +161,6 @@
             </div>
         </div>
     </div>
-    
    	<%@ include file="../footer.jsp" %>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
@@ -218,7 +216,13 @@
 					} else {
 						alert('주문취소 오류');
 					}
-				}
+				},
+				error:function(xhr, status, error) {
+    				var errorResponse = JSON.parse(xhr.responseText);
+    				var errorCode = errorResponse.code;
+    				var message = errorResponse.message;
+    				alert(message);
+    			}
 			})
 		}
 	}
