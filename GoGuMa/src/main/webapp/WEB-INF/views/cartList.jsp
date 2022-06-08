@@ -451,7 +451,7 @@
 								</ol>
 							</div>
 							<div class="cart-bottom">
-								<span>${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> 
+								${memberDTO.name } 고객님의 회원등급: <span> ${memberDTO.grade.name } <i class="bi bi-trophy"></i></span>
 								G.Point: <span><fmt:formatNumber value="${point}"
 																type="currency" currencySymbol="" /></span>원
 								<div class="btngroup">
@@ -465,13 +465,13 @@
 						<!--장바구니에 담긴 상품이 있는 경우-->
 						<c:if test="${list != null or fn:length(list) != 0}">
 							<div class="cart-body">
-								<table class="table table-bordered border-white" id="nrmProd">
+								<table class="table" id="nrmProd">
 									<thead>
 										<tr class="head">
 											<th scope="col" class="all-select-event"><input
 												id="allSel" title="모든 상품 전체결제 설정" type="checkbox"
 												checked="checked" class="all-deal-select"
-												name="allItemSelect" /> <label for="allSel"><span>&nbsp;&nbsp;전체선택</span></label>
+												name="allItemSelect" /> <label for="allSel"><span>전체선택</span></label>
 											</th>
 											<th scope="col" id="th-product-name">상품정보</th>
 											<th scope="col" id="th-product-count">수량</th>
@@ -482,7 +482,7 @@
 										</tr>
 										<c:forEach var="i" items="${list}" begin="0" step="1"
 											varStatus="status">
-											<tr class="cart-product">
+											<tr height="200" class="cart-product">
 												<td class="product-select-event">
 												<input type="hidden" name="cartOrderListDTO[${status.index}].cartId" id="cartId" value="${i.cartId}" />
 												 
@@ -492,9 +492,11 @@
 													
 													<label for="oneSel${status.count}"></label></td>
 												<td class="cart-product-box">
+													
+													
 													<div class="product-image">
-														<a href="${contextPath}/category/1/${i.categoryId}/detail/${i.parentProductId}" class="moveProduct">
-															<img src="${i.prodImgUrl}" width="78" height="78"
+														<a href="${contextPath}/category/1/${i.categoryId}/detail/${i.parentProductId}" class="productImg">
+															<img src="${i.prodImgUrl}" width="100" height="100"
 															class="product-img" alt="">
 														</a>
 													</div>
@@ -505,14 +507,15 @@
 														<span class="product-option-name"> 옵션:
 															${i.productName} </span>
 													</div>
+													
 												</td>
 												<td class="cart-product-count">
 													<div class="cart-count">
-														<button value="-" count_range="m" type="button"
+														<button value="-" count_range="m" type="button" class="calcdown"
 															name="countDown">-</button>
 														<input class="ccount" id="ordQty" value="${i.cartAmount }" readonly
 															name="cartOrderListDTO[${status.index}].ordQty">
-														<button value="+" count_range="p" type="button"
+														<button value="+" count_range="p" type="button" class="calcdown"
 															name="countUp">+</button>
 														<input class="prodStock" type=hidden name="cartOrderListDTO[${status.index}].productStock"
 															value="${i.stock}" />
@@ -527,19 +530,17 @@
 															value="${i.cartPrice * i.cartAmount}" />
 														<fmt:formatNumber var="pp" value="${proPrice}"
 															type="currency" currencySymbol="" />
-														<span>${pp }</span>원
+														<span><strong>${pp }</strong></span>원
 													</div>
 												</td>
 												<td class="cart-discount">
 													<div class="cart-product-discount">
 														<input type=hidden id="disOriPrc" name="cartOrderListDTO[${status.index}].disOriPrc"
 															value="${i.cartPrice * i.discountPercent / 100}" />
-														<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
-														<span>${i.discountPercent }%할인</span>
 														<c:set var="disPrice"
 															value="${proPrice  * i.discountPercent / 100 }" />
-														<em><fmt:formatNumber value="${disPrice}"
-																type="currency" currencySymbol="" /></em>원
+														-<em><strong><fmt:formatNumber value="${disPrice}"
+																type="currency" currencySymbol="" /></strong></em>원
 													</div>
 												</td>
 												<td class="cart-total">
@@ -548,14 +549,14 @@
 															value="${i.cartPrice - (i.cartPrice * i.discountPercent / 100)}" />
 														<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
 														<c:set var="totPrice" value="${proPrice - disPrice}" />
-														<span><fmt:formatNumber value="${totPrice}"
-																type="currency" currencySymbol="" /></span>원
+														<span><strong><fmt:formatNumber value="${totPrice}"
+																type="currency" currencySymbol="" /></strong></span>원
 													</div>
 												</td>
 												<td class="cart-purchase-delete">
 													<div class="cart-pur-del">
 														<button type="button" class="btn text-black btn-delete"
-															onclick="oneCartDel(this)">삭제</button>
+															onclick="oneCartDel(this)"><i class="fa-solid fa-trash-can"></i></button>
 													</div>
 
 												</td>
