@@ -601,7 +601,7 @@
 
 	<!-- cfoot-->
 	<div class="cfoot">
-		<div class="contents">
+		<div class="cfoot-info">
 			<div class="cart-info">
 				<h3 class="major-headings">장바구니 이용안내</h3>
 				<div class="cart-infocnt" role="region" aria-label="장바구니 이용안내">

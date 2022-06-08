@@ -79,15 +79,18 @@
           for (var i = 0; i < result.length; i++) {
             console.log("쿠폰 정보: " + result[i].couponName);
             str = "<div class='coupon-list-box'>";
-            str += "<div class='row'>";
+            str += "<div class='row coupon'>";
             str += "<input type='hidden' id='coupon-id' value='"+ result[i].couponId +"'>";
-            str += "<div class='col-md-8 coupon-name-th'><span class='coupon-name'>" + result[i].couponName + "</span></div>";
-            str += "<div class='col-md-4 coupon-benefit-th'>-<span class='coupon-benefit'>" + result[i].benefit + "</span>원</div>";
+            str += "<div class='coupon-benefit-th'><span class='coupon-benefit'>" + result[i].benefit + "</span>원</div>";
+            str += "<div class='coupon-name-th'><span class='coupon-name'>" + result[i].couponName + "</span></div>";
             str += "<div>";
-            str += "<div class='row'>";
-            str += "<div class='col-md-12 coupon-expiration-th'><span class='coupon-expiration'> 유효기간 ~" + result[i].expiration + "</span></div>";
-            str += "<div>";
-            str += "<div>";
+            str += "<div class='row coupon'>";
+            str += "<div class='coupon-expiration-th'><span class='coupon-expiration'> 유효기간 ~" + result[i].expiration + "</span></div>";
+            str += "<div class='img-coupon'>";
+            str += "<img class='coupon-picture' src='${contextPath}/resources/img/ggmCoupon.png' alt=''>";
+            str += "</div>";
+            str += "</div>";
+            str += "</div>";
             $('#coupon-all').append(str);
           }
         } else {
@@ -442,8 +445,7 @@
 	<!-- 바디 전체-->
 	<div class="cbody">
 		<div class="contents">
-			<div class="csection">
-				<div class="util-option sticky">
+										<div class="util-option sticky">
 					<div class="sticky-inner">
 						<h4 class=st-title>총 결제 금액</h4>
 						<ul class="payment-list">
@@ -482,6 +484,8 @@
 						</div>
 					</div>
 				</div>
+			<div class="csection">
+
 				<div class="order-content">
 					<div class="cart-head">
 						<div class="cart-top">
@@ -504,7 +508,7 @@
 							</h3>
 							<div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
 								<div class="accordion-body">
-									<table class="table table-bordered border-white" id="nrmProd">
+									<table class="table" id="nrmProd">
 										<thead>
 											<tr class="head">
 												<th scope="col" id="th-product-name">상품정보</th>
@@ -542,7 +546,7 @@
 													<td class="cart-price">
 														<div class="cart-product-price">
 															<c:set var="proPrice" value="${dtoList[status.index].nrmOriPrc * dtoList[status.index].ordQty}"></c:set>
-															<em><fmt:formatNumber value="${proPrice}" type="currency" currencySymbol="" /></em>원
+															<strong><em><fmt:formatNumber value="${proPrice}" type="currency" currencySymbol="" /></em></strong>원
 															<c:set var= "total" value="${total + proPrice}"/>
 															<c:set var= "preGPoint" value="${preGPoint + (proPrice * (memberDTO.grade.pointPercent / 100)) }"/>
 														</div>
@@ -550,14 +554,14 @@
 													<td class="cart-discount">
 														<div class="cart-product-discount">
 															<c:set var="disPrice" value="${dtoList[status.index].disOriPrc * dtoList[status.index].ordQty}"></c:set>
-															<em><fmt:formatNumber value="${disPrice}" type="currency" currencySymbol="" /></em>원
+															<strong>-<em><fmt:formatNumber value="${disPrice}" type="currency" currencySymbol="" /></em></strong>원
 															<c:set var = "membershipDiscount" value = "${membershipDiscount + disPrice }" />
 														</div>
 													</td>
 													<td class="cart-total">
 														<div class="cart-total-price">
 															<c:set var="totPrice" value="${dtoList[status.index].totOriPrc * dtoList[status.index].ordQty}"></c:set>
-															<em><fmt:formatNumber value="${totPrice}" type="currency" currencySymbol="" /></em>원
+															<strong><em><fmt:formatNumber value="${totPrice}" type="currency" currencySymbol="" /></em></strong>원
 														</div>
 													</td>
 												</tr>
@@ -583,13 +587,22 @@
 								<div class="modal-dialog modal-dialog-centered">
 									<div class="modal-content">
 										<div class="modal-header">
-											<h4 class="modal-title" id="couponModalLabel">쿠폰 선택</h4>
+											<h4 class="modal-title" id="couponModalLabel">쿠폰 할인</h4>
 											<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
+												<i class="bi bi-x-lg"></i>
 											</button>
 										</div>
 										<div class="modal-body">
-											<div class="coupon-all" id="coupon-all"></div>
+											<div class="mycoupon-body">
+												<!-- 사용자 쿠폰 -->
+												<div class="coupon-all" id="coupon-all">
+													
+												</div>
+											</div>
+											
+										</div>
+										<div class="modal-footer">
+											<button class="btn btn-secondary" data-bs-target="#couponCancelModal" data-bs-toggle="modal" data-bs-dismiss="modal">사용 취소</button>
 										</div>
 									</div>
 								</div>
@@ -603,7 +616,7 @@
 												<span class="dis-coupon-prc">적용 없음</span>
 											</div>
 											<div class="col-md-4">
-												<button class="btn text-white btn-default" id="getCoupon-btn" data-bs-toggle="modal" data-bs-target="#couponModal">쿠폰 조회 및 적용</button>
+												<button class="btn text-white btn-default" id="getCoupon-btn" data-bs-toggle="modal" data-bs-target="#couponModal">조회/변경</button>
 											</div>
 										</div>
 										<div class="row" style="padding: 10px;">
@@ -813,6 +826,7 @@
 						</form>
 					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>
