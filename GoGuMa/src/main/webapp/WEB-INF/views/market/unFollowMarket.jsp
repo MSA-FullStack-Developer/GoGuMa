@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>고구마 - 고객과 구성하는 마켓</title>
+    <title>고구마 마켓 전체보기</title>
 
     <!-- bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -33,32 +33,23 @@
 <body>
     <div class="w-100" style="min-width: 1400px;">
         <section id="main-section" class="container-xxl pt-5 pb-5">
+
             <div>
-                <h3>☀️ ${memberName}님이 팔로우한 마켓 ☀️</h3>
+                <h3>✨ ${memberName}님, 관심있는 마켓을 팔로우해보세요 ✨</h3>
             </div>
 
             <div class="w-100 mt-4">
                 <div class="d-flex justify-content-between align-content-between flex-wrap">
-                	<c:forEach items="${myMarketList}" var="myMarket" end="3">
+                	<c:forEach items="${allMarketList}" var="market" end="3">
 	                    <div class="card mt-3 container">
-	                    	<a href="${contextPath}/market/show.do?marketNum=${myMarket.marketId}">
-		                        <img class="card-img-top container-img" src="${myMarket.marketThumbnail}" alt="${myMarket.marketThumbnail}">
+	                    	<a href="${contextPath}/market/show.do?marketNum=${market.marketId}">
+		                        <img class="card-img-top container-img" src="${market.marketThumbnail}" alt="${market.marketThumbnail}">
 	                        </a>
 	                        <div class="card-body centered">
-	                            <p class="card-text">${myMarket.marketName}</p>
+	                            <p class="card-text">${market.marketName}</p>
 	                        </div>
 	                    </div>
                     </c:forEach>
-                    <c:forEach var="i" begin="0" end="${marketCount-1}">
-                    	<c:set value="https://hd-goguma.s3.ap-northeast-2.amazonaws.com/upload/1654654467726%E1%84%83%E1%85%A1%E1%84%85%E1%85%B3%E1%86%AB%E1%84%86%E1%85%A1%E1%84%8F%E1%85%A6%E1%86%BA%E1%84%91%E1%85%A1%E1%86%AF%E1%84%85%E1%85%A9%E1%84%8B%E1%85%AE%E1%84%92%E1%85%A1%E1%84%80%E1%85%B5.png"
-                    				var="otherImg" />
-						<div class="card mt-3 container">
-                    		<input type="hidden" value="${marketCount}">
-	                    	<a href="${contextPath}/market/unFollowMarket.do">
-		                        <img class="card-img-top container-img" src="${otherImg}">
-	                        </a>
-                    	</div>
-					</c:forEach>
                 </div>
             </div>
         </section>

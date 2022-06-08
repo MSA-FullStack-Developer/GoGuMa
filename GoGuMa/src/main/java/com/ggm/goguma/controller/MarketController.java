@@ -52,19 +52,48 @@ public class MarketController {
 	
 	private final AmazonS3Utils amazonService;
 
+	/* *
+	 * 작성자 : 경민영
+	 * 작성일 : 2022.06.08
+	 * 고구마 마켓 메인 화면
+	 * */
 	@GetMapping("/main.do")
-	public String main() {
+	public String main(Model model, Principal principal) throws Exception {
+		
+		MemberDTO member = this.memberService.getMember(principal.getName());
+		List<MarketDTO> myMarketList = this.marketService.getMyMarket(member.getId());
+		long marketCount = 4 - myMarketList.size(); // 팔로우한 마켓은 4개까지 보여주기
+		String memberName = member.getName();
+		
+		model.addAttribute("myMarketList", myMarketList);
+		model.addAttribute("marketCount", marketCount);
+		model.addAttribute("memberName", memberName);
+		
 		return "market/main";
+	}
+	
+	// 팔로우하지 않은 고구마 마켓 보여주기
+	@GetMapping("/unFollowMarket.do")
+	public String everyMarket(Model model, Principal principal) throws Exception {
+		
+		MemberDTO member = this.memberService.getMember(principal.getName());
+		List<MarketDTO> allMarketList = this.marketService.getUnfollowMarket(member.getId());
+		String memberName = member.getName();
+		
+		model.addAttribute("allMarketList", allMarketList);
+		model.addAttribute("memberName", memberName);
+		
+		return "market/unFollowMarket";
 	}
 
 	@GetMapping("/write.do")
 	public String createMarketForm(@RequestParam(required = false) String error, Model model) throws Exception {
-
+		
 		List<CategoryDTO> categoryList = this.categoryService.getCategoryParentList();
-
 		log.info(categoryList);
 		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("error", error);
+		
 		return "market/createMarket";
 	}
 
@@ -95,6 +124,7 @@ public class MarketController {
 		model.addAttribute("isMine", isMine);
 		model.addAttribute("market", market);
 		model.addAttribute("pagination", paginationDTO);
+		
 		return "market/showMarket";
 	}
 
@@ -203,9 +233,6 @@ public class MarketController {
 
 	}
 	
-	
-	
-	
 	@PostMapping(value = "/api/uploadArticleImage.do", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public ResponseEntity<ImageAttachDTO> uploadImage(MultipartFile file) throws Exception {
@@ -214,7 +241,6 @@ public class MarketController {
 		ImageAttachDTO attachDTO = new ImageAttachDTO();
 		attachDTO.setImageName(uploadResult[0]);
 		attachDTO.setImagePath(uploadResult[1]);
-		
 		
 		return new ResponseEntity<>(attachDTO, HttpStatus.CREATED);
 	}

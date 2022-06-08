@@ -16,7 +16,6 @@ public interface MarketService {
 
 	MarketDTO createMarket(CreateMarketDTO data) throws UploadFileFailException, Exception;
 	
-	
 	MarketDTO getMarket(long marketId) throws Exception;
 	
 	boolean isMyMarket(long marketId, long memberId);
@@ -32,5 +31,13 @@ public interface MarketService {
 	MarketArticleDTO getMarketArticle(long articleId);
 	
 	PaginationDTO<MarketArticleDTO> getMarketArticles(long marketId, long page);
+
+	/* *
+	 * 작성자 : 경민영
+	 * 작성일 : 2022.06.08
+	 * */
+	List<MarketDTO> getMyMarket(long memberId) throws Exception;
+
+	List<MarketDTO> getUnfollowMarket(long memberId) throws Exception;
 	
 }

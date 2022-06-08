@@ -4,8 +4,9 @@ import lombok.Data;
 
 @Data
 public class FollowMarketDTO {
-
+	
 	private long marketId;
 	
 	private long memberId;
+	
 }

@@ -42,4 +42,12 @@ public interface MarketMapper {
 	List<MarketArticleDTO> findMarketArticles(@Param("marketId") long marketId, @Param("offset") long offset, @Param("limit") long limit);
 	
 	int countMarketArticles(@Param("marketId") long marketId);
+
+	/* *
+	 * 작성자 : 경민영
+	 * 작성일 : 2022.06.08
+	 * */
+	List<MarketDTO> getMyMarket(long memberId) throws Exception;
+	
+	List<MarketDTO> getUnfollowMarket(long memberId) throws Exception;
 }
