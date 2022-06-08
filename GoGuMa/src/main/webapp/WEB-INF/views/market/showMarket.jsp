@@ -209,17 +209,17 @@
         <section name="pagination-area" class="w-100 mt-3 d-flex justify-content-center">
             <nav>
                 <ul class="pagination">
-                  <c:if test="${pagination.startPage == 1}">
+                  <c:if test="${pagination.currentPage == 1}">
                     <li class="page-item disabled">
                       <span class="page-link">이전</span>
                   	</li>
                   </c:if>
-                  <c:if test="${pagination.startPage != 1}">
+                  <c:if test="${pagination.currentPage != 1}">
                   	 <li class="page-item">
-                      <a class="page-link" href="${contextPath}/market/show.do?marketNum=${market.marketId}&pg=${pg-1}">이전</a>
+                      <a class="page-link" href="${contextPath}/market/show.do?marketNum=${market.marketId}&pg=${pagination.currentPage-1}">이전</a>
                   	</li>
                   </c:if>
-                  <c:forEach begin="${pagination.startPage}" end="${pagination.endPage + 1}" step="1" var="pg">
+                  <c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" step="1" var="pg">
                   	<c:if test="${pg == pagination.currentPage}">
                   		<li class="page-item active">
 							<span class="page-link">${pg}</span>
@@ -233,14 +233,14 @@
                   	 
                   </c:forEach>
                  	
-                  <c:if test="${pagination.endPage == pagination.pageCount}">
+                  <c:if test="${pagination.currentPage == pagination.pageCount}">
                     <li class="page-item disabled">
                       <span class="page-link">다음</span>
                   	</li>
                   </c:if>
-                  <c:if test="${pagination.endPage != pagination.pageCount}">
+                  <c:if test="${pagination.currentPage != pagination.pageCount}">
                   	 <li class="page-item">
-                      <a class="page-link" href="${contextPath}/market/show.do?marketNum=${market.marketId}&pg=${pg+1}">다음</a>
+                      <a class="page-link" href="${contextPath}/market/show.do?marketNum=${market.marketId}&pg=${pagination.currentPage+1}">다음</a>
                   	</li>
                   </c:if>
                 </ul>

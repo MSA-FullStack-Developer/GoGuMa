@@ -146,7 +146,7 @@ public class MarketServiceImpl implements MarketService {
 		return true;
 	}
 
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = {RuntimeException.class, Exception.class})
 	@Override
 	public void createMarketArticle(CreateArticleDTO article) throws Exception {
 		// 0. 썸네일 저장
@@ -216,15 +216,19 @@ public class MarketServiceImpl implements MarketService {
 	@Override
 	public PaginationDTO<MarketArticleDTO> getMarketArticles(long marketId, long page) {
 
-		long offset = page - 1;
+		long offset = (page - 1) * this.PAGESIZE;
 
 		List<MarketArticleDTO> articles = this.marketMapper.findMarketArticles(marketId, offset, this.PAGESIZE);
 
 		long totalCount = this.marketMapper.countMarketArticles(marketId);
+		
+		log.info("[getMarketArticles] totalCount : " + totalCount);
 
-		long pageCount = (long) Math.ceil(totalCount / this.PAGESIZE);
+		long pageCount = (long) Math.ceil((double)totalCount / this.PAGESIZE);
 
-		long startPage = (offset) / this.BLOCKSIZE * this.BLOCKSIZE + 1;
+		log.info("[getMarketArticles] pageCount : " + pageCount);
+	
+		long startPage = offset / this.BLOCKSIZE * this.BLOCKSIZE + 1;
 		if (startPage < 0)
 			startPage = 1;
 
@@ -235,6 +239,7 @@ public class MarketServiceImpl implements MarketService {
 		PaginationDTO<MarketArticleDTO> paginationDTO = new PaginationDTO<>();
 
 		paginationDTO.setTotalCount(totalCount);
+		paginationDTO.setPageCount(pageCount);
 		paginationDTO.setPageSize(this.PAGESIZE);
 		paginationDTO.setBlockSize(this.BLOCKSIZE);
 		paginationDTO.setStartPage(startPage);
@@ -245,7 +250,7 @@ public class MarketServiceImpl implements MarketService {
 		return paginationDTO;
 	}
 
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = {RuntimeException.class, Exception.class})
 	@Override
 	public void editMarketArticle(EditArticleDTO article) throws Exception {
 

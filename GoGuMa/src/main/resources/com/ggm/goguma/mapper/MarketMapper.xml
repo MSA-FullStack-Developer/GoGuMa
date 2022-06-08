@@ -107,7 +107,7 @@
 	<select id="findMarketArticleById" resultMap="MarketArticleResult">
 		SELECT articleId, marketId, articleTitle, articleContent, regDate
 		FROM marketArticle
-		WHERE articleId = #{articleId}
+		WHERE articleId = #{articleId} 
 	</select>
 	
 	<select id="findThumbnailImageById" resultType="ArticleImageDTO">
@@ -131,6 +131,7 @@
 		SELECT articleId, marketId, articleTitle, regDate
 		FROM marketArticle
 		WHERE marketId = #{marketId}
+		ORDER BY articleId DESC
 		OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
 	</select>
 	
