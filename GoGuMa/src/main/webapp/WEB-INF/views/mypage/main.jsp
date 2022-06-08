@@ -14,26 +14,16 @@
 	<!-- bootstrap js -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 	<style>
-        a {
-            text-decoration: none;
-        }
-        a:link {
-            color: black;
-        }
-        a:visited {
-            color: black;
-        }
-	    .mainImg {
-	        width: 70%;
-	        height: 70%;
-	        margin-top: 15%;
-	        margin-bottom: 15%;
+	    a {
+	        text-decoration: none;
 	    }
-	    .bundle {
-	        width: 25%;
-	        height: 25%;
+	    a:link {
+	        color: black;
 	    }
-</style>
+	    a:visited {
+	        color: black;
+	    }
+	</style>
 </head>
 <body>
 	<%@ include file="../header.jsp" %>
@@ -44,7 +34,7 @@
                 <div class="col">
                     <h4><b>${memberDTO.name}님</b></h4>
                 </div>
-                <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-2">
+                <div class="d-flex flex-row justify-content-evenly border rounded mb-3">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
                             회원등급
@@ -55,10 +45,10 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
+                            포인트
                         </div>
                         <div>
-                            <a href="${contextPath}/mypage/pointHistory/all?page=1">1,000P</a>
+                            1,000P
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -71,10 +61,10 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
+                            쿠폰
                         </div>
                         <div>
-                            <a href="${contextPath}/mypage/couponHistory/available?page=1">3장</a>
+                            3장
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -86,51 +76,93 @@
                         </div>
                     </div>
                 </div>
-                <div class="col mt-3">
-                    <h5><b>최근 주문내역</b></h5>
+                <div>
+                    <h5><b>최근 본 상품</b></h5>
                 </div>
-                <div class="d-flex flex-row mb-2">
-                    <div class="bundle">
-                        <div class="d-flex flex-column align-items-center border rounded">
-                            <img class="mainImg" src="resources\img\아몬드세트.jpg">
+                <div>
+                    <div class="row mb-3">
+                        <div class="col-3">
+                            <div class="border mb-1 p-3">
+                                <img src="https://image.hmall.com/static/3/0/19/38/2138190316_0.jpg?RS=660x660&AR=0" style="width: 100%; height: 100%">
+                            </div>
+                            <div class="text-truncate">
+                                핫브레이크 핫브레이크
+                            </div>
                         </div>
-                        <div class="d-flex flex-column align-items-center">
-                            허니버터아몬드 허니버터아몬드 허니버터아몬드
+                        <div class="col-3">
+                            <div class="border mb-1 p-3">
+                                <img src="https://image.hmall.com/static/9/6/76/31/2131766991_0.jpg?RS=520x520&AR=0" style="width: 100%; height: 100%">
+                            </div>
+                            <div class="text-truncate">
+                                핫브레이크 핫브레이크 핫브레이크 핫브레이크 핫브레이크 핫브레이크 핫브레이크 핫브레이크
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="border mb-1 p-3">
+                                <img src="https://image.hmall.com/static/9/6/76/31/2131766991_0.jpg?RS=520x520&AR=0" style="width: 100%; height: 100%">
+                            </div>
+                            <div class="text-truncate">
+                                핫브레이크 핫브레이크
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="border mb-1 p-3">
+                                <img src="https://image.hmall.com/static/9/6/76/31/2131766991_0.jpg?RS=520x520&AR=0" style="width: 100%; height: 100%">
+                            </div>
+                            <div class="text-truncate">
+                                핫브레이크 핫브레이크
+                            </div>
                         </div>
                     </div>
-                    <div class="bundle">
-                        <div class="d-flex flex-column align-items-center border rounded">
-                            <img class="mainImg" src="resources\img\아몬드세트.jpg">
+                    <div class="row mb-3">
+                        <div class="col-3">
+                            <div class="border mb-1 p-3">
+                                <img src="https://image.hmall.com/static/3/0/19/38/2138190316_0.jpg?RS=660x660&AR=0" style="width: 100%; height: 100%">
+                            </div>
+                            <div class="text-truncate">
+                                허니버터아몬드 허니버터아몬 허니버터아몬드 허니버터아몬 허니버터아몬드 허니버터아몬
+                            </div>
                         </div>
-                        <div class="d-flex flex-column align-items-center">
-                            허니버터아몬드 허니버터아몬드 허니버터아몬드
+                        <div class="col-3">
+                            <div class="border mb-1 p-3">
+                                <img src="https://image.hmall.com/static/9/6/76/31/2131766991_0.jpg?RS=520x520&AR=0" style="width: 100%; height: 100%">
+                            </div>
+                            <div class="text-truncate">
+                                허니버터아몬드 허니버터아몬 허니버터아몬드 허니버터아몬 허니버터아몬드 허니버터아몬
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col mt-3">
-                    <h5><b>내가 작성한 후기</b></h5>
-                </div>
-                <div class="d-flex flex-row mb-2">
-                    <div class="bundle">
-                        <div class="d-flex flex-column align-items-center border rounded">
-                            <img class="mainImg" src="resources\img\핫브레이크미니.jpg">
+                        <div class="col-3">
+                            <div class="border mb-1 p-3">
+                                <img src="https://image.hmall.com/static/9/6/76/31/2131766991_0.jpg?RS=520x520&AR=0" style="width: 100%; height: 100%">
+                            </div>
+                            <div class="text-truncate">
+                                허니버터아몬드 허니버터아몬 허니버터아몬드 허니버터아몬 허니버터아몬드 허니버터아몬
+                            </div>
                         </div>
-                        <div class="d-flex flex-column align-items-center">
-                            핫 브레이크 핫 브레이크 핫 브레이크 핫 브레이크
-                        </div>
-                    </div>
-                    <div class="bundle">
-                        <div class="d-flex flex-column align-items-center border rounded">
-                            <img class="mainImg" src="resources\img\핫브레이크미니.jpg">
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                            핫 브레이크 핫 브레이크 핫 브레이크 핫 브레이크
+                        <div class="col-3">
+                            <div class="border mb-1 p-3">
+                                <img src="https://image.hmall.com/static/9/6/76/31/2131766991_0.jpg?RS=520x520&AR=0" style="width: 100%; height: 100%">
+                            </div>
+                            <div class="text-truncate">
+                                허니버터아몬드 허니버터아몬 허니버터아몬드 허니버터아몬 허니버터아몬드 허니버터아몬
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 		</div>
 	</div>
-    <%@ include file="../footer.jsp" %>
+	<%@ include file="../footer.jsp" %>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
+<script type="text/javascript">
+	let arr = JSON.parse(sessionStorage.getItem('latelySeenProductList'));
+	arr.forEach((item, index, array) => {
+		console.log(item.productID);
+		console.log(item.categoryID);
+		console.log(item.productName);
+		console.log(item.productImgUrl);
+	});
+</script>
 </html>
