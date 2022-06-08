@@ -35,4 +35,6 @@ public class MemberDTO {
 
 	private Date joinDate;
 	
+	private boolean disabled;
+	
 }

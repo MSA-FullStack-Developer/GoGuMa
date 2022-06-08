@@ -36,8 +36,8 @@
 	
 	<insert id="createMember" useGeneratedKeys="true" keyProperty="id" keyColumn="memberId" parameterType="MemberDTO">
 		INSERT INTO 
-			member(email,password,name,age,phone) 
-		VALUES(#{email},#{password},#{name},#{age},#{phone})	
+			member(email,password,name,phone) 
+		VALUES(#{email},#{password},#{name},#{phone})	
 	</insert>
 	
 	<update id="updateMemberPwd" parameterType="MemberDTO">

@@ -11,6 +11,12 @@
 <head>
     <meta charset="UTF-8">
     <title>게시글 작성 - 고구마</title>
+    
+   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!-- kakao JDK -->
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 
     <!-- bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -24,20 +30,103 @@
     <!-- bootstrap icon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+  
 </head>
 
 <body>
+	<script type="text/javascript">
+	
+		$(document).ready(function(){
+			
+			var tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+			var tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+			
+			Kakao.init("86e9cfc5f205d9ffa1a907baecda8000");
+			
+			if(Kakao.isInitialized()) {
+				
+				Kakao.Link.createDefaultButton({
+					container: "#kakao-share-btn",
+					 objectType : 'feed',
+					  content : {
+						title : "${article.articleTitle}",
+						description : "${article.market.category.categoryName}",
+						imageUrl : "${article.thumbnail.imagePath}",
+						link : {
+							mobileWebUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
+							webUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
+						},
+					  },
+					 
+					  buttons : [
+						{
+							title : '웹으로 보기',
+							link : {
+								mobileWebUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
+								webUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
+							},
+						}]
+				});
+				
+				/* $("#kakao-share").click(function() {
+					
+						
+						Kakao.Link.sendDefault({
+						  objectType : 'feed',
+						  content : {
+							title : "${article.articleTitle}",
+							description : "${article.market.category.categoryName}",
+							imageUrl : "${article.thumbnail.imagePath}",
+							link : {
+								mobileWebUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
+								webUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
+							},
+						  },
+						 
+						  buttons : [
+							{
+								title : '웹으로 보기',
+								link : {
+									mobileWebUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
+									webUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
+								},
+							}]
+						})
+						
+				}) */
+			} else {
+				console.log("카카오 JDK 초기화 실패")
+			}
+		});
+	</script>
     <section class="container">
         <div class="w-50 m-auto p-5" style="min-width: 970px;">
-            <h1>${article.articleTitle}</h1>
-            <p>
-            	<strong>${article.market.marketName}</strong> 
+     
+     		<div class="d-flex justify-content-between">
+
+	            <h1>${article.articleTitle}</h1>	 
+	            <button type="button" id="kakao-share-btn" class="border-0 bg-transparent" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="카카오톡 링크 공유하기">
+	            	<img src="https://developers.kakao.com/assets/img/about/logos/kakaotalksharing/kakaotalk_sharing_btn_medium.png" alt="카카오톡 공유 보내기 버튼"   style="width: 40px; height: 40px;"/>		
+	            </button>
+            </div>
+            <div class="d-flex justify-content-between">
+            	<p>
+	            	<strong>${article.market.marketName}</strong> 
+	            	<span class="badge text-bg-info ms-1">${article.market.category.categoryName}</span>
+            	</p>
             	<span class="ms-1 text-secondary"><fmt:formatDate value="${article.regDate}" pattern="yyyy-MM-dd HH:mm"/></span>
-            </p>
-            <div class="badge text-bg-info">${article.market.category.categoryName}</div>
+            </div>
+          
             <div id="article-area">
+            	<c:if test="${isMyArticle}">
+		              <a class="text-decoration-none text-secondary" href="${contextPath}/market/${article.market.marketId}/article/${article.articleId}/edit.do">
+		            	수정 
+		            	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+  						<path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+ 	 					<path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+						</svg>
+		            </a>
+	            </c:if>
                 <div class="accordion mb-3 mt-3" id="accordionSelectedProducts">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
@@ -74,17 +163,20 @@
                 <div id="content-area" style="padding: 10px;">
                    ${article.articleContent}
                 </div>
-            </div>
+            </div>  <!-- article-area 끝 -->
             <div id="market-info-area" class="row mt-2">
                 <div class="col-2">
                 	<a href="${contextPath}/market/show.do?marketNum=${article.market.marketId}" class="h4 text-decoration-none text-dark">
-                    	<img class="w-100 rounded-circle" src="${article.market.marketThumbnail}" />
+                    	<img class="img-thumbnail" src="${article.market.marketThumbnail}" />
                     </a>
                 </div>
                 <div class="col d-flex flex-column justify-content-center">
                    <a href="${contextPath}/market/show.do?marketNum=${article.market.marketId}" class="h4 text-decoration-none text-dark">${article.market.marketName}</a>
                    <p class="text-secondary mt-1">${article.market.marketDetail}</p>
                 </div>
+            </div> <!-- market-info-area 끝 -->
+            <div id="comment-area">
+            	
             </div>
         </div>
     </section>

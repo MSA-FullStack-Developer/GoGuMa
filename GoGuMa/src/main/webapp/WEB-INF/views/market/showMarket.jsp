@@ -90,7 +90,7 @@
             </div>
             <div class="row p-4">
                 <div class="col-1">
-                    <img class="w-100 border border-secondary rounded-circle" src="${market.marketThumbnail}" />
+                    <img class="w-100 border border-secondary rounded-circle"  src="${market.marketThumbnail}"  />
                 </div>
                 <div class="col-9">
                     <h5>${market.marketName}</h5>
@@ -119,7 +119,21 @@
                 </c:if>
                
             </div>
-          
+            <c:if test="${fn:length(pagination.data) == 0}">
+            	<div name="no-data" class="h-50 d-flex flex-column justify-content-around align-items-center">
+	                <div>
+	                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
+	                        class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+	                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+	                        <path
+	                            d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z" />
+	                    </svg>
+	                </div>
+	                <p class="fs-3">등록한 게시글이 없습니다. 게시글을 등록해주세요.</p>
+	            </div> 
+            </c:if>
+            
+          	<c:if test="${fn:length(pagination.data) > 0}">
             <div class="d-flex flex-wrap">
             	<c:forEach items="${pagination.data}" var="article" varStatus="articleStatus">
             	
@@ -133,7 +147,7 @@
                         class="text-decoration-none text-dark">
                         <img src="${article.thumbnail.imagePath}"
                             class="card-img-top" alt="...">
-                        <div class="card-body">
+                        <div class="card-body border-top border-dark">
                             <p class="card-text text-truncate">${article.articleTitle}</p>
 
                         </div>
@@ -188,7 +202,10 @@
 
                 </c:forEach>
             </div>
+            </c:if>
         </section>
+        
+        <c:if test="${fn:length(pagination.data) > 0}">
         <section name="pagination-area" class="w-100 mt-3 d-flex justify-content-center">
             <nav>
                 <ul class="pagination">
@@ -229,6 +246,7 @@
                 </ul>
               </nav>
         </section>
+        </c:if>
     </div>
 
 </body>

@@ -26,6 +26,7 @@ import com.ggm.goguma.dto.PaginationDTO;
 import com.ggm.goguma.dto.market.ArticleProudctDTO;
 import com.ggm.goguma.dto.market.CreateArticleDTO;
 import com.ggm.goguma.dto.market.CreateMarketDTO;
+import com.ggm.goguma.dto.market.EditArticleDTO;
 import com.ggm.goguma.dto.market.FollowMarketDTO;
 import com.ggm.goguma.dto.market.MarketArticleDTO;
 import com.ggm.goguma.dto.market.MarketDTO;
@@ -99,12 +100,23 @@ public class MarketController {
 	}
 
 	@GetMapping("/article/{articleId}/show.do")
-	public String showArticle(@PathVariable long articleId, Model model) {
+	public String showArticle(@PathVariable long articleId, Principal principal, Model model) {
 
 		MarketArticleDTO article = this.marketService.getMarketArticle(articleId);
 		
 		log.info(article);
+		
+		boolean isMyArticle = false;
+		if(principal != null) {
+			MemberDTO member = this.memberService.getMember(principal.getName());
+			
+			isMyArticle = this.marketService.isMyArticle(article.getMarket().getMarketId(), member.getId(), articleId);
+		
+		}
+		
+		
 		model.addAttribute("article", article);
+		model.addAttribute("isMyArticle", isMyArticle);
 		
 		return "market/showArticle";
 	}
@@ -121,6 +133,21 @@ public class MarketController {
 		if(error != null) model.addAttribute("error", error);
 		model.addAttribute("marketId", marketId);
 		return "market/createArticle";
+	}
+	
+	@GetMapping("/{marketId}/article/{articleId}/edit.do")
+	public String editArticleForm(@PathVariable long marketId, @PathVariable long articleId, Model model, Principal principal) {
+		
+		MemberDTO member = this.memberService.getMember(principal.getName());
+		
+		MarketArticleDTO article = this.marketService.getMarketArticle(articleId);
+		
+		if(!this.marketService.isMyArticle(marketId, member.getId(), articleId)) {
+			return "error/error403";
+		}
+		
+		model.addAttribute("article", article);
+		return "market/editArticle";
 	}
 
 	@GetMapping("/article/searchProudct.do")
@@ -182,6 +209,21 @@ public class MarketController {
 		
 		return "redirect:/market/show.do?marketNum="+article.getMarketId();
 	}
+	
+	@PostMapping(value= "/article/editArticle.do", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public String editArticle(EditArticleDTO article, Principal principal) throws Exception {
+		
+		MemberDTO member = this.memberService.getMember(principal.getName());
+	
+		
+		if(!this.marketService.isMyArticle(article.getMarketId(), member.getId(), article.getArticleId())) {
+			return "error/error403";
+		}
+		
+		this.marketService.editMarketArticle(article);
+		
+		return "redirect:/market/article/" + article.getArticleId() + "/show.do";
+	}
 
 	@PostMapping(value = "/api/updateFollow.do", produces = "application/json; charset=utf-8")
 	@ResponseBody
@@ -203,8 +245,7 @@ public class MarketController {
 
 	}
 	
-	
-	
+
 	
 	@PostMapping(value = "/api/uploadArticleImage.do", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody

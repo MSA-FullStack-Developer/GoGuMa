@@ -17,7 +17,9 @@ public interface MarketMapper {
 
 	Optional<MarketDTO> findMarketById(@Param("id") long marketId) throws Exception;
 	
-	List<Long> findMarketIdByMemberId(@Param("id") long memberId);
+	List<Long> findMarketIdsByMemberId(@Param("id") long memberId);
+	
+	List<Long> findArticleIdsByMarketId(@Param("id") long marketId);
 	
 	int findFollwMarketCountByMarketIdAndMemberId(FollowMarketDTO followMarket);
 	
@@ -32,6 +34,13 @@ public interface MarketMapper {
 	void insertArticleProduct(@Param("articleId") long articleId, @Param("productId") long productId);
 	
 	void insertArticleImage(ArticleImageDTO articleImage);
+	
+	void updateMarketArticle(MarketArticleDTO article);
+	
+	void deleteAllArticleProduct(@Param("articleId") long articleId);
+	
+	void deleteAllArticleAimage(@Param("articleId") long articleId, @Param("isthumbnail") long isthumbnail);
+	
 	
 	Optional<MarketArticleDTO> findMarketArticleById(@Param("articleId") long articleId);
 	

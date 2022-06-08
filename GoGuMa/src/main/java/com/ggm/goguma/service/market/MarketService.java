@@ -7,6 +7,7 @@ import com.ggm.goguma.dto.PaginationDTO;
 import com.ggm.goguma.dto.market.ArticleProudctDTO;
 import com.ggm.goguma.dto.market.CreateArticleDTO;
 import com.ggm.goguma.dto.market.CreateMarketDTO;
+import com.ggm.goguma.dto.market.EditArticleDTO;
 import com.ggm.goguma.dto.market.FollowMarketDTO;
 import com.ggm.goguma.dto.market.MarketArticleDTO;
 import com.ggm.goguma.dto.market.MarketDTO;
@@ -21,6 +22,8 @@ public interface MarketService {
 	
 	boolean isMyMarket(long marketId, long memberId);
 	
+	boolean isMyArticle(long marketId, long memberId, long articleId);
+	
 	boolean isAlreadyFollowMarket(FollowMarketDTO followMarket);
 	
 	boolean createOrDeleteFollowMarket(FollowMarketDTO followMarket);
@@ -33,4 +36,5 @@ public interface MarketService {
 	
 	PaginationDTO<MarketArticleDTO> getMarketArticles(long marketId, long page);
 	
+	void editMarketArticle(EditArticleDTO article) throws Exception;
 }
