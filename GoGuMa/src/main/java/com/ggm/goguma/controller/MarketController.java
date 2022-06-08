@@ -61,17 +61,21 @@ public class MarketController {
 	public String main(Model model, Principal principal) throws Exception {
 		
 		String memberName = "";
-		long marketCount = 4;
+		long followCount = 4;
 		
 		if (principal != null) {
 			MemberDTO member = this.memberService.getMember(principal.getName());
 			memberName = member.getName();
 			
 			// 팔로우한 마켓 불러오기
-			List<MarketDTO> myMarketList = this.marketService.getMyMarket(member.getId());
-			marketCount = 4 - myMarketList.size(); // 상단 4개 배치
+			List<MarketDTO> followedList = this.marketService.getFollowedMarket(member.getId());
+			followCount = 4 - followedList.size(); // 상단 4개 배치
+			
+			// 만들었던 마켓이 있는지 확인
+			Integer isCreatedMarket = this.marketService.getMyMarket(member.getId());
 
-			model.addAttribute("myMarketList", myMarketList);
+			model.addAttribute("followedList", followedList);
+			model.addAttribute("isCreatedMarket", isCreatedMarket);
 		} else {
 			memberName = "게스트";
 		}
@@ -80,7 +84,7 @@ public class MarketController {
 		List<MarketArticleDTO> recentArticleList = this.marketService.getAllArticle();
 		
 		model.addAttribute("memberName", memberName);
-		model.addAttribute("marketCount", marketCount);
+		model.addAttribute("followCount", followCount);
 		model.addAttribute("recentArticleList", recentArticleList);
 		
 		return "market/main";
@@ -95,10 +99,10 @@ public class MarketController {
 	public String everyMarket(Model model, Principal principal) throws Exception {
 		
 		MemberDTO member = this.memberService.getMember(principal.getName());
-		List<MarketDTO> allMarketList = this.marketService.getUnfollowMarket(member.getId());
+		List<MarketDTO> unfollowedList = this.marketService.getUnfollowedMarket(member.getId());
 		String memberName = member.getName();
 		
-		model.addAttribute("allMarketList", allMarketList);
+		model.addAttribute("unfollowedList", unfollowedList);
 		model.addAttribute("memberName", memberName);
 		
 		return "market/unFollowMarket";

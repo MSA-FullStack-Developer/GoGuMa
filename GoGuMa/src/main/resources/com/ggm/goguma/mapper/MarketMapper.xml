@@ -132,7 +132,7 @@
 		작업일 : 22.06.08
 		메인 화면 - 내가 팔로우한 마켓 정보 불러오기
 	 -->
-	 <select id="getMyMarket" resultMap="MarketResult">
+	 <select id="getFollowedMarket" resultMap="MarketResult">
 	 	SELECT m.marketid, m.marketname, m.marketthumb
 		FROM market m, followmarket f
 		WHERE m.marketid = f.marketid
@@ -144,7 +144,7 @@
 		작업일 : 22.06.08
 		메인 화면 - 내가 팔로우하지 않은 마켓 정보 불러오기
 	 -->
-	 <select id="getUnfollowMarket" resultMap="MarketResult">
+	 <select id="getUnfollowedMarket" resultMap="MarketResult">
 	 	SELECT *
 		FROM market m
 		LEFT JOIN (SELECT *
@@ -163,6 +163,17 @@
 	 	SELECT *
 	 	FROM marketarticle
 	 	ORDER BY regdate DESC
+	 </select>
+	 
+	 <!-- 
+		작성자 : 경민영
+		작업일 : 22.06.08
+		메인 화면 - 만들었던 마켓이 있는지 확인하기
+	 -->
+	 <select id="getMyMarket" resultType="Integer">
+	 	SELECT COUNT(*)
+	 	FROM market
+	 	WHERE memberid = #{memberId}
 	 </select>
 	
 </mapper>

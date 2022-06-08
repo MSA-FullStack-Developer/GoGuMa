@@ -40,7 +40,7 @@
 
             <div class="w-100 mt-4">
                 <div class="d-flex justify-content-between align-content-between flex-wrap">
-                	<c:forEach items="${allMarketList}" var="market" end="3">
+                	<c:forEach items="${unfollowedList}" var="market" end="3">
 	                    <div class="card mt-3 container">
 	                    	<a href="${contextPath}/market/show.do?marketNum=${market.marketId}">
 		                        <img class="card-img-top container-img" src="${market.marketThumbnail}" alt="${market.marketThumbnail}">

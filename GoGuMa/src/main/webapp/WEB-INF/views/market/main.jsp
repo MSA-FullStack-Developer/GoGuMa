@@ -33,35 +33,37 @@
 		    object-fit: cover;
 		}
     </style>
-    <script>
-    	
-    </script>
 </head>
 
 <body>
+	<%@ include file="../market/marketHeader.jsp" %>
     <div class="w-100" style="min-width: 1400px;">
         <section id="main-section" class="container-xxl pt-5 pb-5">
             <div>
-                <h3>️❤️ ${memberName}님이 팔로우한 마켓 ❤️️</h3>
+                <h3>${memberName}님이 팔로우한 마켓
+                	<c:if test="${isCreatedMarket == null}">
+                		<button type="button" class="createMarketBtn">마켓 생성하기</button>
+                	</c:if>
+                </h3>
             </div>
 
             <div class="w-100 mt-4">
                 <div class="d-flex justify-content-between align-content-between flex-wrap">
-                	<c:forEach items="${myMarketList}" var="myMarket" end="3">
+                	<c:forEach items="${followedList}" var="market" end="3">
 	                    <div class="card mt-3 container">
-	                    	<a href="${contextPath}/market/show.do?marketNum=${myMarket.marketId}">
-		                        <img class="card-img-top container-img" src="${myMarket.marketThumbnail}" alt="${myMarket.marketThumbnail}">
+	                    	<a href="${contextPath}/market/show.do?marketNum=${market.marketId}">
+		                        <img class="card-img-top container-img" src="${market.marketThumbnail}" alt="${myMarket.marketThumbnail}">
 	                        </a>
 	                        <div class="card-body centered">
-	                            <p class="card-text">${myMarket.marketName}</p>
+	                            <p class="card-text">${market.marketName}</p>
 	                        </div>
 	                    </div>
                     </c:forEach>
-                    <c:forEach var="i" begin="1" end="${marketCount}">
+                    <c:forEach var="i" begin="1" end="${followCount}">
                     	<c:set value="https://hd-goguma.s3.ap-northeast-2.amazonaws.com/upload/1654654467726%E1%84%83%E1%85%A1%E1%84%85%E1%85%B3%E1%86%AB%E1%84%86%E1%85%A1%E1%84%8F%E1%85%A6%E1%86%BA%E1%84%91%E1%85%A1%E1%86%AF%E1%84%85%E1%85%A9%E1%84%8B%E1%85%AE%E1%84%92%E1%85%A1%E1%84%80%E1%85%B5.png"
                     				var="otherImg" />
 						<div class="card mt-3 container">
-                    		<input type="hidden" value="${marketCount}">
+                    		<input type="hidden" value="${followCount}">
 	                    	<a href="${contextPath}/market/unFollowMarket.do">
 		                        <img class="card-img-top container-img" src="${otherImg}">
 	                        </a>
@@ -73,7 +75,7 @@
         
         <section id="main-section" class="container-xxl pt-5 pb-5">
             <div>
-                <h3>❤️ 최근 마켓 게시글들 모아보기 ❤️️</h3>
+                <h3>최근 마켓 게시글들 모아보기️️</h3>
             </div>
             
             <div class="d-flex flex-wrap">

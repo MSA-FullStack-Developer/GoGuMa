@@ -224,18 +224,23 @@ public class MarketServiceImpl implements MarketService{
 	}
 
 	@Override
-	public List<MarketDTO> getMyMarket(long memberId) throws Exception {
-		return this.marketMapper.getMyMarket(memberId);
+	public List<MarketDTO> getFollowedMarket(long memberId) throws Exception {
+		return this.marketMapper.getFollowedMarket(memberId);
 	}
 
 	@Override
-	public List<MarketDTO> getUnfollowMarket(long memberId) throws Exception {
-		return this.marketMapper.getUnfollowMarket(memberId);
+	public List<MarketDTO> getUnfollowedMarket(long memberId) throws Exception {
+		return this.marketMapper.getUnfollowedMarket(memberId);
 	}
 
 	@Override
 	public List<MarketArticleDTO> getAllArticle() throws Exception {
 		return this.marketMapper.getAllArticle();
+	}
+
+	@Override
+	public Integer getMyMarket(long memberId) throws Exception {
+		return this.marketMapper.getMyMarket(memberId);
 	}
 	
 }

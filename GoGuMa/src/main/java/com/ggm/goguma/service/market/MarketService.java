@@ -36,10 +36,12 @@ public interface MarketService {
 	 * 작성자 : 경민영
 	 * 작성일 : 2022.06.08
 	 * */
-	List<MarketDTO> getMyMarket(long memberId) throws Exception;
+	List<MarketDTO> getFollowedMarket(long memberId) throws Exception;
 
-	List<MarketDTO> getUnfollowMarket(long memberId) throws Exception;
+	List<MarketDTO> getUnfollowedMarket(long memberId) throws Exception;
 
 	List<MarketArticleDTO> getAllArticle() throws Exception;
+
+	Integer getMyMarket(long memberId) throws Exception;
 	
 }

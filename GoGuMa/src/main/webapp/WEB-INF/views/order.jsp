@@ -420,9 +420,9 @@
 <style>
 <%@include file="/resources/css/header.css"%>
 </style>
-<div class="container">
 
-	<%@ include file="header.jsp"%>
+<%@ include file="header.jsp" %>
+<div class="container mt-5" style="min-width: 1200px">
 	<!-- 바디 전체-->
 	<div class="cbody">
 		<div class="contents">

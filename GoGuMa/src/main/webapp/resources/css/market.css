@@ -37,3 +37,18 @@
 	font-size: 14pt;
 	font-weight: bold;
 }
+
+.createMarketBtn {
+    float: right;
+    border: none;
+    font-size: 13pt;
+    width: 150px;
+    height: 45px;
+    border-radius: 10pt;
+    color: white;
+    background-color: #6426DD;
+}
+
+.createMarketBtn:hover {
+    background-color: #FF493C;
+}
