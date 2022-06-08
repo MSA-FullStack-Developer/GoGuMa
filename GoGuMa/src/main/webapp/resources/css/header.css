@@ -1,6 +1,60 @@
 @charset "UTF-8";
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
 
+.main {
+	width: auto;
+	height: auto;
+}
+
+.header-top {
+	width: 1320px;
+    height: 30px;
+    text-align: center;
+    margin-left: 305px;
+    margin-top: 25px;
+}
+
+.menu {
+	width: auto;
+	float: right;
+	position: static;
+	top: 0%;
+}
+
+#goguma {
+	border: none;
+    color: black;
+    transform: translate(-50%, -50%);
+    top: 17.8%;
+    right: 195px;
+    position: absolute;
+    border-radius: 10pt;
+    width: auto;
+    height: 50px;
+    font-size: 10pt;
+}
+
+#goguma:hover {
+    color: #6426DD;
+}
+
+.menuA {
+	margin-top: 20px;
+}
+
+.menuB {
+	margin-right: 10px;
+	font-size: 9.5pt;
+}
+
+.menuA:hover {
+	color: #FF493C;
+}
+
+.menuB:hover {
+	color: #FF493C;
+}
+	
 .search {
     position: relative;
     width: 500px;
@@ -12,7 +66,7 @@
     width: 1320px;
     text-align: center;
     margin: 0 auto;
-    margin-top: 45px;
+    margin-top: 10px;
 }
 
 .search input {

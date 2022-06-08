@@ -57,7 +57,7 @@
 	                        </div>
 	                    </div>
                     </c:forEach>
-                    <c:forEach var="i" begin="0" end="${marketCount-1}">
+                    <c:forEach var="i" begin="1" end="${marketCount}">
                     	<c:set value="https://hd-goguma.s3.ap-northeast-2.amazonaws.com/upload/1654654467726%E1%84%83%E1%85%A1%E1%84%85%E1%85%B3%E1%86%AB%E1%84%86%E1%85%A1%E1%84%8F%E1%85%A6%E1%86%BA%E1%84%91%E1%85%A1%E1%86%AF%E1%84%85%E1%85%A9%E1%84%8B%E1%85%AE%E1%84%92%E1%85%A1%E1%84%80%E1%85%B5.png"
                     				var="otherImg" />
 						<div class="card mt-3 container">
