@@ -54,7 +54,7 @@
 	 		<a href="${contextPath}/mypage/manageAddress">배송지관리</a>
 	    </div>
         <div>
-            회원탈퇴
+            <a href="${contextPath}/mypage/resignMember">회원탈퇴</a>
         </div>
     </div>
 </div>

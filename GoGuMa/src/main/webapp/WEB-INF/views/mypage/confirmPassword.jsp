@@ -84,14 +84,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-flex flex-column border border-2 rounded mb-2" align="center">
-                    <form action="${contextPath}/mypage/confirmPassword/${type}" method="POST" style="padding: 150px">
+                <form action="${contextPath}/mypage/confirmPassword/${type}" method="POST" >
+	                <div class="d-flex flex-column border border-2 rounded mb-2" style="padding: 150px" align="center">
                         <h5 style="width: 400px"><b>고객님의 소중한 개인정보를 보호하기 위해 비밀번호를 다시 한번 확인합니다.</b></h5>
                         <input type="password" class="form-control mb-2" name="userPassword" style="width: 400px"/>
                         <button type="submit" class="btn btn-primary" style="width: 400px">확인</button>
                         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                    </form>
-                </div>
+	                </div>
+                </form>
             </div>
         </div>
     </div>

@@ -100,16 +100,18 @@
                         <tr>
                             <th class="col-2">성별</th>
                             <td>
-                            	<c:if test="${memberDTO.gender eq 'M'}">
-                           			<label><input type="radio" name="gender" value="M" checked>&nbsp;남</label>
-                                	&nbsp;
-                                	<label><input type="radio" name="gender" value="F">&nbsp;여</label>
-                            	</c:if>
-                            	<c:if test="${memberDTO.gender eq 'F'}">
-                            		<label><input type="radio" name="gender" value="M">&nbsp;남</label>
-                                	&nbsp;
-                                	<label><input type="radio" name="gender" value="F">&nbsp;여</label>
-                            	</c:if>
+                            	<c:choose>
+                            		<c:when test="${memberDTO.gender eq 'M'}">
+	                           			<label><input type="radio" name="gender" value="M" checked>&nbsp;남</label>
+	                                	&nbsp;
+	                                	<label><input type="radio" name="gender" value="F">&nbsp;여</label>
+	                            	</c:when>
+	                            	<c:otherwise>
+	                            		<label><input type="radio" name="gender" value="M">&nbsp;남</label>
+	                                	&nbsp;
+	                                	<label><input type="radio" name="gender" value="F" checked>&nbsp;여</label>
+	                            	</c:otherwise>
+                            	</c:choose>
                             </td>
                         </tr>
                         <tr>
@@ -180,7 +182,7 @@
                     <tbody class="table-group-divider">
                         <tr>
                             <th class="col-2 table-active" style="text-align: center;">비밀번호확인</th>
-                            <td><input type="password" class="ms-3" id="userPassword" maxlength="16" style="width:200px; height:25px"/></td>
+                            <td><input type="password" class="ms-2" id="userPassword" maxlength="16" style="width:200px; height:25px"/></td>
                         </tr>
                     </tbody>
                 </table>
@@ -212,8 +214,8 @@
 	        },
 	        success:function(result) {
 	        	if(result==1) window.location.href = "${contextPath}/mypage";
-	        	else if(result==2) alert('비밀번호 오류');
-	        	else alert("서버 오류");
+	        	else if(result==2) alert('비밀번호가 일치하지 않습니다.');
+	        	else alert("서버에서 문제가 발생했습니다.");
 	        },
 			error:function(xhr, status, error) {
 				var errorResponse = JSON.parse(xhr.responseText);
