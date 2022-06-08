@@ -530,7 +530,7 @@
 															value="${i.cartPrice * i.cartAmount}" />
 														<fmt:formatNumber var="pp" value="${proPrice}"
 															type="currency" currencySymbol="" />
-														<span><strong>${pp }</strong></span>원
+														<strong><span>${pp }</span></strong>원
 													</div>
 												</td>
 												<td class="cart-discount">
@@ -539,8 +539,8 @@
 															value="${i.cartPrice * i.discountPercent / 100}" />
 														<c:set var="disPrice"
 															value="${proPrice  * i.discountPercent / 100 }" />
-														-<em><strong><fmt:formatNumber value="${disPrice}"
-																type="currency" currencySymbol="" /></strong></em>원
+														-<strong><em><fmt:formatNumber value="${disPrice}"
+																type="currency" currencySymbol="" /></em></strong>원
 													</div>
 												</td>
 												<td class="cart-total">
@@ -549,8 +549,8 @@
 															value="${i.cartPrice - (i.cartPrice * i.discountPercent / 100)}" />
 														<!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
 														<c:set var="totPrice" value="${proPrice - disPrice}" />
-														<span><strong><fmt:formatNumber value="${totPrice}"
-																type="currency" currencySymbol="" /></strong></span>원
+														<strong><span><fmt:formatNumber value="${totPrice}"
+																type="currency" currencySymbol="" /></span></strong>원
 													</div>
 												</td>
 												<td class="cart-purchase-delete">
