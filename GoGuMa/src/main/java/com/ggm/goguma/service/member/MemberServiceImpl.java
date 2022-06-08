@@ -139,7 +139,7 @@ public class MemberServiceImpl implements MemberService {
 
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public void createMember(CreateMemberDTO data) throws CreateMemberFailException {
 
 		try {
@@ -158,6 +158,7 @@ public class MemberServiceImpl implements MemberService {
 			for(int contractId: data.getAgreements()) {
 				this.contractService.createContractHistory(member.getId(), contractId);
 			}
+			
 		}catch(Exception e) {
 			log.error(e.getMessage());
 			throw new CreateMemberFailException("계정 생성 실패하였습니다.");

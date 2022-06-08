@@ -4,14 +4,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +28,6 @@ import com.ggm.goguma.exception.NotFoundMarketArticleException;
 import com.ggm.goguma.exception.NotFoundMarketException;
 import com.ggm.goguma.exception.UploadFileFailException;
 import com.ggm.goguma.mapper.MarketMapper;
-import com.ggm.goguma.service.FileService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -146,7 +142,7 @@ public class MarketServiceImpl implements MarketService {
 		return true;
 	}
 
-	@Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void createMarketArticle(CreateArticleDTO article) throws Exception {
 		// 0. 썸네일 저장
@@ -250,7 +246,7 @@ public class MarketServiceImpl implements MarketService {
 		return paginationDTO;
 	}
 
-	@Transactional(rollbackFor = {RuntimeException.class, Exception.class})
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void editMarketArticle(EditArticleDTO article) throws Exception {
 
