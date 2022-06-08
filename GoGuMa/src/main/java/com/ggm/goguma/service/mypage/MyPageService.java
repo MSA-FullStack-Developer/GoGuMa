@@ -51,4 +51,6 @@ public interface MyPageService {
 	boolean changePassword(String curPassword, String newPassword, MemberDTO dto) throws Exception;
 	
 	boolean changeInfo(String birthDate, String gender, String userPassword, MemberDTO dto) throws Exception;
+
+	boolean resignMember(String resignDetail, String userPassword, MemberDTO dto) throws Exception;
 }

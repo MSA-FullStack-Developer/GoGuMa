@@ -211,4 +211,13 @@
 	<update id="changeInfo">
 		update member set birthDate = #{birthDate}, gender = #{gender} where memberid = #{memberId}
 	</update>
+	
+	<insert id="insertResignMember">
+		insert into resignmember(memberid, email, password, name, gender, age, birthdate, phone, grade, joindate, resigndetail)
+		values(#{dto.id}, #{dto.email}, #{dto.password}, #{dto.name}, #{dto.gender}, #{dto.age}, #{dto.birthDate}, #{dto.phone}, #{dto.grade.id}, #{dto.joinDate}, #{resignDetail})
+	</insert>
+	
+	<update id="disableMember">
+		update member set disabled=1 where memberid = #{memberId}
+	</update>
 </mapper>

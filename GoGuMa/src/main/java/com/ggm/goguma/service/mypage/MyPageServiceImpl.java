@@ -167,18 +167,23 @@ public class MyPageServiceImpl implements MyPageService {
 	@Override
 	public boolean changePassword(String curPassword, String newPassword, MemberDTO dto) throws Exception {
 		if(!confirmPassword(curPassword, dto.getPassword())) return false;
-		else {
-			mapper.changePassword(dto.getId(), passwordEncoder.encode(newPassword));
-			return true;
-		}
+		mapper.changePassword(dto.getId(), passwordEncoder.encode(newPassword));
+		return true;
 	}
 
 	@Override
 	public boolean changeInfo(String birthDate, String gender, String userPassword, MemberDTO dto) throws Exception {
 		if(!confirmPassword(userPassword, dto.getPassword())) return false;
-		else {
-			mapper.changeInfo(dto.getId(), birthDate, gender);
-			return true;
-		}
+		mapper.changeInfo(dto.getId(), birthDate, gender);
+		return true;
+	}
+
+	@Override
+	@Transactional
+	public boolean resignMember(String resignDetail, String userPassword, MemberDTO dto) throws Exception {
+		if(!confirmPassword(userPassword, dto.getPassword())) return false;
+		mapper.insertResignMember(dto, resignDetail);
+		mapper.disableMember(dto.getId());
+		return true;
 	}
 }

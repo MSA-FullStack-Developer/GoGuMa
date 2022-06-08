@@ -32,6 +32,13 @@ import com.ggm.goguma.service.mypage.MyPageService;
 
 import lombok.extern.log4j.Log4j;
 
+
+/**
+ * @작성자 : 송진호
+ * @시작일자 : 2022.05.04
+ * @완료일자 : 2022.06.10
+ */
+
 @Log4j
 @Controller
 @RequestMapping("/mypage")
@@ -407,6 +414,31 @@ public class MyPageController {
 		} catch(Exception e) {
 			log.info(e.getMessage());
 			return "3";
+		}
+	}
+	
+	@RequestMapping(value="/resignMember", method=RequestMethod.GET)
+	public String getResignForm(Principal principal, Model model) throws Exception {
+		try {
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			model.addAttribute("memberDTO", memberDTO);
+		} catch(Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/resignMember";
+	}
+	
+	@RequestMapping(value="/resignMember", method=RequestMethod.POST)
+	public String resignMember(@RequestParam("resignDetail") String resignDetail,
+		@RequestParam("userPassword") String userPassword, Principal principal) throws Exception {
+		try {
+			log.info(resignDetail+" "+userPassword);
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			if(service.resignMember(resignDetail, userPassword, memberDTO)) return "mypage/resignResult";
+			return "redirect:/mypage/resignMember";
+		} catch(Exception e) {
+			log.info(e.getMessage());
+			return "redirect:/mypage/resignMember";
 		}
 	}
 }
