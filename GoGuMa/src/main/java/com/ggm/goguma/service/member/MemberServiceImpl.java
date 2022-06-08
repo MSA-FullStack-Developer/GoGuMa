@@ -19,6 +19,7 @@ import com.ggm.goguma.dto.member.CreateMemberDTO;
 import com.ggm.goguma.dto.member.IamportCertificateTokenRspDTO;
 import com.ggm.goguma.dto.member.IamportReqDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
+import com.ggm.goguma.dto.member.ResignMemberDTO;
 import com.ggm.goguma.exception.CreateMemberFailException;
 import com.ggm.goguma.exception.NotFoundMemberExcption;
 import com.ggm.goguma.mapper.MemberMapper;
@@ -51,6 +52,7 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public MemberDTO getMember(String name, String phone) throws NotFoundMemberExcption {
 		log.info("[getMember] name, phone" + name + " " + phone);
+		log.info(memberMapper.findMemberByNameAndPhone(name, phone));
 		return this.memberMapper.findMemberByNameAndPhone(name, phone).orElseThrow(NotFoundMemberExcption::new);
 	}
 
@@ -171,5 +173,13 @@ public class MemberServiceImpl implements MemberService {
 		
 		this.memberMapper.updateMemberPwd(member);
 	}
+
+
+	@Override
+	public ResignMemberDTO getResignMember(MemberDTO member) throws Exception {
+		return this.memberMapper.findResignMember(member.getId()).orElseThrow(() -> new Exception("탈퇴된 회원 조회 실패"));
+	}
+	
+	
 
 }

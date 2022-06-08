@@ -49,4 +49,12 @@
 			memberid = #{id}
 	</update>
 
+
+	<select id="findResignMember" parameterType="long" resultType="ResignMemberDTO">
+		SELECT 
+			*
+		FROM
+			resignMember
+		WHERE memberId = #{memberId}
+	</select>
 </mapper>
