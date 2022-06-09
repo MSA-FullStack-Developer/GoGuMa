@@ -60,31 +60,25 @@ public class MarketController {
 	@GetMapping("/main.do")
 	public String main(Model model, Principal principal) throws Exception {
 		
-		String memberName = "";
-		long followCount = 4;
-		
 		if (principal != null) {
 			MemberDTO member = this.memberService.getMember(principal.getName());
-			memberName = member.getName();
+			String memberName = member.getName();
 			
 			// 팔로우한 마켓 불러오기
 			List<MarketDTO> followedList = this.marketService.getFollowedMarket(member.getId());
-			followCount = 4 - followedList.size(); // 상단 4개 배치
 			
 			// 만들었던 마켓이 있는지 확인
 			Integer isCreatedMarket = this.marketService.getMyMarket(member.getId());
 
+			model.addAttribute("member", member);
+			model.addAttribute("memberName", memberName);
 			model.addAttribute("followedList", followedList);
 			model.addAttribute("isCreatedMarket", isCreatedMarket);
-		} else {
-			memberName = "게스트";
 		}
 		
 		// 최신순으로 전체 게시글 불러오기
 		List<MarketArticleDTO> recentArticleList = this.marketService.getAllArticle();
 		
-		model.addAttribute("memberName", memberName);
-		model.addAttribute("followCount", followCount);
 		model.addAttribute("recentArticleList", recentArticleList);
 		
 		return "market/main";

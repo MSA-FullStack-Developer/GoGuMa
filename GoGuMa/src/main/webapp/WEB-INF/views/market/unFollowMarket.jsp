@@ -24,33 +24,33 @@
 	
     <style>
   		<%@ include file="/resources/css/market.css" %>
+  		
+  		.card-img-top {
+			width: 286px;
+			height: 286px;
+			object-fit: cover;
+			border-radius: 50%;
+		}
     </style>
-    <script>
-    	
-    </script>
 </head>
 
 <body>
+	<%@ include file="../market/marketHeader.jsp" %>
     <div class="w-100" style="min-width: 1400px;">
-        <section id="main-section" class="container-xxl pt-5 pb-5">
-
-            <div>
-                <h3>✨ ${memberName}님, 관심있는 마켓을 팔로우해보세요 ✨</h3>
+        <section id="main-section" class="container-xxl pb-5">
+            <div style="margin-bottom: 25px;">
+                <h3>${memberName}님, 관심있는 마켓을 팔로우해보세요</h3>
             </div>
 
-            <div class="w-100 mt-4">
-                <div class="d-flex justify-content-between align-content-between flex-wrap">
-                	<c:forEach items="${unfollowedList}" var="market" end="3">
-	                    <div class="card mt-3 container">
-	                    	<a href="${contextPath}/market/show.do?marketNum=${market.marketId}">
-		                        <img class="card-img-top container-img" src="${market.marketThumbnail}" alt="${market.marketThumbnail}">
-	                        </a>
-	                        <div class="card-body centered">
-	                            <p class="card-text">${market.marketName}</p>
-	                        </div>
-	                    </div>
-                    </c:forEach>
-                </div>
+			<div class="d-flex justify-content-start flex-wrap mr-4">
+              	<c:forEach items="${unfollowedList}" var="market">
+                   <div class="card mt-2 container col-sm-3">
+                   	<a href="${contextPath}/market/show.do?marketNum=${market.marketId}" class="goguma-link" style="width: 286px;">
+                        <img class="card-img-top container-img" src="${market.marketThumbnail}" alt="${myMarket.marketThumbnail}">
+                       	<p class="card-text" style="margin-top: 10px;">${market.marketName}</p>
+                       </a>
+                   </div>
+                  </c:forEach>
             </div>
         </section>
     </div>

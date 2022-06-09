@@ -145,8 +145,9 @@
 </script>
 
 <body>
+	<%@ include file="../market/marketHeader.jsp" %>
     <section class="container">
-        <div class="w-50 m-auto p-5" style="min-width: 970px;">
+        <div class="w-50 m-auto" style="min-width: 970px;">
             <h1>게시글 만들기</h1>
             <p class="text-secondary">아래 정보를 기입해주세요.</p>
 
@@ -191,7 +192,6 @@
                         </div>
                     </div>
                 </div>
-
               
                 <textarea  id="summernote"  name="articleContent" class="mt-4"></textarea>
                 <button id="submit-btn" type="submit" class="w-100 btn mt-3 btn-lg">게시글 생성하기</button>
