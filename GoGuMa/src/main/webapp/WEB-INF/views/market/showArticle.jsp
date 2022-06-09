@@ -35,8 +35,9 @@
 </head>
 
 <body>
+	<%@ include file="../market/marketHeader.jsp" %>
     <section class="container">
-        <div class="w-50 m-auto p-5" style="min-width: 970px;">
+        <div class="w-50 m-auto" style="min-width: 970px;">
             <h1>${article.articleTitle}</h1>
             <p>
             	<strong>${article.market.marketName}</strong> 
