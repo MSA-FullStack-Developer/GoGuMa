@@ -42,7 +42,7 @@
 			<%@ include file="mypageMenu.jsp" %>
             <div class="col">
                 <div>
-                    <h4><b>송진호님</b></h4>
+                    <h4><b>${memberDTO.name}님</b></h4>
                 </div>
                 <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-3">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -88,6 +88,7 @@
                 </div>
 				<c:forEach var="receiptDTO" items="${receiptHistory}">
 					<!-- 결제 forEach 시작 -->
+					<input type="hidden" id="impUid${receiptDTO.receiptId}" value="${receiptDTO.impUid}" />
 					<div class="col border border-2 rounded p-4 mb-3">
 	                    <div class="d-flex flex-row">
 	                        <div class="col">
@@ -101,7 +102,9 @@
 	                        <table>
 	                            <tbody>
 	                            	<c:forEach var="orderDTO" items="${receiptDTO.orderList}">
-		                                <!-- 주문 forEach 시작 -->
+	                            		<!-- 주문 forEach 시작 -->
+	                            		<input type="hidden" id="price${orderDTO.orderId}" value="${orderDTO.price}"/>
+	                            		<input type="hidden" id="count${orderDTO.orderId}" value="${orderDTO.count}"/>
 		                                <tr class="border-bottom">
 		                                    <td class="col-1 p-3">
 		                                        <img class="orderHistoryImg" src="${orderDTO.image}" style="width:100px; height:100px;">
@@ -130,7 +133,7 @@
 				                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="configBtn(${orderDTO.orderId})">구매확정</button>
 				                                            </div>
 				                                            <div class="mt-2">
-				                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="cancelBtn(${orderDTO.orderId})">주문취소</button>
+				                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="cancelBtn(${receiptDTO.receiptId}, ${orderDTO.orderId})">주문취소</button>
 				                                            </div>
 		                                        		</c:when>
 		                                        		<c:when test="${orderDTO.status eq 'F'}">
@@ -138,7 +141,6 @@
 				                                                <h5><b>구매 완료</b></h5>
 				                                            </div>
 				                                            <div class="mb-2">
-				                                                <button type="button" class="btn btn-sm btn-outline-dark">상품평 쓰기</button>
 				                                            </div>
 		                                        		</c:when>
 		                                        		<c:otherwise>
@@ -150,14 +152,15 @@
 		                                        </div>
 		                                    </td>
 		                                </tr>
+		                                <!-- 주문 forEach 종료 -->
 	                                </c:forEach>
-	                                <!-- 주문 forEach 종료 -->
 	                            </tbody>
 	                        </table>
 	                    </div>
 	                </div>
 	                <!-- 결제 forEach 종료 -->
 				</c:forEach>
+
             </div>
         </div>
     </div>
@@ -193,40 +196,47 @@
     				var message = errorResponse.message;
     				alert(message);
     			}
-			})
+			});
 		}
 	}
-	function cancelPay(){
+	
+	/**
+	 * @작성자: Moon Seokho
+	 * @Date: 2022. 6. 7.
+	 * @프로그램설명: 환불요청을 받을 URL
+	 * @변경이력: 
+	 */
+	function cancelPay(receiptId, orderId) {
 	  	let token = $("meta[name='_csrf']").attr("content");
     	let header = $("meta[name='_csrf_header']").attr("content");
+    	console.log();
 		$.ajax({
-		  url : "${contextPath}/mypage/api/payment/cancel",
-		  type : "POST",
-		  data : {
-		    // 여기 부분 해당하는 상품 데이터 넣어주면 됩니다
-		    uid : 'imp_230189108880',
-		  	cancelAmount : 90,
-		  	reason : "그냥 바꾸고 싶어요",
-		  	refundHolder : "",
-		  	refundBank : "",
-		  	refundAccount : "",
-		  },
-		beforeSend : function(xhr) {
-        	xhr.setRequestHeader(header, token);
-      	},
-		success:function(result) {
-			return;
-		},
-		error:function(xhr, status, error) {
+			url : "${contextPath}/mypage/api/payment/cancel",
+			type : "POST",
+			data : {
+			    uid : $("#impUid"+receiptId).val(),
+			  	cancelAmount : $("#price"+orderId).val() * $("#count"+orderId).val(),
+			  	reason : "",
+			  	refundBank : "",
+			  	refundHolder : "",
+			  	refundAccount : ""
+			},
+			beforeSend : function(xhr) {
+        		xhr.setRequestHeader(header, token);
+        	},
+        	success:function(result) {
+        		return;
+        	},
+        	error:function(xhr, status, error) {
 				var errorResponse = JSON.parse(xhr.responseText);
 				var errorCode = errorResponse.code;
 				var message = errorResponse.message;
 				alert(message);
 			}
-		});
+        });
 	}
 	
-	function cancelBtn(orderId) {
+	function cancelBtn(receiptId, orderId) {
 		if(confirm("주문을 취소하시겠습니까?")) {
 			let token = $("meta[name='_csrf']").attr("content");
 		    let header = $("meta[name='_csrf_header']").attr("content");
@@ -242,11 +252,11 @@
 	            },
 				success:function(result) {
 					if(result==1) {
-				  		cancelPay();
-				  		alert("상품 주문이 취소되었습니다. 결제 환불 처리됩니다.");
+				  		cancelPay(receiptId, orderId);
+				  		alert("상품 주문이 취소되었습니다. 전액 환불 처리됩니다.");
 						window.location.href = "${contextPath}/mypage/orderHistory";
 					} else {
-						alert('주문취소 오류');
+						alert('주문취소 중에 오류가 발생했습니다.');
 					}
 				},
 				error:function(xhr, status, error) {
@@ -255,7 +265,7 @@
     				var message = errorResponse.message;
     				alert(message);
     			}
-			})
+			});
 		}
 	}
 </script>

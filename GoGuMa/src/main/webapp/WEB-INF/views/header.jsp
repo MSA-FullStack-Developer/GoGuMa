@@ -10,7 +10,9 @@
 <style>
 	<%@ include file="/resources/css/header.css" %>
 </style>
-<script>
+<script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
+<script src="https://kit.fontawesome.com/a4f59ea730.js" crossorigin="anonymous"></script>
+<script type="text/javascript">
     $(document).ready(function () {
     	var searchForm = $("#searchForm");
     	
