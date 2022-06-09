@@ -136,7 +136,7 @@ public class OrderController {
 				// 기본 배송지와 저장된 배송지를 불러온다.
 				DeliveryAddressDTO defaultAddress = myPageService.getDefaultAddress(memberId);
 				List<DeliveryAddressDTO> addressList = myPageService.getAddressList(memberId);
-				
+				System.out.println("리스트 : " + list);
 				// 회원이 가진 포인트 조회한다.
 				int point = myPageService.getMemberPoint(memberId);
 				

@@ -238,7 +238,7 @@
 		    pay_method : 'card',
 		    merchant_uid : 'merchant_' + new Date().getTime(),
 		    name : $('.pProductName').text(), //결제창에서 보여질 이름
-		    amount : 100,//$('#lastStlAmtDd').text(), //실제 결제되는 가격
+		    amount : $('#lastStlAmtDd').text(), //실제 결제되는 가격
 		    buyer_email : "${memberDTO.email}",
 		    buyer_name : $('#name').text(),
 		    buyer_tel : $('#phonenumber').text(),
@@ -284,7 +284,7 @@
 	    pay_method : 'vbank',
 	    merchant_uid : 'merchant_' + new Date().getTime(),
 	    name : $('.pProductName').text(), //결제창에서 보여질 이름
-	    amount : 100,//$('#lastStlAmtDd').text(), //실제 결제되는 가격
+	    amount : $('#lastStlAmtDd').text(), //실제 결제되는 가격
 	    buyer_email : "${memberDTO.email}",
 	    buyer_name : $('#name').text(),
 	    buyer_tel : $('#phonenumber').text(),
@@ -610,7 +610,7 @@
 									<input type="hidden" id="couponDiscount" value="0" />
 									<input type="hidden" id="GPoint" value="0"/>
 									<input type="hidden" id="finalPrice" value="${total - membershipDiscount }" />
-									<input type="hidden" id="requirement" class="requirement-in" value="ddd" />
+									<input type="hidden" id="requirement" class="requirement-in" value="" />
 								</div>
 							</div>
 						</div>

@@ -170,7 +170,9 @@ public class MyPageController {
 	@PostMapping("api/payment/cancel")
 	public void cancelPay(CancelPayDTO cancelPayDTO) throws IamportResponseException, IOException {
 		api = new IamportClient(payKey, paySecretKey);
+		System.out.println(cancelPayDTO.getUid() + " " + cancelPayDTO.getCancelAmount());
 		CancelData cancel_data = new CancelData(cancelPayDTO.getUid(), true, BigDecimal.valueOf(cancelPayDTO.getCancelAmount()));
+		
 		api.cancelPaymentByImpUid(cancel_data);
 		log.info("환불 로그");
 	}
