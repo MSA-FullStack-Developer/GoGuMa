@@ -23,6 +23,9 @@ import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.DefaultResponseDTO;
 import com.ggm.goguma.dto.ImageAttachDTO;
 import com.ggm.goguma.dto.PaginationDTO;
+import com.ggm.goguma.dto.articleReply.ArticleReplyDTO;
+import com.ggm.goguma.dto.articleReply.CreateChildReplyDTO;
+import com.ggm.goguma.dto.articleReply.CreateReplyDTO;
 import com.ggm.goguma.dto.market.ArticleProudctDTO;
 import com.ggm.goguma.dto.market.CreateArticleDTO;
 import com.ggm.goguma.dto.market.CreateMarketDTO;
@@ -107,16 +110,19 @@ public class MarketController {
 		log.info(article);
 		
 		boolean isMyArticle = false;
+		MemberDTO member = null;
 		if(principal != null) {
-			MemberDTO member = this.memberService.getMember(principal.getName());
-			
+			member = this.memberService.getMember(principal.getName());
 			isMyArticle = this.marketService.isMyArticle(article.getMarket().getMarketId(), member.getId(), articleId);
-		
+			
 		}
+		List<ArticleReplyDTO> replies = this.marketService.getArticleReplies(articleId);
 		
-		
+		log.info(replies);
 		model.addAttribute("article", article);
 		model.addAttribute("isMyArticle", isMyArticle);
+		model.addAttribute("replies",replies);
+		model.addAttribute("me",member);
 		
 		return "market/showArticle";
 	}
@@ -258,6 +264,43 @@ public class MarketController {
 		
 		
 		return new ResponseEntity<>(attachDTO, HttpStatus.CREATED);
+	}
+	
+	@PostMapping(value= "/api/createReply.do", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity createArticleReply(CreateReplyDTO reply, Principal principal) {
+			
+		log.info("[createArticleReply] reply " + reply);
+		MemberDTO member = this.memberService.getMember(principal.getName());
+		
+		try {
+			ArticleReplyDTO savedReply = this.marketService.createArticleReply(reply, member);
+			
+			return new ResponseEntity<>(savedReply, HttpStatus.CREATED);
+		} catch(Exception e) {
+			e.printStackTrace();
+			log.error("[createArticleReply] exception : " + e.getMessage());
+			DefaultResponseDTO response =  DefaultResponseDTO.builder().status(500).message("생성 실패").build();
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@PostMapping(value= "/api/createChildReply.do", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity createArticleChildReply(CreateChildReplyDTO reply, Principal principal) {
+			
+		log.info("[createArticleChildReply] reply " + reply);
+		MemberDTO member = this.memberService.getMember(principal.getName());
+		
+		try {
+			
+			ArticleReplyDTO savedReply = this.marketService.createChildArticleReply(reply, member);
+		
+			return new ResponseEntity<>(savedReply, HttpStatus.CREATED);
+		} catch(Exception e) {
+			e.printStackTrace();
+			log.error("[createArticleReply] exception : " + e.getMessage());
+			DefaultResponseDTO response =  DefaultResponseDTO.builder().status(500).message("생성 실패").build();
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }

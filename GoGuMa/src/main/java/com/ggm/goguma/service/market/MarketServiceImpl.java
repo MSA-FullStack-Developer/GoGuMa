@@ -16,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ggm.goguma.amazons3.AmazonS3Utils;
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.PaginationDTO;
+import com.ggm.goguma.dto.articleReply.ArticleReplyDTO;
+import com.ggm.goguma.dto.articleReply.CreateChildReplyDTO;
+import com.ggm.goguma.dto.articleReply.CreateReplyDTO;
 import com.ggm.goguma.dto.market.ArticleImageDTO;
 import com.ggm.goguma.dto.market.ArticleProudctDTO;
 import com.ggm.goguma.dto.market.CreateArticleDTO;
@@ -24,9 +27,11 @@ import com.ggm.goguma.dto.market.EditArticleDTO;
 import com.ggm.goguma.dto.market.FollowMarketDTO;
 import com.ggm.goguma.dto.market.MarketArticleDTO;
 import com.ggm.goguma.dto.market.MarketDTO;
+import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.exception.NotFoundMarketArticleException;
 import com.ggm.goguma.exception.NotFoundMarketException;
 import com.ggm.goguma.exception.UploadFileFailException;
+import com.ggm.goguma.mapper.ArticleReplyMapper;
 import com.ggm.goguma.mapper.MarketMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -40,6 +45,8 @@ public class MarketServiceImpl implements MarketService {
 	private final MarketMapper marketMapper;
 
 	private final AmazonS3Utils amazonService;
+	
+	private final ArticleReplyMapper articleReplyMapper;
 
 	private final long PAGESIZE = 8;
 	private final long BLOCKSIZE = 10;
@@ -301,5 +308,43 @@ public class MarketServiceImpl implements MarketService {
 		}
 
 	}
+
+	@Transactional
+	@Override
+	public ArticleReplyDTO createArticleReply(CreateReplyDTO reply, MemberDTO member) throws Exception {
+		
+		ArticleReplyDTO savedReply = ArticleReplyDTO.builder()
+				.articleId(reply.getArticleId())
+				.member(member)
+				.replyContent(reply.getReplyContent())
+				.build();
+
+		this.articleReplyMapper.insertArticleReply(savedReply);
+		
+		return savedReply;
+	}
+
+	@Transactional
+	@Override
+	public ArticleReplyDTO createChildArticleReply(CreateChildReplyDTO reply, MemberDTO member) throws Exception {
+		
+		ArticleReplyDTO savedChildReply = ArticleReplyDTO.builder()
+				.articleId(reply.getArticleId())
+				.replyPId(reply.getReplyId())
+				.member(member)
+				.replyContent(reply.getReplyContent())
+				.build();
+		
+		this.articleReplyMapper.insertChildArticleReply(savedChildReply);
+		
+		return savedChildReply;
+	}
+
+	@Override
+	public List<ArticleReplyDTO> getArticleReplies(long articleId) {
+		return this.articleReplyMapper.findRepliesByArticleId(articleId);
+	}
+	
+	
 
 }

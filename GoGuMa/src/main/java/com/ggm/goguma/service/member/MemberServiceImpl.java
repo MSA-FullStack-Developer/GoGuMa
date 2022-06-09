@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import com.ggm.goguma.amazons3.AmazonS3Utils;
 import com.ggm.goguma.dto.member.CertificationUserDTO;
 import com.ggm.goguma.dto.member.CreateMemberDTO;
 import com.ggm.goguma.dto.member.IamportCertificateTokenRspDTO;
@@ -36,6 +37,8 @@ public class MemberServiceImpl implements MemberService {
 	private final MemberMapper memberMapper;
 	
 	private final ContractService contractService;
+	
+	private final AmazonS3Utils amazonService;
 	
 	private final BCryptPasswordEncoder passwordEncoder;
 	
@@ -143,12 +146,20 @@ public class MemberServiceImpl implements MemberService {
 	public void createMember(CreateMemberDTO data) throws CreateMemberFailException {
 
 		try {
+			String[] result = this.amazonService.uploadFile("profile", data.getProfile());
+		
+			String profileImageURL = result[1];
+			
 			MemberDTO member = MemberDTO.builder()
 					.email(data.getEmail())
 					.password(this.passwordEncoder.encode(data.getPassword()))
 					.name(data.getName())
 					.phone(data.getPhone())
 					.age(data.getAge())
+					.nickName(data.getNickName())
+					.birthDate(data.getBirthDate())
+					.profileImage(profileImageURL)
+					.gender(data.getGender())
 					.build();
 
 			this.memberMapper.createMember(member);
