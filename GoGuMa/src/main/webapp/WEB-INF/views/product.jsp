@@ -365,52 +365,5 @@
     <%@ include file="footer.jsp" %>
 </body>
 <script type="text/javascript">
-	/**
-	 * @작성자 : 송진호
-	 * @작업명 : 최근 본 상품정보를 세션스토리지에 추가
-	 * @시작일자 : 2022.06.08
-	 * @완료일자 : 2022.06.09
-	 **/
-	// 1. 세션스토리지 불러오기
-	let latelySeenProductList = sessionStorage.getItem('latelySeenProductList');
-	if(latelySeenProductList == null) {
-		// 1-1. 불러온 세션스토리지의 값이 null이라면 배열로 선언
-		latelySeenProductList = new Array();
-	} else {
-		// 1-2. 불러온 세션스토리지가 null이 아니라면 JSON 형식으로 Parse
-		latelySeenProductList = JSON.parse(latelySeenProductList);
-	}
-	
-	// 2. 현재 상품상세 페이지의 정보를 JSON 형식으로 만들기
-	let product = {
-		productID : ${productID},
-		categoryID : ${categoryID},
-		productName : "${productInfo.productName}",
-		productImgUrl : "${productInfo.prodimgurl}"
-	}
-	
-	// 3. JSON 형식으로 만든 상품정보를 리스트에 추가 
-	latelySeenProductList.push(product);
-	
-	// 4. 리스트에서 중복되는 요소들을 제거
-	latelySeenProductList = latelySeenProductList.reduce(function(acc, current) {
-		if(acc.findIndex(({ productID }) => productID === current.productID) === -1) acc.push(current);
-		return acc;
-	}, []);
-	
-	// 5. 세션스토리지에 갱신한 JSON 형식의 리스트를 문자열로 변환
-	latelySeenProductList = JSON.stringify(latelySeenProductList);
-	
-	// 6. 'latelySeenProductList' 세션스토리지에 문자열로 변환한 리스트를 값으로 추가
-	sessionStorage.setItem('latelySeenProductList', latelySeenProductList);
-	
-	// 테스트
-	let arr = JSON.parse(latelySeenProductList);
-	arr.forEach((item, index, array) => {
-		console.log(item.productID);
-		console.log(item.categoryID);
-		console.log(item.productName);
-		console.log(item.productImgUrl);
-	});
 </script>
 </html>
