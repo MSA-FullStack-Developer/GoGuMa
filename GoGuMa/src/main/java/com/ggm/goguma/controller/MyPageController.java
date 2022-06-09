@@ -432,12 +432,12 @@ public class MyPageController {
 			if(service.confirmPassword(userPassword, memberDTO.getPassword())) {
 				if(type.equals("changeInfo")) {
 					String[] birthdate = memberDTO.getBirthDate().split("-");
-					model.addAttribute("memberDTO", memberDTO);
 					model.addAttribute("birthYear", birthdate[0]);
 					model.addAttribute("birthMonth", birthdate[1]);
 					model.addAttribute("birthDay", birthdate[2]);
 					model.addAttribute("phoneNum", phoneNum);
 				}
+				model.addAttribute("memberDTO", memberDTO);
 				return "mypage/"+type;
 			}
 			return "redirect:/mypage/confirmPassword/"+type;
@@ -450,10 +450,11 @@ public class MyPageController {
 	@ResponseBody
 	@RequestMapping(value="/changePassword", method=RequestMethod.POST)
 	public String changePassword(@RequestParam("curPassword") String curPassword,
-		@RequestParam("newPassword") String newPassword, Principal principal) throws Exception {
+		@RequestParam("newPassword") String newPassword, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			if(service.changePassword(curPassword, newPassword, memberDTO)) {
+				model.addAttribute("memberDTO", memberDTO);
 				return "1";
 			}
 			return "2";
