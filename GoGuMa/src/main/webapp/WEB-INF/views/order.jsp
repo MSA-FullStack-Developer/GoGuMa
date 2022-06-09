@@ -170,6 +170,19 @@
     // 결제 버튼 클릭시
     $('#pay-onclick').click(function(){
       var radioVal = $('input[name="card-type"]:checked').val();
+      var addressInfo = $('#addressName').text();
+      
+      //결제 종류 선택했는지 체크
+      var chkPayType = $('input[name=card-type]').is(":checked");
+      console.log(chkPayType);
+      if(addressInfo == ""){
+        alert("주소를 입력해 주세요");
+        return;
+      }
+      if(!chkPayType){
+        alert("결제 정보를 선택해 주세요");
+        return;
+      }
       if(radioVal == "nobank"){
         console.log("무통장");
         nobankbookiamport();
@@ -262,6 +275,7 @@
 		         	console.log("결제 및 결제검증완료");
 		          	console.log(rsp);
 		          	console.log(data);
+		          	console.log("카드 status : " + data.response.status);
 		        	paytransaction (data.response.impUid, data.response.status);
 		        	console.log("uid로그 : " + $('#ipUid').val());
 		        	console.log("다시 진행중");
@@ -296,21 +310,29 @@
 	      //아임포트 검증절차
 	      var token = $("meta[name='_csrf']").attr("content");
 		  var header = $("meta[name='_csrf_header']").attr("content");
-	      if(rsp.pay_method == "vbank"){
-	        paytransaction (rsp.imp_uid, rsp.status);
-	        $('#ipUid').val(rsp.imp_uid);
-        	$('#finOrder').submit();
-	      }
-	      /* $.ajax({
+	      $.ajax({
 	        type: "POST",
-	        url: "${contextPath}/order/api/nobankcomplete",
+	        url: "${contextPath}/order/api/verifyIamport/" + rsp.imp_uid,
 	        beforeSend : function(xhr) {
 						xhr.setRequestHeader(header,token);
-					}
+					},
 	      }).done(function(data){
-	        console.log("무통장 Data : " + data);
-	      }); */
-	    
+	        console.log(data);
+	        if(rsp.paid_amount == data.response.amount){
+	          if(rsp.pay_method == "vbank"){
+		        console.log("무통장 status : " + rsp.status);
+		        paytransaction (rsp.imp_uid, rsp.status);
+		        $('#ipUid').val(rsp.imp_uid);
+	        	$('#finOrder').submit();
+		      }
+		    
+	      	} else {
+	      		alert("결제 실패");
+	      		//임의로 금액이 변경되었기 때문에 전체 환불처리
+	      	}
+	      });
+		  
+
 	});
 }
 	 //  unix time stamp to Date
@@ -383,7 +405,7 @@
 			  console.log("결제 ajax 완료");
 			  return;
 			},
-			error : function(xhr, status, error) {
+			error : function(xhr, error) {
 				var errorResponse = JSON.parse(xhr.responseText);
 				var errorCode = errorResponse.code;
 				var message = errorResponse.message;
@@ -508,7 +530,7 @@
 							</li>
 							<li>
 								<div id="calculateList_upoint" class="hpoint">
-									<span class="tit">적립예정 G.Point</span> <span class="txt"><strong id="pre-gp">0</strong>p</span>
+									<span class="tit">적립예정 G.Point</span> <span class="txt pre-gpoint"><em id="pre-gp">0</em>p</span>
 								</div>
 							</li>
 						</ul>
