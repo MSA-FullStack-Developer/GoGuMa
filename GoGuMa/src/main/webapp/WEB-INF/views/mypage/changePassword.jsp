@@ -142,8 +142,8 @@
 		        },
 		        success:function(result) {
 		        	if(result==1) window.location.href = "${contextPath}/mypage";
-		        	else if(result==2) alert('비밀번호 오류');
-		        	else alert("서버 오류");
+		        	else if(result==2) alert('비밀번호가 일치하지 않습니다.');
+		        	else alert("서버에 오류가 발생했습니다.");
 		        },
 				error:function(xhr, status, error) {
 					var errorResponse = JSON.parse(xhr.responseText);

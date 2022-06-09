@@ -421,7 +421,9 @@ public class MyPageController {
 		@RequestParam("newPassword") String newPassword, Principal principal) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			if(service.changePassword(curPassword, newPassword, memberDTO)) return "1";
+			if(service.changePassword(curPassword, newPassword, memberDTO)) {
+				return "1";
+			}
 			return "2";
 		} catch(Exception e) {
 			log.info(e.getMessage());
@@ -432,10 +434,13 @@ public class MyPageController {
 	@ResponseBody
 	@RequestMapping(value="/changeInfo", method=RequestMethod.POST)
 	public String changeInfo(@RequestParam("birthDate") String birthDate, @RequestParam("gender") String gender,
-		@RequestParam("userPassword") String userPassword, Principal principal) throws Exception {
+		@RequestParam("userPassword") String userPassword, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			if(service.changeInfo(birthDate, gender, userPassword, memberDTO)) return "1";
+			if(service.changeInfo(birthDate, gender, userPassword, memberDTO)) {
+				model.addAttribute("memberDTO", memberDTO);
+				return "1";
+			}
 			return "2";
 		} catch(Exception e) {
 			log.info(e.getMessage());
