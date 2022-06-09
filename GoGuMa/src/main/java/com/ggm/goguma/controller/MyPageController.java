@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -47,7 +46,6 @@ import com.siot.IamportRestClient.response.Payment;
 import com.ggm.goguma.service.mypage.MyPageService;
 
 import lombok.extern.log4j.Log4j;
-
 
 /**
  * @작성자 : 송진호
@@ -146,7 +144,6 @@ public class MyPageController {
 	@RequestMapping(value="/orderHistory/updateOrderStatus", method=RequestMethod.POST)
 	public String updateOrderStatus(@RequestParam("orderId") long orderId, @RequestParam("status") String status) throws Exception {
 		try {
-			log.info(orderId+" "+status);
 			service.updateOrderStatus(orderId, status);
 		} catch (Exception e) {
 			log.info(e.getMessage());

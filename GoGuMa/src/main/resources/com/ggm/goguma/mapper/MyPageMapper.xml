@@ -4,7 +4,7 @@
 
 <mapper namespace="com.ggm.goguma.mapper.MyPageMapper">
 	<select id="getReceiptList" resultType="ReceiptDTO">
-		select receiptid, orderdate, memberid
+		select receiptid, orderdate, impuid, memberid
 		from receipt where memberid = #{memberId}
 		order by orderdate desc
 	</select>
