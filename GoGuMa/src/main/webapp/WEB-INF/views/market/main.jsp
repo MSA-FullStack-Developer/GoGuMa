@@ -7,6 +7,10 @@
 <head>
     <meta charset="UTF-8">
     <title>고구마 - 고객과 구성하는 마켓</title>
+    
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
     <!-- bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -39,7 +43,7 @@
 			height: 286px;
 			object-fit: cover;
 		}
-    </style>
+	</style>
 </head>
 
 <body>
@@ -54,26 +58,28 @@
 	                	</c:if>
 	                </h3>
 	            </div>
-
+	            
                 <div class="d-flex justify-content-center flex-wrap">
-                	<c:forEach items="${followedList}" var="market">
+                	<c:forEach items="${followedList}" var="market" varStatus="status">
 	                    <div class="card mt-2 container col-sm-3">
 	                    	<a href="${contextPath}/market/show.do?marketNum=${market.marketId}" class="goguma-link" style="width: 286px;">
 		                        <img class="card-img-top container-img" src="${market.marketThumbnail}" alt="${myMarket.marketThumbnail}">
 	                        	<p class="card-text" style="margin-top: 10px;">${market.marketName}</p>
 	                        </a>
 	                    </div>
-                    </c:forEach>
                     
-                	<c:set value="https://hd-goguma.s3.ap-northeast-2.amazonaws.com/profile/1654751887576%E1%84%83%E1%85%A5%E1%84%87%E1%85%A9%E1%84%80%E1%85%B5.png"
-                   				var="otherImg" />
-					<div class="card mt-2 container col-sm-3">
-                   		<input type="hidden" value="${followCount}">
-                    	<a href="${contextPath}/market/unFollowMarket.do" class="goguma-link">
-	                        <img class="card-img-top container-img" src="${otherImg}">
-	                        <p class="card-text" style="margin-top: 10px;">더보기</p>
-                        </a>
-                   	</div>
+                    	<c:if test="${status.last}">
+		                	<c:set value="https://hd-goguma.s3.ap-northeast-2.amazonaws.com/profile/1654751887576%E1%84%83%E1%85%A5%E1%84%87%E1%85%A9%E1%84%80%E1%85%B5.png"
+		                   				var="otherImg" />
+							<div class="card mt-2 container col-sm-3">
+		                   		<input type="hidden" value="${followCount}">
+		                    	<a href="${contextPath}/market/unFollowMarket.do" class="goguma-link">
+			                        <img class="card-img-top container-img" src="${otherImg}">
+			                        <p class="card-text" style="margin-top: 10px;">더보기</p>
+		                        </a>
+		                   	</div>
+	                   	</c:if>
+                   	</c:forEach>
                 </div>
 	        </section>
         </c:if>

@@ -26,9 +26,6 @@
     <!-- jquery -->
 	<script type="text/javascript" src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.min.js"></script>
 </head>
-<style>
-	<%@ include file="/resources/css/header.css" %>
-</style>
 <body>
 	<script type="text/javascript">
 		$(document).ready(function() {
