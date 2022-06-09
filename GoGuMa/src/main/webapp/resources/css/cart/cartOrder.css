@@ -713,3 +713,39 @@ ul, ol, menu, li {
 .fin-txt{
 	font-size: 30px;
 }
+.insertImgCardRadio{
+	content: url("../../img/img_card.png");
+	width: 100px;
+	height: 100px;
+}
+.insertImgKakaoRadio{
+	content: url("../../img/img_kakaopay.png");
+	width: 100px;
+	height: 100px;
+}
+.insertImgVbankRadio{
+	content: url("../../img/img_vbank.png");
+	width: 100px;
+	height: 100px;
+}
+[name=card-type]{
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+[name=card-type] + label {
+  cursor: pointer;
+}
+[name=card-type]:checked + div {
+  outline: 3px solid #6426DD;
+}
+#select-pay-type{
+	text-align: center;
+    margin: auto;
+}
+.pt-txt{
+    color: #888;
+    line-height: 17px;
+    letter-spacing: -0.56px;
+}

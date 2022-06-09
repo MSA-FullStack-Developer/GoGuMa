@@ -966,10 +966,22 @@
 									<table>
 										<tr>
 											<td class="pay-type">
-												<div class="select-pay-type">
-													<input type='radio' name='card-type' value='html5_inicis'/> KG이니시스(표준결제)
-													<input type='radio' name='card-type' value='kakaopay'/> 카카오페이(간편결제)
-													<input type='radio' name='card-type' value='nobank'/> 무통장 입금
+												<div id="select-pay-type">
+													<input type='radio' name='card-type' value='html5_inicis' id="cardRadio">
+													<div style="display: inline-block;">
+														<label for="cardRadio" class="insertImgCardRadio"></label>
+														<div class="pt-txt">카드</div>
+													</div>
+													<input type='radio' name='card-type' value='kakaopay'id="kakaoRadio"/>
+													<div style="display: inline-block;">
+														<label for="kakaoRadio" class="insertImgKakaoRadio"></label>
+														<div class="pt-txt">카카오 페이</div>
+													</div>
+													<input type='radio' name='card-type' value='nobank' id="vbankRadio"/>
+													<div style="display: inline-block;">
+														<label for="vbankRadio" class="insertImgVbankRadio"></label>
+														<div class="pt-txt">무통장 입금</div>
+													</div>
 												</div>
 											</td>
 										</tr>
