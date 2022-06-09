@@ -83,7 +83,7 @@
 	        </section>
         </c:if>
         
-        <section id="main-section" class="container-xxl pt-5 pb-5">
+        <section id="main-section" class="container-xxl pb-5">
             <div>
                 <h3>최근 마켓 게시글 모아보기️️</h3>
             </div>

@@ -86,6 +86,7 @@ public class MyPageController {
 	public String getMyPageMain(HttpServletRequest request, Principal principal, Model model) throws Exception {
 		MemberDTO memberDTO = memberService.getMember(principal.getName());
 		List<ProductDTO> productList = new ArrayList<>();
+		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 		Cookie[] cookies = request.getCookies();
 		if(cookies != null) {
 			// 가져온 쿠키 중에서
@@ -103,6 +104,7 @@ public class MyPageController {
 		log.info(productList);
 		model.addAttribute("memberDTO", memberDTO);
 		model.addAttribute("productList", productList);
+		model.addAttribute("parentCategory", parentCategory);
 		
 		// 작성 가능한 상품평 개수 불러오기
 		List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
@@ -170,7 +172,7 @@ public class MyPageController {
 		return "1";
 	}
 	
-	/**
+	/*
 	 * @작성자: Moon Seokho
 	 * @Date: 2022. 6. 7.
 	 * @프로그램설명: 환불요청을 받을 URL
