@@ -466,11 +466,12 @@ public class MyPageController {
 	
 	@ResponseBody
 	@RequestMapping(value="/changeInfo", method=RequestMethod.POST)
-	public String changeInfo(@RequestParam("birthDate") String birthDate, @RequestParam("gender") String gender,
+	public String changeInfo(@RequestParam("nickName") String nickName, @RequestParam("birthDate") String birthDate, @RequestParam("gender") String gender,
 		@RequestParam("userPassword") String userPassword, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			if(service.changeInfo(birthDate, gender, userPassword, memberDTO)) {
+			log.info(nickName);
+			if(service.changeInfo(nickName, birthDate, gender, userPassword, memberDTO)) {
 				model.addAttribute("memberDTO", memberDTO);
 				return "1";
 			}

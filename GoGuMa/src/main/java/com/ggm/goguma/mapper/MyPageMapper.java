@@ -71,7 +71,7 @@ public interface MyPageMapper {
 
 	void changePassword(@Param("memberId") long memberId, @Param("newPassword") String newPassword) throws Exception;
 
-	void changeInfo(@Param("memberId") long memberId, @Param("birthDate") String birthDate, @Param("gender") String gender) throws Exception;
+	void changeInfo(@Param("memberId") long memberId, @Param("nickName") String nickName, @Param("birthDate") String birthDate, @Param("gender") String gender) throws Exception;
 
 	void insertResignMember(@Param("dto") MemberDTO dto, @Param("resignDetail") String resignDetail) throws Exception;
 

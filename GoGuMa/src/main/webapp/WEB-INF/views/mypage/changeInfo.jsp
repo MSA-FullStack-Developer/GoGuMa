@@ -89,6 +89,16 @@
                 </div>
                 <table class="table">
                     <tbody class="table-group-divider">
+                    	<tr>
+                            <th class="col-2">프로필 사진</th>
+                            <td><input type="file" class="form-control" id="profileImage" accept=".jpg, .jpeg, .png" required></td>
+                        </tr>
+                        <tr>
+                            <th class="col-2">닉네임</th>
+                            <td>
+                                <input type="text" id="nickName" value="${memberDTO.nickName}" maxlength="12" style="width:200px; height:25px"/>
+                            </td>
+                        </tr>
                         <tr>
                             <th class="col-2">아이디(이메일)</th>
                             <td>${memberDTO.email}</td>
@@ -201,10 +211,16 @@
 	function changeInfo() {
 		let token = $("meta[name='_csrf']").attr("content");
 	    let header = $("meta[name='_csrf_header']").attr("content");
+		let formData = new FormData();
+		formData.append("profileImage", $("#profileImage").val());
 		$.ajax({
 			url : "${contextPath}/mypage/changeInfo",
 			type : "POST",
+			processData : false,
+			contentType : false,
 			data : {
+				formData : formData,
+				nickName : $("#nickName").val(),
 				birthDate : $("#years :selected").val()+'-'+$("#months :selected").val()+'-'+$("#days :selected").val(),
 				gender : $('input[name="gender"]:checked').val(),
 				userPassword : $("#userPassword").val()
