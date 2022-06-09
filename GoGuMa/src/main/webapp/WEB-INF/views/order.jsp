@@ -262,7 +262,7 @@
 		         	console.log("결제 및 결제검증완료");
 		          	console.log(rsp);
 		          	console.log(data);
-		        	paytransaction (data.response.impUid, data.rsponse.status);
+		        	paytransaction (data.response.impUid, data.response.status);
 		        	console.log("uid로그 : " + $('#ipUid').val());
 		        	console.log("다시 진행중");
 		        	$('#ipUid').val(data.response.impUid);
@@ -610,7 +610,7 @@
 									<input type="hidden" id="couponDiscount" value="0" />
 									<input type="hidden" id="GPoint" value="0"/>
 									<input type="hidden" id="finalPrice" value="${total - membershipDiscount }" />
-									<input type="text" id="requirement" class="requirement-in" value="ddd" />
+									<input type="hidden" id="requirement" class="requirement-in" value="ddd" />
 								</div>
 							</div>
 						</div>
@@ -775,36 +775,7 @@
 										<!-- 기본배송지 설정이 없는 경우 -->
 										<c:if test="${empty defaultAddress }">
 											<div class="no-show-first">등록된 기본 배송지가 없습니다.</div>
-											<!-- <tbody>
-												<tr>
-													<th class="delivery-address-th">이름</th>
-													<td class="delivery-address-td">
-														<span class="delivery-address-name" id="name"></span>
-													</td>
-												</tr>
-												<tr>
-													<th class="delivery-address-th">배송지이름</th>
-													<td class="delivery-address-td">
-														<span class="delivery-address-nickname" id="addressNickName"></span>
-													</td>
-												</tr>
-												<tr>
-													<th class="delivery-address-th">배송주소</th>
-													<td class="delivery-address-td delivery-address-per" id="addressName"></td>
-												</tr>
-												<tr>
-													<th class="delivery-address-th delivery-phone-num-th">연락처</th>
-													<td class="delivery-address-td delivery-phone-num-td" id="phonenumber"></td>
-												</tr>
-												<tr>
-													<th class="delivery-address-th delivery-requirement-th">요청사항</th>
-													<td class="delivery-address-td delivery-requirement-td" id="requirement"><input class="requirement-in" type="text" value="" placeholder="배송 요청사항을 입력하세요."></td>
-												</tr>
-											</tbody> -->
-										</c:if>
-										<!-- 기본배송지가 초기에 설정이 되어 있거나/이후에 기본배송지를 설정한 경우 -->
-										<c:if test="${not empty defaultAddress }">
-											<tbody class="tbody-on">
+											<tbody class="tbody-on" style="display:none">
 												<tr>
 													<th class="delivery-address-th" width="30%">이름</th>
 													<td class="delivery-address-td">
@@ -839,7 +810,65 @@
 														<div class="all-comment-box">
 															<div class="custom-selectbox">
 																<select class="form-select fs" name="comment">
-																	<option value="">배송 메시지를 선택해주세요.</option>
+																	<option value="">배송 메시지를 선택해주세요. (선택)</option>
+																    <option value="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요.</option>
+																    <option value="부재 시 연락주세요.">부재 시 연락주세요.</option>
+																    <option value="배송 전 연락주세요.">배송 전 연락주세요.</option>
+																    <option value="write">직접 입력</option>
+																</select>
+															</div>
+															<!-- 직접입력 선택시 노출 -->
+						                                    <div class="commentbox" id="floatingTextcomment" style="display:none;">
+						                                        
+						                                        <textarea class="form-control commentarea" rows="5" placeholder="배송 요청사항" onkeyup="checkBytes(this, 100);"></textarea>
+						                                        <div class="tc">
+						                                        <span class="txtcount"><em id="cntnLen">0</em>/<b>100</b></span>
+						                                        </div>
+						                                    </div>
+						                                    <!-- // 직접입력 선택시 노출 -->
+				                                    	</div>
+													</td>
+												</tr>
+											</tbody>
+										</c:if>
+										<!-- 기본배송지가 초기에 설정이 되어 있거나/이후에 기본배송지를 설정한 경우 -->
+										<c:if test="${not empty defaultAddress }">
+											<tbody class="tbody-off">
+												<tr>
+													<th class="delivery-address-th" width="30%">이름</th>
+													<td class="delivery-address-td">
+														<span class="delivery-address-name" id="name">${defaultAddress.recipient }</span>
+														<!-- 기본 배송지인 경우 표시되는 영역 -->
+														<c:if test="${defaultAddress.isDefault == 0}">
+															<span class="delivery-address-alias" id="addressAlias">기본배송지</span>
+														</c:if>
+														<!-- /기본 배송지인 경우 표시되는 영역 -->
+													</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th">배송지이름</th>
+													<td class="delivery-address-td">
+														<span class="delivery-address-nickname" id="addressNickName">${defaultAddress.nickName }</span>
+													</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th">배송주소</th>
+													<td class="delivery-address-td delivery-address-per" id="addressName">${defaultAddress.address }</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th delivery-phone-num-th">연락처</th>
+													<td class="delivery-address-td delivery-phone-num-td" id="phonenumber">${defaultAddress.contact }</td>
+												</tr>
+												<!-- <tr>
+													<th class="delivery-address-th delivery-requirement-th">요청사항</th>
+													<td class="delivery-address-td delivery-requirement-td" id="requirement"><input class="requirement-in" type="text" value="" id="requirement"></td>
+												</tr> -->
+												<tr>
+													<td colspan="2">
+														<div class="all-comment-box">
+															<div class="custom-selectbox">
+																<select class="form-select fs" name="comment">
+																	<option value="">배송 메시지를 선택해주세요. (선택)</option>
 																    <option value="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요.</option>
 																    <option value="부재 시 연락주세요.">부재 시 연락주세요.</option>
 																    <option value="배송 전 연락주세요.">배송 전 연락주세요.</option>

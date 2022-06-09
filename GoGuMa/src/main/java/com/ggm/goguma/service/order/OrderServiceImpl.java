@@ -54,7 +54,8 @@ public class OrderServiceImpl implements OrderService{
 		
 		log.info(map);
 		//주문 완료 상태라면 N으로 저장
-		if(transactionDTO.getStatus() == "paid") {
+		System.out.println("서비스 로직에서 보는 현재 결제 상태 : " + transactionDTO.getStatus());
+		if(transactionDTO.getStatus().equals("paid")) {
 			log.info("정상적으로 paid상태이고, orderDetail에 저장합니다.");
 			orderMapper.saveOrderDetail(map);
 		}else {
