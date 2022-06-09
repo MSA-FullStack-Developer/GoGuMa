@@ -103,6 +103,10 @@
 					var replyTextArea = $("#reply-textarea");
 					var replyContent = replyTextArea.val();
 					
+					if(!replyContent) {
+						alert("내용을 입력해주세요.");
+						return;
+					}
 					var data = {
 						articleId: articleId,
 						replyContent: replyContent
