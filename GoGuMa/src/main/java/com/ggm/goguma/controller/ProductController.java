@@ -1,12 +1,22 @@
 package com.ggm.goguma.controller;
 
-import java.util.List;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.ggm.goguma.amazons3.AmazonS3Utils;
 import com.ggm.goguma.dto.CategoryDTO;
@@ -55,6 +63,65 @@ public class ProductController {
 	
 	private long pageSize  = 12; 
 	private long blockSize = 10;
+	
+	/**
+	 * @작성자 : 송진호
+	 * @작업내용 : 쿠키에 존재하는 값들을 불러오는 기능 구현
+	 * @작성일자 : 2022.06.09
+	 */
+	public List<String> getLatelySeenProductList(HttpServletRequest request) throws UnsupportedEncodingException {
+		// 기존에 존재하는 쿠키들을 가져옴
+		Cookie[] cookies = request.getCookies();
+		
+		// 최근에 본 상품 리스트 선언
+		List<String> list = null;
+		
+		// 쿠키가 하나라도 존재하면
+		if(cookies != null) {
+			// 가져온 쿠키 중에서
+			for(Cookie cookie : cookies) {
+				// 이름이 'latelySeenProducts'인 쿠키를 찾으면
+				if(cookie.getName().equals("latelySeenProducts")) {
+					// 쿠키의 값을 쉼표로 구분해서 리스트 형식으로 저장
+					String[] arr = (URLDecoder.decode(cookie.getValue(), "utf-8")).split(",");
+					list = new ArrayList<>(Arrays.asList(arr));
+				}
+			}
+		}
+		return list;
+	}
+	
+	/**
+	 * @작성자 : 송진호
+	 * @작업내용 : 불러온 값들을 쿠키에 넣어주는 기능 구현
+	 * @작성일자 : 2022.06.09
+	 */
+	public void setCookie(String productId, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+		// 리스트에 있는 값들을 문자열로 연결시켜주기 위한 변수
+		String value = "";
+		
+		// 쿠키에 존재하는 최근 본 상품 리스트를 불러옴
+		List<String> list = getLatelySeenProductList(request);
+		
+		// 쿠키를 통해서 불러온 최근 본 상품 리스트에 값이 없다면
+		if(list == null) value += productId;
+		else {
+			// 리스트에 productId 값을 새로 추가
+			if(!list.contains(productId)) list.add(productId);
+			// 리스트에 있는 값들을 문자열로 연결
+			for(String item : list) {
+				value += item+",";
+			}
+		}
+		
+		// 쿠키에 값들을 문자열로 연결해서 만든 value 값을 저장
+		if(!value.equals("")) {
+			Cookie cookie = new Cookie("latelySeenProducts", URLEncoder.encode(value, "utf-8"));
+			cookie.setPath(request.getContextPath());
+			cookie.setMaxAge(-1);
+			response.addCookie(cookie);
+		}
+	}
 	
 	@GetMapping("/{categoryID}")
 	public String list(@PathVariable long pg, @PathVariable long categoryID, @RequestParam(defaultValue="recent") String sortType, Model model) throws Exception {
@@ -94,9 +161,10 @@ public class ProductController {
 			return "list";
 		}
 	}
-	
+
 	@GetMapping("/{categoryID}/detail/{productID}")
-	public String detail(@PathVariable long categoryID, @PathVariable long productID, Model model, Authentication authentication) throws Exception {
+	public String detail(@PathVariable long categoryID, @PathVariable long productID, HttpServletRequest request,
+		HttpServletResponse response, Model model, Authentication authentication) throws Exception {
 		try {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 
@@ -125,6 +193,13 @@ public class ProductController {
 				MemberDTO memberDTO = memberService.getMember(user.getUsername());
 				model.addAttribute("memberDTO", memberDTO);
 			}
+			
+			/**
+			 * @작성자 : 송진호
+			 * @작업내용 : productID를 매개변수로 받아서 쿠키에 값 추가
+			 * @작성일자 : 2022.06.09
+			 */
+			setCookie(Long.toString(productID), request, response);
 	
 			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("categoryID", categoryID);

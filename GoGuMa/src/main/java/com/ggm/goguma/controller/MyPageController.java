@@ -1,7 +1,13 @@
 package com.ggm.goguma.controller;
 
+import java.net.URLDecoder;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +33,7 @@ import com.ggm.goguma.dto.ReviewDTO;
 import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.product.CategoryService;
 import com.ggm.goguma.service.product.ImageAttachService;
+import com.ggm.goguma.service.product.ProductService;
 import com.ggm.goguma.service.product.ReviewService;
 import com.ggm.goguma.service.mypage.MyPageService;
 
@@ -63,10 +70,30 @@ public class MyPageController {
 	@Autowired
 	private CategoryService categoryService;
 	
+	@Autowired
+	private ProductService productService;
+	
 	@RequestMapping(value="", method=RequestMethod.GET)
-	public String getMyPageMain(Principal principal, Model model) throws Exception {
+	public String getMyPageMain(HttpServletRequest request, Principal principal, Model model) throws Exception {
 		MemberDTO memberDTO = memberService.getMember(principal.getName());
+		List<ProductDTO> productList = new ArrayList<>();
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null) {
+			// 가져온 쿠키 중에서
+			for(Cookie cookie : cookies) {
+				// 이름이 'latelySeenProducts'인 쿠키를 찾으면
+				if(cookie.getName().equals("latelySeenProducts")) {
+					// 쿠키의 값을 쉼표로 구분해서 리스트 형식으로 저장
+					String[] productIdArr = (URLDecoder.decode(cookie.getValue(), "utf-8")).split(",");
+					for(String productId : productIdArr) {
+						productList.add(productService.getProductInfo(Long.parseLong(productId)));
+					}
+				}
+			}
+		}
+		log.info(productList);
 		model.addAttribute("memberDTO", memberDTO);
+		model.addAttribute("productList", productList);
 		return "mypage/main";
 	}
 	
