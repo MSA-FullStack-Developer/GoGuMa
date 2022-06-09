@@ -110,10 +110,15 @@
 		                                        <img class="orderHistoryImg" src="${orderDTO.image}" style="width:100px; height:100px;">
 		                                    </td>
 		                                    <td class="col-5 border-end">
-		                                    	${orderDTO.name}
+		                                    	<div class="text-truncate">
+		                                    		<b>${orderDTO.pname}</b>
+		                                    	</div>
+		                                    	<div>
+		                                    		옵션 : ${orderDTO.cname}
+		                                    	</div>
 		                                    </td>
 		                                    <td class="border-end">
-		                                        <div class="col" align="center">
+		                                        <div class="col m-auto" style="width: 100px" align="center">
 		                                            <div>
 		                                                <fmt:formatNumber value="${orderDTO.price}" />원
 		                                            </div>
