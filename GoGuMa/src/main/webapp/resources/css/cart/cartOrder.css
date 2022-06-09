@@ -1,6 +1,8 @@
 .container {
 	width: 1320px;
 	min-height: calc(100vh - 369px);
+	padding-left: 0 !important;
+	padding-right: 0 !important;
 }
 
 .contents {
@@ -636,6 +638,9 @@ ul, ol, menu, li {
     border-color: #f8f8f8;
     color: black;
     border: none;
+}
+.delivery-address{
+    width: 100%;
 }
 .delivery-address-alias {
     border: 1px solid #6426DD;
