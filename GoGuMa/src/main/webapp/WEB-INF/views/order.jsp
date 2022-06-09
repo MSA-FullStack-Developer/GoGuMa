@@ -32,13 +32,22 @@
     var coupon_name = $(this).find(".coupon-name").text();
     
     var coupon_id = $(this).find("#coupon-id").val();
+    
+    var totalAmount = $('#lastStlAmtDd1').text();
+    console.log();
+    // 쿠폰 금액이 최종 결제 금액보다 크면 사용할 수 없다.
+    console.log(totalAmount);
+    console.log(coupon_discount);
+    if(parseInt(coupon_discount) > parseInt(totalAmount)){
+      alert("현재 결제 금액보다 큰 할인쿠폰은 사용할 수 없습니다.");
+      return;
+    }
     $('#use-coupon-id').attr('value', parseInt(coupon_id));
     $('.dis-coupon-prc').text(numFormatComma(coupon_discount));
     $('#coupon-discount').text(numFormatComma(coupon_discount));
-    
     $('#couponDiscount').attr('value', parseInt(coupon_discount));
-    
     $('#couponModal').modal('hide');
+    
     calDisPrice();
     alert(coupon_name + " 할인이 적용되었습니다.");
   });
@@ -60,7 +69,7 @@
     $('#all-discount').text(numFormatComma(membershipDiscount));
     
     $('#lastStlAmtDd').text(numFormatComma(total-membershipDiscount));
-    
+    $('#lastStlAmtDd1').text(total-membershipDiscount);
     //쿠폰 조회 버튼
     $('#getCoupon-btn').on('click', function() {
       let token = $("meta[name='_csrf']").attr("content");
@@ -191,27 +200,60 @@
         iamport(radioVal);
       }
     });
-    $("#g-point").on("input propertychange paste", function(){
+    $("#g-point").change(function(){
     	var point = parseInt($('#g-point').val());
     	var limitpoint = Number($('#member-point').val());
     	console.log(limitpoint);
     	console.log("로그: " + numFormatComma(point));
+    	var totalAmount = $('#lastStlAmtDd1').text();
+    	//총 판매 금액
+    	var total = parseInt($('#total').val());
+    	//멤버십 할인 금액
+    	var membershipDiscount = parseInt($('#membershipDiscount').val());
+    	//쿠폰 할인 금액
+    	var coupon_discount = $("#couponDiscount").val();
+    	if (isNaN(coupon_discount)){
+    	  coupon_discount = 0;
+    	}
+    	//사용 가능한 최대 포인트(최종 결제 금액)
+    	var bound = total - membershipDiscount - coupon_discount;
     	if(numFormatComma(point) != "NaN"){
-	   	  	//포인트가 가진 포인트보다 많거 0보다 작은경우
-	      	if(point > limitpoint || point < 0){
-	      	  alert("보유 포인트를 넘길 수 없습니다. 모든 포인트를 사용합니다.");
-	      	  $('#g-point').val(limitpoint);
+    	  	console.log("여기!!!");
+    	  	if (point < 0){
+    	  	  alert("포인트는 0 이상 사용해야 합니다.");
+    	  	  $('#g-point').val(0);
+    	  	  $('#point-discount').text(0);
+	      	  $('#GPoint').attr('value', 0);
+	      	  calDisPrice();
+    	  	}
+	    	//포인트를 최종 결제 금액보다 많이 사용하려는 경우
+	    	else if (point > bound){
+	    	  $('#g-point').val(bound);
+	      	  $('#point-discount').text(numFormatComma(bound));
+	      	  $('#GPoint').attr('value', parseInt(bound));
+	      	  calDisPrice();
+	      	  alert("결제 금액보다 많이 사용할 수 없습니다.");
+	      	}
+    	  	//가진 포인트보다 많이 사용하려는 경우
+	    	else if(point > limitpoint){
+	  	  	  alert("보유 포인트를 넘길 수 없습니다. 모든 포인트를 사용합니다.");
+	  	  	  $('#g-point').val(limitpoint);
 	      	  $('#point-discount').text(numFormatComma(limitpoint));
 	      	  $('#GPoint').attr('value', parseInt(limitpoint));
 	      	  calDisPrice();
-	      	}else{
+	  	  	}
+	    	else{
+	    	  $('#g-point').val(point);
 	      	  $('#point-discount').text(numFormatComma(point));
 	      	  $('#GPoint').attr('value', parseInt(point));
 	      	  calDisPrice();
 	      	}
     	}else{
     	  console.log("빈값");
+    	  $('#g-point').val(0);
     	  $('#point-discount').text(0);
+    	  $('#GPoint').attr('value', 0);
+    	  calDisPrice();
     	}
     });
     
@@ -219,13 +261,8 @@
       $('#g-point').val(0);
       $('#point-discount').text(0);
       $('#GPoint').attr('value', 0);
+      calDisPrice();
     });
-    
-/*     $('.requirement-in').change(function(){
-      var a = $('.requirement-in').val();
-      $('.requirement-in').attr('value',a);
-      console.log($('.requirement-in').val());
-    }); */
     
     $('select[name=comment]').change(function(){
       var selText = $("select[name=comment] option:selected").val()
@@ -251,7 +288,7 @@
 		    pay_method : 'card',
 		    merchant_uid : 'merchant_' + new Date().getTime(),
 		    name : $('.pProductName').text(), //결제창에서 보여질 이름
-		    amount : $('#lastStlAmtDd').text(), //실제 결제되는 가격
+		    amount : $('#lastStlAmtDd1').text(), //실제 결제되는 가격
 		    buyer_email : "${memberDTO.email}",
 		    buyer_name : $('#name').text(),
 		    buyer_tel : $('#phonenumber').text(),
@@ -298,7 +335,7 @@
 	    pay_method : 'vbank',
 	    merchant_uid : 'merchant_' + new Date().getTime(),
 	    name : $('.pProductName').text(), //결제창에서 보여질 이름
-	    amount : $('#lastStlAmtDd').text(), //실제 결제되는 가격
+	    amount : $('#lastStlAmtDd1').text(), //실제 결제되는 가격
 	    buyer_email : "${memberDTO.email}",
 	    buyer_name : $('#name').text(),
 	    buyer_tel : $('#phonenumber').text(),
@@ -468,6 +505,7 @@
 	    var totalPayPrice = totalPrice - totalDC;
 	    
 	    $('#lastStlAmtDd').text(numFormatComma(totalPayPrice));
+	    $('#lastStlAmtDd1').text(totalPayPrice);
 	    $('#finalPrice').attr('value', totalPayPrice);
 	    console.log(totalPayPrice);
 	}
@@ -526,6 +564,7 @@
 							<li>
 								<div class="total">
 									<span class="tit">최종 결제금액</span> <span class="txt"><strong id="lastStlAmtDd">0</strong>원</span>
+									<input type="hidden" id="lastStlAmtDd1" value=""/>
 								</div>
 							</li>
 							<li>

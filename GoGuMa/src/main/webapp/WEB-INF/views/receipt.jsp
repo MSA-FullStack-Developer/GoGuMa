@@ -191,7 +191,7 @@
 					</div>		
 					<div class="order-buttons">
 						<button type="button" class="btn text-black continue" onClick="location.href='${contextPath}'">쇼핑 계속하기</button>
-						<button type="submit" id="orderBtn" class="btn text-white btn-default purchase">나의 쇼핑 내역</button>
+						<button type="button" id="orderBtn" class="btn text-white btn-default purchase" onclicl="location.href='${pageContext }/mypage/orderHistory'">나의 쇼핑 내역</button>
 					</div>
 			</div>
 		</div>
