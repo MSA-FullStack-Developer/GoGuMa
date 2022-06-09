@@ -434,6 +434,17 @@
 	    $('#finalPrice').attr('value', totalPayPrice);
 	    console.log(totalPayPrice);
 	}
+	//적용된 쿠폰 적용 해제
+	function clearCoupon(){
+	    $('#use-coupon-id').val(0);
+	    $('.dis-coupon-prc').text("적용 없음");
+	    $('#coupon-discount').text(0);
+	    
+	    $('#couponDiscount').val(0);
+	    $('#couponModal').modal('hide');
+	    calDisPrice();
+	    alert("쿠폰 적용을 취소했습니다.");
+	}
 </script>
 
 <style>
@@ -451,24 +462,24 @@
 						<ul class="payment-list">
 							<li>
 								<div id="orderAmt">
-									<span class="tit">총 판매 금액</span> <span class="txt"><strong id="total-price"></strong>원</span>
+									<span class="tit">총 판매 금액</span> <span class="txt"><strong id="total-price">0</strong>원</span>
 								</div>
 								<div id="membershipDcAmtDiv">
-									<span class="tit">멤버십 할인</span> <span class="txt">-<strong id="membership-discount"></strong>원</span>
+									<span class="tit">멤버십 할인</span> <span class="txt">-<strong id="membership-discount">0</strong>원</span>
 								</div>
 								<div id="copnDcAmtDiv">
-									<span class="tit">쿠폰 할인</span> <span class="txt">-<strong id="coupon-discount"></strong>원</span>
+									<span class="tit">쿠폰 할인</span> <span class="txt">-<strong id="coupon-discount">0</strong>원</span>
 								</div>
 								<div id="pointDcAmtDiv">
-									<span class="tit">G.Point</span> <span class="txt">-<strong id="point-discount"></strong>원</span>
+									<span class="tit">G.Point</span> <span class="txt">-<strong id="point-discount">0</strong>원</span>
 								</div>
 								<div id="totDcAmtDiv">
-									<span class="tit">할인 합계금액</span> <span class="txt">-<strong id="all-discount"></strong>원</span>
+									<span class="tit">할인 합계금액</span> <span class="txt">-<strong id="all-discount">0</strong>원</span>
 								</div>
 							</li>
 							<li>
 								<div class="total">
-									<span class="tit">최종 결제금액</span> <span class="txt"><strong id="lastStlAmtDd"></strong>원</span>
+									<span class="tit">최종 결제금액</span> <span class="txt"><strong id="lastStlAmtDd">0</strong>원</span>
 								</div>
 							</li>
 							<li>
@@ -602,7 +613,7 @@
 											
 										</div>
 										<div class="modal-footer">
-											<button class="btn btn-secondary" data-bs-target="#couponCancelModal" data-bs-toggle="modal" data-bs-dismiss="modal">사용 취소</button>
+											<button class="btn btn-secondary" onclick="clearCoupon()">사용 취소</button>
 										</div>
 									</div>
 								</div>
@@ -620,7 +631,7 @@
 											</div>
 										</div>
 										<div class="row" style="padding: 10px;">
-											<div class="col-md-2">G.Point</div>
+											<div class="col-md-2">보유 G.Point</div>
 											<div class="col-md-2">
 												<div class="input-group mb-3">
 													<input type="number" class="form-control use-point" id="g-point" placeholder="G.Point" aria-describedby="basic-addon1" value=0>
@@ -796,6 +807,13 @@
 											</tbody>
 										</c:if>
 									</table>
+									<select class="form-select">
+										<option>배송 메시지를 선택해주세요.</option>
+									    <option>부재 시 경비실에 맡겨주세요.</option>
+									    <option>부재 시 연락주세요.</option>
+									    <option>배송 전 연락주세요.</option>
+									    <option>직접 입력</option>
+									</select>
 								</div>
 							</div>
 							<button type="button" class="btn text-white btn-change-address" id="btn-change-address" data-bs-toggle="modal" data-bs-target="#myModal">배송지변경</button>
