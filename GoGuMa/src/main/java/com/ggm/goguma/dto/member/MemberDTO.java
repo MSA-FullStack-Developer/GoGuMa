@@ -35,6 +35,12 @@ public class MemberDTO {
 
 	private Date joinDate;
 	
+	private String birthDate;
+	
+	private String profileImage;
+	
+	private String nickName;
+	
 	private boolean disabled;
 	
 }

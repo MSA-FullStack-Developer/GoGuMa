@@ -202,6 +202,7 @@ public class MemberController {
 			e.printStackTrace();
 			return "redirect:/member/join/fail.do";
 		}		
+	
 	}
 	
 	@PostMapping("/findId/result.do")

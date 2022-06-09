@@ -15,10 +15,13 @@ public interface MemberMapper {
 	
 	Optional<MemberDTO> findMemberByEmailAndPwd(@Param("email") String email, @Param("password") String password);
 	
+	Optional<MemberDTO> findMemberById(@Param("memberId") String memberId);
+	
 	void createMember(MemberDTO member);
 	
 	void updateMemberPwd(MemberDTO meber);
 	
 	Optional<ResignMemberDTO> findResignMember(@Param("memberId") long memberId);
+	
 	
 }
