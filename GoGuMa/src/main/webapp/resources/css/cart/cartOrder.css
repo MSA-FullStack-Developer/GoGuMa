@@ -1,6 +1,8 @@
 .container {
 	width: 1320px;
 	min-height: calc(100vh - 369px);
+	padding-left: 0 !important;
+	padding-right: 0 !important;
 }
 
 .contents {
@@ -447,6 +449,7 @@ ul, ol, menu, li {
     font-size: 14px;
     color: #555;
     text-align: center;
+    background: white;
 }
 .all-cart-total-price em {
     padding: 0 4px 0 5px;
@@ -637,12 +640,18 @@ ul, ol, menu, li {
     color: black;
     border: none;
 }
+.delivery-address{
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
 .delivery-address-alias {
     border: 1px solid #6426DD;
     border-radius: 8px;
     color: #6426DD ;
 }
 .btn-change-address{
+	margin-top: 10px;
 	background-color: #6426DD ;
 	float: right;
 }
@@ -697,6 +706,9 @@ ul, ol, menu, li {
 .address-list-box:hover, .coupon-list-box:hover{
 	border: #FF493C 2px solid;
 	border-radius: 5px;
+}
+.fin-txt-div{
+	
 }
 .fin-txt{
 	font-size: 30px;

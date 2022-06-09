@@ -3,48 +3,46 @@
 
 .main {
 	width: auto;
-	height: auto;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.market-main {
+	width: auto;
+    height: auto;
+    margin-bottom: 50px;
 }
 
 .header-top {
-	width: 1320px;
+    width: 1320px;
     height: 30px;
     text-align: center;
-    margin-left: 305px;
     margin-top: 25px;
     margin-bottom: 25px;
+    margin: 25px auto;
 }
 
 .menu {
 	width: auto;
 	float: right;
 	position: static;
-	top: 0%;
 }
 
 #goguma {
 	border: none;
     color: black;
     transform: translate(-50%, -50%);
-    top: 19.3%;
-    right: 195px;
-    position: absolute;
     border-radius: 10pt;
-    width: auto;
+    width: 600px;
     height: 50px;
-    font-size: 10pt;
 }
 
 #market-goguma {
 	border: none;
     color: black;
-    transform: translate(-50%, -50%);
-    top: 8.8%;
-    position: absolute;
     border-radius: 10pt;
-    width: auto;
+    width: 600px;
     height: 50px;
-    font-size: 10pt;
 }
 
 #goguma:hover {
@@ -65,9 +63,13 @@
 }
 
 .backG {
-	margin-right: 10px;
-	font-size: 9.5pt;
-	color: gray;
+    font-size: 9.5pt;
+    color: gray;
+}
+
+.gotoGGM {
+    float: right;
+    margin-top: -68;
 }
 
 .menuA:hover {
@@ -123,7 +125,27 @@
     margin: 0;
     font-size: 20px;
 }
-
+.commentarea{
+	resize: none;
+}
+.fs{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.tc{
+	text-align: right;
+}
+.bp{
+	text-align: left;
+    margin-top: 8px;
+    color: #888;
+    line-height: 17px;
+    letter-spacing: -0.56px;
+}
+.textareabox {
+    margin-top: 10px;
+    padding: 20px 0 30px;
+}
 #menu {
     width: 170px;
     height: 50px;
@@ -133,10 +155,10 @@
 }
 
 .back {
-	width: auto;
-	float: left;
-	position: static;
-	top: 0%;
+    width: auto;
+    float: left;
+    position: static;
+    padding-top: 6.5px;
 }
 
 .main1 {

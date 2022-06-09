@@ -21,9 +21,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</head>
-
-<body>
+    
     <script>
         $(document).ready(function() {
             $("li").click(function(){
@@ -54,7 +52,9 @@
             }) 
         });
     </script>
+</head>
 
+<body>
     <section class="container pt-3 pb-3">
         <h1>상품 찾기</h1>
         <form action="${contextPath}/market/article/searchProudct.do" method="get">

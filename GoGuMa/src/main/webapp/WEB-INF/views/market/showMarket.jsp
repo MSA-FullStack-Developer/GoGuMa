@@ -124,6 +124,7 @@
     </script>
 </head>
 <body>
+	<%@ include file="../market/marketHeader.jsp" %>
 	<div class="container pt-3 pb-3">
 		<input name="marketId" type="hidden" value="${market.marketId}" />
         <section name="head-area" class="w-100 border border-secondary rounded">
