@@ -54,5 +54,12 @@
 		WHERE E.parentpid = F.productid
         AND NOT EXISTS (SELECT * FROM review R WHERE memberid = #{memberID} AND E.productid = R.productid)
 	</select>
+	
+	<!-- 상품평 수정 -->
+	<update id="updateReview">
+		UPDATE review
+		SET content=#{content}
+		WHERE reviewid=#{reviewID}
+	</update>
 
 </mapper>

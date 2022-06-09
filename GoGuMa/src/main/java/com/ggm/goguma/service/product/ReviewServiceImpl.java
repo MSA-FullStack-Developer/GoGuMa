@@ -62,4 +62,22 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewMapper.getWriteableReview(memberID);
 	}
 
+	@Override
+	public void updateReview(ReviewDTO reviewDTO) throws Exception {
+		// 상품평 이미지 전체 삭제 후 새로 삽입
+		attachMapper.attachDelete(reviewDTO.getReviewID());
+		
+		if (reviewDTO.getAttachList() == null || reviewDTO.getAttachList().size() <= 0) {
+			return;
+		}
+		
+		reviewDTO.getAttachList().forEach(attach -> {
+			attach.setReviewID(reviewDTO.getReviewID());
+			attachMapper.attachInsert(attach);
+		});
+		
+		// 상품평 수정
+		reviewMapper.updateReview(reviewDTO);
+	}
+
 }

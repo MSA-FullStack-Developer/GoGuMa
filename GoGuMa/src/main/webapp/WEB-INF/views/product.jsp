@@ -37,6 +37,15 @@
 			return n;
 		};
     
+		function buybtnClick(){
+		  var optionName = $("#option option:selected").text(); // 옵션 상품 이름
+	      
+	      if (optionName == "선택 없음") {
+	        alert("옵션을 선택하세요.");
+	      	return false;
+	      }
+		}
+		
 	    function selectOption(option) { // 옵션을 변경한 경우 구매 수량 초기화
 	    	document.getElementById("numBox").value = 1;
 
@@ -46,6 +55,10 @@
 	    	console.log("옵션 아이디 : " + optionID);
 	    	$('.selectedOption').text(optionName);
 	    	$('#product-id').val(optionID);
+	    	$('#product-price').val(optionPrice);
+	    	var disp = optionPrice * ("${memberDTO.grade.discountPercent / 100}");
+	    	$('#product-discount').val(parseInt(disp));
+	    	$('#product-totcount').val(optionPrice-disp);
 	    	$('.total_price').text(optionPrice.format() + "원"); // 초기화
 	    }
 	    
@@ -192,7 +205,7 @@
 
         		if (confirm("상품평을 삭제하시겠습니까?")) {
             		$.ajax({
-        	            url: "${contextPath}/category/1/deleteReview",
+        	            url: "${contextPath}/category/1/api/deleteReview",
         	            type: "POST",
         	            data: data,
         	            beforeSend : function(xhr) {
@@ -264,7 +277,7 @@
                                 	<option value="${option.stock}" 
                                 			data-id="${option.productID}" 
                                 			data-price="${option.productPrice}">
-                                			${option.productName}
+                                			${option.productName} - ${option.productPrice}원
                               			</option>
 	                                </c:forEach>
 	                            </select>
@@ -273,17 +286,16 @@
                     </tr>
                     </c:if>
                 </table>
-                <form id="product-order" action="${contextPath}/order/" method="post">
+                <form id="product-order" action="${contextPath}/order/" method="post" onsubmit="return buybtnClick()">
                 	<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 	<input type="hidden" id="product-price" name="productOrder.nrmOriPrc" value="${productInfo.productPrice}"/>
-                	<fmt:parseNumber var="disPrc" value="${productInfo.productPrice * (memberDTO.grade.discountPercent / 100)}" integerOnly="true"/>
-                	<input type="hidden" id="product-discount" name="productOrder.disOriPrc" value="${disPrc}" />
-                	
-                	<fmt:parseNumber var="totPrc" value="${productInfo.productPrice - disPrc}" integerOnly="true"/>
-                	<input type="hidden" id="product-discount" name="productOrder.totOriPrc" value="${totPrc}" />
+                	<%-- <fmt:parseNumber var="disPrc" value="${productInfo.productPrice * (memberDTO.grade.discountPercent / 100)}" integerOnly="true"/> --%>
+                	<input type="hidden" id="product-discount" name="productOrder.disOriPrc" value />      
+                	<%-- <fmt:parseNumber var="totPrc" value="${productInfo.productPrice - disPrc}" integerOnly="true"/> --%>
+                	<input type="hidden" id="product-totcount" name="productOrder.totOriPrc" value />
                 <div class="selectedInfo">
                 	<h5 class="selectedOption">선택 없음</h5>
-                	<input type="hidden" name="productOrder.productId" id="product-id" value= />
+                	<input type="hidden" name="productOrder.productId" id="product-id" value />
                 	<p class="cartStock">
                         <button type="button" class="calc" id="minus">-</button>
                         <span style="text-align: center;">
@@ -294,10 +306,10 @@
                      </p>
                 </div>
                 
-                <div class="btnDiv">
-                	<button type="button" class="cartBtn" id="cartBtn">장바구니</button>
-                    <button type="submit" class="buyBtn" id="buyBtn">바로구매</button>
-                </div>
+	                <div class="btnDiv">
+	                	<button type="button" class="cartBtn" id="cartBtn">장바구니</button>
+	                    <button type="submit" class="buyBtn" id="buyBtn">바로구매</button>
+	                </div>
                 </form>
             </div>
             

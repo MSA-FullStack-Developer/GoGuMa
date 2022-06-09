@@ -1,6 +1,8 @@
 package com.ggm.goguma.controller;
 
 import java.net.URLDecoder;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,12 +17,14 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ggm.goguma.dto.CancelPayDTO;
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
@@ -35,6 +39,11 @@ import com.ggm.goguma.service.product.CategoryService;
 import com.ggm.goguma.service.product.ImageAttachService;
 import com.ggm.goguma.service.product.ProductService;
 import com.ggm.goguma.service.product.ReviewService;
+import com.siot.IamportRestClient.IamportClient;
+import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.request.CancelData;
+import com.siot.IamportRestClient.response.IamportResponse;
+import com.siot.IamportRestClient.response.Payment;
 import com.ggm.goguma.service.mypage.MyPageService;
 
 import lombok.extern.log4j.Log4j;
@@ -146,6 +155,29 @@ public class MyPageController {
 		return "1";
 	}
 	
+	/**
+	 * @작성자: Moon Seokho
+	 * @Date: 2022. 6. 7.
+	 * @프로그램설명: 환불요청을 받을 URL
+	 * @변경이력: 
+	 */
+	private IamportClient api;
+	
+	@Value("${iamport.restKeyPay}")
+	private String payKey;
+	@Value("${iamport.secretPay}")
+	private String paySecretKey;
+	
+	//사용자가 구매 취소를 한 경우 상품 금액만큼 결제 취소한다.
+	@ResponseBody
+	@PostMapping("api/payment/cancel")
+	public void cancelPay(CancelPayDTO cancelPayDTO) throws IamportResponseException, IOException {
+		api = new IamportClient(payKey, paySecretKey);
+		CancelData cancel_data = new CancelData(cancelPayDTO.getUid(), true, BigDecimal.valueOf(cancelPayDTO.getCancelAmount()));
+		api.cancelPaymentByImpUid(cancel_data);
+		log.info("환불 로그");
+	}
+	
 	@RequestMapping(value="/pointHistory/{type}", method=RequestMethod.GET)
 	public String getPointHistory(@PathVariable("type") String type, @RequestParam("page") long page,
 		@RequestParam(value="startDate", required=false) String startDate,
@@ -169,7 +201,9 @@ public class MyPageController {
 			// 마지막 페이지 개수가 전체 페이지 개수보다 많은 경우, 마지막 페이지를 전체 페이지 개수로 맞춰준다.
 			if(endPage > pageCount) endPage = pageCount;
 			
+
 			List<PointDTO> pointHistory = service.getPointHistory(memberDTO.getId(), type, page, startDate, endDate);
+			
 			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("pointHistory", pointHistory);
 			model.addAttribute("type", type);
@@ -196,6 +230,7 @@ public class MyPageController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			// 특정 쿠폰의 개수
 			long couponCount = service.getCouponCount(memberDTO.getId(), type);
+
 			// 전체 페이지 개수 = 전체 페이지 개수 / 한 페이지에 보여지는 내역의 수
 			long pageCount = couponCount / contentPerPage;
 			// 예를 들어, 내역이 101개인 경우, 11개의 페이지가 필요하므로 총 페이지 개수를 증가시켜준다.

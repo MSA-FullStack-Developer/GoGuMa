@@ -80,6 +80,7 @@
 		<include refid="sort"></include>
 	</select>
 	
+	<!-- 검색된 상품 개수 -->
 	<select id="getSearchCount" parameterType="String" resultType="long">
 		SELECT count(*) AS cnt
 		FROM product

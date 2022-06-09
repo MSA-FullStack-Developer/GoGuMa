@@ -40,4 +40,8 @@ public interface OrderMapper {
 
 	void deleteCartOrder(@Param("cartId") long cartId)throws Exception;
 
+	void saveOrderDetailVbank(HashMap<String, Object> map)throws Exception;
+
+	void checkOrderDetail(@Param("impUid") String impUid)throws Exception;
+
 }

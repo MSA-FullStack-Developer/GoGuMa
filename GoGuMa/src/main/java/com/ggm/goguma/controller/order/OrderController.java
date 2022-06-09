@@ -2,10 +2,13 @@ package com.ggm.goguma.controller.order;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeanUtils;
@@ -42,6 +45,8 @@ import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.mypage.MyPageService;
 import com.ggm.goguma.service.order.OrderService;
 import com.ggm.goguma.service.product.CategoryService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
@@ -222,9 +227,17 @@ public class OrderController {
 	}
 	
 	//아임포트 웹훅 url
-	@PostMapping("api/nobankcomplete")
-	public void noBankComplete() {
+	@ResponseBody
+	@PostMapping("nobankcomplete")
+	public void noBankComplete(@RequestBody HashMap<String, Object> webhook_param, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		log.info("리퀘스트 확인");
+		log.info(webhook_param);
+		if(webhook_param.get("status").equals("paid")) {
+			System.out.println("입금이 확인 되었습니다.");
+			//결제 예정이었던 orderdetail의 상품 상태를 N으로 돌려 둔다.
+			String impUid = (String)webhook_param.get("imp_uid");
+			orderService.checkOrderDetail(impUid);
+		}
 	}
 	
 	@PostMapping("/orderResult")
@@ -238,6 +251,12 @@ public class OrderController {
 		//결제 번호
 		String uid = ipUid.substring(4);
 		model.addAttribute("uid", uid);
+		
+		api = new IamportClient(payKey, paySecretKey);
+		
+		IamportResponse<Payment> res = api.paymentByImpUid(ipUid);
+		Payment p = res.getResponse();
+		model.addAttribute("resp", p); 
 		
 		return "receipt";
 	}
