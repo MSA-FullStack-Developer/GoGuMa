@@ -107,13 +107,17 @@
 	                                        <img src="${orderDTO.image}" style="width:100px; height:100px">
 	                                    </td>
 	                                    <td class="col-5 border-end">
-	                                        ${orderDTO.name}
+	                                        <div class="text-truncate">
+	                                    		<b>${orderDTO.pname}</b>
+	                                    	</div>
+	                                    	<div>
+	                                    		옵션 : ${orderDTO.cname}
+	                                    	</div>
 	                                    </td>
 	                                    <td class="border-end">
-	                                        <div class="col" align="center">
+	                                        <div class="col m-auto" style="width: 100px" align="center">
 	                                            <div>
-	                                            	<c:set var="orderPrice" value="${orderDTO.price * orderDTO.count}" />
-	                                            	<fmt:formatNumber value="${orderPrice}" />원
+	                                                <fmt:formatNumber value="${orderDTO.price}" />원
 	                                            </div>
 	                                            <div>
 	                                                (${orderDTO.count}개)
@@ -191,19 +195,19 @@
                     <tbody class="table-group-divider">
                         <tr>
                             <th>멤버십 등급 할인</th>
-                            <td>-<fmt:formatNumber value="${receiptDTO.membershipDiscount}" />원</td>                           
+                            <td>- <fmt:formatNumber value="${receiptDTO.membershipDiscount}" />원</td>                           
                         </tr>
                          <tr>
                             <th>쿠폰 할인</th>
-                            <td>-<fmt:formatNumber value="${receiptDTO.couponDiscount}" />원</td>
+                            <td>- <fmt:formatNumber value="${receiptDTO.couponDiscount}" />원</td>
                         </tr>
                         <tr>
                             <th>포인트 할인</th>
-                            <td>-<fmt:formatNumber value="${receiptDTO.usagePoint}" />원</td>
+                            <td>- <fmt:formatNumber value="${receiptDTO.usagePoint}" />원</td>
                         </tr>
                         <tr>
                             <th>할인 합계</th>
-                            <td><b>-<fmt:formatNumber value="${totalDiscount}" />원</b></td>
+                            <td><b>- <fmt:formatNumber value="${totalDiscount}" />원</b></td>
                         </tr>
                     </tbody>
                 </table>
@@ -218,11 +222,11 @@
                         </tr>
                         <tr>
                             <th>할인 합계</th>
-                            <td>-<fmt:formatNumber value="${totalDiscount}" />원</td>
+                            <td>- <fmt:formatNumber value="${totalDiscount}" />원</td>
                         </tr>
                         <tr>
                             <th>예상 적립 포인트</th>
-                            <td>+<fmt:formatNumber value="${earnablePoint}" />P</td>
+                            <td>+ <fmt:formatNumber value="${earnablePoint}" />P</td>
                         </tr>
                         <tr>
                             <th>최종 결제금액</th>
