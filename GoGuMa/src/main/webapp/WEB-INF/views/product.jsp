@@ -205,7 +205,7 @@
 
         		if (confirm("상품평을 삭제하시겠습니까?")) {
             		$.ajax({
-        	            url: "${contextPath}/category/1/deleteReview",
+        	            url: "${contextPath}/category/1/api/deleteReview",
         	            type: "POST",
         	            data: data,
         	            beforeSend : function(xhr) {
@@ -277,7 +277,7 @@
                                 	<option value="${option.stock}" 
                                 			data-id="${option.productID}" 
                                 			data-price="${option.productPrice}">
-                                			${option.productName}
+                                			${option.productName} - ${option.productPrice}원
                               			</option>
 	                                </c:forEach>
 	                            </select>
@@ -290,8 +290,7 @@
                 	<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 	<input type="hidden" id="product-price" name="productOrder.nrmOriPrc" value="${productInfo.productPrice}"/>
                 	<%-- <fmt:parseNumber var="disPrc" value="${productInfo.productPrice * (memberDTO.grade.discountPercent / 100)}" integerOnly="true"/> --%>
-                	<input type="hidden" id="product-discount" name="productOrder.disOriPrc" value />
-                	
+                	<input type="hidden" id="product-discount" name="productOrder.disOriPrc" value />      
                 	<%-- <fmt:parseNumber var="totPrc" value="${productInfo.productPrice - disPrc}" integerOnly="true"/> --%>
                 	<input type="hidden" id="product-totcount" name="productOrder.totOriPrc" value />
                 <div class="selectedInfo">
@@ -307,10 +306,10 @@
                      </p>
                 </div>
                 
-                <div class="btnDiv">
-                	<button type="button" class="cartBtn" id="cartBtn">장바구니</button>
-                    <button type="submit" class="buyBtn" id="buyBtn">바로구매</button>
-                </div>
+	                <div class="btnDiv">
+	                	<button type="button" class="cartBtn" id="cartBtn">장바구니</button>
+	                    <button type="submit" class="buyBtn" id="buyBtn">바로구매</button>
+	                </div>
                 </form>
             </div>
             

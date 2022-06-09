@@ -69,18 +69,13 @@ public class MarketServiceImpl implements MarketService{
 		
 		this.marketMapper.insertMarket(market);
 		
-	
 		return market;
 	}
 
-
 	@Override
 	public MarketDTO getMarket(long marketId) throws Exception {
-		
 		return this.marketMapper.findMarketById(marketId).orElseThrow(NotFoundMarketException::new);
-	
 	}
-
 
 	@Override
 	public boolean isAlreadyFollowMarket(FollowMarketDTO followMarket) {
@@ -103,12 +98,10 @@ public class MarketServiceImpl implements MarketService{
 		return isCreated;
 	}
 
-
 	@Override
 	public List<ArticleProudctDTO> getArticleProducts(String keyword, long memberId) {
 		return this.marketMapper.findOrderProduct(keyword, memberId);
 	}
-
 
 	@Override
 	public boolean isMyMarket(long marketId, long memberId) {
@@ -132,7 +125,6 @@ public class MarketServiceImpl implements MarketService{
 		}
 		return true;
 	}
-
 
 	@Transactional
 	@Override
@@ -174,8 +166,6 @@ public class MarketServiceImpl implements MarketService{
 		
 	}
 	
-	
-	
 	private List<ArticleImageDTO> extractImage(String html) throws URISyntaxException {
 		List<ArticleImageDTO> articleImages = new ArrayList<>();
 		Document doc = Jsoup.parse(html);
@@ -198,12 +188,10 @@ public class MarketServiceImpl implements MarketService{
 		return articleImages;
 	}
 
-
 	@Override
 	public MarketArticleDTO getMarketArticle(long articleId) {
 		return this.marketMapper.findMarketArticleById(articleId).orElseThrow(NotFoundMarketArticleException::new);
 	}
-
 
 	@Override
 	public PaginationDTO<MarketArticleDTO> getMarketArticles(long marketId, long page) {
@@ -234,9 +222,25 @@ public class MarketServiceImpl implements MarketService{
 		
 		return paginationDTO;
 	}
-	
-	
-	
-	
+
+	@Override
+	public List<MarketDTO> getFollowedMarket(long memberId) throws Exception {
+		return this.marketMapper.getFollowedMarket(memberId);
+	}
+
+	@Override
+	public List<MarketDTO> getUnfollowedMarket(long memberId) throws Exception {
+		return this.marketMapper.getUnfollowedMarket(memberId);
+	}
+
+	@Override
+	public List<MarketArticleDTO> getAllArticle() throws Exception {
+		return this.marketMapper.getAllArticle();
+	}
+
+	@Override
+	public Integer getMyMarket(long memberId) throws Exception {
+		return this.marketMapper.getMyMarket(memberId);
+	}
 	
 }

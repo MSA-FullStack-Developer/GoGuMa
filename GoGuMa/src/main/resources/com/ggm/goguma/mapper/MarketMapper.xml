@@ -14,7 +14,6 @@
 		<association property="category" column="categoryId" select="com.ggm.goguma.mapper.CategoryMapper.findCategoryById"></association>
 	</resultMap>
 	
-	
 	<resultMap type="MarketArticleDTO" id="MarketArticleResult">
 		<id property="articleId" column="articleId"/>
 		<result property="articleId" column="articleId"/>
@@ -27,15 +26,13 @@
 	</resultMap>
 	
 	<insert id="insertMarket" parameterType="MarketDTO" useGeneratedKeys="true" keyProperty="marketId" keyColumn="marketId">
-	
 		INSERT INTO market(MEMBERID, CATEGORYID, MARKETNAME, MARKETDETAIL, MARKETTHUMB,MARKETBANNER)
 		VALUES(#{memberId}, #{category.categoryID}, #{marketName}, #{marketDetail}, #{marketThumbnail}, #{marketBanner})
 	</insert>
 
-
 	<select id="findMarketById" parameterType="long" resultMap="MarketResult">
 		SELECT 
-			marketId,memberId, marketName, marketDetail,marketThumb,marketBanner,categoryId
+			marketId, memberId, marketName, marketDetail, marketThumb, marketBanner, categoryId
 		FROM
 			Market 
 		WHERE marketId = #{id} 
@@ -78,7 +75,6 @@
 			p.PARENTPID = pp.PRODUCTID AND
 			pp.PRODUCTNAME LIKE '%'||#{keyword}||'%'
 	</select>
-	
 	
 	<insert id="insertMarketArticle" parameterType="MarketArticleDTO" useGeneratedKeys="true" keyColumn="articleId" keyProperty="articleId">
 		INSERT INTO marketArticle(marketId, articleTitle, articleContent)
@@ -130,5 +126,54 @@
 		FROM marketArticle
 		WHERE marketId = #{marketId}
 	</select>
+	
+	<!-- 
+		작성자 : 경민영
+		작업일 : 22.06.08
+		메인 화면 - 내가 팔로우한 마켓 정보 불러오기
+	 -->
+	 <select id="getFollowedMarket" resultMap="MarketResult">
+	 	SELECT m.marketid, m.marketname, m.marketthumb
+		FROM market m, followmarket f
+		WHERE m.marketid = f.marketid
+		AND f.memberid = #{memberId}
+	 </select>
+	 
+	 <!-- 
+		작성자 : 경민영
+		작업일 : 22.06.08
+		메인 화면 - 내가 팔로우하지 않은 마켓 정보 불러오기
+	 -->
+	 <select id="getUnfollowedMarket" resultMap="MarketResult">
+	 	SELECT *
+		FROM market m
+		LEFT JOIN (SELECT *
+		            FROM followmarket
+		            WHERE memberid = #{memberId}) f
+		ON m.marketid = f.marketid
+		WHERE f.marketid IS NULL
+	 </select>
+	 
+	 <!-- 
+		작성자 : 경민영
+		작업일 : 22.06.08
+		메인 화면 - 최근 게시글 모두 불러오기
+	 -->
+	 <select id ="getAllArticle" resultMap="MarketArticleResult">
+	 	SELECT *
+	 	FROM marketarticle
+	 	ORDER BY regdate DESC
+	 </select>
+	 
+	 <!-- 
+		작성자 : 경민영
+		작업일 : 22.06.08
+		메인 화면 - 만들었던 마켓이 있는지 확인하기
+	 -->
+	 <select id="getMyMarket" resultType="Integer">
+	 	SELECT COUNT(*)
+	 	FROM market
+	 	WHERE memberid = #{memberId}
+	 </select>
 	
 </mapper>
