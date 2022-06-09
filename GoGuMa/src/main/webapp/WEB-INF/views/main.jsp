@@ -32,6 +32,5 @@
 			<h2>어드민입니다.</h2>
 		</sec:authorize>
 	</h1>
-
 </body>
 </html>

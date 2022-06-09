@@ -47,7 +47,7 @@ public interface MarketMapper {
 	 * 작성자 : 경민영
 	 * 작성일 : 2022.06.08
 	 * */
-	List<MarketDTO> getFollowedMarket(long memberId) throws Exception;
+	List<MarketDTO> getFollowedMarket(@Param("memberId") long memberId) throws Exception;
 	
 	List<MarketDTO> getUnfollowedMarket(long memberId) throws Exception;
 	

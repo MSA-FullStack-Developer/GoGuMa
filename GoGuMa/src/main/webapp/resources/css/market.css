@@ -1,12 +1,16 @@
 @charset "UTF-8";
-		
+	
+a:hover {
+     text-decoration: none;
+}
+	
 .container {
     position: relative;
     text-align: center;
     color: white;
     padding-right: 0px;
     padding-left: 0px;
-    width: 286px;
+    width: 219px;
     border: #ccc 0px solid;
     border-radius: 8pt;
 }
