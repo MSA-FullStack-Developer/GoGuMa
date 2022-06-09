@@ -26,8 +26,8 @@
   		<%@ include file="/resources/css/market.css" %>
   		
   		.card-img-top {
-			width: 286px;
-			height: 286px;
+			width: 200px;
+			height: 200px;
 			object-fit: cover;
 			border-radius: 50%;
 		}
@@ -42,16 +42,16 @@
                 <h3>${memberName}님, 관심있는 마켓을 팔로우해보세요</h3>
             </div>
 
-			<div class="d-flex justify-content-start flex-wrap mr-4">
-              	<c:forEach items="${unfollowedList}" var="market">
-                   <div class="card mt-2 container col-sm-3">
-                   	<a href="${contextPath}/market/show.do?marketNum=${market.marketId}" class="goguma-link" style="width: 286px;">
-                        <img class="card-img-top container-img" src="${market.marketThumbnail}" alt="${myMarket.marketThumbnail}">
-                       	<p class="card-text" style="margin-top: 10px;">${market.marketName}</p>
-                       </a>
-                   </div>
-                  </c:forEach>
-            </div>
+            <div class="d-flex" style="width: 100%; height: 260px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap;">
+            	<c:forEach items="${unfollowedList}" var="market">
+                	<div class="card mt-2 container col-sm-3" >
+                 		<a href="${contextPath}/market/show.do?marketNum=${market.marketId}" class="goguma-link" style="width: 200px;">
+                      		<img class="card-img-top container-img" src="${market.marketThumbnail}" alt="${myMarket.marketThumbnail}">
+                     		<p class="card-text" style="margin-top: 10px;">${market.marketName}</p>
+                     	</a>
+                 	</div>
+                </c:forEach>
+           	</div>
         </section>
     </div>
 </body>
