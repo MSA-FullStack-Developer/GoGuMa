@@ -12,7 +12,7 @@
 
 .cbody {
 	width: fit-content;
-	background: #f3f3f3;
+	background: #f8f8f8;
 }
 
 .order-content{
@@ -22,7 +22,10 @@
 	padding: 50px 0 60px 0;
 }
 
-
+em{
+    font-style: normal;
+    vertical-align: baseline;
+}
 
 .cart-head .cart-top .cart-all strong {
 	font-size: 30px;
@@ -30,7 +33,15 @@
 	font-weight: 700;
 	vertical-align: sub;
 }
-
+.cart-all .cart-count {
+    color: inherit;
+    font-weight: 700;
+}
+.cart-head .cart-top .cart-all span {
+    position: relative;
+    top: 4px;
+    left: 5px;
+}
 .cart-head .cart-top {
 	position: relative;
 	padding-bottom: 19px;
@@ -88,10 +99,16 @@ ul, ol, menu, li {
 		center;
 	background-size: 20px 20px;
 }
-
-
+.btn:focus{
+	background: #6426D0;
+}
 .btngroup {
 	position: relative;
+}
+.cart-body{
+	border: 1px solid #ccc;
+    border-radius: 5px;
+    background: white;
 }
 .cart-bottom{
 	margin-bottom: 50px;
@@ -109,7 +126,7 @@ ul, ol, menu, li {
 }
 .cart-area .nodata {
 	width: 800px;
-	margin: 3px auto 123px;
+	margin: 100px auto 123px;
 	text-align: center;
 }
 
@@ -311,7 +328,7 @@ ul, ol, menu, li {
 .all-select-event{
 	text-align: center;
 	vertical-align: middle;
-	width: 12%;
+	width: 10%;
 }
 .hpoint{
     margin-bottom: 20px;
@@ -319,7 +336,7 @@ ul, ol, menu, li {
 #th-product-name{
 	text-align: center;
 	vertical-align: middle;
-	width: 40%;
+	width: 45%;
 }
 #th-product-count{
 	text-align: center;
@@ -329,36 +346,61 @@ ul, ol, menu, li {
 #th-product-price{
 	text-align: center;
 	vertical-align: middle;
-	width: 10%;
+	width: 12%;
 }
 #th-discount-price{
 	text-align: center;
 	vertical-align: middle;
-	width: 8%;
+	width: 10%;
 }
 #th-total-price{
 	text-align: center;
 	vertical-align: middle;
-	width: 8%;
+	width: 12%;
 }
 #th-order-delete{
 	text-align: center;
 	vertical-align: middle;
-	width: 8%;
 }
 .product-img{
 	float: left;
 	margin: 5px 10px 5px 5px;
 }
 .product-name{
-	margin-top: 10px;
 	margin-bottom: 20px;
+    text-align: left;
+    font-weight: 600;
+}
+.product-option{
+	text-align: left;
+	margin-top: 8px;
+    color: #888;
+    font-size: 13px;
+    line-height: 17px;
+    letter-spacing: -0.56px;
+}
+.close{
+	background: white;
+    border: none;
+}
+.modal-body{
+    margin: 20;
+}
+.modal-header{
+	height: 68px;
+    padding: 20px 40px;
+    border-bottom: 1px solid #ddd;
+    color: #333;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 700;
+    letter-spacing: -0.8px;
 }
 .ccount{
 	width: 30px;
     text-align: -webkit-center;
 }
-.product-select-event, .cart-product-count, .cart-price, .cart-discount, .cart-total, .cart-purchase-delete{
+.product-select-event, .cart-product-box, .cart-product-count, .cart-price, .cart-discount, .cart-total, .cart-purchase-delete{
 	text-align: center;
 	vertical-align: middle;
 }
@@ -371,8 +413,7 @@ ul, ol, menu, li {
 	border-color: #ddd;
 }
 .btn-delete{
-	background-color: #FFFFFF;
-	border-color: #ddd;
+	--bs-btn-border-color: none;
 }
 .all-cart-total-price {
     clear: both;
@@ -410,14 +451,19 @@ ul, ol, menu, li {
 .all-cart-total-price em {
     padding: 0 4px 0 5px;
     font: 700 17px/17px tahoma;
-    color: #111;
+    color: #6117f5;
 }
 .all-cart-total-price .final-order-price {
     color: #6117f5;
     font-size: 20px;
 }
-.cart-product-discount > span {
-	display: block;
+.bi-trophy{
+	color: #FF493C;
+}
+
+#emPriceFTotDcAmt{
+	color: #FF493C;
+    font-size: 20px;
 }
 
 .order-buttons{
@@ -438,7 +484,7 @@ ul, ol, menu, li {
   height:20px;
   font-size:5px;
   line-height:17px;
-  border:1px solid #6426DD;
+  border:1px solid #6c757d;
   vertical-align:middle;/*체크 전과 체크 후 높이 차이 때문에 설정*/
   border-radius: 50%;
   background-color:#FFFFFF;
@@ -504,6 +550,7 @@ ul, ol, menu, li {
 .sticky{
 	position: sticky;
 	top:48px;
+
 }
 .util-option{
 	left: 30%;
@@ -578,6 +625,17 @@ ul, ol, menu, li {
 }
 #ordQty{
 	text-align: -webkit-center;
+	border: none;
+    background: white;
+}
+.calcdown{
+	border-radius: 100%;
+    width: 30px;
+    height: 30px;
+    background-color: #f8f8f8;
+    border-color: #f8f8f8;
+    color: black;
+    border: none;
 }
 .delivery-address-alias {
     border: 1px solid #6426DD;
@@ -588,14 +646,55 @@ ul, ol, menu, li {
 	background-color: #6426DD ;
 	float: right;
 }
+.img-coupon{
+	text-align: right;
+    margin: auto;
+}
+.coupon-picture{
+	width: 150px;
+    height: 150px;
+}
+.coupon-name{
+	color: #333;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 21px;
+    letter-spacing: -0.68px;
+}
 .btn-change-address:hover{
 	background-color: #FF493C ;
+}
+
+.coupon-benefit-th{
+	color: #6426DD;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: -0.96px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.coupon-expiration{
+	text-align: left;
+    margin-top: 8px;
+    color: #888;
+    font-size: 13px;
+    line-height: 17px;
+    letter-spacing: -0.56px;
+}
+.coupon-name-th{
+	margin-bottom: 5px;
 }
 .address-list-box, .coupon-list-box{
 	padding: 10px;
     margin: 10px;
-    border: #F3F3F3 1px solid;
-}.address-list-box:hover, .coupon-list-box:hover{
+    border: #F3F3F3 2px solid;
+    border-radius: 5px;
+}
+.coupon{
+    min-width: 202px;
+    min-height: 160px;
+}
+.address-list-box:hover, .coupon-list-box:hover{
 	border: #FF493C 2px solid;
 	border-radius: 5px;
 }

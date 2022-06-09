@@ -85,38 +85,54 @@
                     </div>
                 </div>
                 <div>
-                    <h5><b>비밀번호변경</b></h5>
+                    <h5><b>회원탈퇴 안내</b></h5>
+                </div>
+                <div class="border border-2 rounded p-3 mb-3">
+                    <div>
+                        고객님의 거래내역은 전자상거래 등에서의 소비자보호에 관한 법률 제 6조 및 동법 시행령 제 6조에 의거, 
+                    </div>
+                    <div>
+                        ① 표시 및 광고에 관한 기록은 6월
+                    </div>
+                    <div>
+                        ② 계약 또는 청약 철회 등에 관한 기록은 5년 
+                    </div>
+                    <div>
+                        ③ 재화 공급 등의 공급에 관한 기록은 5년
+                    </div>
+                    <div>
+                        ④ 소비자 불만 또는 분쟁처리에 관한 기록은 3년간 기록됩니다. 
+                    </div>
                 </div>
                 <div>
-                    <h5>기존 비밀번호 입력</h5>
+                    <h5><b>회원탈퇴 사유</b></h5>
                 </div>
-                <table class="table">
-                    <tbody class="table-group-divider">
-                        <tr>
-                            <th class="col-2 table-active" style="text-align: center;">기존 비밀번호</th>
-                            <td><input type="password" class="ms-2" id="curPassword" maxlength="16" style="width:200px; height:25px"/></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div>
-                    <h5>새 비밀번호 입력</h5>
-                </div>
-                <table class="table">
-                    <tbody class="table-group-divider">
-                        <tr>
-                            <th class="col-2 table-active" style="text-align: center;">새 비밀번호</th>
-                            <td><input type="password" class="ms-2" id="newPassword" maxlength="16" style="width:200px; height:25px"/></td>
-                        </tr>
-                        <tr>
-                            <th class="col-2 table-active" style="text-align: center;">새 비밀번호 확인</th>
-                            <td><input type="password" class="ms-2" id="newConfirm" maxlength="16" style="width:200px; height:25px"/></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div align="center">
-                    <button type="button" class="btn btn-dark" onclick="changePassword()">변경</button>
-                    <button type="button" class="btn btn-secondary">취소</button>
-                </div>
+                <form action="${contextPath}/mypage/resignMember" method="POST">
+	                <table class="table">
+	                    <tbody class="table-group-divider">
+	                        <tr>
+	                            <th class="col-2 table-active align-middle" style="text-align: center">탈퇴 사유</th>
+	                            <td class="p-3"><textarea class="d-flex lh-sm" name="resignDetail" style="width: 100%; height: 150px; resize: none;"></textarea></td>
+	                        </tr>
+	                    </tbody>
+	                </table>
+	                <div>
+	                    <h5><b>비밀번호확인</b></h5>
+	                </div>
+	                <table class="table">
+	                    <tbody class="table-group-divider">
+	                        <tr>
+	                            <th class="col-2 table-active" style="text-align: center;">비밀번호확인</th>
+	                            <td><input type="password" class="ms-2" name="userPassword" maxlength="16" style="width:200px; height:25px"/></td>
+	                        </tr>
+	                    </tbody>
+	                </table>
+	                <div align="center">
+	                    <button type="submit" class="btn btn-dark">회원탈퇴</button>
+	                    <button type="button" class="btn btn-secondary">돌아가기</button>
+	                </div>
+	                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                </form>
             </div>
         </div>
     </div>
@@ -124,35 +140,4 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
-<script type="text/javascript">
-	function changePassword() {
-		if($("#newPassword").val() != $("#newConfirm").val()) alert('새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.');
-		else {
-			let token = $("meta[name='_csrf']").attr("content");
-		    let header = $("meta[name='_csrf_header']").attr("content");
-			$.ajax({
-				url : "${contextPath}/mypage/changePassword",
-				type : "POST",
-				data : {
-					curPassword : $("#curPassword").val(),
-					newPassword : $("#newPassword").val()
-				},
-				beforeSend : function(xhr) {
-		            xhr.setRequestHeader(header, token);
-		        },
-		        success:function(result) {
-		        	if(result==1) window.location.href = "${contextPath}/mypage";
-		        	else if(result==2) alert('비밀번호가 일치하지 않습니다.');
-		        	else alert("서버에 오류가 발생했습니다.");
-		        },
-				error:function(xhr, status, error) {
-					var errorResponse = JSON.parse(xhr.responseText);
-					var errorCode = errorResponse.code;
-					var message = errorResponse.message;
-					alert(message);
-				}
-			});
-		}
-	}
-</script>
 </html>

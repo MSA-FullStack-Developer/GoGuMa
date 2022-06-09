@@ -41,7 +41,7 @@
 			<%@ include file="mypageMenu.jsp" %>
             <div class="col">
                 <div>
-                    <h4><b>송진호님</b></h4>
+                    <h4><b>${memberDTO.name}님</b></h4>
                 </div>
                 <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-3">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -88,15 +88,23 @@
                 <div>
                     <h5><b>쿠폰</b></h5>
                 </div>
-                <div class="d-flex flex-row border border-2 mb-3">
-                    <a href="${contextPath}/mypage/couponHistory/available?page=1" class="col p-2 active" style="text-align: center; background-color: rgb(187, 184, 184);">사용가능</a>
-                    <a href="${contextPath}/mypage/couponHistory/unavailable?page=1" class="col p-2" style="text-align: center;">사용완료 & 기간만료</a>
+                <div class="d-flex flex-row border">
+                	<c:choose>
+                		<c:when test="${type eq 'available'}">
+	                		<a href="${contextPath}/mypage/couponHistory/available?page=1" class="col p-2" style="text-align: center; background-color: #A0A0A0;">사용가능</a>
+	                    	<a href="${contextPath}/mypage/couponHistory/unavailable?page=1" class="col p-2" style="text-align: center">사용완료 & 기간만료</a>
+                		</c:when>
+                		<c:otherwise>
+                			<a href="${contextPath}/mypage/couponHistory/available?page=1" class="col p-2" style="text-align: center">사용가능</a>
+	                    	<a href="${contextPath}/mypage/couponHistory/unavailable?page=1" class="col p-2" style="text-align: center; background-color: #A0A0A0;">사용완료 & 기간만료</a>
+                		</c:otherwise>
+                	</c:choose>
                 </div>
                 <c:choose>
                 	<c:when test="${type eq 'available'}">
 	                	<!-- 사용가능 쿠폰 -->
-		                <table class="table mb-3 active" style="margin: auto; text-align: center; vertical-align: middle;">
-		                    <thead class="table-secondary table-group-divider">
+		                <table class="table mb-3" style="margin: auto; text-align: center; vertical-align: middle;">
+		                    <thead class="table-secondary">
 		                        <tr>
 		                            <th>쿠폰명</th>
 		                            <th>혜택</th>
@@ -119,7 +127,7 @@
                 	<c:otherwise>
 	                	<!-- 사용완료 & 기간만료 쿠폰 -->
 		                <table class="table mb-3" style="margin: auto; text-align: center; vertical-align: middle;">
-		                    <thead class="table-secondary table-group-divider">
+		                    <thead class="table-secondary">
 		                        <tr>
 		                            <th>쿠폰명</th>
 		                            <th>혜택</th>
@@ -162,7 +170,7 @@
                 	<c:forEach begin="${startPage}" end="${endPage}" var="pageNum">
                 		<c:choose>
                 			<c:when test="${page == pageNum}">
-                				<li class="page-item active">
+                				<li class="page-item">
                 					<p class="page-link">${pageNum}</p>
                 				</li>
                 			</c:when>

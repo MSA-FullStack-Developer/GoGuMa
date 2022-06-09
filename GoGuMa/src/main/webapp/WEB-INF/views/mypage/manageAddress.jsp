@@ -36,7 +36,7 @@
 			<%@ include file="mypageMenu.jsp" %>
             <div class="col">
                 <div>
-                    <h4><b>송진호님</b></h4>
+                    <h4><b>${memberDTO.name}님</b></h4>
                 </div>
                 <div class="d-flex flex-row justify-content-evenly border border-2 mb-3 rounded">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -220,7 +220,7 @@
 	             		</div>
 	             		<div class="mb-3">
 	             			<label for="contact" class="col-form-label">연락처</label>
-	             			<input type="text" class="form-control" id="contact">
+	             			<input type="text" class="form-control" id="contact" maxlength="13" oninput="autoHyphen(this)">
 	            		</div>
 	            		<div class="">
 	            			<label for="checkDefault" class="col-form-label">기본 배송지 설정</label>
@@ -241,6 +241,12 @@
 <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
+	const autoHyphen = (target) => {
+		target.value = target.value
+		   .replace(/[^0-9]/g, '')
+		   .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+	}
+
 	// 수정 버튼 이벤트
 	function updateAddress(event) {
 		let isDefault = 0;

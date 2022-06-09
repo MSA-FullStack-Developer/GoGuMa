@@ -41,7 +41,7 @@
 			<%@ include file="mypageMenu.jsp" %>
             <div class="col">
                 <div>
-                    <h4><b>송진호님</b></h4>
+                    <h4><b>${memberDTO.name}님</b></h4>
                 </div>
                 <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-3">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -99,25 +99,53 @@
                 
                 <div class="d-flex flex-row mb-2">
                     <div class="d-flex flex-column me-2">
-                        <a href="${contextPath}/mypage/pointHistory/all?page=1"><b>전체내역</b></a>
+                    	<c:choose>
+                    		<c:when test="${type eq 'all'}">
+                    			<a href="${contextPath}/mypage/pointHistory/all?page=1" style="color: #FF493C"><b>전체내역</b></a>
+                    		</c:when>
+                    		<c:otherwise>
+                    			<a href="${contextPath}/mypage/pointHistory/all?page=1"><b>전체내역</b></a>
+                    		</c:otherwise>
+                    	</c:choose>
                     </div>
                     <div class="d-flex flex-column me-2">
                         |
                     </div>
                     <div class="d-flex flex-column me-2">
-                        <a href="${contextPath}/mypage/pointHistory/earn?page=1"><b>적립내역</b></a>
+                    	<c:choose>
+                    		<c:when test="${type eq 'earn'}">
+                    			<a href="${contextPath}/mypage/pointHistory/earn?page=1" style="color: #FF493C"><b>적립내역</b></a>
+                    		</c:when>
+                    		<c:otherwise>
+                    			<a href="${contextPath}/mypage/pointHistory/earn?page=1"><b>적립내역</b></a>
+                    		</c:otherwise>
+                    	</c:choose>
                     </div>
                     <div class="d-flex flex-column me-2">
                         |
                     </div>
                     <div class="d-flex flex-column me-2">
-                        <a href="${contextPath}/mypage/pointHistory/usage?page=1"><b>사용내역</b></a>
+                    	<c:choose>
+                    		<c:when test="${type eq 'usage'}">
+                    			<a href="${contextPath}/mypage/pointHistory/usage?page=1" style="color: #FF493C"><b>사용내역</b></a>
+                    		</c:when>
+                    		<c:otherwise>
+                    			<a href="${contextPath}/mypage/pointHistory/usage?page=1"><b>사용내역</b></a>
+                    		</c:otherwise>
+                    	</c:choose>
                     </div>
                     <div class="d-flex flex-column me-2">
                         |
                     </div>
                     <div class="d-flex flex-column me-2">
-                        <a href="${contextPath}/mypage/pointHistory/refund?page=1"><b>환급내역</b></a>
+                    	<c:choose>
+                    		<c:when test="${type eq 'refund'}">
+                    			<a href="${contextPath}/mypage/pointHistory/refund?page=1" style="color: #FF493C"><b>환급내역</b></a>
+                    		</c:when>
+                    		<c:otherwise>
+                    			<a href="${contextPath}/mypage/pointHistory/refund?page=1"><b>환급내역</b></a>
+                    		</c:otherwise>
+                    	</c:choose>
                     </div>
                 </div>
                 <table class="table mb-3" style="margin: auto; text-align: center">

@@ -79,15 +79,18 @@
           for (var i = 0; i < result.length; i++) {
             console.log("쿠폰 정보: " + result[i].couponName);
             str = "<div class='coupon-list-box'>";
-            str += "<div class='row'>";
+            str += "<div class='row coupon'>";
             str += "<input type='hidden' id='coupon-id' value='"+ result[i].couponId +"'>";
-            str += "<div class='col-md-8 coupon-name-th'><span class='coupon-name'>" + result[i].couponName + "</span></div>";
-            str += "<div class='col-md-4 coupon-benefit-th'>-<span class='coupon-benefit'>" + result[i].benefit + "</span>원</div>";
+            str += "<div class='coupon-benefit-th'><span class='coupon-benefit'>" + result[i].benefit + "</span>원</div>";
+            str += "<div class='coupon-name-th'><span class='coupon-name'>" + result[i].couponName + "</span></div>";
             str += "<div>";
-            str += "<div class='row'>";
-            str += "<div class='col-md-12 coupon-expiration-th'><span class='coupon-expiration'> 유효기간 ~" + result[i].expiration + "</span></div>";
-            str += "<div>";
-            str += "<div>";
+            str += "<div class='row coupon'>";
+            str += "<div class='coupon-expiration-th'><span class='coupon-expiration'> 유효기간 ~" + result[i].expiration + "</span></div>";
+            str += "<div class='img-coupon'>";
+            str += "<img class='coupon-picture' src='${contextPath}/resources/img/ggmCoupon.png' alt=''>";
+            str += "</div>";
+            str += "</div>";
+            str += "</div>";
             $('#coupon-all').append(str);
           }
         } else {
@@ -163,7 +166,17 @@
       $('#myModal').modal('hide');
       alert("배송지가 적용되었습니다.");
     });
-    
+    // 결제 버튼 클릭시
+    $('#pay-onclick').click(function(){
+      var radioVal = $('input[name="card-type"]:checked').val();
+      if(radioVal == "nobank"){
+        console.log("무통장");
+        nobankbookiamport();
+      }else{
+        console.log("카드결제");
+        iamport(radioVal);
+      }
+    });
     $("#g-point").on("input propertychange paste", function(){
     	var point = parseInt($('#g-point').val());
     	var limitpoint = Number($('#member-point').val());
@@ -202,11 +215,8 @@
   });
   
 	//카드 결제
-	function iamport(){
-	  	//선택한 라디오 버튼에 따른 pg 선택
-	  	var radioVal = $('input[name="card-type"]:checked').val();
+	function iamport(radioVal){
 		//가맹점 식별코드
-		console.log(radioVal);
 		IMP.init('imp37623879');
 		IMP.request_pay({
 		    pg : radioVal,
@@ -230,17 +240,17 @@
 		        url: "${contextPath}/order/api/verifyIamport/" + rsp.imp_uid,
 		        beforeSend : function(xhr) {
 							xhr.setRequestHeader(header,token);
-						}
+						},
 		      }).done(function(data){
 		        console.log("done Data : " + data);
 		        if(rsp.paid_amount == data.response.amount){
 		         	console.log("결제 및 결제검증완료");
 		          	console.log(rsp);
 		          	console.log(data);
-		        	paytransaction (data.response.impUid);
+		        	paytransaction (data.response.impUid, data.rsponse.status);
+		        	console.log("uid로그 : " + $('#ipUid').val());
 		        	console.log("다시 진행중");
 		        	$('#ipUid').val(data.response.impUid);
-		        	console.log("uid로그 : " + $('#ipUid').val());
 		        	$('#finOrder').submit();
 	        	} else {
 	        		alert("결제 실패");
@@ -253,10 +263,9 @@
 	//무통장 입금
 	function nobankbookiamport(){
 	//가맹점 식별코드
-	console.log(radioVal);
 	IMP.init('imp37623879');
 	IMP.request_pay({
-	    pg : html5_inicis,
+	    pg : 'html5_inicis',
 	    pay_method : 'vbank',
 	    merchant_uid : 'merchant_' + new Date().getTime(),
 	    name : $('.pProductName').text(), //결제창에서 보여질 이름
@@ -267,38 +276,46 @@
 	    buyer_addr : $('#addressName').text(),
 	    buyer_postcode : '123-456',
 	}, function(rsp) {
-		  console.log("결제 완료 후 로그 : " + rsp);
+	  	console.log("결제 완료 후 로그 : ");
+		  console.log(rsp);
 	      //아임포트 검증절차
 	      var token = $("meta[name='_csrf']").attr("content");
 		  var header = $("meta[name='_csrf_header']").attr("content");
-		  
-	      $.ajax({
+	      if(rsp.pay_method == "vbank"){
+	        paytransaction (rsp.imp_uid, rsp.status);
+	        $('#ipUid').val(rsp.imp_uid);
+        	$('#finOrder').submit();
+	      }
+	      /* $.ajax({
 	        type: "POST",
-	        url: "${contextPath}/order/api/verifyIamport/" + rsp.imp_uid,
+	        url: "${contextPath}/order/api/nobankcomplete",
 	        beforeSend : function(xhr) {
 						xhr.setRequestHeader(header,token);
 					}
 	      }).done(function(data){
-	        console.log("done Data : " + data);
-	        if(rsp.paid_amount == data.response.amount){
-	         	console.log("결제 및 결제검증완료");
-	          	console.log(rsp);
-	          	console.log(data);
-	        	paytransaction (data.response.impUid);
-	        	console.log("다시 진행중");
-	        	$('#ipUid').val(data.response.impUid);
-	        	console.log("uid로그 : " + $('#ipUid').val());
-	        	$('#finOrder').submit();
-        	} else {
-        		alert("결제 실패");
-        		//임의로 금액이 변경되었기 때문에 전체 환불처리 되어야함
-        	}
-	      });
+	        console.log("무통장 Data : " + data);
+	      }); */
 	    
 	});
 }
+	 //  unix time stamp to Date
+	  function UnixTimeToDate(UnixTime){
+	  var origin = new Date(UnixTime);
+	  
+	  var year = origin.getFullYear();
+	  var month = ('0' + (origin.getMonth() + 1)).slice(-2);
+	  var day = ('0' + origin.getDate()).slice(-2);
+	  
+	  var hours = ('0' + today.getHours()).slice(-2); 
+	  var minutes = ('0' + today.getMinutes()).slice(-2);
+	  var seconds = ('0' + today.getSeconds()).slice(-2);
+	   
+	  var val_time = year+"-"+month+"-"+day + " " + hours + ":"+minutes + ":" + seconds;
+	  
+	  return val_time;
+	  }
 	//결제가 완료 된 후 트랜잭션처리
-	function paytransaction(impUid){
+	function paytransaction(impUid, status){
 	  	var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		var parr = [];
@@ -323,8 +340,10 @@
 		var couponDis = $('#couponDiscount').val();
 		var usePoint = $('#GPoint').val();
 		var totprc = parseInt($('#finalPrice').val());
+		
 		var data = {
 		    impUid: impUid,
+		    status: status,
 		    products: parr,
 		    address: addr,
 		    requirement: req,
@@ -415,6 +434,17 @@
 	    $('#finalPrice').attr('value', totalPayPrice);
 	    console.log(totalPayPrice);
 	}
+	//적용된 쿠폰 적용 해제
+	function clearCoupon(){
+	    $('#use-coupon-id').val(0);
+	    $('.dis-coupon-prc').text("적용 없음");
+	    $('#coupon-discount').text(0);
+	    
+	    $('#couponDiscount').val(0);
+	    $('#couponModal').modal('hide');
+	    calDisPrice();
+	    alert("쿠폰 적용을 취소했습니다.");
+	}
 </script>
 
 <style>
@@ -426,31 +456,30 @@
 	<!-- 바디 전체-->
 	<div class="cbody">
 		<div class="contents">
-			<div class="csection">
-				<div class="util-option sticky">
+										<div class="util-option sticky">
 					<div class="sticky-inner">
 						<h4 class=st-title>총 결제 금액</h4>
 						<ul class="payment-list">
 							<li>
 								<div id="orderAmt">
-									<span class="tit">총 판매 금액</span> <span class="txt"><strong id="total-price"></strong>원</span>
+									<span class="tit">총 판매 금액</span> <span class="txt"><strong id="total-price">0</strong>원</span>
 								</div>
 								<div id="membershipDcAmtDiv">
-									<span class="tit">멤버십 할인</span> <span class="txt">-<strong id="membership-discount"></strong>원</span>
+									<span class="tit">멤버십 할인</span> <span class="txt">-<strong id="membership-discount">0</strong>원</span>
 								</div>
 								<div id="copnDcAmtDiv">
-									<span class="tit">쿠폰 할인</span> <span class="txt">-<strong id="coupon-discount"></strong>원</span>
+									<span class="tit">쿠폰 할인</span> <span class="txt">-<strong id="coupon-discount">0</strong>원</span>
 								</div>
 								<div id="pointDcAmtDiv">
-									<span class="tit">G.Point</span> <span class="txt">-<strong id="point-discount"></strong>원</span>
+									<span class="tit">G.Point</span> <span class="txt">-<strong id="point-discount">0</strong>원</span>
 								</div>
 								<div id="totDcAmtDiv">
-									<span class="tit">할인 합계금액</span> <span class="txt">-<strong id="all-discount"></strong>원</span>
+									<span class="tit">할인 합계금액</span> <span class="txt">-<strong id="all-discount">0</strong>원</span>
 								</div>
 							</li>
 							<li>
 								<div class="total">
-									<span class="tit">최종 결제금액</span> <span class="txt"><strong id="lastStlAmtDd"></strong>원</span>
+									<span class="tit">최종 결제금액</span> <span class="txt"><strong id="lastStlAmtDd">0</strong>원</span>
 								</div>
 							</li>
 							<li>
@@ -460,12 +489,14 @@
 							</li>
 						</ul>
 						<div class="btngroup agreeCheck">
-							<button type="button" class="btn text-white btn-default medium" onclick="iamport()">
+							<button type="button" id="pay-onclick" class="btn text-white btn-default medium">
 								<span>결제</span>
 							</button>
 						</div>
 					</div>
 				</div>
+			<div class="csection">
+
 				<div class="order-content">
 					<div class="cart-head">
 						<div class="cart-top">
@@ -488,7 +519,7 @@
 							</h3>
 							<div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
 								<div class="accordion-body">
-									<table class="table table-bordered border-white" id="nrmProd">
+									<table class="table" id="nrmProd">
 										<thead>
 											<tr class="head">
 												<th scope="col" id="th-product-name">상품정보</th>
@@ -526,7 +557,7 @@
 													<td class="cart-price">
 														<div class="cart-product-price">
 															<c:set var="proPrice" value="${dtoList[status.index].nrmOriPrc * dtoList[status.index].ordQty}"></c:set>
-															<em><fmt:formatNumber value="${proPrice}" type="currency" currencySymbol="" /></em>원
+															<strong><em><fmt:formatNumber value="${proPrice}" type="currency" currencySymbol="" /></em></strong>원
 															<c:set var= "total" value="${total + proPrice}"/>
 															<c:set var= "preGPoint" value="${preGPoint + (proPrice * (memberDTO.grade.pointPercent / 100)) }"/>
 														</div>
@@ -534,14 +565,14 @@
 													<td class="cart-discount">
 														<div class="cart-product-discount">
 															<c:set var="disPrice" value="${dtoList[status.index].disOriPrc * dtoList[status.index].ordQty}"></c:set>
-															<em><fmt:formatNumber value="${disPrice}" type="currency" currencySymbol="" /></em>원
+															<strong>-<em><fmt:formatNumber value="${disPrice}" type="currency" currencySymbol="" /></em></strong>원
 															<c:set var = "membershipDiscount" value = "${membershipDiscount + disPrice }" />
 														</div>
 													</td>
 													<td class="cart-total">
 														<div class="cart-total-price">
 															<c:set var="totPrice" value="${dtoList[status.index].totOriPrc * dtoList[status.index].ordQty}"></c:set>
-															<em><fmt:formatNumber value="${totPrice}" type="currency" currencySymbol="" /></em>원
+															<strong><em><fmt:formatNumber value="${totPrice}" type="currency" currencySymbol="" /></em></strong>원
 														</div>
 													</td>
 												</tr>
@@ -567,13 +598,22 @@
 								<div class="modal-dialog modal-dialog-centered">
 									<div class="modal-content">
 										<div class="modal-header">
-											<h4 class="modal-title" id="couponModalLabel">쿠폰 선택</h4>
+											<h4 class="modal-title" id="couponModalLabel">쿠폰 할인</h4>
 											<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
+												<i class="bi bi-x-lg"></i>
 											</button>
 										</div>
 										<div class="modal-body">
-											<div class="coupon-all" id="coupon-all"></div>
+											<div class="mycoupon-body">
+												<!-- 사용자 쿠폰 -->
+												<div class="coupon-all" id="coupon-all">
+													
+												</div>
+											</div>
+											
+										</div>
+										<div class="modal-footer">
+											<button class="btn btn-secondary" onclick="clearCoupon()">사용 취소</button>
 										</div>
 									</div>
 								</div>
@@ -587,11 +627,11 @@
 												<span class="dis-coupon-prc">적용 없음</span>
 											</div>
 											<div class="col-md-4">
-												<button class="btn text-white btn-default" id="getCoupon-btn" data-bs-toggle="modal" data-bs-target="#couponModal">쿠폰 조회 및 적용</button>
+												<button class="btn text-white btn-default" id="getCoupon-btn" data-bs-toggle="modal" data-bs-target="#couponModal">조회/변경</button>
 											</div>
 										</div>
 										<div class="row" style="padding: 10px;">
-											<div class="col-md-2">G.Point</div>
+											<div class="col-md-2">보유 G.Point</div>
 											<div class="col-md-2">
 												<div class="input-group mb-3">
 													<input type="number" class="form-control use-point" id="g-point" placeholder="G.Point" aria-describedby="basic-addon1" value=0>
@@ -767,6 +807,13 @@
 											</tbody>
 										</c:if>
 									</table>
+									<select class="form-select">
+										<option>배송 메시지를 선택해주세요.</option>
+									    <option>부재 시 경비실에 맡겨주세요.</option>
+									    <option>부재 시 연락주세요.</option>
+									    <option>배송 전 연락주세요.</option>
+									    <option>직접 입력</option>
+									</select>
 								</div>
 							</div>
 							<button type="button" class="btn text-white btn-change-address" id="btn-change-address" data-bs-toggle="modal" data-bs-target="#myModal">배송지변경</button>
@@ -783,7 +830,7 @@
 												<div class="select-pay-type">
 													<input type='radio' name='card-type' value='html5_inicis'/> KG이니시스(표준결제)
 													<input type='radio' name='card-type' value='kakaopay'/> 카카오페이(간편결제)
-													<input type='radio' name='card-type' value='html5_inicis'/> 무통장 입금
+													<input type='radio' name='card-type' value='nobank'/> 무통장 입금
 												</div>
 											</td>
 										</tr>
@@ -797,6 +844,7 @@
 						</form>
 					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>

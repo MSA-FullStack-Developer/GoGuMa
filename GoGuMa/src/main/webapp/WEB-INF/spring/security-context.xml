@@ -32,6 +32,10 @@
 		<security:intercept-url pattern="/market/api/**" access="isAuthenticated()" />
 	</security:http>
 
+	<security:http pattern="/order/nobankcomplete/**" entry-point-ref="customAuthenticationEntryPoint" use-expressions="true">
+			<security:csrf disabled="true"/>
+	</security:http>
+
 	<security:http  use-expressions="true">
 		<security:form-login login-page="/member/login.do" default-target-url="/"  authentication-failure-handler-ref="loginFailHandler"/>
 		<security:remember-me remember-me-parameter="remember-me" data-source-ref="dataSource" token-validity-seconds="604800"/>
@@ -39,6 +43,7 @@
 		<security:intercept-url pattern="/mypage/**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/cart/**" access="isAuthenticated()" />
 		<security:intercept-url pattern="/order/**" access="isAuthenticated()" />	
+		<security:intercept-url pattern="/order/nobankcomplete" access="permitAll()" />	
 		<security:intercept-url pattern="/market/write.do" access="isAuthenticated()" />	
 		<security:intercept-url pattern="/market/createMarket.do" access="isAuthenticated()" />	
 		<security:intercept-url pattern="/market/*/article/**" access="isAuthenticated()" />	

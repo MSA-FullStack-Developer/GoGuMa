@@ -37,26 +37,25 @@
  	  var token = $("meta[name='_csrf']").attr("content");
 	  var header = $("meta[name='_csrf_header']").attr("content");
 	  
-	  $.ajax({
-      type: "POST",
-      url: "${contextPath}/order/api/verifyIamport/imp_${uid}",
-      beforeSend : function(xhr) {
-				xhr.setRequestHeader(header,token);
-			}
-	    }).done(function(data){
-	      console.log(data);
-	      $('#bname').text(data.response.buyerName);
-	      $('#bemail').text(data.response.buyerEmail);
-	      $('#baddress').text(data.response.buyerAddr);
-	      $('#bphone').text(data.response.buyerTel);
-	      
-	      $('#pamount').text(data.response.amount);
-	      $('#pname').text(data.response.name);
-	      $('#ptype').text(data.response.pgProvider);
-	     
-		});
 	});
 
+	 //  unix time stamp to Date
+	  function UnixTimeToDate(UnixTime){
+	  var origin = new Date(UnixTime);
+	  
+	  var year = origin.getFullYear();
+	  var month = ('0' + (origin.getMonth() + 1)).slice(-2);
+	  var day = ('0' + origin.getDate()).slice(-2);
+	  
+	  var hours = ('0' + origin.getHours()).slice(-2); 
+	  var minutes = ('0' + origin.getMinutes()).slice(-2);
+	  var seconds = ('0' + origin.getSeconds()).slice(-2);
+	   
+	  var val_time = year+"-"+month+"-"+day + " " + hours + ":"+minutes + ":" + seconds;
+	  
+	  return val_time;
+	  }
+	 
 	function numFormatComma(nNumber, nDetail) {
 		if (nNumber == null)
 			return "";
@@ -133,19 +132,19 @@
 					<div class="payman-info">
 						<div class="row">
 							<div class="col-md-4"><strong>구매자 이름</strong></div>
-							<div class="col-md-8" id="bname"></div>
+							<div class="col-md-8" id="bname">${resp.buyerName}</div>
 						</div>
 						<div class="row">
 							<div class="col-md-4"><strong>구매자 이메일</strong></div>
-							<div class="col-md-8" id="bemail"></div>
+							<div class="col-md-8" id="bemail">${resp.buyerEmail}</div>
 						</div>
 						<div class="row">
 							<div class="col-md-4"><strong>구매자 주소</strong></div>
-							<div class="col-md-8" id="baddress"></div>
+							<div class="col-md-8" id="baddress">${resp.buyerAddr}</div>
 						</div>
 						<div class="row">
 							<div class="col-md-4"><strong>구매자 연락처</strong></div>
-							<div class="col-md-8" id="bphone"></div>
+							<div class="col-md-8" id="bphone">${resp.buyerTel}</div>
 						</div>
 					</div>	
 					
@@ -153,16 +152,40 @@
 					<div class="pay-info">
 						<div class="row">
 							<div class="col-md-4"><strong>결제 금액</strong></div>
-							<div class="col-md-8"><span id="pamount"></span>원</div>
+							<div class="col-md-8"><span id="pamount">${resp.amount}</span>원</div>
 						</div>
 						<div class="row">
 							<div class="col-md-4"><strong>결제 상품명</strong></div>
-							<div class="col-md-8" id="pname"></div>
+							<div class="col-md-8" id="pname">${resp.name}</div>
 						</div>
 						<div class="row">
 							<div class="col-md-4"><strong>결제 방법</strong></div>
-							<div class="col-md-8" id="ptype"></div>
+							<div class="col-md-8" id="ptype">${resp.payMethod}</div>
 						</div>
+						<c:if test="${resp.payMethod =='vbank'}">
+						<div class="row">
+							<div class="col-md-4"><strong>수취인</strong></div>
+							<div class="col-md-8" id="vbankholder">${resp.vbankHolder}</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4"><strong>은행이름</strong></div>
+							<div class="col-md-8" id="vbankname">${resp.vbankName}</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4"><strong>은행계좌</strong></div>
+							<div class="col-md-8" id="vbanknum">${resp.vbankNum}</div>
+						</div>
+						</c:if>
+						<div class="row">
+							<div class="col-md-4"><strong>입금 유효기간</strong></div>
+							<div class="col-md-8" id="vbankdate">~<fmt:formatDate value="${resp.vbankDate}" pattern="yyyy-MM-dd KK:mm:ss"/>
+						</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4"><strong>결제상태</strong></div>
+							<div class="col-md-8" id="vbankstatus">${resp.status}</div>
+						</div>
+						<a href="${resp.receiptUrl}" id="receipt_url">영수증 출력하기</a>
 					</div>		
 					<div class="order-buttons">
 						<button type="button" class="btn text-black continue" onClick="location.href='${contextPath}'">쇼핑 계속하기</button>

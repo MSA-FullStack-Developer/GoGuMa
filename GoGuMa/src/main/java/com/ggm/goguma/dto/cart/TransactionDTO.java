@@ -10,6 +10,7 @@ import lombok.Data;
 public class TransactionDTO {
 	private long receiptId;
 	private String impUid;
+	private String status;
 	private List<ProductOrderDTO> products;
 	private DeliveryAddressDTO address;
 	private String requirement;
