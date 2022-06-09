@@ -11,19 +11,27 @@
 	margin: 40px 40px;
     padding: 40px 40px;
 }
-
+.col-md-4{
+	padding: 6px 6px;
+	background: #eee;
+}
+.col-md-8{
+	margin: auto;
+}
 .cbody {
 	width: fit-content;
 	background: #f8f8f8;
 }
-
 .order-content{
 	width: 900px;
 }
 .cart-area, .order-content {
 	padding: 50px 0 60px 0;
 }
-
+.row{
+	margin-right:0;
+    margin-left:0;
+}
 em{
     font-style: normal;
     vertical-align: baseline;
@@ -102,7 +110,7 @@ ul, ol, menu, li {
 	background-size: 20px 20px;
 }
 .btn:focus{
-	background: #6426D0;
+	background: #ffffff;
 }
 .btngroup {
 	position: relative;
@@ -410,8 +418,8 @@ ul, ol, menu, li {
 	margin-bottom: 20px;
 	background-color: #6426D0;
 }
-.continue{
-	background-color: #FFFFFF;
+.print-receipt{
+	background-color: white;
 	border-color: #ddd;
 }
 .btn-delete{
@@ -432,17 +440,19 @@ ul, ol, menu, li {
 }
 .all-fin {
     clear: both;
-    border: 4px solid #c8c8c8;
+    border: 2px solid #c8c8c8;
     border-radius: 5px;
     text-align: center;
     margin: 50px 0px;
 }
 .pay-info, .payman-info{
 	clear: both;
-    border: 4px solid #c8c8c8;
+    border: 2px solid #c8c8c8;
     border-radius: 5px;
-    text-align: center;
-    margin: 50px 0px;
+    background: white;
+	margin-bottom: 70px;
+}
+.payman-info{
 }
 .all-fin .all-fin-ment{
 	padding: 20px 15px 18px;
@@ -708,7 +718,8 @@ ul, ol, menu, li {
 	border-radius: 5px;
 }
 .fin-txt-div{
-	
+	margin-top: 30px;
+    margin-bottom: 30px;
 }
 .fin-txt{
 	font-size: 30px;
@@ -748,4 +759,23 @@ ul, ol, menu, li {
     color: #888;
     line-height: 17px;
     letter-spacing: -0.56px;
+}
+#finTT{
+	color: #FF493C;
+}
+.fin-ord-title{
+	font-size: 20px;
+    line-height: 40px;
+    font-weight: 600;
+    vertical-align: sub;
+}
+#pamount{
+	color: #FF493C;
+}
+#duedate{
+	font-size: 15px;
+	line-height: 24px;
+	font-weight: 600;
+	letter-spacing: -0.56px;
+	color: #808080;
 }
