@@ -206,7 +206,7 @@
 							elem +=	"</span>";
 							elem +=	"</div>"; // regDate end
 							elem +=	"</div>"; // <div class='col'> end
-							elem += "<div class='col-2 d-flex justify-content-end'>";
+							elem += "<div class='reply-child-button-wrapper col-2 d-flex justify-content-end'>";
 							elem += "<span class='reply-child-edit text-secondary'>수정</span>";
 							elem += "<span class='reply-child-delete text-secondary ms-1'>삭제</span>";
 							
@@ -220,7 +220,7 @@
 							elem += "<textarea name='reply-child-edit-textarea' class='w-100 p-2 border border-secondary rounded' style='resize: none; height: 70px;' placeholder='댓글을 작성하세요.'> </textarea>";
 							elem +=  "<div class='button-wrapper mt-2 d-flex justify-content-end'>"; 
 							elem += "<button name='close-edit-child-reply' type='button' class='btn btn-outline-success me-2'>취소</button>"
-							elem += "<button name='submit-edit-child-reply' type='button' class='btn btn-success'>댓글 작성</button>";
+							elem += "<button name='submit-edit-child-reply' type='button' class='btn btn-success'>수정하기</button>";
 							elem += "</div> </div>";
 							
 						
@@ -244,7 +244,7 @@
 					
 				});
 				
-				//댓글 수정 클릭 이벤트 핸들러
+				//댓글 [수정] 클릭 이벤트 핸들러
 				$(".reply-edit").click(function() {
 					
 					var replyItem = $(this).parents(".reply-item");
@@ -260,6 +260,7 @@
 					
 				});
 				
+				//댓글 수정 취소 버튼 클릭 이벤트 핸들러
 				$("button[name='close-edit-reply']").click(function() {
 					
 					var replyItem = $(this).parents(".reply-item");
@@ -273,6 +274,7 @@
 					replyContentParagraph.show();
 				})
 				
+				//댓글 [수정 하기] 버튼 클릭 이벤트 핸들러
 				$("button[name=submit-edit-reply]").click(function() {
 					var replyItem = $(this).parents(".reply-item");
 					var editForm = replyItem.find(".reply-edit-form-area");
@@ -292,7 +294,8 @@
 					};
 					
 					console.log(data);
-					$.ajax({
+					updateReply(data,replyContentParagraph,editForm,buttonWrapper);
+					/* $.ajax({
 						url: "${contextPath}/market/api/updateReply.do",
 						method: "put",
 						contentType: "application/json; charset=utf-8;",
@@ -323,8 +326,68 @@
 							buttonWrapper.removeClass("d-none");
 							replyContentParagraph.show();
 		        		}
-					});
+					}); */
 				})
+				
+				
+				//답글 [수정] 클릭 이벤트 핸들러
+				$(".reply-reply-list").on("click",".reply-child-button-wrapper .reply-child-edit", function() {
+					var replyItem = $(this).parents(".reply-child-item");
+					var buttonWrapper = replyItem.find(".reply-child-button-wrapper");
+					var editForm = replyItem.find(".reply-child-edit-form-area");
+					var replyChildContentParagraph = replyItem.find(".reply-child-content");
+					var editTextArea = replyItem.find("textarea[name=reply-child-edit-textarea]");
+					
+					editTextArea.val(replyChildContentParagraph.text());
+					buttonWrapper.addClass("d-none");
+					replyChildContentParagraph.hide();
+					editForm.show();
+					
+					
+				});
+				
+				//답글 [수정 취소] 버튼 클릭 이벤트 핸들러
+				$(".reply-reply-list").on("click","button[name=close-edit-child-reply]", function() {
+					var replyItem = $(this).parents(".reply-child-item");
+					var buttonWrapper = replyItem.find(".reply-child-button-wrapper");
+					var editForm = replyItem.find(".reply-child-edit-form-area");
+					var replyChildContentParagraph = replyItem.find(".reply-child-content");
+					var editTextArea = replyItem.find("textarea[name=reply-child-edit-textarea]");
+					
+					editTextArea.val("");
+					editForm.hide();
+					buttonWrapper.removeClass("d-none");
+					replyChildContentParagraph.show();
+					
+				});
+				
+				//답글 [수정 하기] 버튼 클릭 이벤트 핸들러
+				$(".reply-reply-list").on("click","button[name=submit-edit-child-reply]", function() {
+					var replyItem = $(this).parents(".reply-child-item");
+					var buttonWrapper = replyItem.find(".reply-child-button-wrapper");
+					var editForm = replyItem.find(".reply-child-edit-form-area");
+					var replyChildContentParagraph = replyItem.find(".reply-child-content");
+					var editTextArea = replyItem.find("textarea[name=reply-child-edit-textarea]");
+					
+					var replyContent = editTextArea.val();
+					if(!replyContent) {
+						alert("내용을 입력해주세요.");
+						return;
+					}
+					
+					var data = {
+						replyId: replyItem.data("replyId"),
+						replyContent: replyContent
+					}
+					
+					updateReply(data,replyChildContentParagraph,editForm,buttonWrapper);
+					
+				});
+				
+				
+				
+				
+				
 				
 				
 			} else {
@@ -337,6 +400,43 @@
 				var formattedDate = locatDate.format('yyyy-MM-DD HH:mm');
 				return formattedDate;
 			}
+			
+			//댓글 & 답글 AJAX 호출 함수
+			function updateReply(data,replyContentParagraph,editForm,buttonWrapper) {
+				$.ajax({
+					url: "${contextPath}/market/api/updateReply.do",
+					method: "put",
+					contentType: "application/json; charset=utf-8;",
+	        		dataType: "json",
+	        		data: JSON.stringify(data),
+	        		beforeSend : function(xhr) {
+			            xhr.setRequestHeader(header, token);
+			        },
+			        success: function() {
+			        	replyContentParagraph.text(data.replyContent);
+			        	
+			        },
+			        error: function(xhr, status, error) {
+	        			console.log(xhr.status);
+	        			var status = xhr.status;
+	        			if(status === 401) {
+	        				alert("로그인 후 이용이 가능합니다.");
+	        			} else if(status === 403) {
+	        				alert("댓글을 작성할 권한이 없습니다.");
+	        			} else if(status === 404) {
+	        				alert("이미 삭제된 댓글 입니다.");
+	        			}  else {
+	        				alert("서버 오류가 발생했습니다.");
+	        			}
+	        		},
+	        		complete: function() {
+						editForm.hide();
+						buttonWrapper.removeClass("d-none");
+						replyContentParagraph.show();
+	        		}
+				});
+			}
+			
 		});
 	</script>
 	<section class="container">
@@ -356,8 +456,8 @@
 			</div>
 			<div class="d-flex justify-content-between">
 				<p>
-					<strong>${article.market.marketName}</strong> <span
-						class="badge text-bg-info ms-1">${article.market.category.categoryName}</span>
+					<strong>${article.market.marketName}</strong> 
+					<span class="badge text-bg-info ms-1">${article.market.category.categoryName}</span>
 				</p>
 				<span class="ms-1 text-secondary"><fmt:formatDate
 						value="${article.regDate}" pattern="yyyy-MM-dd HH:mm" /></span>
@@ -480,7 +580,7 @@
 									<textarea name='reply-edit-textarea' class='w-100 p-2 border border-secondary rounded' style='resize: none; height: 70px;' placeholder='댓글을 작성하세요.'> </textarea>
 									<div class='reply-edit-button-wrapper mt-2 d-flex justify-content-end'> 
 										<button name='close-edit-reply' type='button' class='btn btn-outline-success me-2'>취소</button>
-										<button name='submit-edit-reply' type='button' class='btn btn-success'>수정 하기</button>
+										<button name='submit-edit-reply' type='button' class='btn btn-success'>수정하기</button>
 									</div>
 								</div>
 							</c:if>
@@ -518,7 +618,7 @@
 											</div>
 										</div>
 										<c:if test="${me.id eq childReply.member.id}">
-											<div class="col-2 d-flex justify-content-end">
+											<div class="reply-child-button-wrapper col-2 d-flex justify-content-end">
 												<span class="reply-child-edit text-secondary">수정</span>
 												<span class="reply-child-delete text-secondary ms-1">삭제</span>
 											</div>
@@ -527,6 +627,15 @@
 									<!-- 프로필 영역 끝 -->
 									<div>
 										<p class="reply-child-content">${childReply.replyContent}</p>
+										<c:if test="${me.id eq reply.member.id}">
+											<div class="reply-child-edit-form-area" data-reply-id="${reply.replyId}" style='display: none;'>
+												<textarea name='reply-child-edit-textarea' class='w-100 p-2 border border-secondary rounded' style='resize: none; height: 70px;' placeholder='댓글을 작성하세요.'> </textarea>
+												<div class='reply-edit-button-wrapper mt-2 d-flex justify-content-end'> 
+													<button name='close-edit-child-reply' type='button' class='btn btn-outline-success me-2'>취소</button>
+													<button name='submit-edit-child-reply' type='button' class='btn btn-success'>수정하기</button>
+												</div>
+											</div>
+										</c:if>
 									</div>
 								</div>
 								<!-- 답글 아이템 끝-->
