@@ -21,7 +21,6 @@ public interface ProductService {
 	// 상품 옵션 개수
 	public long getOptionCount(long productID) throws Exception;
 
-	
 	/* *
 	 * 작성자 : 이승준
 	 * 작업일 : 22.05.25
@@ -29,10 +28,10 @@ public interface ProductService {
 	// 대분류 카테고리에 속한 상품 목록 조회
 	public List<ProductDTO> getSameParentCategoryProductList(long categoryID);
 
-
 	// 상품 검색
 	public List<ProductDTO> getSearchList(String keyword, String sortType) throws Exception;
 
+	// 상품 검색 개수
 	public long getSearchCount(String keyword) throws Exception;
 }
 

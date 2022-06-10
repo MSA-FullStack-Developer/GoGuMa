@@ -23,10 +23,8 @@ select {
 
 .no_result {
 	text-align: center;
-    margin-top: 200px;
+    margin-top: 20px;
     margin-bottom: 100px;
-    color: #FF493C;
-    height: 100px;
 }
 
 .no_keyword {
