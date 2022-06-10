@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+div, ul, li {
+	margin: 0;
+    padding: 0;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+.container{
+	margin: 50px auto 80px;
+}
+.contents {
+    display: inline-block;
+    width: 800px;
+    padding: 0 0 40px 0;
+    position: relative;
+    margin: 0 auto;
+}
+.side-content {
+    display: inline-block;
+    width: 183px;
+    margin-right: 83px;
+}
+.side-menu-title {
+    margin-bottom: 30px;
+    font-size: 30px;
+    color: #333;
+    font-weight: 700;
+    line-height: 28px;
+    letter-spacing: -1.2px;
+    text-align: left;
+}
+.side-menu-list > ul > li > a {
+    color: #333;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: -0.75px;
+}
+.side-menu-list > ul > li + li {
+    margin-top: 15px;
+}
