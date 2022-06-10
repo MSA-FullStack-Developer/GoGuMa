@@ -40,7 +40,7 @@
             --bs-btn-active-color: #fff;
             --bs-btn-active-bg: #6426DD;
             --bs-btn-active-border-color: #6426DD;
-            --bs-btn-active-shadow: inset 0 3px 5pxrgba(0, 0, 0, 0.125);
+            --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
             --bs-btn-disabled-color: #fff;
             --bs-btn-disabled-bg: #6426DD;
             --bs-btn-disabled-border-color: #6426DD;
@@ -72,7 +72,7 @@
         
 		.card-img-top {
 		    width: 100%;
-		    height: 300px;
+		    height: 286px;
 		    object-fit: cover;
 		}
     </style>

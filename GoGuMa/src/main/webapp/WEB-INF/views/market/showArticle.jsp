@@ -43,21 +43,44 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment-with-locales.min.js" integrity="sha512-vFABRuf5oGUaztndx4KoAEUVQnOvAIFs59y4tO0DILGWhQiFnFHiR+ZJfxLDyJlXgeut9Z07Svuvm+1Jv89w5g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data-10-year-range.js" ></script>
 <style>
-.profile-img {
-	width: 100px;
-	height: 100px;
-	object-fit: cover;
-	margin-right: 10px;
-	border-radius: 50%;
-	margin-left: 25px;
-}
-
-.reply-toggle-btn {
-	cursor: pointer;
-}
-.reply-edit, .reply-delete, .reply-child-edit, .reply-child-delete  {
-	cursor: pointer;
-}
+	.profile-img {
+		width: 100px;
+		height: 100px;
+		object-fit: cover;
+		margin-right: 10px;
+		border-radius: 50%;
+		margin-left: 25px;
+	}
+	
+	.reply-toggle-btn {
+		cursor: pointer;
+	}
+	
+	.reply-edit, .reply-delete, .reply-child-edit, .reply-child-delete  {
+		cursor: pointer;
+	}
+	
+	.btn-success {
+        --bs-btn-color: #fff;
+        --bs-btn-bg: #6426DD;
+        --bs-btn-border-color: #6426DD;
+        --bs-btn-hover-color: #fff;
+        --bs-btn-hover-bg: #6426DD;
+        --bs-btn-hover-border-color: #6426DD;
+        --bs-btn-focus-shadow-rgb: 100, 38, 221;
+        --bs-btn-active-color: #fff;
+        --bs-btn-active-bg: #6426DD;
+        --bs-btn-active-border-color: #6426DD;
+        --bs-btn-active-shadow: inset 0 3px 5pxrgba(0, 0, 0, 0.125);
+        --bs-btn-disabled-color: #fff;
+        --bs-btn-disabled-bg: #6426DD;
+        --bs-btn-disabled-border-color: #6426DD;
+    }
+    
+    .text-success-reply {
+	    --bs-text-opacity: 1;
+	    color: rgb(100, 38, 221);
+	}
 </style>
 
 </head>
@@ -623,8 +646,8 @@
 							<!-- 답글 영역 시작 -->
 							<div class="reply-btn-area">
 								<div class="reply-toggle-btn" data-toggle="false">
-									<span><i class="bi bi-plus-square text-success"></i></span>
-									<span class="reply-btn text-success">답글 보기</span>
+									<span><i class="bi bi-plus-square text-success-reply"></i></span>
+									<span class="reply-btn text-success-reply">답글 보기</span>
 								</div>
 							</div>
 
