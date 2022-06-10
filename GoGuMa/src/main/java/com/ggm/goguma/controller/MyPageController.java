@@ -1,8 +1,8 @@
 package com.ggm.goguma.controller;
 
-import java.net.URLDecoder;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URLDecoder;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,9 +33,11 @@ import com.ggm.goguma.dto.ImageAttachDTO;
 import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ProductDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
-import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.dto.ReviewDTO;
+import com.ggm.goguma.dto.UpdateMemberDTO;
+import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.service.member.MemberService;
+import com.ggm.goguma.service.mypage.MyPageService;
 import com.ggm.goguma.service.product.CategoryService;
 import com.ggm.goguma.service.product.ImageAttachService;
 import com.ggm.goguma.service.product.ProductService;
@@ -41,9 +45,6 @@ import com.ggm.goguma.service.product.ReviewService;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.CancelData;
-import com.siot.IamportRestClient.response.IamportResponse;
-import com.siot.IamportRestClient.response.Payment;
-import com.ggm.goguma.service.mypage.MyPageService;
 
 import lombok.extern.log4j.Log4j;
 
@@ -500,7 +501,6 @@ public class MyPageController {
 		@RequestParam("newPassword") String newPassword, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			model.addAttribute("memberDTO", memberDTO);
 			
 			// 작성 가능한 상품평 개수 불러오기
 			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
@@ -520,12 +520,10 @@ public class MyPageController {
 	
 	@ResponseBody
 	@RequestMapping(value="/changeInfo", method=RequestMethod.POST)
-	public String changeInfo(@RequestParam("nickName") String nickName, @RequestParam("birthDate") String birthDate, @RequestParam("gender") String gender,
-		@RequestParam("userPassword") String userPassword, Principal principal, Model model) throws Exception {
+	public String changeInfo(@ModelAttribute UpdateMemberDTO updateDTO, BindingResult result, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			log.info(nickName);
-			if(service.changeInfo(nickName, birthDate, gender, userPassword, memberDTO)) {
+			if(service.changeInfo(updateDTO, memberDTO)) {
 				model.addAttribute("memberDTO", memberDTO);
 				return "1";
 			}
