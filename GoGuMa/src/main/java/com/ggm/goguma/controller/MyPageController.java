@@ -479,12 +479,12 @@ public class MyPageController {
 			if(service.confirmPassword(userPassword, memberDTO.getPassword())) {
 				if(type.equals("changeInfo")) {
 					String[] birthdate = memberDTO.getBirthDate().split("-");
-					model.addAttribute("memberDTO", memberDTO);
 					model.addAttribute("birthYear", birthdate[0]);
 					model.addAttribute("birthMonth", birthdate[1]);
 					model.addAttribute("birthDay", birthdate[2]);
 					model.addAttribute("phoneNum", phoneNum);
 				}
+				model.addAttribute("memberDTO", memberDTO);
 				return "mypage/"+type;
 			}
 			return "redirect:/mypage/confirmPassword/"+type;
@@ -508,6 +508,7 @@ public class MyPageController {
 			model.addAttribute("writeableCount", writeableList.size());
 			
 			if(service.changePassword(curPassword, newPassword, memberDTO)) {
+				model.addAttribute("memberDTO", memberDTO);
 				return "1";
 			}
 			return "2";
@@ -519,11 +520,12 @@ public class MyPageController {
 	
 	@ResponseBody
 	@RequestMapping(value="/changeInfo", method=RequestMethod.POST)
-	public String changeInfo(@RequestParam("birthDate") String birthDate, @RequestParam("gender") String gender,
+	public String changeInfo(@RequestParam("nickName") String nickName, @RequestParam("birthDate") String birthDate, @RequestParam("gender") String gender,
 		@RequestParam("userPassword") String userPassword, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			if(service.changeInfo(birthDate, gender, userPassword, memberDTO)) {
+			log.info(nickName);
+			if(service.changeInfo(nickName, birthDate, gender, userPassword, memberDTO)) {
 				model.addAttribute("memberDTO", memberDTO);
 				return "1";
 			}

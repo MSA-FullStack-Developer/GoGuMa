@@ -146,6 +146,11 @@
 			                                                <button type="button" class="btn btn-sm btn-outline-dark">상품평 쓰기</button>
 			                                            </div>
 	                                        		</c:when>
+	                                        		<c:when test="${orderDTO.status eq 'V'}">
+	                                        			<div>
+			                                                <h5><b>입금 예정</b></h5>
+			                                            </div>
+	                                        		</c:when>
 	                                        		<c:otherwise>
 	                                        			<div>
 			                                                <h5><b>취소 완료</b></h5>
