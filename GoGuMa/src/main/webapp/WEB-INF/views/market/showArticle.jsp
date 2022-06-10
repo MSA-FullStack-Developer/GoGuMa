@@ -585,7 +585,7 @@
 						<div class="row mb-4">
 							<!-- 프로필 영역 시작 -->
 							<div class="col-1">
-								<img class="w-100 rounded-circle" src="${reply.member.profileImage}"
+								<img class="w-100 rounded-circle bg-success" src="${reply.member.profileImage}"
 									style="object-fit: cover;" />
 							</div>
 							<div class="col">
@@ -637,7 +637,7 @@
 									<div class="row mb-4">
 										<!-- 프로필 영역 시작 -->
 										<div class="col-1">
-											<img class="w-100 rounded-circle" src="${childReply.member.profileImage}"
+											<img class="w-100 rounded-circle bg-success" src="${childReply.member.profileImage}"
 												style="object-fit: cover;" />
 										</div>
 										<div class="col">
@@ -660,7 +660,7 @@
 									<!-- 프로필 영역 끝 -->
 									<div>
 										<p class="reply-child-content">${childReply.replyContent}</p>
-										<c:if test="${me.id eq reply.member.id}">
+										<c:if test="${me.id eq childReply.member.id}">
 											<div class="reply-child-edit-form-area" data-reply-id="${reply.replyId}" style='display: none;'>
 												<textarea name='reply-child-edit-textarea' class='w-100 p-2 border border-secondary rounded' style='resize: none; height: 70px;' placeholder='댓글을 작성하세요.'> </textarea>
 												<div class='reply-edit-button-wrapper mt-2 d-flex justify-content-end'> 
