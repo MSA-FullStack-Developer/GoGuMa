@@ -10,7 +10,7 @@
 	</select>
 
 	<select id="getOrderList" resultType="OrderDTO">
-		select orderid, pname, cname, price, image, count, status, receiptid
+		select orderid, productid, categoryid, pname, cname, price, image, count, status, receiptid
 		from orderview where receiptId = #{receiptId}
 		order by pname
 	</select>
