@@ -38,12 +38,21 @@
 		WHERE marketId = #{id} 
 	</select>
 	
-	<select id="findMarketIdByMemberId" resultType="long">
+	<select id="findMarketIdsByMemberId" resultType="long">
 		SELECT 
 			marketId
 		FROM
 			Market 
 		WHERE memberId = #{id} 
+	</select>
+	
+	<select id="findArticleIdsByMarketId" resultType="long"> 
+		SELECT 
+			articleId
+		FROM
+			MarketArticle
+		WHERE
+			marketId = #{id}
 	</select>
 	
 	<select id="findFollwMarketCountByMarketIdAndMemberId" parameterType="FollowMarketDTO" resultType="int">
@@ -94,7 +103,7 @@
 	<select id="findMarketArticleById" resultMap="MarketArticleResult">
 		SELECT articleId, marketId, articleTitle, articleContent, regDate
 		FROM marketArticle
-		WHERE articleId = #{articleId}
+		WHERE articleId = #{articleId} 
 	</select>
 	
 	<select id="findThumbnailImageById" resultType="ArticleImageDTO">
@@ -118,6 +127,7 @@
 		SELECT articleId, marketId, articleTitle, regDate
 		FROM marketArticle
 		WHERE marketId = #{marketId}
+		ORDER BY articleId DESC
 		OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
 	</select>
 	
@@ -175,5 +185,22 @@
 	 	FROM market
 	 	WHERE memberid = #{memberId}
 	 </select>
+	
+	
+	<update id="updateMarketArticle" parameterType="MarketArticleDTO">
+		UPDATE marketArticle
+		SET articleTitle = #{articleTitle}, articleContent= #{articleContent}
+		WHERE articleId = #{articleId}
+	</update>
+	
+	<delete id="deleteAllArticleProduct" parameterType="long">
+		DELETE FROM articleProduct
+		WHERE articleId= #{articleId}
+	</delete>
+	
+	<delete id="deleteAllArticleAimage" parameterType="long">
+		DELETE FROM marketArticleImage
+		WHERE articleId = #{articleId} AND isthumbnail = #{isthumbnail}
+	</delete>
 	
 </mapper>
