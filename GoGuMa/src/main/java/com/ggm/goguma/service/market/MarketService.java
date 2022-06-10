@@ -7,6 +7,7 @@ import com.ggm.goguma.dto.PaginationDTO;
 import com.ggm.goguma.dto.articleReply.ArticleReplyDTO;
 import com.ggm.goguma.dto.articleReply.CreateChildReplyDTO;
 import com.ggm.goguma.dto.articleReply.CreateReplyDTO;
+import com.ggm.goguma.dto.articleReply.UpdateReplyDTO;
 import com.ggm.goguma.dto.market.ArticleProudctDTO;
 import com.ggm.goguma.dto.market.CreateArticleDTO;
 import com.ggm.goguma.dto.market.CreateMarketDTO;
@@ -49,4 +50,6 @@ public interface MarketService {
 	
 	List<ArticleReplyDTO> getArticleReplies(long articleId);
 	
+	
+	void updateArticleReply(UpdateReplyDTO reply, MemberDTO member);
 }

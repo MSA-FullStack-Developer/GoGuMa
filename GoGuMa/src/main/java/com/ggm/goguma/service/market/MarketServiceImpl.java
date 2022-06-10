@@ -19,6 +19,7 @@ import com.ggm.goguma.dto.PaginationDTO;
 import com.ggm.goguma.dto.articleReply.ArticleReplyDTO;
 import com.ggm.goguma.dto.articleReply.CreateChildReplyDTO;
 import com.ggm.goguma.dto.articleReply.CreateReplyDTO;
+import com.ggm.goguma.dto.articleReply.UpdateReplyDTO;
 import com.ggm.goguma.dto.market.ArticleImageDTO;
 import com.ggm.goguma.dto.market.ArticleProudctDTO;
 import com.ggm.goguma.dto.market.CreateArticleDTO;
@@ -28,8 +29,10 @@ import com.ggm.goguma.dto.market.FollowMarketDTO;
 import com.ggm.goguma.dto.market.MarketArticleDTO;
 import com.ggm.goguma.dto.market.MarketDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
+import com.ggm.goguma.exception.NotAllowedManageReplyException;
 import com.ggm.goguma.exception.NotFoundMarketArticleException;
 import com.ggm.goguma.exception.NotFoundMarketException;
+import com.ggm.goguma.exception.NotFoundReplyException;
 import com.ggm.goguma.exception.UploadFileFailException;
 import com.ggm.goguma.mapper.ArticleReplyMapper;
 import com.ggm.goguma.mapper.MarketMapper;
@@ -344,6 +347,23 @@ public class MarketServiceImpl implements MarketService {
 	public List<ArticleReplyDTO> getArticleReplies(long articleId) {
 		return this.articleReplyMapper.findRepliesByArticleId(articleId);
 	}
+
+	@Transactional
+	@Override
+	public void updateArticleReply(UpdateReplyDTO reply, MemberDTO member) {
+		
+		//1. reply 이 있는지 확인
+		ArticleReplyDTO savedReply =  this.articleReplyMapper.findReplyById(reply.getReplyId()).orElseThrow(NotFoundReplyException::new);
+		
+		//2. reply 생성자 인지 확인
+		if(savedReply.getMember().getId() != member.getId()) throw new NotAllowedManageReplyException();
+		
+		//3. reply 수정
+		savedReply.setReplyContent(reply.getReplyContent());
+		
+		this.articleReplyMapper.updateArticleReply(savedReply);
+	}
+	
 	
 	
 

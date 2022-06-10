@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +27,7 @@ import com.ggm.goguma.dto.PaginationDTO;
 import com.ggm.goguma.dto.articleReply.ArticleReplyDTO;
 import com.ggm.goguma.dto.articleReply.CreateChildReplyDTO;
 import com.ggm.goguma.dto.articleReply.CreateReplyDTO;
+import com.ggm.goguma.dto.articleReply.UpdateReplyDTO;
 import com.ggm.goguma.dto.market.ArticleProudctDTO;
 import com.ggm.goguma.dto.market.CreateArticleDTO;
 import com.ggm.goguma.dto.market.CreateMarketDTO;
@@ -303,4 +305,15 @@ public class MarketController {
 		}
 	}
 
+	@PutMapping(value ="/api/updateReply.do", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<DefaultResponseDTO> updateArticleReply(@RequestBody UpdateReplyDTO reply, Principal principal) {
+		
+		
+		log.info("[updateArticleReply] reply " + reply);
+		MemberDTO member = this.memberService.getMember(principal.getName());
+		
+		this.marketService.updateArticleReply(reply, member);
+		
+		return new ResponseEntity<>(DefaultResponseDTO.builder().status(HttpStatus.OK.value()).message("수정이 완료되었습니다.").build(), HttpStatus.OK);
+	}
 }

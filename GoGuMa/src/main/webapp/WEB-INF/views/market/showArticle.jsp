@@ -42,7 +42,9 @@
 
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+	
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment-with-locales.min.js" integrity="sha512-vFABRuf5oGUaztndx4KoAEUVQnOvAIFs59y4tO0DILGWhQiFnFHiR+ZJfxLDyJlXgeut9Z07Svuvm+1Jv89w5g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data-10-year-range.js" ></script>
 <style>
 .profile-img {
 	width: 100px;
@@ -54,6 +56,9 @@
 }
 
 .reply-toggle-btn {
+	cursor: pointer;
+}
+.reply-edit, .reply-delete, .reply-child-edit, .reply-child-delete  {
 	cursor: pointer;
 }
 </style>
@@ -98,6 +103,7 @@
 						}]
 				});
 				
+				//댓글 제출 버튼 클릭 핸들러
 				$("#submit-create-reply").click(function() {
 					var articleId = "${article.articleId}";
 					var replyTextArea = $("#reply-textarea");
@@ -138,6 +144,7 @@
 				});
 				
 			
+				//답글 보기/닫기 토글 버튼 클릭 이벤트 핸들러
 				$(".reply-toggle-btn").click(function() {
 				
 					var toggle = $(this).data("toggle");
@@ -154,9 +161,13 @@
 					
 				});
 				
+				
+				//답글 작성 버튼 클릭 이벤트 핸들러
 				$("button[name='submit-create-child-reply']").click(function() {
 					var textArea = $(this).parents(".reply-child-form-area").find("textarea[name='reply-child-textarea']");
 					var replyId = $(this).parents(".reply-child-form-area").data("replyId");
+					
+					var formArea = $(this).parents(".reply-child-form-area ");
 					if(!textArea.val()) {
 						alert("내용을 입력해주세요.");
 						return;
@@ -178,6 +189,45 @@
 				        },
 		        		success: function(data) {
 		        			console.log(data);
+		        			var elem = "";
+		        			elem += "<div class='reply-child-item pt-2 pb-2 border-bottom border-secondary mb-2' data-reply-id='"+ data.replyId + "'>"
+							elem += "<div class='row mb-4'>";
+			
+							elem +=	"<div class='col-1'>";
+							elem +=	"<img class='w-100 rounded-circle' src='" + data.member.profileImage + "' style='object-fit: cover;' />";
+							elem += "</div>";
+							elem += "<div class='col'>";
+							elem +=	"<div name='user-nick-name'>";
+							elem +=	"<strong>" + data.member.nickName + "</strong>";
+							elem +=	"</div>";
+							elem +=	"<div name='reg-date'>";
+							elem +=	"<span class='text-secondary' style='font-size: 0.8rem;'>";
+							elem +=	 "방금 전"
+							elem +=	"</span>";
+							elem +=	"</div>"; // regDate end
+							elem +=	"</div>"; // <div class='col'> end
+							elem += "<div class='col-2 d-flex justify-content-end'>";
+							elem += "<span class='reply-child-edit text-secondary'>수정</span>";
+							elem += "<span class='reply-child-delete text-secondary ms-1'>삭제</span>";
+							
+							elem += "</div>" //<div class='col-2 d-flex justify-content-end'> end;
+						
+							elem += "</div>"; //<div class='row mb-4'> end
+						
+							elem += "<div>"
+							elem += "<p class='reply-child-content'>" + data.replyContent + "</p>"
+							elem += "<div class='reply-child-edit-form-area' data-reply-id='" + data.replyId + "' style='display: none;'>";
+							elem += "<textarea name='reply-child-edit-textarea' class='w-100 p-2 border border-secondary rounded' style='resize: none; height: 70px;' placeholder='댓글을 작성하세요.'> </textarea>";
+							elem +=  "<div class='button-wrapper mt-2 d-flex justify-content-end'>"; 
+							elem += "<button name='close-edit-child-reply' type='button' class='btn btn-outline-success me-2'>취소</button>"
+							elem += "<button name='submit-edit-child-reply' type='button' class='btn btn-success'>댓글 작성</button>";
+							elem += "</div> </div>";
+							
+						
+							
+							formArea.before(elem);
+							textArea.val("");
+							
 		        		},
 		        		error: function(xhr, status, error) {
 		        			console.log(xhr.status);
@@ -194,8 +244,98 @@
 					
 				});
 				
+				//댓글 수정 클릭 이벤트 핸들러
+				$(".reply-edit").click(function() {
+					
+					var replyItem = $(this).parents(".reply-item");
+					var buttonWrapper = replyItem.find(".reply-button-wrapper");
+					var replyContentParagraph = replyItem.find(".reply-content");
+					var editForm = replyItem.find(".reply-edit-form-area");
+					var editTextArea = editForm.find("textarea[name=reply-edit-textarea]").val(replyContentParagraph.text());
+					
+					
+					buttonWrapper.addClass("d-none");
+					replyContentParagraph.hide();
+					editForm.show();
+					
+				});
+				
+				$("button[name='close-edit-reply']").click(function() {
+					
+					var replyItem = $(this).parents(".reply-item");
+					var editForm = replyItem.find(".reply-edit-form-area");
+					var buttonWrapper = replyItem.find(".reply-button-wrapper");
+					var replyContentParagraph  = replyItem.find(".reply-content");
+					var editTextArea = editForm.find("textarea[name=reply-edit-textarea]").val("");
+					
+					editForm.hide();
+					buttonWrapper.removeClass("d-none");
+					replyContentParagraph.show();
+				})
+				
+				$("button[name=submit-edit-reply]").click(function() {
+					var replyItem = $(this).parents(".reply-item");
+					var editForm = replyItem.find(".reply-edit-form-area");
+					var buttonWrapper = replyItem.find(".reply-button-wrapper");
+					var replyContentParagraph  = replyItem.find(".reply-content");
+					var editTextArea = editForm.find("textarea[name=reply-edit-textarea]");
+					
+					var replyContent = editTextArea.val();
+					var replyId = replyItem.data("replyId");
+					if(!replyContent) {
+						alert("내용을 입력해주세요.");
+						return;
+					}
+					var data = {
+						replyId,
+						replyContent
+					};
+					
+					console.log(data);
+					$.ajax({
+						url: "${contextPath}/market/api/updateReply.do",
+						method: "put",
+						contentType: "application/json; charset=utf-8;",
+		        		dataType: "json",
+		        		data: JSON.stringify(data),
+		        		beforeSend : function(xhr) {
+				            xhr.setRequestHeader(header, token);
+				        },
+				        success: function(data) {
+				        	replyContentParagraph.text(replyContent);
+				        	
+				        },
+				        error: function(xhr, status, error) {
+		        			console.log(xhr.status);
+		        			var status = xhr.status;
+		        			if(status === 401) {
+		        				alert("로그인 후 이용이 가능합니다.");
+		        			} else if(status === 403) {
+		        				alert("댓글을 작성할 권한이 없습니다.");
+		        			} else if(status === 404) {
+		        				alert("이미 삭제된 댓글 입니다.");
+		        			}  else {
+		        				alert("서버 오류가 발생했습니다.");
+		        			}
+		        		},
+		        		complete: function() {
+							editForm.hide();
+							buttonWrapper.removeClass("d-none");
+							replyContentParagraph.show();
+		        		}
+					});
+				})
+				
+				
 			} else {
 				console.log("카카오 JDK 초기화 실패")
+			}
+			
+			function dateformat(date) {
+				console.log(date)
+				var locatDate = new moment(date).tz("Asia/Seoul");
+				var formattedDate = locatDate.format('yyyy-MM-DD HH:mm');
+				return formattedDate;
 			}
 		});
 	</script>
@@ -307,7 +447,7 @@
 				</div> <!-- 댓글 작성 폼 영역 끝-->
 				<div class="mt-3"> <!-- 댓글 리스트 영역 시작-->
 					<c:forEach items="${replies}" var="reply">
-					<div class="pt-4 pb-4 border-bottom border-secondary">
+					<div class="reply-item pt-4 pb-4 border-bottom border-secondary" data-reply-id="${reply.replyId}" >
 						<!-- 댓글 아이템 시작 -->
 						<div class="row mb-4">
 							<!-- 프로필 영역 시작 -->
@@ -325,10 +465,25 @@
 									</span>
 								</div>
 							</div>
+							<c:if test="${me.id eq reply.member.id}">
+								<div class="reply-button-wrapper col-2 d-flex justify-content-end">
+									<span class="reply-edit text-secondary">수정</span>
+									<span class="reply-delete text-secondary ms-1">삭제</span>
+								</div>
+							</c:if>
 						</div>
 						<!-- 프로필 영역 끝 -->
-						<div class="reply-content">
-							<p>${reply.replyContent}</p>
+						<div>
+							<p class="reply-content">${reply.replyContent}</p>
+							<c:if test="${me.id eq reply.member.id}">
+								<div class="reply-edit-form-area" data-reply-id="${reply.replyId}" style='display: none;'>
+									<textarea name='reply-edit-textarea' class='w-100 p-2 border border-secondary rounded' style='resize: none; height: 70px;' placeholder='댓글을 작성하세요.'> </textarea>
+									<div class='reply-edit-button-wrapper mt-2 d-flex justify-content-end'> 
+										<button name='close-edit-reply' type='button' class='btn btn-outline-success me-2'>취소</button>
+										<button name='submit-edit-reply' type='button' class='btn btn-success'>수정 하기</button>
+									</div>
+								</div>
+							</c:if>
 						</div>
 
 						<div class="reply-reply-area">
@@ -340,10 +495,10 @@
 								</div>
 							</div>
 
-							<div class="w-100 p-3 bg-light rounded" style="display: none;">
+							<div class="reply-reply-list w-100 p-3 bg-light rounded" style="display: none;">
 								<!-- 답글 리스트 영역 시작-->
 								<c:forEach items="${reply.childReplies}" var="childReply">
-								<div class="pt-2 pb-2 border-bottom border-secondary mb-2">
+								<div class="reply-child-item pt-2 pb-2 border-bottom border-secondary mb-2" data-reply-id="${childReply.replyId}">
 									<!-- 답글 아이템 시작 -->
 
 									<div class="row mb-4">
@@ -362,10 +517,16 @@
 												</span>
 											</div>
 										</div>
+										<c:if test="${me.id eq childReply.member.id}">
+											<div class="col-2 d-flex justify-content-end">
+												<span class="reply-child-edit text-secondary">수정</span>
+												<span class="reply-child-delete text-secondary ms-1">삭제</span>
+											</div>
+										</c:if>
 									</div>
 									<!-- 프로필 영역 끝 -->
 									<div>
-										<p>${childReply.replyContent}</p>
+										<p class="reply-child-content">${childReply.replyContent}</p>
 									</div>
 								</div>
 								<!-- 답글 아이템 끝-->
