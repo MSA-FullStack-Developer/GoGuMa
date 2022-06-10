@@ -19,6 +19,12 @@
     font-weight: bold;
 }
 
+.no-review-img {
+    width: 100px;
+    height: 100px;
+    margin: 70px 0px 20px 0px;
+}
+
 .membername {
     margin-top: 0px;
     text-align: left;

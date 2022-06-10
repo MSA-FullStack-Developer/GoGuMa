@@ -10,6 +10,12 @@ select {
 	margin-right: 15px;
 }
 
+.no-review-img {
+    width: 100px;
+    height: 100px;
+    margin: 70px 0px 20px 0px;
+}
+
 .selectbox {
 	margin-left: 15px;
     width: 100%;
@@ -73,14 +79,9 @@ input {
 }
 
 #deleteBtn {
-	width: auto;
-	height: auto;
-	color: #fff;
-	background: #6426DD;
-	border: none;
-	font-size: 10pt;
-	margin-left: 5px;
-	border-radius: 5pt;
+	background: #F8F8F8;
+    border: none;
+    width: 25px;
 }
 
 .imgList {

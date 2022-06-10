@@ -326,10 +326,10 @@
                 <div id="tab02">
    					<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
    					<c:if test='${reviewList.size() < 1}'>
-   						<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-						<lottie-player src="https://assets7.lottiefiles.com/packages/lf20_wglo7xex.json" 
-							background="transparent" speed="1" style="width: 300px; height: 150px; margin: 0 auto" loop autoplay></lottie-player>
-   						<h5 class="no_result">상품평이 없습니다.</h5>
+   						<div style="text-align: center;">
+	   						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
+	   						<h5 class="no_result">등록된 상품평이 없습니다.</h5>
+   						</div>
 					</c:if>
    					
                     <c:forEach items="${reviewList}" var="review">
@@ -339,7 +339,7 @@
 	                            <p class="review-profile-name">
 	                            	${review.name}
 		                        	<c:if test="${review.name == memberDTO.name}">
-		                        		<button type="button" class="deleteBtn" id="deleteBtn" style="float: right;">삭제</button>
+		                        		<button type="button" class="deleteBtn" id="deleteBtn"><i class="fa-solid fa-trash-can"></i></button>
 		                        	</c:if>
 	                           		<span class="review-create-date">
 		                            	<fmt:formatDate value="${review.createDate}" pattern="yyyy-MM-dd" />

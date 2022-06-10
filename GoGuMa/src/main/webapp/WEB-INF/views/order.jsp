@@ -19,7 +19,6 @@
 <script type="text/javascript" src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.js"></script>
 <script type="text/javascript" src="${contextPath}/webjars/jquery-ui/1.13.0/jquery-ui.js"></script>
 
-
  <!-- iamport.payment.js -->
  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
  
@@ -27,6 +26,21 @@
  	.col-md-4 {
 	    padding: 0px 0px;
 	    background-color: #FFF;
+	}
+	
+	.orderPageBtn {
+		background-color: #6426DD;
+	    border-radius: 5pt;
+	    height: 38px;
+	    width: auto;
+	    color: white;
+	    border: none;
+	    padding-left: 10px;
+	    padding-right: 10px;
+	}
+	
+	.orderPageBtn:hover {
+		background-color: #FF493C;
 	}
  </style>
  <script type="text/javascript">
@@ -580,7 +594,7 @@
 							</li>
 						</ul>
 						<div class="btngroup agreeCheck">
-							<button type="button" id="pay-onclick" class="btn text-white btn-default medium">
+							<button type="button" id="pay-onclick" class="orderPageBtn medium">
 								<span>결제</span>
 							</button>
 						</div>
@@ -718,8 +732,8 @@
 											<div class="col-md-2 dis-coupon">
 												<span class="dis-coupon-prc">적용 없음</span>
 											</div>
-											<div class="col-md-4" style="background-color: white; padding: 0px 0px;">
-												<button class="btn text-white btn-default" id="getCoupon-btn" data-bs-toggle="modal" data-bs-target="#couponModal">조회/변경</button>
+											<div class="col-md-4">
+												<button class="orderPageBtn" id="getCoupon-btn" data-bs-toggle="modal" data-bs-target="#couponModal">조회/변경</button>
 											</div>
 										</div>
 										<div class="row" style="padding: 10px;">
@@ -730,10 +744,10 @@
 												</div>
 											</div>
 										
-											<div class="col-md-4" style="background-color: white; padding: 0px 0px;">
-												<button class="btn text-white btn-default" id="point-cancel">사용취소</button>
+											<div class="col-md-4" style="width: 90px;">
+												<button class="orderPageBtn" id="point-cancel">사용취소</button>
 											</div>
-											<div class="col-md-4 bp" style="background-color: white; padding: 0px 0px;">
+											<div class="col-md-4 bp">
 												[보유 G.Point: <fmt:formatNumber value="${point}" type="currency" currencySymbol="" />p]
 											</div>
 										</div>
@@ -830,7 +844,7 @@
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-light" data-bs-target="#myModal" data-bs-toggle="modal" data-bs-dismiss="modal">뒤로가기</button>
-											<button type="button" id="addAddressBtn" class="btn text-white btn-default">확인</button>
+											<button type="button" id="addAddressBtn" class="orderPageBtn">확인</button>
 										</div>
 									</div>
 								</div>
@@ -962,7 +976,7 @@
 									
 								</div>
 							</div>
-							<button type="button" class="btn text-white btn-change-address" id="btn-change-address" data-bs-toggle="modal" data-bs-target="#myModal">배송지변경</button>
+							<button type="button" class="btn-change-address orderPageBtn" id="btn-change-address" data-bs-toggle="modal" data-bs-target="#myModal">배송지변경</button>
 						</div>
 						<div class="accordion-item">
 							<h3 class="accordion-header select-pay-info" id="panelsStayOpen-headine">
