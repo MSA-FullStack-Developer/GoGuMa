@@ -260,6 +260,24 @@
 					
 				});
 				
+				//댓글 [삭제] 클릭 이벤트 핸들러
+				$(".reply-delete").click(function() {
+					
+					var replyItem = $(this).parents(".reply-item");
+				
+					var replyId = replyItem.data("replyId");
+					
+					var data = {
+						replyId
+					};
+					
+					if(confirm('정말로 삭제하시겠습니까?')){
+						deleteReply(data, replyItem);
+					}
+					
+				});
+				
+				
 				//댓글 수정 취소 버튼 클릭 이벤트 핸들러
 				$("button[name='close-edit-reply']").click(function() {
 					
@@ -295,38 +313,7 @@
 					
 					console.log(data);
 					updateReply(data,replyContentParagraph,editForm,buttonWrapper);
-					/* $.ajax({
-						url: "${contextPath}/market/api/updateReply.do",
-						method: "put",
-						contentType: "application/json; charset=utf-8;",
-		        		dataType: "json",
-		        		data: JSON.stringify(data),
-		        		beforeSend : function(xhr) {
-				            xhr.setRequestHeader(header, token);
-				        },
-				        success: function(data) {
-				        	replyContentParagraph.text(replyContent);
-				        	
-				        },
-				        error: function(xhr, status, error) {
-		        			console.log(xhr.status);
-		        			var status = xhr.status;
-		        			if(status === 401) {
-		        				alert("로그인 후 이용이 가능합니다.");
-		        			} else if(status === 403) {
-		        				alert("댓글을 작성할 권한이 없습니다.");
-		        			} else if(status === 404) {
-		        				alert("이미 삭제된 댓글 입니다.");
-		        			}  else {
-		        				alert("서버 오류가 발생했습니다.");
-		        			}
-		        		},
-		        		complete: function() {
-							editForm.hide();
-							buttonWrapper.removeClass("d-none");
-							replyContentParagraph.show();
-		        		}
-					}); */
+				
 				})
 				
 				
@@ -384,7 +371,23 @@
 					
 				});
 				
+				//답글 [삭제] 클릭 이벤트 핸들러
 				
+				$(".reply-reply-list").on("click",".reply-child-button-wrapper .reply-child-delete", function() {
+					
+					var replyItem = $(this).parents(".reply-child-item");
+				
+					var replyId = replyItem.data("replyId");
+					
+					var data = {
+						replyId
+					};
+					
+					if(confirm('정말로 삭제하시겠습니까?')){
+						deleteReply(data, replyItem);
+					}
+					
+				});
 				
 				
 				
@@ -401,7 +404,7 @@
 				return formattedDate;
 			}
 			
-			//댓글 & 답글 AJAX 호출 함수
+			//댓글 & 답글 수정 AJAX 호출 함수
 			function updateReply(data,replyContentParagraph,editForm,buttonWrapper) {
 				$.ajax({
 					url: "${contextPath}/market/api/updateReply.do",
@@ -433,6 +436,38 @@
 						editForm.hide();
 						buttonWrapper.removeClass("d-none");
 						replyContentParagraph.show();
+	        		}
+				});
+			}
+			
+			//댓글 & 답글 삭제 AJAX 호출 함수
+			function deleteReply(data, replyItem) {
+			
+				$.ajax({
+					url: "${contextPath}/market/api/deleteReply.do",
+					method: "post",
+	        		dataType: "json",
+	        		data: data,
+	        		beforeSend : function(xhr) {
+			            xhr.setRequestHeader(header, token);
+			        },
+			        success: function() {
+			        	replyItem.remove();
+			        	var replyCount = $("#reply-count").text() - 1;
+			        	$("#reply-count").text(replyCount);
+			        },
+			        error: function(xhr, status, error) {
+	        			console.log(xhr.status);
+	        			var status = xhr.status;
+	        			if(status === 401) {
+	        				alert("로그인 후 이용이 가능합니다.");
+	        			} else if(status === 403) {
+	        				alert("댓글을 작성할 권한이 없습니다.");
+	        			} else if(status === 404) {
+	        				alert("이미 삭제된 댓글 입니다.");
+	        			}  else {
+	        				alert("서버 오류가 발생했습니다.");
+	        			}
 	        		}
 				});
 			}
@@ -536,7 +571,7 @@
 			</div>
 			<!-- market-info-area 끝 -->
 			<div id="reply-area" class="w-100 mt-5">
-				<h5>${fn:length(replies)}개 댓글</h5>
+				<h5><span id="reply-count">${fn:length(replies)}</span>개 댓글</h5>
 				<div class="mt-4">
 					<textarea id="reply-textarea" class="w-100 p-2 border border-secondary rounded"
 						style="resize: none; height: 70px;" placeholder="댓글을 작성하세요."></textarea>

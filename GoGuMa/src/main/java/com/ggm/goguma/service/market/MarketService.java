@@ -52,4 +52,6 @@ public interface MarketService {
 	
 	
 	void updateArticleReply(UpdateReplyDTO reply, MemberDTO member);
+	
+	void deleteArticleReply(long replyId, MemberDTO member);
 }

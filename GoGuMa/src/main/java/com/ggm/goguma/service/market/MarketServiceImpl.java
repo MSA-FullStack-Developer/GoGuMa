@@ -48,7 +48,7 @@ public class MarketServiceImpl implements MarketService {
 	private final MarketMapper marketMapper;
 
 	private final AmazonS3Utils amazonService;
-	
+
 	private final ArticleReplyMapper articleReplyMapper;
 
 	private final long PAGESIZE = 8;
@@ -227,13 +227,13 @@ public class MarketServiceImpl implements MarketService {
 		List<MarketArticleDTO> articles = this.marketMapper.findMarketArticles(marketId, offset, this.PAGESIZE);
 
 		long totalCount = this.marketMapper.countMarketArticles(marketId);
-		
+
 		log.info("[getMarketArticles] totalCount : " + totalCount);
 
-		long pageCount = (long) Math.ceil((double)totalCount / this.PAGESIZE);
+		long pageCount = (long) Math.ceil((double) totalCount / this.PAGESIZE);
 
 		log.info("[getMarketArticles] pageCount : " + pageCount);
-	
+
 		long startPage = offset / this.BLOCKSIZE * this.BLOCKSIZE + 1;
 		if (startPage < 0)
 			startPage = 1;
@@ -265,7 +265,6 @@ public class MarketServiceImpl implements MarketService {
 
 		// 1. 썸네일 저장
 		ArticleImageDTO thumbnail = null;
-		
 
 		if (!article.getThumbnail().isEmpty()) {
 			String[] uploadThumbnail = this.amazonService.uploadFile("upload", article.getThumbnail());
@@ -275,7 +274,7 @@ public class MarketServiceImpl implements MarketService {
 			thumbnail.setThumbnail(true);
 			images.add(thumbnail);
 		}
-		
+
 		MarketArticleDTO marketArticle = new MarketArticleDTO();
 		marketArticle.setArticleId(article.getArticleId());
 		marketArticle.setArticleTitle(article.getArticleTitle());
@@ -315,31 +314,24 @@ public class MarketServiceImpl implements MarketService {
 	@Transactional
 	@Override
 	public ArticleReplyDTO createArticleReply(CreateReplyDTO reply, MemberDTO member) throws Exception {
-		
-		ArticleReplyDTO savedReply = ArticleReplyDTO.builder()
-				.articleId(reply.getArticleId())
-				.member(member)
-				.replyContent(reply.getReplyContent())
-				.build();
+
+		ArticleReplyDTO savedReply = ArticleReplyDTO.builder().articleId(reply.getArticleId()).member(member)
+				.replyContent(reply.getReplyContent()).build();
 
 		this.articleReplyMapper.insertArticleReply(savedReply);
-		
+
 		return savedReply;
 	}
 
 	@Transactional
 	@Override
 	public ArticleReplyDTO createChildArticleReply(CreateChildReplyDTO reply, MemberDTO member) throws Exception {
-		
-		ArticleReplyDTO savedChildReply = ArticleReplyDTO.builder()
-				.articleId(reply.getArticleId())
-				.replyPId(reply.getReplyId())
-				.member(member)
-				.replyContent(reply.getReplyContent())
-				.build();
-		
+
+		ArticleReplyDTO savedChildReply = ArticleReplyDTO.builder().articleId(reply.getArticleId())
+				.replyPId(reply.getReplyId()).member(member).replyContent(reply.getReplyContent()).build();
+
 		this.articleReplyMapper.insertChildArticleReply(savedChildReply);
-		
+
 		return savedChildReply;
 	}
 
@@ -351,20 +343,34 @@ public class MarketServiceImpl implements MarketService {
 	@Transactional
 	@Override
 	public void updateArticleReply(UpdateReplyDTO reply, MemberDTO member) {
-		
-		//1. reply 이 있는지 확인
-		ArticleReplyDTO savedReply =  this.articleReplyMapper.findReplyById(reply.getReplyId()).orElseThrow(NotFoundReplyException::new);
-		
-		//2. reply 생성자 인지 확인
-		if(savedReply.getMember().getId() != member.getId()) throw new NotAllowedManageReplyException();
-		
-		//3. reply 수정
+
+		// 1. reply 이 있는지 확인
+		ArticleReplyDTO savedReply = this.articleReplyMapper.findReplyById(reply.getReplyId())
+				.orElseThrow(NotFoundReplyException::new);
+
+		// 2. reply 생성자 인지 확인
+		if (savedReply.getMember().getId() != member.getId())
+			throw new NotAllowedManageReplyException();
+
+		// 3. reply 수정
 		savedReply.setReplyContent(reply.getReplyContent());
-		
+
 		this.articleReplyMapper.updateArticleReply(savedReply);
 	}
-	
-	
-	
+
+	@Override
+	public void deleteArticleReply(long replyId, MemberDTO member) {
+		// 1. reply 이 있는지 확인
+		ArticleReplyDTO savedReply = this.articleReplyMapper.findReplyById(replyId)
+				.orElseThrow(NotFoundReplyException::new);
+
+		// 2. reply 생성자 인지 확인
+		if (savedReply.getMember().getId() != member.getId())
+			throw new NotAllowedManageReplyException();
+		
+		//3. reply 삭제
+		this.articleReplyMapper.deleteArticleReply(replyId);
+
+	}
 
 }

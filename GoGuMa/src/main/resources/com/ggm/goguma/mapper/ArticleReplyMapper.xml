@@ -74,4 +74,10 @@
 		SET replyContent = #{replyContent} 
 		WHERE replyId = #{replyId}
 	</update>
+	
+	<update id="deleteArticleReply" parameterType="long">
+		UPDATE ArticleReply
+		SET deleted = 1
+		WHERE replyId = #{replyId}
+	</update>
 </mapper>
