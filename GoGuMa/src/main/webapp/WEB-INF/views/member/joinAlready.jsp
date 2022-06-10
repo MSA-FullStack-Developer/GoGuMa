@@ -42,13 +42,7 @@
 				<div name="memberInfo"
 					class="w-100 p-4 border border-dark rounded-4 mt-3"
 					style="min-height: 100px;">
-					
-					<c:if test="${not disabled}">
-						<h4 class="border-bottom pb-3">고구마 회원</h4>
-					</c:if>
-					<c:if test="${disabled}">
-						<h4 class="border-bottom pb-3">탈퇴 진행중인 계정</h4>
-					</c:if>
+					<h4 class="border-bottom pb-3">고구마 회원</h4>
 					<div name="member-name" class="row mt-4">
 						<div class="col-2">
 							<span class="text-secondary">이름</span>
@@ -75,18 +69,6 @@
 							</span>
 						</div>
 					</div>
-					<c:if test="${disabled}">
-		            	<div id="member-reSignDate" class="row mt-3">
-		                	<div class="col-2">
-		                    	<span class="text-secondary">탈퇴일</span>
-		                    </div>
-		                    <div class="col">
-		                    	<span>
-		                        	<fmt:formatDate value="${resignDate}" pattern="yyyy.MM.dd"/>
-		                        </span>
-		                     </div>
-		           		</div>
-	               </c:if>
 				</div>
 				<div class="d-flex justify-content-between mt-5">
 					<a id="find-pw-btn" type="button"

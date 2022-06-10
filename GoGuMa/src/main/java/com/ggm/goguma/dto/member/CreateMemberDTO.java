@@ -3,8 +3,6 @@ package com.ggm.goguma.dto.member;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.Data;
 
 @Data
@@ -24,14 +22,6 @@ public class CreateMemberDTO {
 	private String phone;
 	
 	private int age;
-	
-	private MultipartFile profile;
-	
-	private String gender;
-	
-	private String birthDate;
-	
-	private String nickName;
 	
 	private int[] agreements;
 }

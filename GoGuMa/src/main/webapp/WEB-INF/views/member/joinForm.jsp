@@ -118,26 +118,7 @@
 						$(this).validate();
 					});
 				}
-			});
-			
-			$("#upload-profile").click(function () {
-	            $("#profile").click();
-	        });
-			
-			$("#profile").change(function () {
-	            var img = $("#preview-profile");
-	            readfile(this, img);
-	        });
-			
-			 function readfile(input, img) {
-			 	if (input.files && input.files[0]) {
-			    	var reader = new FileReader();
-			    	reader.onload = function (e) {
-			        	img.attr('src', e.target.result);
-			        }
-			    	reader.readAsDataURL(input.files[0]);
-			    }
-			 }
+			}) 
 		})
 	</script>
 	<section class="container" style="min-width: 970px;">
@@ -145,17 +126,8 @@
 			<h1>고구마 회원가입</h1>
 			<p class="text-secondary">아래 회원 정보를 기입해주세요.</p>
 
-			<form id="joinForm"  method="post" action="${contextPath}/member/join/create.do" enctype="multipart/form-data">
+			<form id="joinForm"  method="post" action="${contextPath}/member/join/create.do">
 				<input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
-				<label for="profile" class="form-label mt-3">
-                  	프로필 이미지
-                </label>
-                <input id="profile" name="profile" type="file" class="form-control" accept=".jpg, .jpeg, .png"
-                    style="position: absolute; left: -9999px;"  required>
-                <div id="upload-profile">
-                    <img id="preview-profile" class="rounded-circle border border-light" src="https://hd-goguma.s3.ap-northeast-2.amazonaws.com/profile/1654741131039default.png" style="width: 150px; height: 150px; object-fit: fill;"/>
-                </div>
-                
 				<label for="email" class="form-label"> 사용할 이메일 아이디 </label> 
 				<input id="email" name="email" type="email" class="form-control" placeholder="example@example.com" required/>
 				<div>
@@ -163,24 +135,6 @@
 				</div>
 				<label for="password" class="form-label mt-3" > 비밀번호 </label> 
 				<input name="password" type="password" class="form-control" required/> 
-				<label for="nickName" class="form-label mt-3" > 닉네임 </label> 
-				<input name="nickName" type="text" class="form-control" required/> 
-				<label for="birthDate" class="form-label mt-3" > 생년월일 </label> 
-				<input name="birthDate" type="date" class="form-control" required/> 
-				
-				<label for="gender" class="form-label mt-3" > 성별 </label> 
-				<div class="form-check">
-				  <input class="form-check-input" type="radio" name="gender" id="gender-male" value="M">
-				  <label class="form-check-label" for="gender-male">
-				     남
-				  </label>
-				</div>
-				<div class="form-check">
-				  <input class="form-check-input" type="radio" name="gender" id="gender-female" value="F" checked>
-				  <label class="form-check-label" for="gender-female">
-				    여
-				  </label>
-				</div>
 				<label for="name" class="form-label mt-3"> 이름 </label> 
 				<input name="name" type="text" class="form-control" value="${member.name}" readonly />
 				<label for="phone" class="form-label mt-3"> 전화번호 </label> 
