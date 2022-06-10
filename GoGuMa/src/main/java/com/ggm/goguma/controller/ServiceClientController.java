@@ -1,5 +1,6 @@
 package com.ggm.goguma.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,11 @@ import com.ggm.goguma.constant.Role;
 import com.ggm.goguma.controller.cart.CartController;
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.cart.CartItemDTO;
+import com.ggm.goguma.dto.cart.CartOrderListDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
+import com.ggm.goguma.dto.serviceClient.ServiceCategoryDTO;
 import com.ggm.goguma.service.member.MemberService;
+import com.ggm.goguma.service.serviceClient.ServiceClientService;
 
 import lombok.extern.log4j.Log4j;
 
@@ -26,6 +30,9 @@ public class ServiceClientController {
 	
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private ServiceClientService serviceClientService;
 	
 	@GetMapping("/")
 	public String cartList(Model model, Authentication authentication) throws Exception {
@@ -39,9 +46,6 @@ public class ServiceClientController {
 				//사용자 정보 가져오기
 				MemberDTO memberDTO = memberService.getMember(memberEmail);
 				log.info("고객센터에서 사용될 사용자 정보: " + memberDTO);
-				// 회원이 담은 카트 리스트를 불러온다.
-				Role role = memberService.getMember(memberEmail).getRole();
-				System.out.println("사용자 권한 : " + role);
 				
 				model.addAttribute("memberDTO", memberDTO);
 			}
@@ -58,11 +62,24 @@ public class ServiceClientController {
 	}
 	
 	@GetMapping("oneCnslPup")
-	public String oneCnslPup(Authentication authentication)throws Exception{
+	public String oneCnslPup(Model model, Authentication authentication)throws Exception{
 		try {
-			System.out.println("1대1 상담 팝업");
+			String memberEmail = "";
 			// 사용자가 권한이 있는 경우
 			if (authentication != null){
+				UserDetails user = (UserDetails)authentication.getPrincipal();
+				//사용자 이메일정보를 가져온다.
+				memberEmail = user.getUsername();
+				//사용자 정보 가져오기
+				MemberDTO memberDTO = memberService.getMember(memberEmail);
+				
+				//카테고리 문의 유형 가져오기
+				List<ServiceCategoryDTO> scDtoList = new ArrayList<ServiceCategoryDTO>();
+				scDtoList = serviceClientService.getSCategory();
+				log.info("고객센터 카테고리 리스트" + scDtoList);
+				model.addAttribute("memberDTO", memberDTO);
+				model.addAttribute("scDtoList", scDtoList);
+				
 				return "servicecnsl/oneCnslPup";
 			}else {
 				// 로그인 안된 상태라면 사용자 로그인 창으로 이동
