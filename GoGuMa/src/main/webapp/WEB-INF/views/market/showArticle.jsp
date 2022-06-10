@@ -214,8 +214,8 @@
 			</div>
 			<div class="d-flex justify-content-between">
 				<p>
-					<strong>${article.market.marketName}</strong> <span
-						class="badge text-bg-info ms-1">${article.market.category.categoryName}</span>
+					<strong>${article.market.marketName}</strong>
+					<span class="badge text-light" style="background-color: #FF493C;">${article.market.category.categoryName}</span>
 				</p>
 				<span class="ms-1 text-secondary"><fmt:formatDate
 						value="${article.regDate}" pattern="yyyy-MM-dd HH:mm" /></span>

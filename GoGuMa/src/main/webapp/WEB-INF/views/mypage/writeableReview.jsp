@@ -304,7 +304,7 @@
 	                        	<input type="hidden" id="thumbnailImg" value="">
 	                       	</h4>
 	                       	<textarea cols="34" rows="5" type="text" class="write-review-content" placeholder="상품평을 작성해주세요. (최대 2,000자)"></textarea>
-	                       	<input type="file" id="file" name='uploadFile' style="margin-left: 30px; "multiple>
+	                       	<input type="file" class="form-control form-control-sm" id="file" name='uploadFile' style="margin-left: 30px; width: 20%;" multiple>
 	                       	<div class='uploadResult'>
 								<ul>
 								</ul>
