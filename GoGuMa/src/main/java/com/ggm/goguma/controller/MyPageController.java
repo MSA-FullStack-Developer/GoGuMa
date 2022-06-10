@@ -1,6 +1,7 @@
 package com.ggm.goguma.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.security.Principal;
@@ -61,8 +62,7 @@ public class MyPageController {
 	private int contentPerPage=10; // 한 페이지에 보여지는 게시물의 개수
 	
 //	@Value("${productPerPage}")
-	private int productPerPage=10;
-	
+	private int productPerPage=8; // 한 페이지에 보여지는 최근 본 상품의 개수
 	
 //	@Value("${blockPerPage}")
 	private int blockPerPage=10; // 한 페이지에 보여지는 페이지 블록의 개수
@@ -85,14 +85,52 @@ public class MyPageController {
 	@Autowired
 	private ProductService productService;
 	
+	// 쿠키에 저장된 상품ID의 개수를 반환하는 메소드
+	public int getSeenProductCount(HttpServletRequest request) throws UnsupportedEncodingException {
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null) {
+			for(Cookie cookie : cookies) {
+				// 이름이 'seenProducts'인 쿠키를 찾으면
+				if(cookie.getName().equals("seenProducts")) {
+					// 쿠키에 저장된 상품ID 값을 쉼표로 구분해서 배열 형식으로 저장
+					String[] productIdArr = (URLDecoder.decode(cookie.getValue(), "utf-8")).split(",");
+					return productIdArr.length;
+				}
+			}
+		}
+		return 0;
+	}
+	
+	// 쿠키에 저장된 상품ID들을 리스트에 각각 저장하는 메소드
+	public List<ProductDTO> setSeenProducts(long page, long productCount, HttpServletRequest request) throws NumberFormatException, Exception {
+		List<ProductDTO> productList = new ArrayList<>();
+		
+		long startNum = (page-1) * productPerPage;
+		long endNum = page * productPerPage - 1;
+		if(endNum >= productCount) endNum = productCount - 1; // endNum이 productCount 보다 커지는 것을 방지
+		
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null) {
+			for(Cookie cookie : cookies) {
+				// 이름이 'seenProducts'인 쿠키를 찾으면
+				if(cookie.getName().equals("seenProducts")) {
+					// 쿠키에 저장된 상품ID 값을 쉼표로 구분해서 배열 형식으로 저장
+					String[] productIdArr = (URLDecoder.decode(cookie.getValue(), "utf-8")).split(",");
+					// 상품ID들을 통해서 가져온 ProductInfo들을 productList에 각각 저장
+					for(int i=(int)startNum; i<=endNum; i++) {
+						productList.add(productService.getProductInfo(Long.parseLong(productIdArr[i])));
+					}
+				}
+			}
+		}
+		return productList;
+	}
+	
 	@RequestMapping(value="", method=RequestMethod.GET)
-	public String getMyPageMain(HttpServletRequest request, Principal principal, Model model) throws Exception {
+	public String getMyPageMain(@RequestParam("page") long page, HttpServletRequest request, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			model.addAttribute("memberDTO", memberDTO);
-			
-			List<ProductDTO> productList = new ArrayList<>();
-			model.addAttribute("productList", productList);
 			
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
@@ -105,21 +143,27 @@ public class MyPageController {
 			model.addAttribute("writeableList", writeableList);
 			model.addAttribute("writeableCount", writeableList.size());
 			
-			Cookie[] cookies = request.getCookies();
-			if(cookies != null) {
-				// 가져온 쿠키 중에서
-				for(Cookie cookie : cookies) {
-					// 이름이 'seenProducts'인 쿠키를 찾으면
-					if(cookie.getName().equals("seenProducts")) {
-						// 쿠키에 저장된 상품ID 값을 쉼표로 구분해서 배열 형식으로 저장
-						String[] productIdArr = (URLDecoder.decode(cookie.getValue(), "utf-8")).split(",");
-						// 상품ID들을 통해서 가져온 ProductInfo들을 productList에 각각 저장
-						for(String productId : productIdArr) {
-							productList.add(productService.getProductInfo(Long.parseLong(productId)));
-						}
-					}
-				}
-			}
+			// 최근 본 상품의 개수
+			long productCount = getSeenProductCount(request);
+			// 전체 페이지 개수 = 최근 본 상품의 개수 / 한 페이지에 보여지는 최근 본 상품의 개수
+			long pageCount = productCount / productPerPage;
+			// 예를 들어, 최근 본 상품의 개수가 101개인 경우, 11개의 페이지가 필요하므로 총 페이지의 개수를 증가시켜준다.
+			if(productCount % productPerPage != 0) pageCount++;
+			
+			// 시작 페이지 = (현재 페이지-1) / 페이지 블록 크기 * 페이지 블록 크기 + 1
+			long startPage = (page-1) / blockPerPage * blockPerPage + 1;
+			// 마지막 페이지 (현재 페이지-1) / 페이지 블록 크기 * 페이지 블록 크기 + 페이지 블록 크기
+			long endPage = (page-1) / blockPerPage * blockPerPage + blockPerPage;
+			// 마지막 페이지 개수가 전체 페이지 개수보다 많은 경우, 마지막 페이지를 전체 페이지 개수로 맞춰준다.
+			if(endPage > pageCount) endPage = pageCount;
+			
+			List<ProductDTO> productList = setSeenProducts(page, productCount, request);
+			model.addAttribute("productList", productList);
+			model.addAttribute("page", page);
+			model.addAttribute("startPage", startPage);
+			model.addAttribute("endPage", endPage);
+			model.addAttribute("pageCount", pageCount);
+			model.addAttribute("productCount", productCount);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}
@@ -239,9 +283,9 @@ public class MyPageController {
 			model.addAttribute("writeableList", writeableList);
 			model.addAttribute("writeableCount", writeableList.size());
 			
-			// 특정 포인트 내역의 개수
+			// 포인트 내역의 개수
 			long historyCount = service.getPointHistoryCount(memberDTO.getId(), type, startDate, endDate);
-			// 전체 페이지 개수 = 전체 페이지 개수 / 한 페이지에 보여지는 내역의 수
+			// 전체 페이지 개수 = 포인트 내역의 개수 / 한 페이지에 보여지는 내역의 수
 			long pageCount = historyCount / contentPerPage;
 			// 예를 들어, 내역이 101개인 경우, 11개의 페이지가 필요하므로 총 페이지 개수를 증가시켜준다.
 			if(historyCount % contentPerPage != 0) pageCount++;
@@ -262,8 +306,6 @@ public class MyPageController {
 			model.addAttribute("startPage", startPage);
 			model.addAttribute("endPage", endPage);
 			model.addAttribute("pageCount", pageCount);
-			model.addAttribute("historyCount", historyCount);
-			model.addAttribute("contentPerPage", contentPerPage);
 		} catch (Exception e) {
 			log.info(e.getMessage());
 		}
@@ -287,9 +329,9 @@ public class MyPageController {
 			model.addAttribute("writeableList", writeableList);
 			model.addAttribute("writeableCount", writeableList.size());
 			
-			// 특정 쿠폰의 개수
+			// 쿠폰의 개수
 			long historyCount = service.getCouponCount(memberDTO.getId(), type);
-			// 전체 페이지 개수 = 전체 페이지 개수 / 한 페이지에 보여지는 내역의 수
+			// 전체 페이지 개수 = 쿠폰의 개수 / 한 페이지에 보여지는 쿠폰의 개수
 			long pageCount = historyCount / contentPerPage;
 			// 예를 들어, 내역이 101개인 경우, 11개의 페이지가 필요하므로 총 페이지 개수를 증가시켜준다.
 			if(historyCount % contentPerPage != 0) pageCount++;
@@ -308,8 +350,6 @@ public class MyPageController {
 			model.addAttribute("startPage", startPage);
 			model.addAttribute("endPage", endPage);
 			model.addAttribute("pageCount", pageCount);
-			model.addAttribute("historyCount", historyCount);
-			model.addAttribute("contentPerPage", contentPerPage);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}

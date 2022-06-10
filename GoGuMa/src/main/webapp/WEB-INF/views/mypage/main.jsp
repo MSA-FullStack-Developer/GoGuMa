@@ -89,6 +89,38 @@
                     	</c:forEach>
                     </div>
                 </div>
+                <ul class="pagination justify-content-center">
+                	<c:if test="${startPage ne 1}">
+                		<li class="page-item">
+                			<a class="page-link" href="${contextPath}/mypage?page=${startPage-1}" aria-label="Previous">
+	                			<span aria-hidden="true">&laquo;</span>
+	                		</a>
+                		</li>
+                	</c:if>
+                	<c:forEach begin="${startPage}" end="${endPage}" var="pageNum">
+                		<c:choose>
+                			<c:when test="${page == pageNum}">
+                				<li class="page-item">
+                					<p class="page-link">${pageNum}</p>
+                				</li>
+                			</c:when>
+                			<c:otherwise>
+                				<li class="page-item">
+                					<a class="page-link" href="${contextPath}/mypage?page=${pageNum}">
+                						${pageNum}
+                					</a>
+                				</li>
+                			</c:otherwise>
+                		</c:choose>
+                	</c:forEach>
+                	<c:if test="${endPage ne pageCount}">
+                		<li class="page-item">
+                			<a class="page-link" href="${contextPath}/mypage?page=${endPage+1}" aria-label="Next">
+					    		<span aria-hidden="true">&raquo;</span>
+					    	</a>
+                		</li>
+                	</c:if>
+                </ul>
             </div>
 		</div>
 	</div>

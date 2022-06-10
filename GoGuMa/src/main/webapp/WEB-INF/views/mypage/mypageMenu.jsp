@@ -9,7 +9,7 @@
 </style>
 <div class="col-3">
     <div class="col mb-4">
-        <h3><a href="${contextPath}/mypage/"><b>마이페이지</b></a></h3>
+        <h3><a href="${contextPath}/mypage?page=1"><b>마이페이지</b></a></h3>
     </div>
     <div class="col mb-4">
         <div>
