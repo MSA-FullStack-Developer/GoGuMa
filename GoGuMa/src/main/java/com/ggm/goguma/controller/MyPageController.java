@@ -60,6 +60,10 @@ public class MyPageController {
 //	@Value("${contentPerPage}")
 	private int contentPerPage=10; // 한 페이지에 보여지는 게시물의 개수
 	
+//	@Value("${productPerPage}")
+	private int productPerPage=10;
+	
+	
 //	@Value("${blockPerPage}")
 	private int blockPerPage=10; // 한 페이지에 보여지는 페이지 블록의 개수
 	
@@ -105,10 +109,11 @@ public class MyPageController {
 			if(cookies != null) {
 				// 가져온 쿠키 중에서
 				for(Cookie cookie : cookies) {
-					// 이름이 'latelySeenProducts'인 쿠키를 찾으면
-					if(cookie.getName().equals("latelySeenProducts")) {
-						// 쿠키의 값을 쉼표로 구분해서 리스트 형식으로 저장
+					// 이름이 'seenProducts'인 쿠키를 찾으면
+					if(cookie.getName().equals("seenProducts")) {
+						// 쿠키에 저장된 상품ID 값을 쉼표로 구분해서 배열 형식으로 저장
 						String[] productIdArr = (URLDecoder.decode(cookie.getValue(), "utf-8")).split(",");
+						// 상품ID들을 통해서 가져온 ProductInfo들을 productList에 각각 저장
 						for(String productId : productIdArr) {
 							productList.add(productService.getProductInfo(Long.parseLong(productId)));
 						}

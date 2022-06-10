@@ -69,7 +69,7 @@ public class ProductController {
 	 * @작업내용 : 쿠키에 존재하는 값들을 불러오는 기능 구현
 	 * @작성일자 : 2022.06.09
 	 */
-	public List<String> getLatelySeenProductList(HttpServletRequest request) throws UnsupportedEncodingException {
+	public List<String> getSeenProductList(HttpServletRequest request) throws UnsupportedEncodingException {
 		// 기존에 존재하는 쿠키들을 가져옴
 		Cookie[] cookies = request.getCookies();
 		
@@ -81,7 +81,7 @@ public class ProductController {
 			// 가져온 쿠키 중에서
 			for(Cookie cookie : cookies) {
 				// 이름이 'latelySeenProducts'인 쿠키를 찾으면
-				if(cookie.getName().equals("latelySeenProducts")) {
+				if(cookie.getName().equals("seenProducts")) {
 					// 쿠키의 값을 쉼표로 구분해서 리스트 형식으로 저장
 					String[] arr = (URLDecoder.decode(cookie.getValue(), "utf-8")).split(",");
 					list = new ArrayList<>(Arrays.asList(arr));
@@ -101,7 +101,7 @@ public class ProductController {
 		String value = "";
 		
 		// 쿠키에 존재하는 최근 본 상품 리스트를 불러옴
-		List<String> list = getLatelySeenProductList(request);
+		List<String> list = getSeenProductList(request);
 		
 		// 쿠키를 통해서 불러온 최근 본 상품 리스트에 값이 없다면
 		if(list == null) value += productId;
@@ -116,7 +116,7 @@ public class ProductController {
 		
 		// 쿠키에 값들을 문자열로 연결해서 만든 value 값을 저장
 		if(!value.equals("")) {
-			Cookie cookie = new Cookie("latelySeenProducts", URLEncoder.encode(value, "utf-8"));
+			Cookie cookie = new Cookie("seenProducts", URLEncoder.encode(value, "utf-8"));
 			cookie.setPath(request.getContextPath());
 			cookie.setMaxAge(-1);
 			response.addCookie(cookie);
