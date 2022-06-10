@@ -369,6 +369,11 @@ ul, ol, menu, li {
 .product-name{
     text-align: left;
     font-weight: 600;
+    margin-top: 30px;
+}
+.order-product-name{
+    text-align: left;
+    font-weight: 600;
     margin-top: 20px;
 }
 .product-option{

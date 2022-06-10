@@ -539,7 +539,7 @@
 																<img src="${i.prodImgUrl }" width="78" height="78" class="product-img" alt="">
 															</a>
 														</div>
-														<div class="product-name">
+														<div class="order-product-name">
 															<input type="hidden" name="cartId" value="${i.cartId }"/>
 															<input type="hidden" name="productId" value="${i.productId }"/>
 															<input type="hidden" name="cartAmount" value="${i.cartAmount }"/>
