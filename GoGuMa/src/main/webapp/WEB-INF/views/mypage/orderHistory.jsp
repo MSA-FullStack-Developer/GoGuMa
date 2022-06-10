@@ -266,7 +266,7 @@
 				success:function(result) {
 					if(result==1) {
 				  		cancelPay(receiptId, orderId);
-				  		alert("상품 주문이 취소되었습니다. 전액 환불 처리됩니다.");
+				  		alert("상품 주문이 취소되었습니다. 빠른 시일 이내에 환불 처리 됩니다.");
 						window.location.href = "${contextPath}/mypage/orderHistory";
 					} else {
 						alert('주문취소 중에 오류가 발생했습니다.');
