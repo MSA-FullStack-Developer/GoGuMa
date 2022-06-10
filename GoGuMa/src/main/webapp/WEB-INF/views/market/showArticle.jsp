@@ -327,7 +327,7 @@
 							</div>
 						</div>
 						<!-- 프로필 영역 끝 -->
-						<div>
+						<div class="reply-content">
 							<p>${reply.replyContent}</p>
 						</div>
 
