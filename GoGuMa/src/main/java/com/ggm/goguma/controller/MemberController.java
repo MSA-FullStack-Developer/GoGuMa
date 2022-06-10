@@ -28,6 +28,7 @@ import com.ggm.goguma.dto.member.CheckMemberResult;
 import com.ggm.goguma.dto.member.ContractDTO;
 import com.ggm.goguma.dto.member.CreateMemberDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
+import com.ggm.goguma.dto.member.ResignMemberDTO;
 import com.ggm.goguma.exception.CreateMemberFailException;
 import com.ggm.goguma.exception.NoCertificationException;
 import com.ggm.goguma.exception.NotFoundMemberExcption;
@@ -97,7 +98,7 @@ public class MemberController {
 	}
 
 	@GetMapping("/join/already.do")
-	public String joinAlready(HttpServletRequest request, Model model) {
+	public String joinAlready(HttpServletRequest request, Model model) throws Exception {
 
 		Map<String, ?> redirectMap = RequestContextUtils.getInputFlashMap(request);
 		MemberDTO member = null;
@@ -108,10 +109,16 @@ public class MemberController {
 		log.info(member);
 		if (member == null)
 			throw new NoCertificationException();
+		
+		if(member.isDisabled()) {
+			ResignMemberDTO resignMember = this.memberService.getResignMember(member);
+			model.addAttribute("resignDate", resignMember.getResignDate());
+		}
 
 		model.addAttribute("email", member.getEmail());
 		model.addAttribute("name", member.getName());
 		model.addAttribute("joinDate", member.getJoinDate());
+		model.addAttribute("disabled", member.isDisabled());
 		
 		return "member/joinAlready";
 	}
@@ -195,15 +202,22 @@ public class MemberController {
 			e.printStackTrace();
 			return "redirect:/member/join/fail.do";
 		}		
+	
 	}
 	
 	@PostMapping("/findId/result.do")
-	public String resultFindId(@RequestParam("impUid") String impUid, Model model) {
+	public String resultFindId(@RequestParam("impUid") String impUid, Model model) throws Exception{
 		
 		MemberDTO member = this.memberService.getMemberInfoFromIamport(impUid);
 		
 		try {
 			MemberDTO savedMember = this.memberService.getMember(member.getName(), member.getPhone());
+			
+			if(savedMember.isDisabled()) {
+				ResignMemberDTO resignMember = this.memberService.getResignMember(savedMember);
+				model.addAttribute("resignDate", resignMember.getResignDate());
+			}
+			model.addAttribute("disabled",savedMember.isDisabled());
 			model.addAttribute("notFound", false);
 			model.addAttribute("email", savedMember.getEmail());
 			model.addAttribute("name", savedMember.getName());
@@ -211,13 +225,14 @@ public class MemberController {
 			
 			
 		}catch(NotFoundMemberExcption e) {
+			
 			model.addAttribute("notFound", true);
 		}
 		return "member/findIdResult";
 	}
 	
 	@PostMapping("/findPwd/temp.do")
-	public String pwdTemp(@RequestParam("impUid") String impUid, @RequestParam(name = "email", defaultValue = "") String email, Model model) {
+	public String pwdTemp(@RequestParam("impUid") String impUid, @RequestParam(name = "email", defaultValue = "") String email, Model model) throws Exception{
 		
 		MemberDTO member = this.memberService.getMemberInfoFromIamport(impUid);
 		
@@ -228,6 +243,11 @@ public class MemberController {
 			if(!savedMember.getEmail().equals(email)) {
 				model.addAttribute("error", "입력하신 아이디와 가입된 정보가 다릅니다.");
 				return "redirect:/member/findPwd/start.do";
+			}
+			if(savedMember.isDisabled()) {
+				model.addAttribute("error", "탈퇴 진행중인 회원입니다.");
+				return "redirect:/member/findPwd/start.do";
+				
 			}
 			
 			model.addAttribute("memberId", savedMember.getId());
