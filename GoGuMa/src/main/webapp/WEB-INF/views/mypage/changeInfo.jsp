@@ -31,9 +31,6 @@
             table-layout: fixed;
             word-break: keep-all;
         }
-        input {
-        	margin: 10px 0px 10px 0px;
-        }
     </style>
 </head>
 <body>
@@ -92,14 +89,14 @@
                 </div>
                 <table class="table">
                     <tbody class="table-group-divider">
-                    	<tr class="m-auto">
+                    	<tr>
                             <th class="col-2">프로필 사진</th>
-                            <td><input type="file" class="form-control form-control-sm" id="profileImage" accept=".jpg, .jpeg, .png" required></td>
+                            <td><input type="file" class="form-control" id="profileImage" accept=".jpg, .jpeg, .png" required></td>
                         </tr>
                         <tr>
                             <th class="col-2">닉네임</th>
                             <td>
-                                <input type="text" class="form-control form-control-sm" id="nickName" value="${memberDTO.nickName}" maxlength="12" style="width:200px"/>
+                                <input type="text" id="nickName" value="${memberDTO.nickName}" maxlength="12" style="width:200px; height:25px"/>
                             </td>
                         </tr>
                         <tr>
@@ -131,7 +128,7 @@
                             <th class="col-2">생년월일</th>
                             <td>
                                 <select id="years">
-                                	<c:forEach var="year" begin="1950" end="2030">
+                                	<c:forEach var="year" begin="1960" end="2030">
                                 		<c:choose>
                                 			<c:when test="${birthYear eq year}">
                                 				<option value="${birthYear}" selected>${birthYear}</option>
@@ -195,7 +192,7 @@
                     <tbody class="table-group-divider">
                         <tr>
                             <th class="col-2 table-active" style="text-align: center;">비밀번호확인</th>
-                            <td><input type="password" class="form-control form-control-sm ms-2" id="userPassword" maxlength="16" style="width:200px; height:25px"/></td>
+                            <td><input type="password" class="ms-2" id="userPassword" maxlength="16" style="width:200px; height:25px"/></td>
                         </tr>
                     </tbody>
                 </table>

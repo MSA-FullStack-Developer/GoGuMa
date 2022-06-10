@@ -161,21 +161,7 @@
                 	 <a type="button" class="btn articleWriteBtn" href="${contextPath}/market/${market.marketId}/article/write.do">글 작성하기</a>
                 </c:if>
             </div>
-            <c:if test="${fn:length(pagination.data) == 0}">
-            	<div name="no-data" class="h-50 d-flex flex-column justify-content-around align-items-center">
-	                <div>
-	                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
-	                        class="bi bi-exclamation-circle" viewBox="0 0 16 16">
-	                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-	                        <path
-	                            d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z" />
-	                    </svg>
-	                </div>
-	                <p class="fs-3">등록한 게시글이 없습니다. 게시글을 등록해주세요.</p>
-	            </div> 
-            </c:if>
-            
-          	<c:if test="${fn:length(pagination.data) > 0}">
+          
             <div class="d-flex flex-wrap">
             	<c:forEach items="${pagination.data}" var="article" varStatus="articleStatus">
 	            	<c:if test="${articleStatus.index % 4 == 0}">
@@ -237,23 +223,24 @@
 	                </div> <!--card 영역 끝-->
                 </c:forEach>
             </div>
-            </c:if>
         </section>
-        <c:if test="${fn:length(pagination.data) > 0}">
+        
         <section name="pagination-area" class="w-100 mt-3 d-flex justify-content-center">
             <nav>
                 <ul class="pagination">
-                  <c:if test="${pagination.currentPage == 1}">
+                  <c:if test="${pagination.startPage == 1}">
                     <li class="page-item disabled">
                       <span class="page-link">이전</span>
                   	</li>
                   </c:if>
-                  <c:if test="${pagination.currentPage != 1}">
+                  
+                  <c:if test="${pagination.startPage != 1}">
                   	 <li class="page-item">
-                      <a class="page-link" href="${contextPath}/market/show.do?marketNum=${market.marketId}&pg=${pagination.currentPage-1}">이전</a>
+                      <a class="page-link" href="${contextPath}/market/show.do?marketNum=${market.marketId}&pg=${pg-1}">이전</a>
                   	</li>
                   </c:if>
-                  <c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" step="1" var="pg">
+                  
+                  <c:forEach begin="${pagination.startPage}" end="${pagination.endPage + 1}" step="1" var="pg">
                   	<c:if test="${pg == pagination.currentPage}">
                   		<li class="page-item active">
 							<span class="page-link">${pg}</span>
@@ -266,20 +253,20 @@
                   	</c:if>
                   </c:forEach>
                  	
-                  <c:if test="${pagination.currentPage == pagination.pageCount}">
+                  <c:if test="${pagination.endPage == pagination.pageCount}">
                     <li class="page-item disabled">
                       <span class="page-link">다음</span>
                   	</li>
                   </c:if>
-                  <c:if test="${pagination.currentPage != pagination.pageCount}">
+                  
+                  <c:if test="${pagination.endPage != pagination.pageCount}">
                   	 <li class="page-item">
-                      <a class="page-link" href="${contextPath}/market/show.do?marketNum=${market.marketId}&pg=${pagination.currentPage+1}">다음</a>
+                      <a class="page-link" href="${contextPath}/market/show.do?marketNum=${market.marketId}&pg=${pg+1}">다음</a>
                   	</li>
                   </c:if>
                 </ul>
               </nav>
         </section>
-        </c:if>
     </div>
 </body>
 </html>

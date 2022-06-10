@@ -34,19 +34,10 @@
 			email = #{email}
 	</select>
 	
-	<select id="findMemberById" resultMap="MemberResult">
-		SELECT 
-			*
-		FROM 
-			member
-		WHERE 
-			memberId = #{memberId}
-	</select>
-	
 	<insert id="createMember" useGeneratedKeys="true" keyProperty="id" keyColumn="memberId" parameterType="MemberDTO">
 		INSERT INTO 
-			member(email,password,name,phone,birthDate,nickName,profileImage,gender) 
-		VALUES(#{email},#{password},#{name},#{phone},#{birthDate},#{nickName},#{profileImage},#{gender})	
+			member(email,password,name,age,phone) 
+		VALUES(#{email},#{password},#{name},#{age},#{phone})	
 	</insert>
 	
 	<update id="updateMemberPwd" parameterType="MemberDTO">
@@ -58,12 +49,4 @@
 			memberid = #{id}
 	</update>
 
-
-	<select id="findResignMember" parameterType="long" resultType="ResignMemberDTO">
-		SELECT 
-			*
-		FROM
-			resignMember
-		WHERE memberId = #{memberId}
-	</select>
 </mapper>

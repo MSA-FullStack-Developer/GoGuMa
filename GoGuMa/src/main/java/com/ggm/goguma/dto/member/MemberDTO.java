@@ -27,5 +27,4 @@ public class MemberDTO {
 	private MemberGradeDTO grade;
 	private Date joinDate;
 	private Role role;
-	private boolean disabled;
 }
