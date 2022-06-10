@@ -342,5 +342,4 @@ public class MarketServiceImpl implements MarketService {
 	public List<ArticleReplyDTO> getArticleReplies(long articleId) {
 		return this.articleReplyMapper.findRepliesByArticleId(articleId);
 	}
-	
 }

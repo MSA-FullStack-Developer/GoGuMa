@@ -31,6 +31,9 @@
             table-layout: fixed;
             word-break: keep-all;
         }
+        input {
+        	margin: 10px 0px 10px 0px;
+        }
     </style>
 </head>
 <body>
@@ -94,7 +97,7 @@
                     <tbody class="table-group-divider">
                         <tr>
                             <th class="col-2 table-active" style="text-align: center;">기존 비밀번호</th>
-                            <td><input type="password" class="ms-2" id="curPassword" maxlength="16" style="width:200px; height:25px"/></td>
+                            <td><input type="password" class="form-control form-control-sm ms-2" id="curPassword" maxlength="16" style="width:200px; height:25px"/></td>
                         </tr>
                     </tbody>
                 </table>
@@ -105,11 +108,11 @@
                     <tbody class="table-group-divider">
                         <tr>
                             <th class="col-2 table-active" style="text-align: center;">새 비밀번호</th>
-                            <td><input type="password" class="ms-2" id="newPassword" maxlength="16" style="width:200px; height:25px"/></td>
+                            <td><input type="password" class="form-control form-control-sm ms-2" id="newPassword" maxlength="16" style="width:200px; height:25px"/></td>
                         </tr>
                         <tr>
                             <th class="col-2 table-active" style="text-align: center;">새 비밀번호 확인</th>
-                            <td><input type="password" class="ms-2" id="newConfirm" maxlength="16" style="width:200px; height:25px"/></td>
+                            <td><input type="password" class="form-control form-control-sm ms-2" id="newConfirm" maxlength="16" style="width:200px; height:25px"/></td>
                         </tr>
                     </tbody>
                 </table>

@@ -94,7 +94,9 @@
                     <tbody class="table-group-divider">
                     	<tr class="m-auto">
                             <th class="col-2">프로필 사진</th>
-                            <td><input type="file" class="form-control form-control-sm" id="profileImage" accept=".jpg, .jpeg, .png" required></td>
+                            <td>
+                            	<input type="file" class="form-control form-control-sm" id="profileImage" accept=".jpg, .jpeg, .png" required>
+                            </td>
                         </tr>
                         <tr>
                             <th class="col-2">닉네임</th>
