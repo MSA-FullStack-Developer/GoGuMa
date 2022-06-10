@@ -77,13 +77,6 @@
 		        </li>
 		    </ul>
 		</div>
-	
-	    <div class="search">
-	    	<form id="searchForm" action="${contextPath}/category/1/search/" autocomplete="off">
-				<input type="text" id="keyword" name="keyword" placeholder="상품명을 검색하세요" autocomplete="off" value="${keyword}"></input>
-				<button type="submit" class="searchBtn" id="searchBtn"></button>
-			</form>
-		</div>
 		
 		<div class="gotoGGM">
 			<a id="goguma" href="${contextPath}/market/main.do">
@@ -100,6 +93,13 @@
 				<i class="fa-solid fa-e"></i>&nbsp;&nbsp;
 				<i class="fa-solid fa-t"></i>
 			</a>
+		</div>
+	
+	    <div class="search">
+	    	<form id="searchForm" action="${contextPath}/category/1/search/" autocomplete="off">
+				<input type="text" id="keyword" name="keyword" placeholder="상품명을 검색하세요" autocomplete="off" value="${keyword}"></input>
+				<button type="submit" class="searchBtn" id="searchBtn"></button>
+			</form>
 		</div>
 	</div>
 </div>

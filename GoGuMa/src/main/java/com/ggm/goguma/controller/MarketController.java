@@ -51,13 +51,13 @@ public class MarketController {
 	private final MemberService memberService;
 	
 	private final AmazonS3Utils amazonService;
-
+	
 	/* *
 	 * 작성자 : 경민영
 	 * 작성일 : 2022.06.08
 	 * 고구마 마켓 메인 화면
 	 * */
-	@GetMapping("/main.do")
+	@GetMapping("main.do")
 	public String main(Model model, Principal principal) throws Exception {
 		
 		if (principal != null) {

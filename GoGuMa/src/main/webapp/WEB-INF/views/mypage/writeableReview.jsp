@@ -228,7 +228,7 @@
 			<%@ include file="mypageMenu.jsp" %>
             <div class="col" style="width: 900px;">
                 <div class="col">
-                    <h5><b>👨‍💻 ${memberDTO.name}님</b></h5>
+                    <h4><b>${memberDTO.name}님</b></h4>
                     <input type="hidden" id="memberID" name="${memberDTO.id}" value="${memberDTO.id}">
                 </div>
                 <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-2">

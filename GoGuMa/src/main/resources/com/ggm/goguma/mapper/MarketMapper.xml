@@ -133,7 +133,7 @@
 		메인 화면 - 내가 팔로우한 마켓 정보 불러오기
 	 -->
 	 <select id="getFollowedMarket" resultMap="MarketResult">
-	 	SELECT m.marketid, m.marketname, m.marketthumb
+	 	SELECT m.marketid, m.marketname, m.marketthumb, rownum AS rnum
 		FROM market m, followmarket f
 		WHERE m.marketid = f.marketid
 		AND f.memberid = #{memberId}

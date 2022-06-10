@@ -79,12 +79,15 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            작성 가능한 상품평
+                            <a href="${contextPath}/mypage/writeableReview">작성 가능한 상품평</a>
                         </div>
                         <div>
-                            5건
+                            <a href="${contextPath}/mypage/writeableReview">${writeableCount}건</a>
                         </div>
                     </div>
+                </div>
+                <div>
+                    <h5><b>주문내역</b></h5>
                 </div>
 				<c:forEach var="receiptDTO" items="${receiptHistory}">
 					<!-- 결제 forEach 시작 -->

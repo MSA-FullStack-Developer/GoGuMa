@@ -7,6 +7,9 @@
 <head>
     <meta charset="UTF-8">
     <title>고구마 - 고객과 구성하는 마켓</title>
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
     <!-- bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -19,17 +22,16 @@
 
     <!-- bootstrap icon -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
-
+	
     <!-- jquery -->
-    <script type="text/javascript"
-        src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.min.js"></script>
-        
+    <script type="text/javascript" src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.min.js"></script>
+    
     <style>
   		<%@ include file="/resources/css/market.css" %>
   		
 		.card-img-top {
-			width: 286px;
-			height: 286px;
+			width: 200px;
+			height: 200px;
 			object-fit: cover;
 			border-radius: 50%;
 		}
@@ -39,7 +41,11 @@
 			height: 286px;
 			object-fit: cover;
 		}
-    </style>
+	</style>
+	
+	<script>
+	
+	</script>
 </head>
 
 <body>
@@ -54,19 +60,18 @@
 	                	</c:if>
 	                </h3>
 	            </div>
-
-                <div class="d-flex justify-content-center flex-wrap">
+	            
+                <div class="d-flex" style="width: 100%; height: 260px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap;">
                 	<c:forEach items="${followedList}" var="market">
-	                    <div class="card mt-2 container col-sm-3">
-	                    	<a href="${contextPath}/market/show.do?marketNum=${market.marketId}" class="goguma-link" style="width: 286px;">
+	                    <div class="card mt-2 container col-sm-3" >
+	                    	<a href="${contextPath}/market/show.do?marketNum=${market.marketId}" class="goguma-link" style="width: 200px;">
 		                        <img class="card-img-top container-img" src="${market.marketThumbnail}" alt="${myMarket.marketThumbnail}">
 	                        	<p class="card-text" style="margin-top: 10px;">${market.marketName}</p>
 	                        </a>
 	                    </div>
                     </c:forEach>
-                    
-                	<c:set value="https://hd-goguma.s3.ap-northeast-2.amazonaws.com/profile/1654751887576%E1%84%83%E1%85%A5%E1%84%87%E1%85%A9%E1%84%80%E1%85%B5.png"
-                   				var="otherImg" />
+                    <c:set value="https://hd-goguma.s3.ap-northeast-2.amazonaws.com/profile/1654751887576%E1%84%83%E1%85%A5%E1%84%87%E1%85%A9%E1%84%80%E1%85%B5.png"
+	                   				var="otherImg" />
 					<div class="card mt-2 container col-sm-3">
                    		<input type="hidden" value="${followCount}">
                     	<a href="${contextPath}/market/unFollowMarket.do" class="goguma-link">
@@ -78,7 +83,7 @@
 	        </section>
         </c:if>
         
-        <section id="main-section" class="container-xxl pt-5 pb-5">
+        <section id="main-section" class="container-xxl pb-5">
             <div>
                 <h3>최근 마켓 게시글 모아보기️️</h3>
             </div>

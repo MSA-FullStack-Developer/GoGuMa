@@ -906,7 +906,7 @@
 										<tr>
 											<td class="pay-type">
 												<div class="select-pay-type">
-													<input type='radio' name='card-type' value='html5_inicis'/> KG이니시스(표준결제)
+													<input type='radio' name='card-type' value='html5_inicis' checked/> KG이니시스(표준결제)
 													<input type='radio' name='card-type' value='kakaopay'/> 카카오페이(간편결제)
 													<input type='radio' name='card-type' value='nobank'/> 무통장 입금
 												</div>
