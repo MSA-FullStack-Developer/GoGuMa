@@ -343,4 +343,24 @@ public class MarketServiceImpl implements MarketService {
 		return this.articleReplyMapper.findRepliesByArticleId(articleId);
 	}
 	
+	@Override
+	public List<MarketDTO> getFollowedMarket(long memberId) throws Exception {
+		return this.marketMapper.getFollowedMarket(memberId);
+	}
+
+	@Override
+	public List<MarketDTO> getUnfollowedMarket(long memberId) throws Exception {
+		return this.marketMapper.getUnfollowedMarket(memberId);
+	}
+
+	@Override
+	public List<MarketArticleDTO> getAllArticle() throws Exception {
+		return this.marketMapper.getAllArticle();
+	}
+
+	@Override
+	public Integer getMyMarket(long memberId) throws Exception {
+		return this.marketMapper.getMyMarket(memberId);
+	}
+	
 }

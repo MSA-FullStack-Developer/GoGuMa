@@ -53,7 +53,6 @@ public interface MarketService {
 	
 	void editMarketArticle(EditArticleDTO article) throws Exception;
 	
-	
 	ArticleReplyDTO createArticleReply(CreateReplyDTO reply, MemberDTO member) throws Exception;
 	
 	ArticleReplyDTO createChildArticleReply(CreateChildReplyDTO reply, MemberDTO member) throws Exception;
