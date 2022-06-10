@@ -19,6 +19,7 @@ public class ReceiptDTO {
 	private long usagePoint;
 	private long totalPrice;
 	private Date orderDate;
+	private String impUid;
 	private long memberId;
 	List<OrderDTO> orderList;
 }

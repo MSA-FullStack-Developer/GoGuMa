@@ -172,9 +172,9 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 
 	@Override
-	public boolean changeInfo(String birthDate, String gender, String userPassword, MemberDTO dto) throws Exception {
+	public boolean changeInfo(String nickName, String birthDate, String gender, String userPassword, MemberDTO dto) throws Exception {
 		if(!confirmPassword(userPassword, dto.getPassword())) return false;
-		mapper.changeInfo(dto.getId(), birthDate, gender);
+		mapper.changeInfo(dto.getId(), nickName, birthDate, gender);
 		return true;
 	}
 

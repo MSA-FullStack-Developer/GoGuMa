@@ -122,7 +122,9 @@
 						</div>
 					<div class="all-fin">
 						<div class="all-fin-ment">
-							<strong class="fin-txt">고구마 쇼핑몰을 이용해주셔서 감사합니다.</strong> 
+							<div class="fin-txt-div">
+								<strong class="fin-txt">고구마 쇼핑몰을 이용해주셔서 감사합니다.</strong>
+							</div>
 							<p>주문하신 내역은 마이페이지 > 나의 쇼핑내역 > 주문/배송조회에서 확인하실 수 있습니다.</p>
 							<strong>주문번호: </strong>${uid}
 						</div>

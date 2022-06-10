@@ -4,15 +4,15 @@
 
 <mapper namespace="com.ggm.goguma.mapper.MyPageMapper">
 	<select id="getReceiptList" resultType="ReceiptDTO">
-		select receiptid, orderdate, memberid
+		select receiptid, orderdate, impuid, memberid
 		from receipt where memberid = #{memberId}
 		order by orderdate desc
 	</select>
 
 	<select id="getOrderList" resultType="OrderDTO">
-		select orderid, name, price, image, count, status, receiptid
+		select orderid, pname, cname, price, image, count, status, receiptid
 		from orderview where receiptId = #{receiptId}
-		order by name
+		order by pname
 	</select>
 	
 	<select id="getReceiptDetail" resultType="ReceiptDTO">
@@ -209,7 +209,7 @@
 	</update>
 	
 	<update id="changeInfo">
-		update member set birthDate = #{birthDate}, gender = #{gender} where memberid = #{memberId}
+		update member set nickname = #{nickName}, birthDate = #{birthDate}, gender = #{gender} where memberid = #{memberId}
 	</update>
 	
 	<insert id="insertResignMember">
