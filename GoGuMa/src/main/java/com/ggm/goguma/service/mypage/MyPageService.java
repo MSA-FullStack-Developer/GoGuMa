@@ -7,6 +7,7 @@ import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
 import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
+import com.ggm.goguma.dto.member.MemberDTO;
 
 public interface MyPageService {
 	List<ReceiptDTO> getReceiptHistory(long memberId) throws Exception;
@@ -45,7 +46,11 @@ public interface MyPageService {
 
 	int getMemberPoint(long memberId) throws Exception;
 
-	boolean confirmPassword(long memberId, String userPassword) throws Exception;
+	boolean confirmPassword(String userPassword, String comparePassword) throws Exception;
 
-	boolean changePassword(long memberId, String curPassword, String newPassword) throws Exception;
+	boolean changePassword(String curPassword, String newPassword, MemberDTO dto) throws Exception;
+	
+	boolean changeInfo(String nickName, String birthDate, String gender, String userPassword, MemberDTO dto) throws Exception;
+
+	boolean resignMember(String resignDetail, String userPassword, MemberDTO dto) throws Exception;
 }

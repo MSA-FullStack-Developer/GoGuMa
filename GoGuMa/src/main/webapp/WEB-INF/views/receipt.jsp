@@ -37,26 +37,25 @@
  	  var token = $("meta[name='_csrf']").attr("content");
 	  var header = $("meta[name='_csrf_header']").attr("content");
 	  
-	  $.ajax({
-      type: "POST",
-      url: "${contextPath}/order/api/verifyIamport/imp_${uid}",
-      beforeSend : function(xhr) {
-				xhr.setRequestHeader(header,token);
-			}
-	    }).done(function(data){
-	      console.log(data);
-	      $('#bname').text(data.response.buyerName);
-	      $('#bemail').text(data.response.buyerEmail);
-	      $('#baddress').text(data.response.buyerAddr);
-	      $('#bphone').text(data.response.buyerTel);
-	      
-	      $('#pamount').text(data.response.amount);
-	      $('#pname').text(data.response.name);
-	      $('#ptype').text(data.response.pgProvider);
-	     
-		});
 	});
 
+	 //  unix time stamp to Date
+	  function UnixTimeToDate(UnixTime){
+	  var origin = new Date(UnixTime);
+	  
+	  var year = origin.getFullYear();
+	  var month = ('0' + (origin.getMonth() + 1)).slice(-2);
+	  var day = ('0' + origin.getDate()).slice(-2);
+	  
+	  var hours = ('0' + origin.getHours()).slice(-2); 
+	  var minutes = ('0' + origin.getMinutes()).slice(-2);
+	  var seconds = ('0' + origin.getSeconds()).slice(-2);
+	   
+	  var val_time = year+"-"+month+"-"+day + " " + hours + ":"+minutes + ":" + seconds;
+	  
+	  return val_time;
+	  }
+	 
 	function numFormatComma(nNumber, nDetail) {
 		if (nNumber == null)
 			return "";
@@ -101,9 +100,9 @@
 <style>
 	<%@ include file="/resources/css/header.css" %>
 </style>
-<div class="container">
-	<%@ include file="header.jsp" %>
-	
+
+<%@ include file="header.jsp" %>
+<div class="container mt-5" style="min-width: 1200px">
 	<!-- 바디 전체-->
 	<div class="cbody">
 		<div class="contents">
@@ -123,50 +122,96 @@
 						</div>
 					<div class="all-fin">
 						<div class="all-fin-ment">
-							<strong class="fin-txt">고구마 쇼핑몰을 이용해주셔서 감사합니다.</strong> 
+							<div class="fin-txt-div">
+								<strong class="fin-txt">주문이 성공적으로 <em id="finTT">완료</em>되었습니다.</strong>
+							</div>
+							<p>고구마몰을 이용해주셔서 감사합니다.</p>
 							<p>주문하신 내역은 마이페이지 > 나의 쇼핑내역 > 주문/배송조회에서 확인하실 수 있습니다.</p>
 							<strong>주문번호: </strong>${uid}
 						</div>
 					</div>
 					
-					<h4>구매자 정보</h4>
+					<strong class="fin-ord-title">구매자 정보</strong>
 					<div class="payman-info">
 						<div class="row">
-							<div class="col-md-4"><strong>구매자 이름</strong></div>
-							<div class="col-md-8" id="bname"></div>
+							<div class="col-md-4">구매자 이름</div>
+							<div class="col-md-8" id="bname">${resp.buyerName}</div>
 						</div>
 						<div class="row">
-							<div class="col-md-4"><strong>구매자 이메일</strong></div>
-							<div class="col-md-8" id="bemail"></div>
+							<div class="col-md-4">구매자 이메일</div>
+							<div class="col-md-8" id="bemail">${resp.buyerEmail}</div>
 						</div>
 						<div class="row">
-							<div class="col-md-4"><strong>구매자 주소</strong></div>
-							<div class="col-md-8" id="baddress"></div>
+							<div class="col-md-4">구매자 주소</div>
+							<div class="col-md-8" id="baddress">${resp.buyerAddr}</div>
 						</div>
 						<div class="row">
-							<div class="col-md-4"><strong>구매자 연락처</strong></div>
-							<div class="col-md-8" id="bphone"></div>
+							<div class="col-md-4">구매자 연락처</div>
+							<div class="col-md-8" id="bphone">${resp.buyerTel}</div>
 						</div>
 					</div>	
 					
-					<h4>결제 내역</h4>
+					<strong class="fin-ord-title">결제 내역</strong>
 					<div class="pay-info">
 						<div class="row">
-							<div class="col-md-4"><strong>결제 금액</strong></div>
-							<div class="col-md-8"><span id="pamount"></span>원</div>
+							<div class="col-md-4">결제 금액</div>
+							<div class="col-md-8">
+								<span id="pamount">
+									<strong><fmt:formatNumber value="${resp.amount}" type="currency" currencySymbol="" />원</strong>
+								</span>
+							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-4"><strong>결제 상품명</strong></div>
-							<div class="col-md-8" id="pname"></div>
+							<div class="col-md-4">결제 상품명</div>
+							<div class="col-md-8" id="pname">${resp.name}</div>
 						</div>
 						<div class="row">
-							<div class="col-md-4"><strong>결제 방법</strong></div>
-							<div class="col-md-8" id="ptype"></div>
+							<div class="col-md-4">결제 방법</div>
+							<!-- vbank인 경우 -->
+							<c:if test="${resp.payMethod =='vbank'}">
+								<div class="col-md-8" id="ptype">무통장 입금</div>
+							</c:if>
+							<!-- /vbank인 경우 -->
+							<!-- 카카오페이인 경우 -->
+							<c:if test="${resp.payMethod =='kakopay'}">
+								<div class="col-md-8" id="ptype">카카오페이</div>
+							</c:if>
+							<!-- /카카오페이인 경우 -->
+						</div>
+						<!-- 무통장 입금인 경우 -->
+						<c:if test="${resp.payMethod =='vbank'}">
+							<div class="row">
+								<div class="col-md-4">수취인</div>
+								<div class="col-md-8" id="vbankholder">${resp.vbankHolder}</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4">은행이름</div>
+								<div class="col-md-8" id="vbankname">${resp.vbankName}</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4">은행계좌</div>
+								<div class="col-md-8" id="vbanknum">${resp.vbankNum} <em id="duedate">(<fmt:formatDate value="${resp.vbankDate}" pattern="yyyy-MM-dd hh:mm"/>분 까지)</em></div>
+							</div>
+						</c:if>
+						<!-- /무통장 입금인 경우 -->
+						<div class="row">
+							<div class="col-md-4">결제상태</div>
+							<!-- 결제 상태 입금 대기 중 -->
+							<c:if test="${resp.status =='ready'}">
+								<div class="col-md-8" id="vbankstatus">결제 진행중</div>
+							</c:if>
+							<!-- /결제 상태 입금 대기 중 -->
+							<!-- 결제 상태 완료 -->
+							<c:if test="${resp.status =='paid'}">
+								<div class="col-md-8" id="vbankstatus">결제 완료</div>
+							</c:if>
+							<!-- /결제 상태 완료 -->
 						</div>
 					</div>		
 					<div class="order-buttons">
-						<button type="button" class="btn text-black continue" onClick="location.href='${contextPath}'">쇼핑 계속하기</button>
-						<button type="submit" id="orderBtn" class="btn text-white btn-default purchase">나의 쇼핑 내역</button>
+						<button type="button" id="orderBtn" class="btn text-white btn-default purchase" onclick="location.href='${contextPath}/mypage/orderHistory'">나의 쇼핑 내역</button>
+						<button type="button" id="receipt_url" class="btn text-black print-receipt" onclick="window.open('${resp.receiptUrl}', 'window_name', 'width=430, height=500, location=no, status=no, scrollbars=yes');">주문내역 인쇄</button>
+						<button type="button" class="btn text-white btn-default continue" onclick="location.href='${contextPath}'">쇼핑 계속하기</button>
 					</div>
 			</div>
 		</div>

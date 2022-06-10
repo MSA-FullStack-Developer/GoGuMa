@@ -16,5 +16,8 @@ public interface OrderService {
 	void paytransaction(TransactionDTO transactionDTO, long memberId) throws Exception;
 
 	List<CartItemDTO> getOrder(List<CartOrderListDTO> dtoList) throws Exception;
+
+	void checkOrderDetail(String impUid) throws Exception;
+
 	
 }

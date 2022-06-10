@@ -3,19 +3,21 @@
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ggm.goguma.mapper.CategoryMapper">
 
-	<!-- 카테고리 목록 -->
+	<!-- 부모 카테고리 목록 조회 -->
 	<select id="getCategoryParentList" resultType="com.ggm.goguma.dto.CategoryDTO">
 		SELECT categoryID, parentID, categoryname, categoryType, md
 		FROM category
 		WHERE parentid IS NULL
 	</select>
 	
+	<!-- 부모 카테고리 번호로 해당 카테고리 전체 정보 조회 -->
 	<select id="getCategoryList" parameterType="long" resultType="com.ggm.goguma.dto.CategoryDTO">
 		SELECT * 
 		FROM category 
 		WHERE parentid = ${categoryID}
 	</select>
 	
+	<!-- 카테고리 이름 조회 -->
 	<select id="getCategoryName" parameterType="long" resultType="String">
 		SELECT categoryname
 		FROM category
@@ -49,6 +51,16 @@
 			category
 		WHERE
 			categoryId = #{id}
+	</select>
+	
+	<!-- 상품 번호로 부모 카테고리 번호 조회 -->
+	<select id="getCategoryId" resultType="long">
+		SELECT pc.categoryid
+		FROM (SELECT c.parentid
+		        FROM category c, product p
+				WHERE c.categoryid = p.categoryid
+				AND p.productid = #{productID}) cc, category pc
+		WHERE cc.parentid = pc.categoryid
 	</select>
 	
 </mapper>

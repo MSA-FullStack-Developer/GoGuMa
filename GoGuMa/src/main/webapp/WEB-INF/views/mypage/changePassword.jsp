@@ -40,16 +40,16 @@
 			<%@ include file="mypageMenu.jsp" %>
             <div class="col">
                 <div>
-                    <h4><b>송진호님</b></h4>
+                    <h4><b>${memberDTO.name}님</b></h4>
                 </div>
                 <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-3">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
-                        <div>
-                            회원등급
-                        </div>
-                        <div>
-                            💎
-                        </div>
+                    <div>
+                        회원등급
+                    </div>
+                    <div>
+                        💎
+                    </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
@@ -77,10 +77,10 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            작성 가능한 상품평
+                            <a href="${contextPath}/mypage/writeableReview">작성 가능한 상품평</a>
                         </div>
                         <div>
-                            5건
+                            <a href="${contextPath}/mypage/writeableReview">${writeableCount}건</a>
                         </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                     <tbody class="table-group-divider">
                         <tr>
                             <th class="col-2 table-active" style="text-align: center;">기존 비밀번호</th>
-                            <td><input type="password" class="ms-3" id="curPassword" maxlength="16" style="width:200px; height:25px"/></td>
+                            <td><input type="password" class="ms-2" id="curPassword" maxlength="16" style="width:200px; height:25px"/></td>
                         </tr>
                     </tbody>
                 </table>
@@ -105,11 +105,11 @@
                     <tbody class="table-group-divider">
                         <tr>
                             <th class="col-2 table-active" style="text-align: center;">새 비밀번호</th>
-                            <td><input type="password" class="ms-3" id="newPassword" maxlength="16" style="width:200px; height:25px"/></td>
+                            <td><input type="password" class="ms-2" id="newPassword" maxlength="16" style="width:200px; height:25px"/></td>
                         </tr>
                         <tr>
                             <th class="col-2 table-active" style="text-align: center;">새 비밀번호 확인</th>
-                            <td><input type="password" class="ms-3" id="newConfirm" maxlength="16" style="width:200px; height:25px"/></td>
+                            <td><input type="password" class="ms-2" id="newConfirm" maxlength="16" style="width:200px; height:25px"/></td>
                         </tr>
                     </tbody>
                 </table>
@@ -142,8 +142,8 @@
 		        },
 		        success:function(result) {
 		        	if(result==1) window.location.href = "${contextPath}/mypage";
-		        	else if(result==2) alert('비밀번호 오류');
-		        	else alert("서버 오류");
+		        	else if(result==2) alert('비밀번호가 일치하지 않습니다.');
+		        	else alert("서버에 오류가 발생했습니다.");
 		        },
 				error:function(xhr, status, error) {
 					var errorResponse = JSON.parse(xhr.responseText);

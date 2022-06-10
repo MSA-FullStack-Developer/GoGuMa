@@ -14,33 +14,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDTO {
-
-	private Long id;
-	
+	private long id;
 	private String email;
-	
 	private String password;
-	
-	private String name;
-	
-	private String gender;
-	
-	private int age;
-	
-	private String phone;
-	
-	private MemberGradeDTO grade;
-	
-	private Role role;
-
-	private Date joinDate;
-	
-	private String birthDate;
-	
 	private String profileImage;
-	
 	private String nickName;
-	
+	private String name;
+	private String gender;
+	private int age;
+	private String birthDate;
+	private String phone;
+	private MemberGradeDTO grade;
+	private Date joinDate;
+	private Role role;
 	private boolean disabled;
-	
 }

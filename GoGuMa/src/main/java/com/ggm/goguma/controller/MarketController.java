@@ -11,8 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -57,20 +59,65 @@ public class MarketController {
 	private final MemberService memberService;
 
 	private final AmazonS3Utils amazonService;
+	
+	/* *
+	 * 작성자 : 경민영
+	 * 작성일 : 2022.06.08
+	 * 고구마 마켓 메인 화면
+	 * */
+	@GetMapping("main.do")
+	public String main(Model model, Principal principal) throws Exception {
+		
+		if (principal != null) {
+			MemberDTO member = this.memberService.getMember(principal.getName());
+			String memberName = member.getName();
+			
+			// 팔로우한 마켓 불러오기
+			List<MarketDTO> followedList = this.marketService.getFollowedMarket(member.getId());
+			
+			// 만들었던 마켓이 있는지 확인
+			Integer isCreatedMarket = this.marketService.getMyMarket(member.getId());
 
-	@GetMapping("/main.do")
-	public String main() {
+			model.addAttribute("member", member);
+			model.addAttribute("memberName", memberName);
+			model.addAttribute("followedList", followedList);
+			model.addAttribute("isCreatedMarket", isCreatedMarket);
+		}
+		
+		// 최신순으로 전체 게시글 불러오기
+		List<MarketArticleDTO> recentArticleList = this.marketService.getAllArticle();
+		
+		model.addAttribute("recentArticleList", recentArticleList);
+		
 		return "market/main";
+	}
+	
+	/* *
+	 * 작성자 : 경민영
+	 * 작성일 : 2022.06.08
+	 * 팔로우하지 않은 마켓 보여주기
+	 * */
+	@GetMapping("/unFollowMarket.do")
+	public String everyMarket(Model model, Principal principal) throws Exception {
+		
+		MemberDTO member = this.memberService.getMember(principal.getName());
+		List<MarketDTO> unfollowedList = this.marketService.getUnfollowedMarket(member.getId());
+		String memberName = member.getName();
+		
+		model.addAttribute("unfollowedList", unfollowedList);
+		model.addAttribute("memberName", memberName);
+		
+		return "market/unFollowMarket";
 	}
 
 	@GetMapping("/write.do")
 	public String createMarketForm(@RequestParam(required = false) String error, Model model) throws Exception {
-
+		
 		List<CategoryDTO> categoryList = this.categoryService.getCategoryParentList();
-
 		log.info(categoryList);
 		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("error", error);
+		
 		return "market/createMarket";
 	}
 
@@ -102,6 +149,7 @@ public class MarketController {
 		model.addAttribute("isMine", isMine);
 		model.addAttribute("market", market);
 		model.addAttribute("pagination", paginationDTO);
+		
 		return "market/showMarket";
 	}
 

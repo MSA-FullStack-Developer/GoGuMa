@@ -9,6 +9,7 @@ import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
 import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
+import com.ggm.goguma.dto.member.MemberDTO;
 
 public interface MyPageMapper {
 //	@Select("SELECT nickname, recipient, address, contact FROM deliveryaddress")
@@ -69,4 +70,10 @@ public interface MyPageMapper {
 	String confirmPassword(long memberId) throws Exception;
 
 	void changePassword(@Param("memberId") long memberId, @Param("newPassword") String newPassword) throws Exception;
+
+	void changeInfo(@Param("memberId") long memberId, @Param("nickName") String nickName, @Param("birthDate") String birthDate, @Param("gender") String gender) throws Exception;
+
+	void insertResignMember(@Param("dto") MemberDTO dto, @Param("resignDetail") String resignDetail) throws Exception;
+
+	void disableMember(long memberId) throws Exception;
 }

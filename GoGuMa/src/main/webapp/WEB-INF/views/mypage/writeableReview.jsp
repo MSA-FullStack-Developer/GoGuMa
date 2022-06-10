@@ -83,7 +83,7 @@
             		};
             		
             		$.ajax({
-    		            url: "${contextPath}/category/1/insertReview",
+    		            url: "${contextPath}/category/1/api/insertReview",
     		            type: "POST",
     		            contentType: 'application/json; charset=utf-8',
     		            data: JSON.stringify(data),
@@ -228,7 +228,7 @@
 			<%@ include file="mypageMenu.jsp" %>
             <div class="col" style="width: 900px;">
                 <div class="col">
-                    <h5><b>👨‍💻 ${memberDTO.name}님</b></h5>
+                    <h4><b>${memberDTO.name}님</b></h4>
                     <input type="hidden" id="memberID" name="${memberDTO.id}" value="${memberDTO.id}">
                 </div>
                 <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-2">
@@ -277,6 +277,14 @@
                     <h5><b>작성 가능한 상품평</b></h5>
                 </div>
                 <div class="d-flex flex-wrap">
+                	<c:if test='${writeableList.size() < 1}'>
+   						<div style="text-align: center;">
+	   						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
+	   						<h5 class="no_result">작성 가능한 상품평이 없습니다.</h5>
+	   						<span style="font-size: 11pt; color: #ccc;">[마이페이지 > 주문내역]에서 구매확정시 작성하실 수 있습니다.</span>
+   						</div>
+					</c:if>
+                
                     <c:forEach items="${writeableList}" var="product">
                     <div class="myReview-writeable">
 	                    <div style="width: 100%; margin-bottom: 10px;">
@@ -304,7 +312,7 @@
 	                        	<input type="hidden" id="thumbnailImg" value="">
 	                       	</h4>
 	                       	<textarea cols="34" rows="5" type="text" class="write-review-content" placeholder="상품평을 작성해주세요. (최대 2,000자)"></textarea>
-	                       	<input type="file" id="file" name='uploadFile' style="margin-left: 30px; "multiple>
+	                       	<input type="file" class="form-control form-control-sm" id="file" name='uploadFile' style="margin-left: 30px; width: 20%;" multiple>
 	                       	<div class='uploadResult'>
 								<ul>
 								</ul>

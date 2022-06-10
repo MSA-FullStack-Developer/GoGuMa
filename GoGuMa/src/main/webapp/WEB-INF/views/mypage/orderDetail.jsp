@@ -41,7 +41,7 @@
             <%@ include file="mypageMenu.jsp" %>
             <div class="col">
                 <div>
-                    <h4><b>송진호님</b></h4>
+                    <h4><b>${memberDTO.name}님</b></h4>
                 </div>
                 <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-3">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -78,16 +78,17 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            작성 가능한 상품평
+                            <a href="${contextPath}/mypage/writeableReview">작성 가능한 상품평</a>
                         </div>
                         <div>
-                            5건
+                            <a href="${contextPath}/mypage/writeableReview">${writeableCount}건</a>
                         </div>
                     </div>
                 </div>
                 <div>
                     <h5><b>주문상세</b></h5>
                 </div>
+                <input type="hidden" id="impUid${receiptDTO.receiptId}" value="${receiptDTO.impUid}" />
                 <div class="col border border-2 rounded p-4 mb-3">
                     <div class="d-flex flex-row">
                         <div class="col">
@@ -98,19 +99,25 @@
                         <table>
                             <tbody>
                             	<c:forEach var="orderDTO" items="${receiptDTO.orderList}">
-	                                <!--여기부터 forEach-->
+	                                <!-- 주문 forEach 시작 -->
+	                                <input type="hidden" id="price${orderDTO.orderId}" value="${orderDTO.price}"/>
+	                                <input type="hidden" id="count${orderDTO.orderId}" value="${orderDTO.count}"/>
 	                                <tr class="border-bottom">
 	                                    <td class="col-1 p-3">
 	                                        <img src="${orderDTO.image}" style="width:100px; height:100px">
 	                                    </td>
 	                                    <td class="col-5 border-end">
-	                                        ${orderDTO.name}
+	                                        <div class="text-truncate">
+	                                    		<b>${orderDTO.pname}</b>
+	                                    	</div>
+	                                    	<div>
+	                                    		옵션 : ${orderDTO.cname}
+	                                    	</div>
 	                                    </td>
 	                                    <td class="border-end">
-	                                        <div class="col" align="center">
+	                                        <div class="col m-auto" style="width: 100px" align="center">
 	                                            <div>
-	                                            	<c:set var="orderPrice" value="${orderDTO.price * orderDTO.count}" />
-	                                            	<fmt:formatNumber value="${orderPrice}" />원
+	                                                <fmt:formatNumber value="${orderDTO.price}" />원
 	                                            </div>
 	                                            <div>
 	                                                (${orderDTO.count}개)
@@ -128,7 +135,7 @@
 			                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="configBtn(${orderDTO.orderId})">구매확정</button>
 			                                            </div>
 			                                            <div class="mt-2">
-			                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="cancelBtn(${orderDTO.orderId})">주문취소</button>
+			                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="cancelBtn(${receiptDTO.receiptId}, ${orderDTO.orderId})">주문취소</button>
 			                                            </div>
 	                                        		</c:when>
 	                                        		<c:when test="${orderDTO.status eq 'F'}">
@@ -137,6 +144,11 @@
 			                                            </div>
 			                                            <div class="mb-2">
 			                                                <button type="button" class="btn btn-sm btn-outline-dark">상품평 쓰기</button>
+			                                            </div>
+	                                        		</c:when>
+	                                        		<c:when test="${orderDTO.status eq 'V'}">
+	                                        			<div>
+			                                                <h5><b>입금 예정</b></h5>
 			                                            </div>
 	                                        		</c:when>
 	                                        		<c:otherwise>
@@ -148,6 +160,7 @@
 	                                        </div>
 	                                    </td>
                                     </tr>
+                                    <!-- 주문 forEach 종료 -->
 	                            </c:forEach>
                             </tbody>
                         </table>
@@ -187,19 +200,19 @@
                     <tbody class="table-group-divider">
                         <tr>
                             <th>멤버십 등급 할인</th>
-                            <td>-<fmt:formatNumber value="${receiptDTO.membershipDiscount}" />원</td>                           
+                            <td>- <fmt:formatNumber value="${receiptDTO.membershipDiscount}" />원</td>                           
                         </tr>
                          <tr>
                             <th>쿠폰 할인</th>
-                            <td>-<fmt:formatNumber value="${receiptDTO.couponDiscount}" />원</td>
+                            <td>- <fmt:formatNumber value="${receiptDTO.couponDiscount}" />원</td>
                         </tr>
                         <tr>
                             <th>포인트 할인</th>
-                            <td>-<fmt:formatNumber value="${receiptDTO.usagePoint}" />원</td>
+                            <td>- <fmt:formatNumber value="${receiptDTO.usagePoint}" />원</td>
                         </tr>
                         <tr>
                             <th>할인 합계</th>
-                            <td><b>-<fmt:formatNumber value="${totalDiscount}" />원</b></td>
+                            <td><b>- <fmt:formatNumber value="${totalDiscount}" />원</b></td>
                         </tr>
                     </tbody>
                 </table>
@@ -214,11 +227,11 @@
                         </tr>
                         <tr>
                             <th>할인 합계</th>
-                            <td>-<fmt:formatNumber value="${totalDiscount}" />원</td>
+                            <td>- <fmt:formatNumber value="${totalDiscount}" />원</td>
                         </tr>
                         <tr>
                             <th>예상 적립 포인트</th>
-                            <td>+<fmt:formatNumber value="${earnablePoint}" />P</td>
+                            <td>+ <fmt:formatNumber value="${earnablePoint}" />P</td>
                         </tr>
                         <tr>
                             <th>최종 결제금액</th>
@@ -265,10 +278,47 @@
     				var message = errorResponse.message;
     				alert(message);
     			}
-			})
+			});
 		}
 	}
-	function cancelBtn(orderId) {
+	
+	/**
+	 * @작성자: Moon Seokho
+	 * @Date: 2022. 6. 7.
+	 * @프로그램설명: 환불요청을 받을 URL
+	 * @변경이력: 
+	 */
+	function cancelPay(receiptId, orderId) {
+	  	let token = $("meta[name='_csrf']").attr("content");
+    	let header = $("meta[name='_csrf_header']").attr("content");
+    	console.log();
+		$.ajax({
+			url : "${contextPath}/mypage/api/payment/cancel",
+			type : "POST",
+			data : {
+			    uid : $("#impUid"+receiptId).val(),
+			  	cancelAmount : $("#price"+orderId).val() * $("#count"+orderId).val(),
+			  	reason : "",
+			  	refundBank : "",
+			  	refundHolder : "",
+			  	refundAccount : ""
+			},
+			beforeSend : function(xhr) {
+        		xhr.setRequestHeader(header, token);
+        	},
+        	success:function(result) {
+        		return;
+        	},
+        	error:function(xhr, status, error) {
+				var errorResponse = JSON.parse(xhr.responseText);
+				var errorCode = errorResponse.code;
+				var message = errorResponse.message;
+				alert(message);
+			}
+        });
+	}
+	
+	function cancelBtn(receiptId, orderId) {
 		if(confirm("주문을 취소하시겠습니까?")) {
 			let token = $("meta[name='_csrf']").attr("content");
 		    let header = $("meta[name='_csrf_header']").attr("content");
@@ -284,6 +334,8 @@
 	            },
 				success:function(result) {
 					if(result==1) {
+						cancelPay(receiptId, orderId);
+				  		alert("상품 주문이 취소되었습니다. 전액 환불 처리됩니다.");
 						window.location.href = "${contextPath}/mypage/orderHistory/${receiptDTO.receiptId}";
 					} else {
 						alert('주문취소 오류');

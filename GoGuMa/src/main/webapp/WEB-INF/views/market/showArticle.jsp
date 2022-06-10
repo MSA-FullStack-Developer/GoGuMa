@@ -5,9 +5,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-
-
-<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -66,6 +63,7 @@
 </head>
 
 <body>
+	<%@ include file="../market/marketHeader.jsp" %>
 	<script type="text/javascript">
 	
 		$(document).ready(function(){
@@ -491,8 +489,8 @@
 			</div>
 			<div class="d-flex justify-content-between">
 				<p>
-					<strong>${article.market.marketName}</strong> 
-					<span class="badge text-bg-info ms-1">${article.market.category.categoryName}</span>
+					<strong>${article.market.marketName}</strong>
+					<span class="badge text-light" style="background-color: #FF493C;">${article.market.category.categoryName}</span>
 				</p>
 				<span class="ms-1 text-secondary"><fmt:formatDate
 						value="${article.regDate}" pattern="yyyy-MM-dd HH:mm" /></span>
@@ -625,7 +623,7 @@
 							<!-- 답글 영역 시작 -->
 							<div class="reply-btn-area">
 								<div class="reply-toggle-btn" data-toggle="false">
-									<span><i class="bi bi-plus-square fa-2x text-success"></i></span>
+									<span><i class="bi bi-plus-square text-success"></i></span>
 									<span class="reply-btn text-success">답글 보기</span>
 								</div>
 							</div>
@@ -699,5 +697,4 @@
 		</div>
 	</section>
 </body>
-
 </html>

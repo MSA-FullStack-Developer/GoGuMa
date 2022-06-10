@@ -70,15 +70,13 @@ public class MarketServiceImpl implements MarketService {
 				.marketThumbnail(savedThumbnail[1]).marketBanner(savedBanner[1]).build();
 
 		this.marketMapper.insertMarket(market);
-
+		
 		return market;
 	}
 
 	@Override
 	public MarketDTO getMarket(long marketId) throws Exception {
-
 		return this.marketMapper.findMarketById(marketId).orElseThrow(NotFoundMarketException::new);
-
 	}
 
 	@Override
@@ -340,6 +338,7 @@ public class MarketServiceImpl implements MarketService {
 		return this.articleReplyMapper.findRepliesByArticleId(articleId);
 	}
 
+
 	@Transactional
 	@Override
 	public void updateArticleReply(UpdateReplyDTO reply, MemberDTO member) {
@@ -370,7 +369,27 @@ public class MarketServiceImpl implements MarketService {
 		
 		//3. reply 삭제
 		this.articleReplyMapper.deleteArticleReply(replyId);
+	}
+	
+	@Override
+	public List<MarketDTO> getFollowedMarket(long memberId) throws Exception {
+		return this.marketMapper.getFollowedMarket(memberId);
 
 	}
 
+	@Override
+	public List<MarketDTO> getUnfollowedMarket(long memberId) throws Exception {
+		return this.marketMapper.getUnfollowedMarket(memberId);
+	}
+
+	@Override
+	public List<MarketArticleDTO> getAllArticle() throws Exception {
+		return this.marketMapper.getAllArticle();
+	}
+
+	@Override
+	public Integer getMyMarket(long memberId) throws Exception {
+		return this.marketMapper.getMyMarket(memberId);
+	}
+	
 }
