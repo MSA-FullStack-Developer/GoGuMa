@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -33,16 +34,14 @@ public class UserLoginFailHandler extends SimpleUrlAuthenticationFailureHandler 
 		
 		if(exception instanceof BadCredentialsException) {
 			errorMessage = "아이디 또는 비밀번호가 일치하지 않습니다.";
-		} else {
+		}  else if(exception instanceof DisabledException) {
+			errorMessage = "이미 탈퇴한 회원입니다.";
+		}else {
 			errorMessage = "죄송합니다. 인증 서버 시스템 오류입니다.";
 		}
 	
 		log.info("[onAuthenticationFailure] errorMessage : " + errorMessage);
 		request.setAttribute("error", errorMessage);
-//		
-//		RequestDispatcher dispatcher = request.getRequestDispatcher("/member/login.do");
-//		
-//		dispatcher.forward(request, response);
 		
 	
 		String encodeResult = URLEncoder.encode(errorMessage, "UTF-8");

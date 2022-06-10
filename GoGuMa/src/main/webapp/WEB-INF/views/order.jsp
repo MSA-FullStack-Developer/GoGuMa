@@ -624,7 +624,7 @@
 																<img src="${i.prodImgUrl }" width="78" height="78" class="product-img" alt="">
 															</a>
 														</div>
-														<div class="product-name">
+														<div class="order-product-name">
 															<input type="hidden" name="cartId" value="${i.cartId }"/>
 															<input type="hidden" name="productId" value="${i.productId }"/>
 															<input type="hidden" name="cartAmount" value="${i.cartAmount }"/>
@@ -712,7 +712,7 @@
 											<div class="col-md-2 dis-coupon">
 												<span class="dis-coupon-prc">적용 없음</span>
 											</div>
-											<div class="col-md-4">
+											<div class="col-md-4" style="background-color: white; padding: 0px 0px;">
 												<button class="btn text-white btn-default" id="getCoupon-btn" data-bs-toggle="modal" data-bs-target="#couponModal">조회/변경</button>
 											</div>
 										</div>
@@ -724,11 +724,12 @@
 												</div>
 											</div>
 										
-											<div class="col-md-4">
+											<div class="col-md-4" style="background-color: white; padding: 0px 0px;">
 												<button class="btn text-white btn-default" id="point-cancel">사용취소</button>
 											</div>
-											<div class="col-md-4 bp">[보유 G.Point: <fmt:formatNumber value="${point}"
-																type="currency" currencySymbol="" />p]</div>
+											<div class="col-md-4 bp" style="background-color: white; padding: 0px 0px;">
+												[보유 G.Point: <fmt:formatNumber value="${point}" type="currency" currencySymbol="" />p]
+											</div>
 										</div>
 									</div>
 								</div>
@@ -962,7 +963,7 @@
 								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="true" aria-controls="panelsStayOpen-collapseFour"><strong>결제 정보 선택</strong></button>
 							</h3>
 							<div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingFour">
-								<div class="accordion-body">
+								<div class="accordion-body" style="padding-top: 0px;">
 									<table>
 										<tr>
 											<td class="pay-type">

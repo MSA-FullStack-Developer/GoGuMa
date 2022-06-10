@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,9 +22,13 @@ import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.DefaultResponseDTO;
 import com.ggm.goguma.dto.ImageAttachDTO;
 import com.ggm.goguma.dto.PaginationDTO;
+import com.ggm.goguma.dto.articleReply.ArticleReplyDTO;
+import com.ggm.goguma.dto.articleReply.CreateChildReplyDTO;
+import com.ggm.goguma.dto.articleReply.CreateReplyDTO;
 import com.ggm.goguma.dto.market.ArticleProudctDTO;
 import com.ggm.goguma.dto.market.CreateArticleDTO;
 import com.ggm.goguma.dto.market.CreateMarketDTO;
+import com.ggm.goguma.dto.market.EditArticleDTO;
 import com.ggm.goguma.dto.market.FollowMarketDTO;
 import com.ggm.goguma.dto.market.MarketArticleDTO;
 import com.ggm.goguma.dto.market.MarketDTO;
@@ -145,12 +148,26 @@ public class MarketController {
 	}
 
 	@GetMapping("/article/{articleId}/show.do")
-	public String showArticle(@PathVariable long articleId, Model model) {
+	public String showArticle(@PathVariable long articleId, Principal principal, Model model) {
 
 		MarketArticleDTO article = this.marketService.getMarketArticle(articleId);
 		
 		log.info(article);
+		
+		boolean isMyArticle = false;
+		MemberDTO member = null;
+		if(principal != null) {
+			member = this.memberService.getMember(principal.getName());
+			isMyArticle = this.marketService.isMyArticle(article.getMarket().getMarketId(), member.getId(), articleId);
+			
+		}
+		List<ArticleReplyDTO> replies = this.marketService.getArticleReplies(articleId);
+		
+		log.info(replies);
 		model.addAttribute("article", article);
+		model.addAttribute("isMyArticle", isMyArticle);
+		model.addAttribute("replies",replies);
+		model.addAttribute("me",member);
 		
 		return "market/showArticle";
 	}
@@ -167,6 +184,21 @@ public class MarketController {
 		if(error != null) model.addAttribute("error", error);
 		model.addAttribute("marketId", marketId);
 		return "market/createArticle";
+	}
+	
+	@GetMapping("/{marketId}/article/{articleId}/edit.do")
+	public String editArticleForm(@PathVariable long marketId, @PathVariable long articleId, Model model, Principal principal) {
+		
+		MemberDTO member = this.memberService.getMember(principal.getName());
+		
+		MarketArticleDTO article = this.marketService.getMarketArticle(articleId);
+		
+		if(!this.marketService.isMyArticle(marketId, member.getId(), articleId)) {
+			return "error/error403";
+		}
+		
+		model.addAttribute("article", article);
+		return "market/editArticle";
 	}
 
 	@GetMapping("/article/searchProudct.do")
@@ -228,6 +260,21 @@ public class MarketController {
 		
 		return "redirect:/market/show.do?marketNum="+article.getMarketId();
 	}
+	
+	@PostMapping(value= "/article/editArticle.do", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public String editArticle(EditArticleDTO article, Principal principal) throws Exception {
+		
+		MemberDTO member = this.memberService.getMember(principal.getName());
+	
+		
+		if(!this.marketService.isMyArticle(article.getMarketId(), member.getId(), article.getArticleId())) {
+			return "error/error403";
+		}
+		
+		this.marketService.editMarketArticle(article);
+		
+		return "redirect:/market/article/" + article.getArticleId() + "/show.do";
+	}
 
 	@PostMapping(value = "/api/updateFollow.do", produces = "application/json; charset=utf-8")
 	@ResponseBody
@@ -259,6 +306,43 @@ public class MarketController {
 		attachDTO.setImagePath(uploadResult[1]);
 		
 		return new ResponseEntity<>(attachDTO, HttpStatus.CREATED);
+	}
+	
+	@PostMapping(value= "/api/createReply.do", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity createArticleReply(CreateReplyDTO reply, Principal principal) {
+			
+		log.info("[createArticleReply] reply " + reply);
+		MemberDTO member = this.memberService.getMember(principal.getName());
+		
+		try {
+			ArticleReplyDTO savedReply = this.marketService.createArticleReply(reply, member);
+			
+			return new ResponseEntity<>(savedReply, HttpStatus.CREATED);
+		} catch(Exception e) {
+			e.printStackTrace();
+			log.error("[createArticleReply] exception : " + e.getMessage());
+			DefaultResponseDTO response =  DefaultResponseDTO.builder().status(500).message("생성 실패").build();
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@PostMapping(value= "/api/createChildReply.do", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity createArticleChildReply(CreateChildReplyDTO reply, Principal principal) {
+			
+		log.info("[createArticleChildReply] reply " + reply);
+		MemberDTO member = this.memberService.getMember(principal.getName());
+		
+		try {
+			
+			ArticleReplyDTO savedReply = this.marketService.createChildArticleReply(reply, member);
+		
+			return new ResponseEntity<>(savedReply, HttpStatus.CREATED);
+		} catch(Exception e) {
+			e.printStackTrace();
+			log.error("[createArticleReply] exception : " + e.getMessage());
+			DefaultResponseDTO response =  DefaultResponseDTO.builder().status(500).message("생성 실패").build();
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }
