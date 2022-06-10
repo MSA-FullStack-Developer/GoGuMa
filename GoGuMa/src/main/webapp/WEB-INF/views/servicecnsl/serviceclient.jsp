@@ -31,8 +31,24 @@
 <script type="text/javascript"
 	src="${contextPath}/webjars/jquery-ui/1.13.0/jquery-ui.js"></script>
 
-<%@ include file="header.jsp" %>
-<main class="cmain customer" role="main" id="mainContents"><!-- 마이페이지 'mypage' 클래스 추가 -->
+<%@ include file="../header.jsp" %>
+<script>
+  
+   function openCnslPup(){
+     
+     if(`${memberDTO}`){
+       //로그인 한 경우
+       window.open("oneCnslPup", "popup01", "width=500, height=550");
+     }else{
+       location.href="${contextPath}/member/login.do";
+     }
+   }
+   
+   $(document).ready(function () {
+     
+   });
+</script>
+<main class="cmain customer" role="main" id="mainContents">
         <div class="container">
         	<!-- .side-menu-list -->
         	<div class="side-content">
@@ -41,7 +57,7 @@
                 <div class="side-menu-list">
                     <ul>
                         <li><a class="#" href="">자주 묻는 질문</a></li>
-                        <li><a href="#" onclick="openCnslAcptPup(); return false;">1:1 문의하기</a></li>
+                        <li><a href="#" onclick="openCnslPup(); return false;">1:1 문의하기</a></li>
                         <li><a href="#" onclick="openCustBoardPup();" >내 상담내역 조회</a></li>
                         <li><a href="/p/ccb/noticeList.do">공지사항</a></li>
                         
@@ -287,7 +303,7 @@
         </div>
         <!-- //.container -->
     </main>
-<%@ include file="./footer.jsp" %>
+<%@ include file="../footer.jsp" %>
 <!-- CLOUDTURING -->
 <script>
     window.dyc = {
