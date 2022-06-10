@@ -88,6 +88,7 @@ public class ProductController {
 				}
 			}
 		}
+		
 		return list;
 	}
 	
@@ -218,13 +219,32 @@ public class ProductController {
 	}
 	
 	@GetMapping("/search/")
-	public String search(@RequestParam(defaultValue="") String keyword, @RequestParam(defaultValue="recent") String sortType, Model model) throws Exception {
+	public String search(@RequestParam(defaultValue="") String keyword, 
+							@RequestParam(defaultValue="recent") String sortType, 
+							HttpServletRequest request, Model model) throws Exception {
 		try {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			
 			List<ProductDTO> list = productService.getSearchList(keyword, sortType);
 			long searchCount = productService.getSearchCount(keyword);
-
+			
+			if (searchCount == 0) { // 검색결과가 없는 경우
+				// 최근 본 상품과 관련된 카테고리 상품 최신순으로 추천해주기
+				List<ProductDTO> recommendList = new ArrayList<>();
+				Cookie[] cookies = request.getCookies();
+				if (cookies != null) {
+					for (Cookie cookie : cookies) {
+						if(cookie.getName().equals("latelySeenProducts")) {
+							String[] productIdArr = (URLDecoder.decode(cookie.getValue(), "utf-8")).split(",");
+							long parentCID = categoryService.getCategoryId(Long.parseLong(productIdArr[productIdArr.length-1])); // 최근 본 상품의 부모 카테고리 번호
+							recommendList = productService.getSameParentCategoryProductList(parentCID); // 추천 상품 목록
+						}
+					}
+				}
+				
+				model.addAttribute("recommendList", recommendList);
+			}
+			
 			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("keyword", keyword);
 			model.addAttribute("list", list);

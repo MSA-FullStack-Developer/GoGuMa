@@ -553,7 +553,7 @@
 												<td class="cart-purchase-delete">
 													<div class="cart-pur-del">
 														<button type="button" class="btn text-black btn-delete"
-															onclick="oneCartDel(this)"><i class="fa-solid fa-trash-can"></i></button>
+															onclick="oneCartDel(this)"><i class="fa-solid fa-trash-can" style="margin: 0 auto;"></i></button>
 													</div>
 
 												</td>

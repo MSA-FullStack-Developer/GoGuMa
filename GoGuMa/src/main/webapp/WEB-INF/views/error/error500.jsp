@@ -24,7 +24,8 @@
             <h3>죄송합니다. 서버에 오류가 발생하였습니다.</h3>
             <div class="d-flex justify-content-center">
                 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-                <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_ohGbOl.json"  background="transparent"  speed="1"  style="width: 60%"  loop  autoplay></lottie-player>
+                <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_ohGbOl.json" 
+                	background="transparent" speed="1" style="width: 60%" loop autoplay />
             </div>
             <a type="button" class="btn btn-primary" href="${contextPath}/main.do">홈으로 이동하기</a>
         </div>

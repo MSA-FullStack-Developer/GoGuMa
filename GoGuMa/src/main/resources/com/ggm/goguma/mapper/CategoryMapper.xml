@@ -53,4 +53,14 @@
 			categoryId = #{id}
 	</select>
 	
+	<!-- 상품 번호로 부모 카테고리 번호 조회 -->
+	<select id="getCategoryId" resultType="long">
+		SELECT pc.categoryid
+		FROM (SELECT c.parentid
+		        FROM category c, product p
+				WHERE c.categoryid = p.categoryid
+				AND p.productid = #{productID}) cc, category pc
+		WHERE cc.parentid = pc.categoryid
+	</select>
+	
 </mapper>

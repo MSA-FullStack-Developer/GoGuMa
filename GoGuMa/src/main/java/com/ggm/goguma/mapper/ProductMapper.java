@@ -35,5 +35,6 @@ public interface ProductMapper {
 	// 상품 검색
 	public List<ProductDTO> getSearchList(@Param("keyword") String keyword, @Param("sortType") String sortType) throws Exception;
 
+	// 상품 검색 개수
 	public long getSearchCount(@Param("keyword") String keyword) throws Exception;
 }
