@@ -425,9 +425,6 @@
 	};
 	
 </script>
-<style>
-	<%@ include file="/resources/css/header.css" %>
-</style>
 
 <%@ include file="header.jsp" %>
 <div class="container mt-5" style="min-width: 1200px">

@@ -32,13 +32,22 @@
     var coupon_name = $(this).find(".coupon-name").text();
     
     var coupon_id = $(this).find("#coupon-id").val();
+    
+    var totalAmount = $('#lastStlAmtDd1').text();
+    console.log();
+    // 쿠폰 금액이 최종 결제 금액보다 크면 사용할 수 없다.
+    console.log(totalAmount);
+    console.log(coupon_discount);
+    if(parseInt(coupon_discount) > parseInt(totalAmount)){
+      alert("현재 결제 금액보다 큰 할인쿠폰은 사용할 수 없습니다.");
+      return;
+    }
     $('#use-coupon-id').attr('value', parseInt(coupon_id));
     $('.dis-coupon-prc').text(numFormatComma(coupon_discount));
     $('#coupon-discount').text(numFormatComma(coupon_discount));
-    
     $('#couponDiscount').attr('value', parseInt(coupon_discount));
-    
     $('#couponModal').modal('hide');
+    
     calDisPrice();
     alert(coupon_name + " 할인이 적용되었습니다.");
   });
@@ -60,7 +69,7 @@
     $('#all-discount').text(numFormatComma(membershipDiscount));
     
     $('#lastStlAmtDd').text(numFormatComma(total-membershipDiscount));
-    
+    $('#lastStlAmtDd1').text(total-membershipDiscount);
     //쿠폰 조회 버튼
     $('#getCoupon-btn').on('click', function() {
       let token = $("meta[name='_csrf']").attr("content");
@@ -143,6 +152,7 @@
         $(".no-show-first").hide();
         $('.tbody-on').show();
       }
+      
 
       var name = $(this).find('.delivery-address-name').text();
       var addressNickName = $(this).find('.delivery-address-nickname').text();
@@ -169,6 +179,19 @@
     // 결제 버튼 클릭시
     $('#pay-onclick').click(function(){
       var radioVal = $('input[name="card-type"]:checked').val();
+      var addressInfo = $('#addressName').text();
+      
+      //결제 종류 선택했는지 체크
+      var chkPayType = $('input[name=card-type]').is(":checked");
+      console.log(chkPayType);
+      if(addressInfo == ""){
+        alert("주소를 입력해 주세요");
+        return;
+      }
+      if(!chkPayType){
+        alert("결제 정보를 선택해 주세요");
+        return;
+      }
       if(radioVal == "nobank"){
         console.log("무통장");
         nobankbookiamport();
@@ -177,27 +200,60 @@
         iamport(radioVal);
       }
     });
-    $("#g-point").on("input propertychange paste", function(){
+    $("#g-point").change(function(){
     	var point = parseInt($('#g-point').val());
     	var limitpoint = Number($('#member-point').val());
     	console.log(limitpoint);
     	console.log("로그: " + numFormatComma(point));
+    	var totalAmount = $('#lastStlAmtDd1').text();
+    	//총 판매 금액
+    	var total = parseInt($('#total').val());
+    	//멤버십 할인 금액
+    	var membershipDiscount = parseInt($('#membershipDiscount').val());
+    	//쿠폰 할인 금액
+    	var coupon_discount = $("#couponDiscount").val();
+    	if (isNaN(coupon_discount)){
+    	  coupon_discount = 0;
+    	}
+    	//사용 가능한 최대 포인트(최종 결제 금액)
+    	var bound = total - membershipDiscount - coupon_discount;
     	if(numFormatComma(point) != "NaN"){
-	   	  	//포인트가 가진 포인트보다 많거 0보다 작은경우
-	      	if(point > limitpoint || point < 0){
-	      	  alert("보유 포인트를 넘길 수 없습니다. 모든 포인트를 사용합니다.");
-	      	  $('#g-point').val(limitpoint);
+    	  	console.log("여기!!!");
+    	  	if (point < 0){
+    	  	  alert("포인트는 0 이상 사용해야 합니다.");
+    	  	  $('#g-point').val(0);
+    	  	  $('#point-discount').text(0);
+	      	  $('#GPoint').attr('value', 0);
+	      	  calDisPrice();
+    	  	}
+	    	//포인트를 최종 결제 금액보다 많이 사용하려는 경우
+	    	else if (point > bound){
+	    	  $('#g-point').val(bound);
+	      	  $('#point-discount').text(numFormatComma(bound));
+	      	  $('#GPoint').attr('value', parseInt(bound));
+	      	  calDisPrice();
+	      	  alert("결제 금액보다 많이 사용할 수 없습니다.");
+	      	}
+    	  	//가진 포인트보다 많이 사용하려는 경우
+	    	else if(point > limitpoint){
+	  	  	  alert("보유 포인트를 넘길 수 없습니다. 모든 포인트를 사용합니다.");
+	  	  	  $('#g-point').val(limitpoint);
 	      	  $('#point-discount').text(numFormatComma(limitpoint));
 	      	  $('#GPoint').attr('value', parseInt(limitpoint));
 	      	  calDisPrice();
-	      	}else{
+	  	  	}
+	    	else{
+	    	  $('#g-point').val(point);
 	      	  $('#point-discount').text(numFormatComma(point));
 	      	  $('#GPoint').attr('value', parseInt(point));
 	      	  calDisPrice();
 	      	}
     	}else{
     	  console.log("빈값");
+    	  $('#g-point').val(0);
     	  $('#point-discount').text(0);
+    	  $('#GPoint').attr('value', 0);
+    	  calDisPrice();
     	}
     });
     
@@ -205,12 +261,21 @@
       $('#g-point').val(0);
       $('#point-discount').text(0);
       $('#GPoint').attr('value', 0);
+      calDisPrice();
     });
     
-    $('.requirement-in').change(function(){
-      var a = $('.requirement-in').val();
-      $('.requirement-in').attr('value',a);
-      console.log($('.requirement-in').val());
+    $('select[name=comment]').change(function(){
+      var selText = $("select[name=comment] option:selected").val()
+      
+      console.log(selText);
+      if(selText == "write"){
+        $('.commentbox').css("display", "");
+        $('#requirement').attr('value', "");
+      }else{
+        $('.commentbox').css("display", "none");
+        $('#requirement').attr('value', selText);
+        console.log("요구사항: " + $('#requirement').val());
+      }
     });
   });
   
@@ -223,7 +288,7 @@
 		    pay_method : 'card',
 		    merchant_uid : 'merchant_' + new Date().getTime(),
 		    name : $('.pProductName').text(), //결제창에서 보여질 이름
-		    amount : 100,//$('#lastStlAmtDd').text(), //실제 결제되는 가격
+		    amount : $('#lastStlAmtDd1').text(), //실제 결제되는 가격
 		    buyer_email : "${memberDTO.email}",
 		    buyer_name : $('#name').text(),
 		    buyer_tel : $('#phonenumber').text(),
@@ -247,7 +312,8 @@
 		         	console.log("결제 및 결제검증완료");
 		          	console.log(rsp);
 		          	console.log(data);
-		        	paytransaction (data.response.impUid, data.rsponse.status);
+		          	console.log("카드 status : " + data.response.status);
+		        	paytransaction (data.response.impUid, data.response.status);
 		        	console.log("uid로그 : " + $('#ipUid').val());
 		        	console.log("다시 진행중");
 		        	$('#ipUid').val(data.response.impUid);
@@ -269,7 +335,7 @@
 	    pay_method : 'vbank',
 	    merchant_uid : 'merchant_' + new Date().getTime(),
 	    name : $('.pProductName').text(), //결제창에서 보여질 이름
-	    amount : 100,//$('#lastStlAmtDd').text(), //실제 결제되는 가격
+	    amount : $('#lastStlAmtDd1').text(), //실제 결제되는 가격
 	    buyer_email : "${memberDTO.email}",
 	    buyer_name : $('#name').text(),
 	    buyer_tel : $('#phonenumber').text(),
@@ -281,21 +347,29 @@
 	      //아임포트 검증절차
 	      var token = $("meta[name='_csrf']").attr("content");
 		  var header = $("meta[name='_csrf_header']").attr("content");
-	      if(rsp.pay_method == "vbank"){
-	        paytransaction (rsp.imp_uid, rsp.status);
-	        $('#ipUid').val(rsp.imp_uid);
-        	$('#finOrder').submit();
-	      }
-	      /* $.ajax({
+	      $.ajax({
 	        type: "POST",
-	        url: "${contextPath}/order/api/nobankcomplete",
+	        url: "${contextPath}/order/api/verifyIamport/" + rsp.imp_uid,
 	        beforeSend : function(xhr) {
 						xhr.setRequestHeader(header,token);
-					}
+					},
 	      }).done(function(data){
-	        console.log("무통장 Data : " + data);
-	      }); */
-	    
+	        console.log(data);
+	        if(rsp.paid_amount == data.response.amount){
+	          if(rsp.pay_method == "vbank"){
+		        console.log("무통장 status : " + rsp.status);
+		        paytransaction (rsp.imp_uid, rsp.status);
+		        $('#ipUid').val(rsp.imp_uid);
+	        	$('#finOrder').submit();
+		      }
+		    
+	      	} else {
+	      		alert("결제 실패");
+	      		//임의로 금액이 변경되었기 때문에 전체 환불처리
+	      	}
+	      });
+		  
+
 	});
 }
 	 //  unix time stamp to Date
@@ -333,7 +407,7 @@
 			address: $('#addressName').text(),
 			contact: $('#phonenumber').text()
 		  };
-		var req = $('.requirement-in').val();
+		var req = $('#requirement').val();
 		var oriprc = $('#total').val();
 		var memDc = parseInt($('#membershipDiscount').val());
 		var ucI = $('#use-coupon-id').val();
@@ -368,7 +442,7 @@
 			  console.log("결제 ajax 완료");
 			  return;
 			},
-			error : function(xhr, status, error) {
+			error : function(xhr, error) {
 				var errorResponse = JSON.parse(xhr.responseText);
 				var errorCode = errorResponse.code;
 				var message = errorResponse.message;
@@ -431,6 +505,7 @@
 	    var totalPayPrice = totalPrice - totalDC;
 	    
 	    $('#lastStlAmtDd').text(numFormatComma(totalPayPrice));
+	    $('#lastStlAmtDd1').text(totalPayPrice);
 	    $('#finalPrice').attr('value', totalPayPrice);
 	    console.log(totalPayPrice);
 	}
@@ -445,18 +520,27 @@
 	    calDisPrice();
 	    alert("쿠폰 적용을 취소했습니다.");
 	}
+	//요청사항 글자 수 체크
+	function checkBytes(e, mcount){
+	  let content = $(e).val();
+	  if (content.length > mcount) {
+	    $(e).val($(e).val().substring(0, mcount));
+	    alert("글자수는 100자를 넘을 수 없습니다.");
+	    } 
+	  else {
+	    	$('#requirement').attr('value', $('.commentarea').val());
+	    	console.log("직접입력 로그 : " + $('#requirement').val())
+	    	$('#cntnLen').text(content.length);
+	    }
+	}
 </script>
-
-<style>
-<%@include file="/resources/css/header.css"%>
-</style>
 
 <%@ include file="header.jsp" %>
 <div class="container mt-5" style="min-width: 1200px">
 	<!-- 바디 전체-->
 	<div class="cbody">
 		<div class="contents">
-										<div class="util-option sticky">
+			<div class="util-option sticky">
 					<div class="sticky-inner">
 						<h4 class=st-title>총 결제 금액</h4>
 						<ul class="payment-list">
@@ -480,11 +564,12 @@
 							<li>
 								<div class="total">
 									<span class="tit">최종 결제금액</span> <span class="txt"><strong id="lastStlAmtDd">0</strong>원</span>
+									<input type="hidden" id="lastStlAmtDd1" value=""/>
 								</div>
 							</li>
 							<li>
 								<div id="calculateList_upoint" class="hpoint">
-									<span class="tit">적립예정 G.Point</span> <span class="txt"><strong id="pre-gp">0</strong>p</span>
+									<span class="tit">적립예정 G.Point</span> <span class="txt pre-gpoint"><em id="pre-gp">0</em>p</span>
 								</div>
 							</li>
 						</ul>
@@ -586,6 +671,7 @@
 									<input type="hidden" id="couponDiscount" value="0" />
 									<input type="hidden" id="GPoint" value="0"/>
 									<input type="hidden" id="finalPrice" value="${total - membershipDiscount }" />
+									<input type="hidden" id="requirement" class="requirement-in" value="" />
 								</div>
 							</div>
 						</div>
@@ -641,7 +727,7 @@
 											<div class="col-md-4">
 												<button class="btn text-white btn-default" id="point-cancel">사용취소</button>
 											</div>
-											<div class="col-md-4">[보유 G.Point: <fmt:formatNumber value="${point}"
+											<div class="col-md-4 bp">[보유 G.Point: <fmt:formatNumber value="${point}"
 																type="currency" currencySymbol="" />p]</div>
 										</div>
 									</div>
@@ -701,6 +787,7 @@
 									</div>
 								</div>
 							</div>
+							
 							<div class="modal fade" id="deliveryAddressModal" tabindex="-1">
 								<div class="modal-dialog modal-dialog-centered">
 									<div class="modal-content">
@@ -741,49 +828,24 @@
 									</div>
 								</div>
 							</div>
+							<!-- /배송정보 조회 Modal -->
+							
 							<div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingThree">
 								<div class="accordion-body address-info">
 									<table class="delivery-address">
-										<!-- 기본배송지 설정이 안되어 있는 경우 -->
+										<!-- 기본배송지 설정이 없는 경우 -->
 										<c:if test="${empty defaultAddress }">
 											<div class="no-show-first">등록된 기본 배송지가 없습니다.</div>
-											<tbody class="tbody-on" style="display: none">
+											<tbody class="tbody-on" style="display:none">
 												<tr>
-													<th class="delivery-address-th">이름</th>
-													<td class="delivery-address-td">
-														<span class="delivery-address-name" id="name"></span>
-													</td>
-												</tr>
-												<tr>
-													<th class="delivery-address-th">배송지이름</th>
-													<td class="delivery-address-td">
-														<span class="delivery-address-nickname" id="addressNickName"></span>
-													</td>
-												</tr>
-												<tr>
-													<th class="delivery-address-th">배송주소</th>
-													<td class="delivery-address-td delivery-address-per" id="addressName"></td>
-												</tr>
-												<tr>
-													<th class="delivery-address-th delivery-phone-num-th">연락처</th>
-													<td class="delivery-address-td delivery-phone-num-td" id="phonenumber"></td>
-												</tr>
-												<tr>
-													<th class="delivery-address-th delivery-requirement-th">요청사항</th>
-													<td class="delivery-address-td delivery-requirement-td" id="requirement"><input class="requirement-in" type="text" value="" placeholder="배송 요청사항을 입력하세요."></td>
-												</tr>
-											</tbody>
-										</c:if>
-										<!-- 기본배송지 설정이 되어 있는 경우 -->
-										<c:if test="${not empty defaultAddress }">
-											<tbody>
-												<tr>
-													<th class="delivery-address-th">이름</th>
+													<th class="delivery-address-th" width="30%">이름</th>
 													<td class="delivery-address-td">
 														<span class="delivery-address-name" id="name">${defaultAddress.recipient }</span>
-														<c:if test="${defaultAddress.isDefault == 1}">
+														<!-- 기본 배송지인 경우 표시되는 영역 -->
+														<c:if test="${defaultAddress.isDefault == 0}">
 															<span class="delivery-address-alias" id="addressAlias">기본배송지</span>
 														</c:if>
+														<!-- /기본 배송지인 경우 표시되는 영역 -->
 													</td>
 												</tr>
 												<tr>
@@ -800,20 +862,97 @@
 													<th class="delivery-address-th delivery-phone-num-th">연락처</th>
 													<td class="delivery-address-td delivery-phone-num-td" id="phonenumber">${defaultAddress.contact }</td>
 												</tr>
-												<tr>
+												<!-- <tr>
 													<th class="delivery-address-th delivery-requirement-th">요청사항</th>
 													<td class="delivery-address-td delivery-requirement-td" id="requirement"><input class="requirement-in" type="text" value="" id="requirement"></td>
+												</tr> -->
+												<tr>
+													<td colspan="2">
+														<div class="all-comment-box">
+															<div class="custom-selectbox">
+																<select class="form-select fs" name="comment">
+																	<option value="">배송 메시지를 선택해주세요. (선택)</option>
+																    <option value="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요.</option>
+																    <option value="부재 시 연락주세요.">부재 시 연락주세요.</option>
+																    <option value="배송 전 연락주세요.">배송 전 연락주세요.</option>
+																    <option value="write">직접 입력</option>
+																</select>
+															</div>
+															<!-- 직접입력 선택시 노출 -->
+						                                    <div class="commentbox" id="floatingTextcomment" style="display:none;">
+						                                        
+						                                        <textarea class="form-control commentarea" rows="5" placeholder="배송 요청사항" onkeyup="checkBytes(this, 100);"></textarea>
+						                                        <div class="tc">
+						                                        <span class="txtcount"><em id="cntnLen">0</em>/<b>100</b></span>
+						                                        </div>
+						                                    </div>
+						                                    <!-- // 직접입력 선택시 노출 -->
+				                                    	</div>
+													</td>
 												</tr>
 											</tbody>
 										</c:if>
+										<!-- 기본배송지가 초기에 설정이 되어 있거나/이후에 기본배송지를 설정한 경우 -->
+										<c:if test="${not empty defaultAddress }">
+											<tbody class="tbody-off">
+												<tr>
+													<th class="delivery-address-th" width="30%">이름</th>
+													<td class="delivery-address-td">
+														<span class="delivery-address-name" id="name">${defaultAddress.recipient }</span>
+														<!-- 기본 배송지인 경우 표시되는 영역 -->
+														<c:if test="${defaultAddress.isDefault == 0}">
+															<span class="delivery-address-alias" id="addressAlias">기본배송지</span>
+														</c:if>
+														<!-- /기본 배송지인 경우 표시되는 영역 -->
+													</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th">배송지이름</th>
+													<td class="delivery-address-td">
+														<span class="delivery-address-nickname" id="addressNickName">${defaultAddress.nickName }</span>
+													</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th">배송주소</th>
+													<td class="delivery-address-td delivery-address-per" id="addressName">${defaultAddress.address }</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th delivery-phone-num-th">연락처</th>
+													<td class="delivery-address-td delivery-phone-num-td" id="phonenumber">${defaultAddress.contact }</td>
+												</tr>
+												<!-- <tr>
+													<th class="delivery-address-th delivery-requirement-th">요청사항</th>
+													<td class="delivery-address-td delivery-requirement-td" id="requirement"><input class="requirement-in" type="text" value="" id="requirement"></td>
+												</tr> -->
+												<tr>
+													<td colspan="2">
+														<div class="all-comment-box">
+															<div class="custom-selectbox">
+																<select class="form-select fs" name="comment">
+																	<option value="">배송 메시지를 선택해주세요. (선택)</option>
+																    <option value="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요.</option>
+																    <option value="부재 시 연락주세요.">부재 시 연락주세요.</option>
+																    <option value="배송 전 연락주세요.">배송 전 연락주세요.</option>
+																    <option value="write">직접 입력</option>
+																</select>
+															</div>
+															<!-- 직접입력 선택시 노출 -->
+						                                    <div class="commentbox" id="floatingTextcomment" style="display:none;">
+						                                        
+						                                        <textarea class="form-control commentarea" rows="5" placeholder="배송 요청사항" onkeyup="checkBytes(this, 100);"></textarea>
+						                                        <div class="tc">
+						                                        <span class="txtcount"><em id="cntnLen">0</em>/<b>100</b></span>
+						                                        </div>
+						                                    </div>
+						                                    <!-- // 직접입력 선택시 노출 -->
+				                                    	</div>
+													</td>
+												</tr>
+											</tbody>
+											
+										</c:if>
 									</table>
-									<select class="form-select">
-										<option>배송 메시지를 선택해주세요.</option>
-									    <option>부재 시 경비실에 맡겨주세요.</option>
-									    <option>부재 시 연락주세요.</option>
-									    <option>배송 전 연락주세요.</option>
-									    <option>직접 입력</option>
-									</select>
+									
 								</div>
 							</div>
 							<button type="button" class="btn text-white btn-change-address" id="btn-change-address" data-bs-toggle="modal" data-bs-target="#myModal">배송지변경</button>
@@ -827,11 +966,22 @@
 									<table>
 										<tr>
 											<td class="pay-type">
-												<div class="select-pay-type">
-													<input type='radio' name='card-type' value='html5_inicis' checked/> KG이니시스(표준결제)
-													<input type='radio' name='card-type' value='kakaopay'/> 카카오페이(간편결제)
-													<input type='radio' name='card-type' value='nobank'/> 무통장 입금
-												</div>
+												<div id="select-pay-type">
+													<input type='radio' name='card-type' value='html5_inicis' id="cardRadio">
+													<div style="display: inline-block;">
+														<label for="cardRadio" class="insertImgCardRadio"></label>
+														<div class="pt-txt">카드</div>
+													</div>
+													<input type='radio' name='card-type' value='kakaopay'id="kakaoRadio"/>
+													<div style="display: inline-block;">
+														<label for="kakaoRadio" class="insertImgKakaoRadio"></label>
+														<div class="pt-txt">카카오 페이</div>
+													</div>
+													<input type='radio' name='card-type' value='nobank' id="vbankRadio"/>
+													<div style="display: inline-block;">
+														<label for="vbankRadio" class="insertImgVbankRadio"></label>
+														<div class="pt-txt">무통장 입금</div>
+													</div>
 											</td>
 										</tr>
 									</table>
@@ -844,7 +994,6 @@
 						</form>
 					</div>
 				</div>
-
 			</div>
 		</div>
 	</div>
