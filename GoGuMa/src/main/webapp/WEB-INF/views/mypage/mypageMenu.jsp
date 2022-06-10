@@ -26,9 +26,6 @@
         <div>
             <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
         </div>
-        <div >
-            예치금
-        </div>
         <div>
             <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
         </div>
