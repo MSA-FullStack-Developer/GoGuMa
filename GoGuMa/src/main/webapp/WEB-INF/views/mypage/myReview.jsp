@@ -366,7 +366,7 @@
 		                        	<input type="hidden" id="reviewID" value="">
 		                       	</h4>
 		                       	<textarea cols="34" rows="5" type="text" class="write-review-content" value=""></textarea>
-		                       	<input type="file" id="file" name='uploadFile' style="margin-left: 30px; "multiple>
+		                       	<input type="file" class="form-control form-control-sm" id="file" name='uploadFile' style="margin-left: 30px; width: 20%;" multiple>
 		                       	<div class='uploadResult'>
 									<ul>
 									</ul>
