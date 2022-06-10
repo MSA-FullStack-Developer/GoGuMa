@@ -982,7 +982,6 @@
 														<label for="vbankRadio" class="insertImgVbankRadio"></label>
 														<div class="pt-txt">무통장 입금</div>
 													</div>
-												</div>
 											</td>
 										</tr>
 									</table>

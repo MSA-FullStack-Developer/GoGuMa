@@ -44,12 +44,12 @@
                 </div>
                 <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-3">
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
-                        <div>
-                            회원등급
-                        </div>
-                        <div>
-                            💎
-                        </div>
+                    <div>
+                        회원등급
+                    </div>
+                    <div>
+                        💎
+                    </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
@@ -77,10 +77,10 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            작성 가능한 상품평
+                            <a href="${contextPath}/mypage/writeableReview">작성 가능한 상품평</a>
                         </div>
                         <div>
-                            5건
+                            <a href="${contextPath}/mypage/writeableReview">${writeableCount}건</a>
                         </div>
                     </div>
                 </div>

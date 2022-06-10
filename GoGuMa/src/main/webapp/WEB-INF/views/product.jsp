@@ -3,14 +3,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<!DOCTYPE html>
+<meta name="_csrf" content="${_csrf.token}">
+<meta name="_csrf_header" content="${_csrf.headerName}">
 <html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.js"></script>
 <head>
     <title>Product</title>
-    <meta name="_csrf" content="${_csrf.token}">
-	<meta name="_csrf_header" content="${_csrf.headerName}">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script type="text/javascript" src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.js"></script>
+    
     <!-- bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
@@ -37,15 +37,6 @@
 			return n;
 		};
     
-		function buybtnClick(){
-		  var optionName = $("#option option:selected").text(); // 옵션 상품 이름
-	      
-	      if (optionName == "선택 없음") {
-	        alert("옵션을 선택하세요.");
-	      	return false;
-	      }
-		}
-		
 	    function selectOption(option) { // 옵션을 변경한 경우 구매 수량 초기화
 	    	document.getElementById("numBox").value = 1;
 
@@ -55,10 +46,6 @@
 	    	console.log("옵션 아이디 : " + optionID);
 	    	$('.selectedOption').text(optionName);
 	    	$('#product-id').val(optionID);
-	    	$('#product-price').val(optionPrice);
-	    	var disp = optionPrice * ("${memberDTO.grade.discountPercent / 100}");
-	    	$('#product-discount').val(parseInt(disp));
-	    	$('#product-totcount').val(optionPrice-disp);
 	    	$('.total_price').text(optionPrice.format() + "원"); // 초기화
 	    }
 	    
@@ -205,7 +192,7 @@
 
         		if (confirm("상품평을 삭제하시겠습니까?")) {
             		$.ajax({
-        	            url: "${contextPath}/category/1/api/deleteReview",
+        	            url: "${contextPath}/category/1/deleteReview",
         	            type: "POST",
         	            data: data,
         	            beforeSend : function(xhr) {
@@ -277,7 +264,7 @@
                                 	<option value="${option.stock}" 
                                 			data-id="${option.productID}" 
                                 			data-price="${option.productPrice}">
-                                			${option.productName} - ${option.productPrice}원
+                                			${option.productName} - ${option.productPrice}
                               			</option>
 	                                </c:forEach>
 	                            </select>
@@ -286,25 +273,26 @@
                     </tr>
                     </c:if>
                 </table>
-                <form id="product-order" action="${contextPath}/order/" method="post" onsubmit="return buybtnClick()">
+                <form id="product-order" action="${contextPath}/order/" method="post">
                 	<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 	<input type="hidden" id="product-price" name="productOrder.nrmOriPrc" value="${productInfo.productPrice}"/>
-                	<%-- <fmt:parseNumber var="disPrc" value="${productInfo.productPrice * (memberDTO.grade.discountPercent / 100)}" integerOnly="true"/> --%>
-                	<input type="hidden" id="product-discount" name="productOrder.disOriPrc" value />      
-                	<%-- <fmt:parseNumber var="totPrc" value="${productInfo.productPrice - disPrc}" integerOnly="true"/> --%>
-                	<input type="hidden" id="product-totcount" name="productOrder.totOriPrc" value />
-                <div class="selectedInfo">
-                	<h5 class="selectedOption">선택 없음</h5>
-                	<input type="hidden" name="productOrder.productId" id="product-id" value />
-                	<p class="cartStock">
-                        <button type="button" class="calc" id="minus">-</button>
-                        <span style="text-align: center;">
-                        
-                        	<input type="number" name="productOrder.ordQty" id="numBox" min="1" max="${productInfo.stock}" value="1" readonly="readonly" />
-                        </span>
-                        <button type="button" class="calc" id="plus">+</button>
-                     </p>
-                </div>
+                	<fmt:parseNumber var="disPrc" value="${productInfo.productPrice * (memberDTO.grade.discountPercent / 100)}" integerOnly="true"/>
+                	<input type="hidden" id="product-discount" name="productOrder.disOriPrc" value="${disPrc}" />
+                	
+                	<fmt:parseNumber var="totPrc" value="${productInfo.productPrice - disPrc}" integerOnly="true"/>
+                	<input type="hidden" id="product-discount" name="productOrder.totOriPrc" value="${totPrc}" />
+                	
+	                <div class="selectedInfo">
+	                	<h5 class="selectedOption">선택 없음</h5>
+	                	<input type="hidden" name="productOrder.productId" id="product-id" value= />
+	                	<p class="cartStock">
+	                        <button type="button" class="calc" id="minus">-</button>
+	                        <span style="text-align: center;">
+	                        	<input type="number" name="productOrder.ordQty" id="numBox" min="1" max="${productInfo.stock}" value="1" readonly="readonly" />
+	                        </span>
+	                        <button type="button" class="calc" id="plus">+</button>
+	                     </p>
+	                </div>
                 
 	                <div class="btnDiv">
 	                	<button type="button" class="cartBtn" id="cartBtn">장바구니</button>
@@ -374,8 +362,7 @@
             </div>
         </div>
     </div>
+    
     <%@ include file="footer.jsp" %>
 </body>
-<script type="text/javascript">
-</script>
 </html>

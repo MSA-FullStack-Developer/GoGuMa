@@ -64,7 +64,7 @@ public class ProductController {
 	private long pageSize  = 12; 
 	private long blockSize = 10;
 	
-	/**
+	/*
 	 * @작성자 : 송진호
 	 * @작업내용 : 쿠키에 존재하는 값들을 불러오는 기능 구현
 	 * @작성일자 : 2022.06.09
@@ -91,7 +91,7 @@ public class ProductController {
 		return list;
 	}
 	
-	/**
+	/*
 	 * @작성자 : 송진호
 	 * @작업내용 : 불러온 값들을 쿠키에 넣어주는 기능 구현
 	 * @작성일자 : 2022.06.09
@@ -131,7 +131,7 @@ public class ProductController {
 			// 페이징
 			long recordCount = productService.getProductCount(categoryID); // 카테고리별 상품 개수
 			long pageCount = recordCount / pageSize; // 총 페이지 수
-			if (recordCount % pageSize != 0) pageCount ++;
+			if (recordCount % pageSize != 0) pageCount++;
 			
 			// 하단부에 보여줄 페이지 번호
 			long startPage = (pg - 1) / blockSize * blockSize + 1;
