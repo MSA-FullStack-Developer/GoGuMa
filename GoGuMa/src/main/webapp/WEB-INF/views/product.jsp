@@ -161,8 +161,10 @@
 	        				xhr.setRequestHeader(header, token);
 	        			},
 	        			success : function(result) {
-	        				if(result){
-	        					alert("장바구니에 상품이 담겼습니다.");
+	        				if (result){
+	        					if (confirm("장바구니에 상품이 담겼습니다. 장바구니로 이동하시겠습니까?")) {
+	        						location.href = "${contextPath}/cart/"	
+	        					}
 	        				} else {
 	        					alert("이미 장바구니에 담겨있는 상품입니다.")
 	        				}
@@ -314,7 +316,7 @@
         	<div class="tabBtns">
 	            <ul class="tabnav">
 	                <li class="bottom-menu"><a href="#tab01">상품상세</a></li>
-	                <li class="bottom-menu"><a href="#tab02">상품평</a></li>
+	                <li class="bottom-menu"><a href="#tab02">상품평&nbsp;(${reviewList.size()})</a></li>
 	            </ul>
             </div>
             <div class="tabcontent">
@@ -323,6 +325,13 @@
                 </div>
                 <div id="tab02">
    					<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
+   					<c:if test='${reviewList.size() < 1}'>
+   						<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+						<lottie-player src="https://assets7.lottiefiles.com/packages/lf20_wglo7xex.json" 
+							background="transparent" speed="1" style="width: 300px; height: 150px; margin: 0 auto" loop autoplay></lottie-player>
+   						<h5 class="no_result">상품평이 없습니다.</h5>
+					</c:if>
+   					
                     <c:forEach items="${reviewList}" var="review">
 	                    <div class="review" id="review">
 	                        <div>

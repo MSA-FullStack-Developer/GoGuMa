@@ -24,7 +24,8 @@
             <h3>죄송합니다. 요청하신 페이지에 접근할 수 없습니다.</h3>
             <div class="d-flex justify-content-center">
                 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-<lottie-player src="https://assets4.lottiefiles.com/private_files/lf30_yABbl9.json"  background="transparent"  speed="1"  style="width: 70%;"  loop  autoplay></lottie-player>
+				<lottie-player src="https://assets4.lottiefiles.com/private_files/lf30_yABbl9.json" 
+					background="transparent" speed="1" style="width: 70%;" loop autoplay></lottie-player>
             </div>
             <a type="button" class="btn btn-primary" href="${contextPath}/main.do">홈으로 이동하기</a>
         </div>

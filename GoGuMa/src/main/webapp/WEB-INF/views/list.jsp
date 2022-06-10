@@ -73,7 +73,8 @@
         
         <c:if test="${isSearch == true && recordCount == 0}">
         	<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-			<lottie-player src="https://assets5.lottiefiles.com/packages/lf20_6rwtym6l.json" background="transparent" speed="1" style="width: 250px; height: 250px; margin: 0 auto;" loop autoplay></lottie-player>
+			<lottie-player src="https://assets5.lottiefiles.com/packages/lf20_6rwtym6l.json" 
+				background="transparent" speed="1" style="width: 250px; height: 250px; margin: 0 auto;" loop autoplay></lottie-player>
         	<h5 class="no_result">검색결과가 없습니다.</h5>
         	
         	<c:if test="${recommendList.size() > 0}">

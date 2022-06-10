@@ -22,8 +22,14 @@
 
  <!-- iamport.payment.js -->
  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
-  
-<script type="text/javascript">
+ 
+ <style>
+ 	.col-md-4 {
+	    padding: 0px 0px;
+	    background-color: #FFF;
+	}
+ </style>
+ <script type="text/javascript">
 
 
   //모달 쿠폰 적용 클릭이벤트
