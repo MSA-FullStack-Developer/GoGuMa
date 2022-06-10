@@ -265,12 +265,14 @@
 				
 					var replyId = replyItem.data("replyId");
 					
+					var isParentReply = $(this).data("reply");
+					
 					var data = {
 						replyId
 					};
 					
 					if(confirm('정말로 삭제하시겠습니까?')){
-						deleteReply(data, replyItem);
+						deleteReply(data, replyItem, isParentReply);
 					}
 					
 				});
@@ -387,10 +389,6 @@
 					
 				});
 				
-				
-				
-				
-				
 			} else {
 				console.log("카카오 JDK 초기화 실패")
 			}
@@ -439,7 +437,7 @@
 			}
 			
 			//댓글 & 답글 삭제 AJAX 호출 함수
-			function deleteReply(data, replyItem) {
+			function deleteReply(data, replyItem, isParentReply) {
 			
 				$.ajax({
 					url: "${contextPath}/market/api/deleteReply.do",
@@ -450,9 +448,11 @@
 			            xhr.setRequestHeader(header, token);
 			        },
 			        success: function() {
+			        	if (isParentReply == true) {
+				        	var replyCount = $("#reply-count").text() - 1;
+				        	$("#reply-count").text(replyCount);
+			        	}
 			        	replyItem.remove();
-			        	var replyCount = $("#reply-count").text() - 1;
-			        	$("#reply-count").text(replyCount);
 			        },
 			        error: function(xhr, status, error) {
 	        			console.log(xhr.status);
@@ -601,7 +601,7 @@
 							<c:if test="${me.id eq reply.member.id}">
 								<div class="reply-button-wrapper col-2 d-flex justify-content-end">
 									<span class="reply-edit text-secondary">수정</span>
-									<span class="reply-delete text-secondary ms-1">삭제</span>
+									<span class="reply-delete text-secondary ms-1" data-reply="true">삭제</span>
 								</div>
 							</c:if>
 						</div>
@@ -653,7 +653,7 @@
 										<c:if test="${me.id eq childReply.member.id}">
 											<div class="reply-child-button-wrapper col-2 d-flex justify-content-end">
 												<span class="reply-child-edit text-secondary">수정</span>
-												<span class="reply-child-delete text-secondary ms-1">삭제</span>
+												<span class="reply-child-delete text-secondary ms-1" data-reply="false">삭제</span>
 											</div>
 										</c:if>
 									</div>
