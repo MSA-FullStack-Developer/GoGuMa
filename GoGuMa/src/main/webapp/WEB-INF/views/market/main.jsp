@@ -55,8 +55,11 @@
 	        <section id="main-section" class="container-xxl pb-5">
 	            <div style="margin-bottom: 25px;">
 	                <h3>${memberName}님이 팔로우한 마켓
-	                	<c:if test="${isCreatedMarket == null}">
-	                		<button type="button" class="createMarketBtn">마켓 생성하기</button>
+	                	<c:if test="${myMarketID == null}">
+	                		<a class="createMarketBtn" href="${contextPath}/market/write.do">마켓 생성하기</a>
+	                	</c:if>
+	                	<c:if test="${myMarketID != null}">
+	                		<a class="createMarketBtn" href="${contextPath}/market/show.do?marketNum=${myMarketID}">나의 마켓</a>
 	                	</c:if>
 	                </h3>
 	            </div>

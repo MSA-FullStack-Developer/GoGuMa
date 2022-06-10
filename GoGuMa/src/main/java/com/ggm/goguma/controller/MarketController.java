@@ -74,14 +74,14 @@ public class MarketController {
 			
 			// 팔로우한 마켓 불러오기
 			List<MarketDTO> followedList = this.marketService.getFollowedMarket(member.getId());
-			
-			// 만들었던 마켓이 있는지 확인
-			Integer isCreatedMarket = this.marketService.getMyMarket(member.getId());
+		
+			// 나의 마켓의 번호 불러오기, 나의 마켓이 없으면 null
+			Integer myMarketID = this.marketService.getMyMarket(member.getId());
 
 			model.addAttribute("member", member);
 			model.addAttribute("memberName", memberName);
 			model.addAttribute("followedList", followedList);
-			model.addAttribute("isCreatedMarket", isCreatedMarket);
+			model.addAttribute("myMarketID", myMarketID);
 		}
 		
 		// 최신순으로 전체 게시글 불러오기
@@ -165,7 +165,6 @@ public class MarketController {
 		if (principal != null) {
 			member = this.memberService.getMember(principal.getName());
 			isMyArticle = this.marketService.isMyArticle(article.getMarket().getMarketId(), member.getId(), articleId);
-
 		}
 		List<ArticleReplyDTO> replies = this.marketService.getArticleReplies(articleId);
 
