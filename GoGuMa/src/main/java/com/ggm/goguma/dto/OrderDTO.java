@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class OrderDTO {
 	private long orderId;
+	private long productId;
+	private long categoryId;
 	private String pname;
 	private String cname;
 	private long price;

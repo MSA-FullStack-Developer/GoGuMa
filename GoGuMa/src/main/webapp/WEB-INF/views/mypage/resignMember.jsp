@@ -61,18 +61,10 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            예치금
-                        </div>
-                        <div>
-                            10,000원
-                        </div>
-                    </div>
-                    <div class="d-flex flex-column align-items-center mt-3 mb-3">
-                        <div>
                             <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
                         </div>
                         <div>
-                            <a href="${contextPath}/mypage/couponHistory/available?page=1">3장</a>
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">${couponCount}장</a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">

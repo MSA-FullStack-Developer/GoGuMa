@@ -9,7 +9,7 @@
 </style>
 <div class="col-3">
     <div class="col mb-4">
-        <h3><a href="${contextPath}/mypage/"><b>마이페이지</b></a></h3>
+        <h3><a href="${contextPath}/mypage?page=1"><b>마이페이지</b></a></h3>
     </div>
     <div class="col mb-4">
         <div>
@@ -25,9 +25,6 @@
         </div>
         <div>
             <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
-        </div>
-        <div >
-            예치금
         </div>
         <div>
             <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
