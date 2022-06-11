@@ -105,8 +105,8 @@ public class OrderController {
 					 list.get(0).setCartAmount(cartOrderDTO.getProductOrder().getOrdQty());
 					 log.info("단일상품 구매 리스트: " + list); // 기본 배송지와 저장된 배송지를 불러온다.
 					 DeliveryAddressDTO defaultAddress = myPageService.getDefaultAddress(memberId); 
-					 List<DeliveryAddressDTO> addressList = myPageService.getAddressList(memberId); // 회원이 가진 포인트 조회한다. int
-					 int point = myPageService.getMemberPoint(memberId);
+					 List<DeliveryAddressDTO> addressList = myPageService.getAddressList(memberId); // 회원이 가진 포인트 조회한다.
+					 int point = myPageService.getMemberPoints(memberId);
 					 
 					 model.addAttribute("list", list); model.addAttribute("dtoList", dtoList);
 					 model.addAttribute("memberDTO", memberDTO); // 회원 정보를 저장한다.
@@ -137,7 +137,7 @@ public class OrderController {
 				List<DeliveryAddressDTO> addressList = myPageService.getAddressList(memberId);
 				System.out.println("리스트 : " + list);
 				// 회원이 가진 포인트 조회한다.
-				int point = myPageService.getMemberPoint(memberId);
+				int point = myPageService.getMemberPoints(memberId);
 				
 				model.addAttribute("point", point);	 //회원이 가진 포인트를 저장한다.
 				model.addAttribute("list", list); // 회원이 담은 카트나 단품 상품 정보를 저장한다.

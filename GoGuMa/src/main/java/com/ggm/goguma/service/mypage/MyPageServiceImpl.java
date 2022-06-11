@@ -17,9 +17,7 @@ import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.mapper.MyPageMapper;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
 
-@Log4j
 @Service
 @RequiredArgsConstructor
 public class MyPageServiceImpl implements MyPageService {
@@ -70,6 +68,16 @@ public class MyPageServiceImpl implements MyPageService {
 	public void updateOrderStatus(long orderId, String status) throws Exception {
 		mapper.updateOrderStatus(orderId, status);
 		if(status.equals("F")) mapper.makeInquirable(orderId);
+	}
+
+	@Override
+	public int getMemberPoints(long memberId) throws Exception {
+		return mapper.getMemberPoints(memberId);
+	}
+	
+	@Override
+	public int getEstimatedPoints(long receiptId) throws Exception {
+		return mapper.getEstimatedPoints(receiptId);
 	}
 
 	@Override
@@ -160,10 +168,6 @@ public class MyPageServiceImpl implements MyPageService {
 		mapper.cancelDefault(memberId);
 	}
 
-	@Override
-	public int getMemberPoint(long memberId) throws Exception {
-		return mapper.getMemberPoint(memberId);
-	}
 
 	@Override
 	public boolean confirmPassword(String userPassword, String comparePassword) throws Exception {
@@ -199,10 +203,6 @@ public class MyPageServiceImpl implements MyPageService {
 		return true;
 	}
 
-	@Override
-	public int estimatedPoints(long receiptId) throws Exception {
-		return mapper.estimatedPoints(receiptId);
-	}
 
 	
 	//고객 센터에서 불러올 주문내역

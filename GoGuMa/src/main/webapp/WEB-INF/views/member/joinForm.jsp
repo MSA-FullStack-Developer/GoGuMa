@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>회원가입 - 고구마</title>
+<title>고구마 - 고객과 구성하는 마켓</title>
 
 <!-- bootstrap css -->
 <link
@@ -151,7 +151,7 @@
                   	프로필 이미지
                 </label>
                 <input id="profile" name="profile" type="file" class="form-control" accept=".jpg, .jpeg, .png"
-                    style="position: absolute; left: -9999px;"  required>
+                    style="position: absolute; left: -9999px;">
                 <div id="upload-profile">
                     <img id="preview-profile" class="rounded-circle border border-light" src="https://hd-goguma.s3.ap-northeast-2.amazonaws.com/profile/1654741131039default.png" style="width: 150px; height: 150px; object-fit: fill;"/>
                 </div>

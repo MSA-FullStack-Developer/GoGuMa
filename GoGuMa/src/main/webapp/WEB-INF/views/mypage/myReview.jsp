@@ -10,7 +10,7 @@
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 <head>
 	<meta charset="utf-8">
-	<title>My Review</title>
+	<title>고구마 - 고객과 구성하는 마켓</title>
     <!-- bootstrap icon -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 	<!-- bootstrap css -->

@@ -5,6 +5,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <meta name="_csrf" content="${_csrf.token}">
 <meta name="_csrf_header" content="${_csrf.headerName}">
+<title>고구마 - 고객과 구성하는 마켓</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -35,7 +36,6 @@
 <script>
   
    function openCnslPup(){
-     
      if(`${memberDTO}`){
        //로그인 한 경우
        window.open("oneCnslPup", "popup01", "width=800, height=700");
@@ -56,16 +56,15 @@
                 <h2 class="side-menu-title" onclick='javascript:location.href="${contextPath}/serviceclient/"' style="cursor:pointer;">고객센터</h2>
                 <div class="side-menu-list">
                     <ul>
-                        <li><a class="#" href="">자주 묻는 질문</a></li>
+                        <li><a href="${contextPath}/serviceclient/">자주 묻는 질문</a></li>
                         <li><a href="#" onclick="openCnslPup(); return false;">1:1 문의하기</a></li>
-                        <li><a href="#" onclick="openCustBoardPup();" >내 상담내역 조회</a></li>
+                        <li><a href="${contextPath}/serviceclient/myService">내 상담내역 조회</a></li>
                         <li><a href="/p/ccb/noticeList.do">공지사항</a></li>
-                        
                     </ul>
                 </div>
                 <!-- // .side-menu-list -->
-
             </div>
+             </div>
              <!-- // .side-menu-list -->
              <div class="contents">
 				<!--search : 자주 묻는 질문-->
@@ -75,7 +74,7 @@
                     	<form id="searchForm" action="" >
                         	<div class="inputbox">
 								<label class="inplabel icon-find"><input type="text" name="ancmCntn" placeholder="질문을 검색해보세요" title="검색어 입력" value=""></label>
-	                            <button type="button" class="btn btn-find searchBtn" onclick="searchCntn();"></button>
+	                            <button type="button" class="btn btn-find searchBtn" onclick="searchCntn();" style="height: auto;"></button>
                         	</div>
                         </form>
                     </div>
@@ -239,32 +238,30 @@
                                     <col style="width:75px">
                                 </colgroup>
                                 <tbody>
-                                
-			                                    		<tr>
-				                                        <td class="nowrap"><a href="/p/ccb/noticeView.do?ancmId=53744&page=1">현대홈쇼핑 멤버십 제도 개편 안내</a></td>
-				                                        <td class="txt-center"><span class="date">2022.05.02</span></td>
-				                                    	</tr>
-				                                    	
-			                                    		<tr>
-				                                        <td class="nowrap"><a href="/p/ccb/noticeView.do?ancmId=53740&page=1">현대홈쇼핑 상시채용 안내</a></td>
-				                                        <td class="txt-center"><span class="date">2022.04.15</span></td>
-				                                    	</tr>
-				                                    	
-			                                    		<tr>
-				                                        <td class="nowrap"><a href="/p/ccb/noticeView.do?ancmId=53722&page=1">개인정보처리방침 변경 안내(01/27)</a></td>
-				                                        <td class="txt-center"><span class="date">2022.01.27</span></td>
-				                                    	</tr>
-				                                    	 
-			                                    		<tr>
-				                                        <td class="nowrap"><a href="/p/ccb/noticeView.do?ancmId=53597&page=1">현대홈쇼핑 금융소비자보호 내부통제기준 및 금융소비자보호기준</a></td>
-				                                        <td class="txt-center"><span class="date">2021.09.24</span></td>
-				                                    	</tr>
-				                                    	
-			                                    		<tr>
-				                                        <td class="nowrap"><a href="/p/ccb/noticeView.do?ancmId=53596&page=1">현대홈쇼핑 보험대리점등록증</a></td>
-				                                        <td class="txt-center"><span class="date">2021.09.24</span></td>
-				                                    	</tr>
-     
+                               		<tr>
+                                     	<td class="nowrap"><a href="/p/ccb/noticeView.do?ancmId=53744&page=1">현대홈쇼핑 멤버십 제도 개편 안내</a></td>
+                                    	<td class="txt-center"><span class="date">2022.05.02</span></td>
+                                 	</tr>
+                                 	
+                                		<tr>
+                                     <td class="nowrap"><a href="/p/ccb/noticeView.do?ancmId=53740&page=1">현대홈쇼핑 상시채용 안내</a></td>
+                                     <td class="txt-center"><span class="date">2022.04.15</span></td>
+                                 	</tr>
+                                 	
+                               		<tr>
+                                    	<td class="nowrap"><a href="/p/ccb/noticeView.do?ancmId=53722&page=1">개인정보처리방침 변경 안내(01/27)</a></td>
+                                    	<td class="txt-center"><span class="date">2022.01.27</span></td>
+                                 	</tr>
+                                 	 
+                                	<tr>
+                                    	<td class="nowrap"><a href="/p/ccb/noticeView.do?ancmId=53597&page=1">현대홈쇼핑 금융소비자보호 내부통제기준 및 금융소비자보호기준</a></td>
+                                    	<td class="txt-center"><span class="date">2021.09.24</span></td>
+                                 	</tr>
+                                 	
+                                	<tr>
+                                        <td class="nowrap"><a href="/p/ccb/noticeView.do?ancmId=53596&page=1">현대홈쇼핑 보험대리점등록증</a></td>
+                                        <td class="txt-center"><span class="date">2021.09.24</span></td>
+                                 	</tr>
                                 </tbody>
                             </table>
                         </div>

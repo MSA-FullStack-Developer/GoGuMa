@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script type="text/javascript" src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.js"></script>
 <head>
-    <title>Product</title>
+    <title>고구마 - 고객과 구성하는 마켓</title>
     
     <!-- bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -273,7 +273,7 @@
                                 	<option value="${option.stock}" 
                                 			data-id="${option.productID}" 
                                 			data-price="${option.productPrice}">
-                                			${option.productName} - <fmt:formatNumber value="${productInfo.productPrice}" pattern="#,###" />
+                                			${option.productName} - <fmt:formatNumber value="${option.productPrice}" pattern="#,###" />
                               			</option>
 	                                </c:forEach>
 	                            </select>
@@ -333,7 +333,7 @@
    					<c:if test='${reviewList.size() < 1}'>
    						<div style="text-align: center;">
 	   						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
-	   						<h5 class="no_result">등록된 상품평이 없습니다.</h5>
+	   						<h5 class="no_result" style="margin-top: 0px;">등록된 상품평이 없습니다.</h5>
    						</div>
 					</c:if>
    					

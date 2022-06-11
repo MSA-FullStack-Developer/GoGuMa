@@ -39,6 +39,7 @@
 		.card-img-bottom {
 			width: 286px;
 			height: 286px;
+			border-radius: 4pt 4pt 0pt 0pt;
 			object-fit: cover;
 		}
 	</style>
@@ -98,7 +99,7 @@
 	                    <a href="${contextPath}/market/article/${article.articleId}/show.do"
 	                        class="text-decoration-none text-dark">
 	                        <img src="${article.thumbnail.imagePath}"
-	                            class="card-img-bottom" alt="...">
+	                            class="card-img-bottom border-bottom" alt="...">
 	                        <div class="card-body">
 	                            <p class="card-text text-truncate">${article.articleTitle}</p>
 	                        </div>

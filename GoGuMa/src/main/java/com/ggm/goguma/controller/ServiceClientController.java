@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -42,13 +41,13 @@ public class ServiceClientController {
 	private MemberService memberService;
 	
 	@Autowired
+	private CategoryService categoryService;
+	
+	@Autowired
 	private ServiceClientService serviceClientService;
 	
 	@Autowired
 	private MyPageService myPageService;
-	
-	@Autowired
-	private CategoryService categoryService;
 	
 	@GetMapping("/")
 	public String cartList(Model model, Authentication authentication) throws Exception {
@@ -68,6 +67,7 @@ public class ServiceClientController {
 				log.info("고객센터에서 사용될 사용자 정보: " + memberDTO);
 				
 				model.addAttribute("memberDTO", memberDTO);
+				model.addAttribute("parentCategory", parentCategory);
 			}
 			//로그인을 하지 않은 경우
 			else {
@@ -106,6 +106,10 @@ public class ServiceClientController {
 				//최대 필요한 페이지 수
 				int maxPages = (rcpt.size() / 10) + 1;
 				model.addAttribute("maxPages", maxPages);
+				
+				List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+				model.addAttribute("parentCategory", parentCategory);
+				
 				return "servicecnsl/oneCnslPup";
 			}else {
 				// 로그인 안된 상태라면 사용자 로그인 창으로 이동
@@ -152,6 +156,34 @@ public class ServiceClientController {
 			
 		}catch (Exception e) {
 			// TODO: handle exception
+		}
+	}
+	/* *
+	 * 작성자 : 경민영
+	 * 작성일 : 2022.06.11
+	 * */
+	// 내 상담내역 조회
+	@GetMapping("/myService")
+	public String myService(Model model, Authentication authentication)throws Exception{
+		try {
+			String memberEmail = "";
+			if (authentication != null){
+				UserDetails user = (UserDetails)authentication.getPrincipal();
+				memberEmail = user.getUsername();
+				
+				MemberDTO memberDTO = memberService.getMember(memberEmail);
+				List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+				
+				model.addAttribute("memberDTO", memberDTO);
+				model.addAttribute("parentCategory", parentCategory);
+				
+				return "servicecnsl/myService";
+			}else {
+				return "redirect:../member/login.do"; // 로그인 화면으로 이동
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
 		}
 	}
 }
