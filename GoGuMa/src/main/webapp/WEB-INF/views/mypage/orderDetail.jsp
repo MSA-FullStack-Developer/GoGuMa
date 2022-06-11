@@ -57,7 +57,9 @@
                             <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
                         </div>
                         <div>
-                            <a href="${contextPath}/mypage/pointHistory/all?page=1">1,000P</a>
+                            <a href="${contextPath}/mypage/pointHistory/all?page=1">
+                            	<fmt:formatNumber value="${memberPoint}"/>P
+                            </a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -229,7 +231,7 @@
                         </tr>
                         <tr>
                             <th>예상 적립 포인트</th>
-                            <td>+ <fmt:formatNumber value="${earnablePoint}" />P</td>
+                            <td>+ <fmt:formatNumber value="${estimatedPoints}" />P</td>
                         </tr>
                         <tr>
                             <th>최종 결제금액</th>
@@ -348,5 +350,28 @@
 			})
 		}
 	}
+	$(document).ready(function() {
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		$.ajax({
+			url : "${contextPath}/order/api/verifyIamport/${receiptDTO.impUid}",
+			type : "POST",
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader(header,token);
+			}
+		}).done(function(data) {
+			let payMethod = data.response.payMethod;
+			if(payMethod == 'point') {
+				console.log(data.response.pgProvider);
+			}
+			else if(payMethod == 'card') {
+				console.log(data.response.cardName);
+			}
+			else if(payMethod == 'vbank') {
+				
+			}
+			
+		});
+	});
 </script>
 </html>

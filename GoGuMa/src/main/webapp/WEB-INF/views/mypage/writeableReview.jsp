@@ -245,7 +245,9 @@
                             <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
                         </div>
                         <div>
-                            <a href="${contextPath}/mypage/pointHistory/all?page=1">1,000P</a>
+                            <a href="${contextPath}/mypage/pointHistory/all?page=1">
+                            	<fmt:formatNumber value="${memberPoint}"/>P
+                            </a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
