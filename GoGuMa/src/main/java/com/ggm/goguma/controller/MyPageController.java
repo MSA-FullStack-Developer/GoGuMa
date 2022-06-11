@@ -10,10 +10,14 @@ import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -127,7 +131,8 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="", method=RequestMethod.GET)
-	public String getMyPageMain(@RequestParam("page") long page, HttpServletRequest request, Principal principal, Model model) throws Exception {
+	public String getMyPageMain(@RequestParam(value="page", defaultValue="1") long page,
+		HttpServletRequest request, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			model.addAttribute("memberDTO", memberDTO);
@@ -641,9 +646,10 @@ public class MyPageController {
 		return "mypage/resignMember";
 	}
 	
+	
 	@RequestMapping(value="/resignMember", method=RequestMethod.POST)
 	public String resignMember(@RequestParam("resignDetail") String resignDetail,
-		@RequestParam("userPassword") String userPassword, Principal principal, Model model) throws Exception {
+		@RequestParam("userPassword") String userPassword, HttpServletRequest request, HttpServletResponse response,  Authentication auth, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			
@@ -654,6 +660,9 @@ public class MyPageController {
 			
 			if(service.resignMember(resignDetail, userPassword, memberDTO)) {
 				model.addAttribute("memberDTO", memberDTO);
+				new SecurityContextLogoutHandler().logout(request, response, auth);
+				SecurityContextHolder.getContext().setAuthentication(null);
+				
 				return "mypage/resignResult";
 			}
 			return "redirect:/mypage/resignMember";
