@@ -8,4 +8,5 @@ public interface ServiceClientService {
 
 	List<ServiceCategoryDTO> getSCategory() throws Exception;
 
+
 }

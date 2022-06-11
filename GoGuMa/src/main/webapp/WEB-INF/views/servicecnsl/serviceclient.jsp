@@ -38,7 +38,7 @@
      
      if(`${memberDTO}`){
        //로그인 한 경우
-       window.open("oneCnslPup", "popup01", "width=800, height=700");
+       window.open("oneCnslPup/1", "popup01", "width=800, height=700");
      }else{
        location.href="${contextPath}/member/login.do";
      }

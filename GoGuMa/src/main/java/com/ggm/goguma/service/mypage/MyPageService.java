@@ -46,6 +46,8 @@ public interface MyPageService {
 	void cancelDefault(long memberId) throws Exception;
 
 	int getMemberPoint(long memberId) throws Exception;
+	
+	int estimatedPoints(long receiptId) throws Exception;
 
 	boolean confirmPassword(String userPassword, String comparePassword) throws Exception;
 
@@ -54,4 +56,7 @@ public interface MyPageService {
 	boolean changeInfo(UpdateMemberDTO updateDTO, MemberDTO memberDTO) throws Exception;
 
 	boolean resignMember(String resignDetail, String userPassword, MemberDTO dto) throws Exception;
+
+	//고객센터에서 불러올 주문내역
+	List<ReceiptDTO> getReceiptHistoryPages(long memberId, int pages) throws Exception;
 }
