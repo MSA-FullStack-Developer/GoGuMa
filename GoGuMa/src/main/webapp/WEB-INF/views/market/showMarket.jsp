@@ -158,7 +158,7 @@
             <div class="d-flex justify-content-between">
                 <h2>${market.marketName}의 진열대</h2>
                 <c:if test="${isMine}">
-                	 <a type="button" class="btn articleWriteBtn" href="${contextPath}/market/${market.marketId}/article/write.do">글 작성하기</a>
+                	 <a type="button" class="btn articleWriteBtn" href="${contextPath}/market/${market.marketId}/article/write.do" style="width: auto;">글 작성하기</a>
                 </c:if>
             </div>
             <c:if test="${fn:length(pagination.data) == 0}">

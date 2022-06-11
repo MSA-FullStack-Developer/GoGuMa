@@ -37,6 +37,7 @@
         width: 150px;
         height: 150px;
         cursor: pointer;
+        object-fit: cover;
     }
 </style>
 
@@ -170,7 +171,7 @@
                 <input id="thumbnail" name="thumbnail" type="file" class="form-control" accept=".jpg, .jpeg, .png"
                     style="position: absolute; left: -9999px;" >
                 <div id="upload-thumbnail">
-                    <img id="preview-thumbnail" class="w-100 h-100" src="${article.thumbnail.imagePath}" />
+                    <img id="preview-thumbnail" class="w-100 h-100" src="${article.thumbnail.imagePath}" style="object-fit: cover;"/>
                 </div>
 
                 <div class="accordion mb-3 mt-3" id="accordionSelectedProducts">

@@ -165,7 +165,7 @@
                 <input id="thumbnail" name="thumbnail" type="file" class="form-control" accept=".jpg, .jpeg, .png"
                     style="position: absolute; left: -9999px;" required>
                 <div id="upload-thumbnail">
-                    <img id="preview-thumbnail" class="w-100 h-100" src="${contextPath}/resources/img/gallery.png" />
+                    <img id="preview-thumbnail" class="w-100 h-100" src="${contextPath}/resources/img/gallery.png" style="object-fit: cover;"/>
                 </div>
 
                 <div class="accordion mb-3 mt-3" id="accordionSelectedProducts">
