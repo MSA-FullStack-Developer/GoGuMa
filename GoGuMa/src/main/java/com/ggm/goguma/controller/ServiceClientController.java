@@ -16,6 +16,7 @@ import com.ggm.goguma.constant.Role;
 import com.ggm.goguma.controller.cart.CartController;
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
+import com.ggm.goguma.dto.ServiceClientDTO;
 import com.ggm.goguma.dto.cart.CartItemDTO;
 import com.ggm.goguma.dto.cart.CartOrderListDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
@@ -43,6 +44,9 @@ public class ServiceClientController {
 	
 	@Autowired
 	private MyPageService myPageService;
+	
+	private long pageSize  = 10; 
+	private long blockSize = 10;
 	
 	@GetMapping("/")
 	public String cartList(Model model, Authentication authentication) throws Exception {
@@ -123,19 +127,40 @@ public class ServiceClientController {
 	 * 작성일 : 2022.06.11
 	 * */
 	// 내 상담내역 조회
-	@GetMapping("/myService")
-	public String myService(Model model, Authentication authentication)throws Exception{
+	@GetMapping("/myService/{pg}")
+	public String myService(@PathVariable long pg, Model model, Authentication authentication)throws Exception{
 		try {
 			String memberEmail = "";
 			if (authentication != null){
-				UserDetails user = (UserDetails)authentication.getPrincipal();
+				UserDetails user = (UserDetails) authentication.getPrincipal();
 				memberEmail = user.getUsername();
 				
 				MemberDTO memberDTO = memberService.getMember(memberEmail);
 				List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 				
+				// 내 상담내역 불러오기
+				List<ServiceClientDTO> myQnaList = serviceClientService.getQnaList(pg, memberDTO.getId());
+				log.info(myQnaList);
+				
+				// 페이징
+				long recordCount = serviceClientService.getQnaCount(memberDTO.getId()); // 카테고리별 상품 개수
+				long pageCount = recordCount / pageSize; // 총 페이지 수
+				if (recordCount % pageSize != 0) pageCount++;
+				
+				// 하단부에 보여줄 페이지 번호
+				long startPage = (pg - 1) / blockSize * blockSize + 1;
+				long endPage = startPage + blockSize - 1; 
+				if (endPage > pageCount) endPage = pageCount;
+				
 				model.addAttribute("memberDTO", memberDTO);
 				model.addAttribute("parentCategory", parentCategory);
+				model.addAttribute("myQnaList", myQnaList);
+				model.addAttribute("pg", pg);
+				model.addAttribute("recordCount", recordCount);
+				model.addAttribute("pageSize", pageSize);
+				model.addAttribute("pageCount", pageCount);
+				model.addAttribute("startPage", startPage);
+				model.addAttribute("endPage", endPage);
 				
 				return "servicecnsl/myService";
 			}else {

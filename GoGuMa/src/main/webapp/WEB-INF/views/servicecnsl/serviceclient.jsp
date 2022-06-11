@@ -58,7 +58,7 @@
                     <ul>
                         <li><a href="${contextPath}/serviceclient/">자주 묻는 질문</a></li>
                         <li><a href="#" onclick="openCnslPup(); return false;">1:1 문의하기</a></li>
-                        <li><a href="${contextPath}/serviceclient/myService">내 상담내역 조회</a></li>
+                        <li><a href="${contextPath}/serviceclient/myService/1">내 상담내역 조회</a></li>
                         <li><a href="/p/ccb/noticeList.do">공지사항</a></li>
                     </ul>
                 </div>
