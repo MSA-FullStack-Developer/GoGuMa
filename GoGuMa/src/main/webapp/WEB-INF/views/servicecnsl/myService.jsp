@@ -17,7 +17,7 @@
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
 		crossorigin="anonymous"></script>
-	
+		
 	<link rel="stylesheet"
 		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
 	
@@ -36,27 +36,74 @@
 	<script type="text/javascript"
 	src="${contextPath}/webjars/jquery-ui/1.13.0/jquery-ui.js"></script>
 	
+	<style>
+		table {
+			text-align: center;
+		}
+		
+		tr {
+			height: 45px;
+		}
+		
+		th {
+			vertical-align: middle;
+			height: 50px;
+		}
+		
+		td {
+			vertical-align: middle;
+			height: 50px;
+		}
+		
+		th.detail {
+			vertical-align: middle;
+		}
+		
+		tr.detail {
+		    display: none;
+		    width: 100%;
+		}
+		
+		tr.detail div {
+		    display: none;
+		}
+		
+		.showmore:hover {
+		    cursor: pointer;
+		    color: #FF493C;
+		}
+	</style>
 	<script>
-	   function openCnslPup(){
-	     
-	     if(`${memberDTO}`){
-	       //로그인 한 경우
-	       window.open("oneCnslPup/1", "popup01", "width=800, height=700");
-	     }else{
-	       location.href="${contextPath}/member/login.do";
-	     }
-	   }
-	   
-	   $(document).ready(function () {
-	     
-	   });
+		function openCnslPup() {
+		   if (`${memberDTO}`) {
+			   window.open("oneCnslPup/1", "popup01", "width=800, height=700");
+	       } else {
+	    	   location.href="${contextPath}/member/login.do";
+		   }
+	    }
+		
+		$(document).ready(function() {
+			$(".detail").hide();
+			
+			$("a.showmore").click(function (e) {
+				e.preventDefault();
+			    var targetrow = $(this).closest('tr').next('.detail');
+			    var btn = $(this).text("닫기");
+			    targetrow.show().find('div').slideToggle(0, function(){
+			    	if (!$(this).is(':visible')) {
+			    		btn.text("보기");
+			        	targetrow.hide();
+			      	}
+			    });
+			});
+		});
 	</script>
 </head>
 
 <body>
 	<%@ include file="../header.jsp" %>
 	
-	<main class="cmain customer" role="main" id="mainContents">
+	<main class="cmain customer" role="main" id="mainContents" style="height: 100%;">
 		<div class="container">
 	    	<!-- .side-menu-list -->
 	       	<div class="side-content">
@@ -65,39 +112,82 @@
                     <ul>
                         <li><a href="${contextPath}/serviceclient/">자주 묻는 질문</a></li>
                         <li><a href="#" onclick="openCnslPup(); return false;">1:1 문의하기</a></li>
-                        <li><a href="${contextPath}/serviceclient/myService">내 상담내역 조회</a></li>
+                        <li><a href="${contextPath}/serviceclient/myService/1">내 상담내역 조회</a></li>
                         <li><a href="/p/ccb/noticeList.do">공지사항</a></li>
                     </ul>
                 </div>
 	         </div>
-	         <div class="contents" style="height: 100%; margin-top: 50px;">
-				<table class="table table-sm" style="text-align: center;">
-			 		<thead>
-				    	<tr>
-				      		<th>NO</th>
-				      		<th>문의 유형</th>
-				      		<th>제목</th>
-				    		<th>문의일</th>
-				    		<th>문의상태</th>
-				    	</tr>
-			 		</thead>
-			 		<tbody>
-				   		<tr>
-				      		<th scope="row">1</th>
-				      		<td>Mark</td>
-				      		<td>Otto</td>
-				      		<td>@mdo</td>
-				      		<td>@mdo</td>
-				    	</tr>
-				    	<tr>
-					      	<th scope="row">2</th>
-					      	<td>Jacob</td>
-					      	<td>Thornton</td>
-					      	<td>@fat</td>
-					      	<td>@mdo</td>
-				    	</tr>
-					</tbody>
-				</table>
+	         <div class="contents" style="height: 100%;">
+	         	<div class="cus-wrap">
+                    <h3>내 상담내역 조회</h3>
+                </div>
+                <div style="margin-top: 20px;">
+                	<c:if test="${myQnaList.size() < 1}">
+                		<div style="text-align: center;">
+	   						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
+	   						<h5 class="no_result">상담내역이 없습니다.</h5>
+   						</div>
+                	</c:if>
+					<table class="table table-sm">
+				 		<thead>
+					    	<tr>
+					      		<th width="10%">NO</th>
+					      		<th>문의 유형</th>
+					      		<th>제목</th>
+					    		<th>문의일</th>
+					    		<th>문의상태</th>
+					    		<th></th>
+					    	</tr>
+				 		</thead>
+				 		<tbody>
+				 			<c:forEach items="${myQnaList}" var="qna" varStatus="status">
+						   		<tr>
+						      		<th scope="row">${status.count + ((pg - 1) * 10)}</th>
+						      		<td>${qna.categoryName}</td>
+						      		<td>${qna.qnaTitle}</td>
+						      		<td><fmt:formatDate value="${qna.createdAt}" pattern="yyyy-MM-dd" /></td>
+						      		<td>
+						      			<c:if test="${qna.answerStatus == 0}">
+						      				처리중
+						      			</c:if>
+						      			<c:if test="${qna.answerStatus == 1}">
+						      				답변완료
+						      			</c:if>
+					      			</td>
+					      			<td><a class="showmore">보기</a></td>
+						    	</tr>
+						    	<tr class="detail">
+						    		<th>내용</th>
+						    		<td colspan="5">
+						    			<div><h6>${qna.qnaContent}</h6></div>
+						    		</td>
+						    	</tr>
+					    	</c:forEach>
+						</tbody>
+					</table>
+				</div>
+				<ul class="pagination justify-content-center">
+                	<c:if test="${startPage != 1}">
+                		<li class="page-item">
+                			<a class="page-link" href="${contextPath}/serviceclient/myService/${startPage-1}" aria-label="Previous">
+	                			<span aria-hidden="true">&laquo;</span>
+	                		</a>
+                		</li>
+                	</c:if>
+                	<c:forEach begin="${startPage}" end="${endPage}" var="p">
+                		<li class="page-item">
+						<c:if test="${p == pg}"><a class="page-link">${p}</a></c:if>
+						<c:if test="${p != pg}"><a class="page-link" href="${contextPath}/serviceclient/myService/${p}" >${p}</a></c:if>
+						</li>
+					</c:forEach>
+                	<c:if test="${endPage != pageCount}">
+                		<li class="page-item">
+                			<a class="page-link" href="${contextPath}/serviceclient/myService/${endPage+1}">
+					    		<span aria-hidden="true">&raquo;</span>
+					    	</a>
+                		</li>
+                	</c:if>
+                </ul>
 	        </div>
 	    </div>
 	</main>

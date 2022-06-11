@@ -9,6 +9,7 @@ public class ServiceClientDTO {
 	long qnaID;
 	long memberID;
 	long categoryID;
+	String categoryName;
 	String qnaTitle;
 	String qnaContent;
 	Date createdAt;
