@@ -266,7 +266,7 @@
                                 	<option value="${option.stock}" 
                                 			data-id="${option.productID}" 
                                 			data-price="${option.productPrice}">
-                                			${option.productName} - ${option.productPrice}
+                                			${option.productName} - <fmt:formatNumber value="${productInfo.productPrice}" pattern="#,###" />
                               			</option>
 	                                </c:forEach>
 	                            </select>

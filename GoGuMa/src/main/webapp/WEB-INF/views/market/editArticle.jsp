@@ -149,6 +149,7 @@
 </script>
 
 <body>
+	<%@ include file="../market/marketHeader.jsp" %>
     <section class="container">
         <div class="w-50 m-auto p-5" style="min-width: 970px;">
             <h1>게시글 수정하기</h1>

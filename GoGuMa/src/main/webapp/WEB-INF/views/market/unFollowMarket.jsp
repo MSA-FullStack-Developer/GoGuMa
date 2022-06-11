@@ -36,10 +36,10 @@
 
 <body>
 	<%@ include file="../market/marketHeader.jsp" %>
-    <div class="w-100" style="min-width: 1400px;">
+    <div class="w-100" style="min-width: 1400px; height: 100%;">
         <section id="main-section" class="container-xxl pb-5">
             <div style="margin-bottom: 25px;">
-                <h3>${memberName}님, 관심있는 마켓을 팔로우해보세요</h3>
+                <h3>${memberName}님, 관심있는 마켓을 팔로우해보세요.</h3>
             </div>
 
             <div class="d-flex" style="width: 100%; height: 260px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap;">
@@ -52,7 +52,7 @@
                  	</div>
                 </c:forEach>
            	</div>
-        </section>
+       	</section>
     </div>
    	<%@ include file="../market/marketFooter.jsp" %>
 </body>
