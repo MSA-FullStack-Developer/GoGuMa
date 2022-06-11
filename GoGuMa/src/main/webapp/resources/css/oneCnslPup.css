@@ -4,14 +4,27 @@
 	border-top: 2px solid #d8d8d8;
 	border-bottom: 2px solid #d8d8d8;
 }
+.col-content{
+	border-left: 1px solid #ddd;
+	margin: auto;
+	padding: 10px;
+}
 .pop-row{
-	
+	border: 1px solid #ddd;
 }
 .col-head{
-	border-right: 1px solid #ddd;
 	text-align: center;
     padding: 10px 0;
+    margin: auto;
 }
 .btnGroup{
 	text-align: center;
+}
+.btn-primary{
+	background: #6426D0;
+	border-color: #F3F3F3;
+}
+.btn:hover {
+    background-color: #FF493C;
+    border-color: #F3F3F3;
 }

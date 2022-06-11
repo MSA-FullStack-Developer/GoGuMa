@@ -18,8 +18,22 @@
 <script type="text/javascript" src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.js"></script>
 
 <script type="text/javascript">
+
+const inputPhoneNumber = (target) => {
+  target.value = target.value
+    .replace(/[^0-9]/g, '')
+   .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+ }
+
   $(document).ready(function() {
+    var phone = "${memberDTO.phone}".replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+    console.log(phone);
+    $('#bphone').attr('value', phone);
     console.log("${memberDTO}");
+    
+    $('#findReceitpBtn').click(function(e){
+      
+    });
   });
 </script>
 
@@ -38,46 +52,56 @@
 						<div class="content">
 							<div class="row pop-row">
 								<div class="col-md-4 col-head">문의 유형 선택</div>
-								<div class="col-md-8" id="bname">
+								<div class="col-md-8 col-content" id="bname">
 									<!--상담유형선택-->
-									<select name="cnslSel" class="cu_select" id="cnslSel">
+									<select name="cnslSel" class="form-select" id="cnslSel">
 										<option value="">상담 분야 선택</option>
 										<c:forEach var="i" items="${scDtoList }" begin="0" step="1" varStatus="status">
-											<option value="">${i.categoryName}</option>
+											<option value="${i.categoryName}">${i.categoryName}</option>
 										</c:forEach>
 									</select>
 								</div>
 							</div>
 							<div class="row pop-row">
 								<div class="col-md-4 col-head">문의 상품 정보</div>
-								<div class="col-md-8" id="bemail">
-									<span><button>주문내역에서 찾기</button>
-										<button>장바구니에서 찾기</button></span>
+								<div class="col-md-8 col-content" id="bemail">
+									<div><button class="btn btn-primary" id="findReceitpBtn">주문내역에서 찾기</button>
+										<button class="btn btn-primary">장바구니에서 찾기</button></div>
+									<div>
+										<!-- 주문내역에서 찾는 경우 -->
+										<span style="display: none">주문번호: 123123 상품명: 케시미어 100% 옷</span>
+										<!-- 장바구니에서 찾는 경우 -->
+										<span style="display: none">상품명: 케시미어 100% 옷 옵션: 그레이</span>
+									</div>
 								</div>
 							</div>
 							<div class="row pop-row">
 								<div class="col-md-4 col-head">제목</div>
-								<div class="col-md-8" id="baddress">
-									<input type="text" placeholder="제목을 입력해주세요.">
+								<div class="col-md-8 col-content" id="baddress">
+									<input class="form-control" type="text" placeholder="제목을 입력해주세요.">
 								</div>
 							</div>
 							<div class="row pop-row">
 								<div class="col-md-4 col-head">문의 내용</div>
-								<div class="col-md-8" id="bphone">내용</div>
+								<div class="col-md-8 col-content" id="bcont">
+									<textarea class="form-control" placeholder="문의 내용을 입력하세요." id="exampleFormControlTextarea1" rows="3"></textarea>
+								</div>
 							</div>
 							<div class="row pop-row">
 								<div class="col-md-4 col-head">연락처</div>
-								<div class="col-md-8" id="bphone">${memberDTO.phone}</div>
+								<div class="col-md-8 col-content">
+									<input type="text" id="bphone" class="form-control" maxlength="13" oninput="inputPhoneNumber(this);" value="">
+								</div>
 							</div>
 							<div class="row pop-row">
 								<div class="col-md-4 col-head">이메일</div>
-								<div class="col-md-8" id="email">${memberDTO.email}</div>
+								<div class="col-md-8 col-content" id="email">${memberDTO.email}</div>
 							</div>
 						</div>
 					</form>
 					<div class="btnGroup">
-						<button>문의하기</button>
-						<button>취소</button>
+						<button class="btn btn-primary">문의하기</button>
+						<button class="btn btn-secondary">취소</button>
 					</div>
 				</div>
 			</div>

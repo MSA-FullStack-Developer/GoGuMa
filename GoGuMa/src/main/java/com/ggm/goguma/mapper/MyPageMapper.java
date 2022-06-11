@@ -66,6 +66,8 @@ public interface MyPageMapper {
 	void cancelDefault(long memberId) throws Exception;
 
 	int getMemberPoint(long memberId) throws Exception;
+	
+	int estimatedPoints(long receiptId) throws Exception;
 
 	String confirmPassword(long memberId) throws Exception;
 

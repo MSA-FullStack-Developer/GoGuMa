@@ -186,4 +186,9 @@ public class MyPageServiceImpl implements MyPageService {
 		mapper.disableMember(dto.getId());
 		return true;
 	}
+
+	@Override
+	public int estimatedPoints(long receiptId) throws Exception {
+		return mapper.estimatedPoints(receiptId);
+	}
 }
