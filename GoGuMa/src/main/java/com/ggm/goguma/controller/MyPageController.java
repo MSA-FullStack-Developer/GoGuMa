@@ -223,8 +223,8 @@ public class MyPageController {
 			ReceiptDTO receiptDTO = service.getReceiptDetail(receiptId); // 결제상세 가져오기
 			model.addAttribute("receiptDTO", receiptDTO);
 			
-			long earnablePoint = service.getEarnablePoint(receiptId);
-			model.addAttribute("earnablePoint", earnablePoint);
+			long estimatedPoints = service.getEstimatedPoints(receiptId);
+			model.addAttribute("estimatedPoints", estimatedPoints);
 		} catch (Exception e) {
 			log.info(e.getMessage());
 		}
