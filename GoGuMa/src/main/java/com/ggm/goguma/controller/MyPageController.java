@@ -131,7 +131,8 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="", method=RequestMethod.GET)
-	public String getMyPageMain(@RequestParam("page") long page, HttpServletRequest request, Principal principal, Model model) throws Exception {
+	public String getMyPageMain(@RequestParam(value="page", defaultValue="1") long page,
+		HttpServletRequest request, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			model.addAttribute("memberDTO", memberDTO);
