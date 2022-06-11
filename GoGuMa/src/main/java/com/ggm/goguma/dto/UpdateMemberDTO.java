@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class UpdateMemberDTO {
-	private long memberId;
 	private MultipartFile profileImage;
 	private String nickName;
 	private String gender;

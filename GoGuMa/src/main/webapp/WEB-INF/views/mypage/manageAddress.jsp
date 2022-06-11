@@ -57,18 +57,10 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            예치금
-                        </div>
-                        <div>
-                            10,000원
-                        </div>
-                    </div>
-                    <div class="d-flex flex-column align-items-center mt-3 mb-3">
-                        <div>
                             <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
                         </div>
                         <div>
-                            <a href="${contextPath}/mypage/couponHistory/available?page=1">3장</a>
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">${couponCount}장</a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -86,7 +78,7 @@
                 <div>
                     <h5>기본 배송지</h5>
                 </div>
-                <table class="table table-hover mb-3" style="margin: auto; text-align: center">
+                <table class="table mb-3" style="margin: auto; text-align: center">
                     <thead class="table-secondary table-group-divider">
                         <tr>
                             <th>배송지 별칭</th>
@@ -111,7 +103,7 @@
                 <div>
                     <h5>배송지 목록</h5>
                 </div>
-                <table class="table table-hover mb-2" style="margin: auto; text-align: center">
+                <table class="table mb-2" style="margin: auto; text-align: center">
                     <thead class="table-secondary table-group-divider">
                         <tr>
                             <th><input type="checkbox" id="checkAll"></th>
@@ -141,7 +133,7 @@
 					        <div class="modal-dialog modal-dialog-centered">
 					            <div class="modal-content">
 					                <div class="modal-header">
-					                    <h5 class="modal-title" id="exampleModalLabel"><b>배송지 수정</b></h5>
+					                    <h5 class="modal-title"><b>배송지 수정</b></h5>
 					                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					                </div>
 					                <div class="modal-body" id="body${addressDTO.addressId}">
@@ -176,6 +168,7 @@
 						            	</form>
 					                </div>
 					                <div class="modal-footer">
+					                	<button type="button" class="btn btm-sm btn-light" onclick="findAddress()">우편번호 찾기</button>
 					                    <button type="button" class="btn btn-dark" onclick="updateAddress(this)">확인</button>
 					                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">취소</button>
 					                    <input type="hidden" value="${addressDTO.addressId}" />
@@ -201,34 +194,44 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"><b>배송지 등록</b></h5>
+                    <h5 class="modal-title"><b>배송지 등록</b></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div id="addressBody" class="modal-body">
                 	<form>
-	                	<div class="mb-1">
+	                	<div class="mb-2">
 	                		<label for="nickName" class="col-form-label">배송지 별칭</label>
 	                		<input type="text" class="form-control" id="nickName">
 	               		</div>
-	               		<div class="mb-1">
+	               		<div class="mb-2">
 	               			<label for="recipient" class="col-form-label">받는 분</label>
 	               			<input type="text" class="form-control" id="recipient">
 	              		</div>
-	              		<div class="mb-1">
-	              			<label for="address" class="col-form-label">배송지 주소</label>
-	              			<input type="text" class="form-control" id="address">
+	              		<div class="mb-2">
+	              			<div class="mb-1">
+	              				<label for="address" class="col-form-label">배송지 주소</label>
+	              				<button type="button" class="btn btn-sm btn-warning" onclick="findAddress()">우편번호 찾기</button>
+	              				<!-- 
+		              			<label for="address" class="col-form-label" style="font-size: 14px">배송지 주소</label>
+		              			<button type="button" class="btn btn-sm btn-warning" onclick="findAddress()" style="width:100px; height:30px; font-size: 12px">우편번호 찾기</button>
+		              			 -->
+	              			</div>
+	              			<input type="text" class="form-control" id="postcode" placeholder="주소" disabled>
+	              			<input type="text" class="form-control" id="address" placeholder="주소" disabled>
+	              			<input type="text" class="form-control" id="extra" placeholder="참고" disabled>
+              				<input type="text" class="form-control" id="detail" placeholder="상세주소" disabled>
 	             		</div>
-	             		<div class="mb-3">
+	             		<div class="mb-2">
 	             			<label for="contact" class="col-form-label">연락처</label>
 	             			<input type="text" class="form-control" id="contact" maxlength="13" oninput="autoHyphen(this)">
-	            		</div>
-	            		<div class="">
-	            			<label for="checkDefault" class="col-form-label">기본 배송지 설정</label>
-	            			<input type="checkbox" id="isDefault">
 	            		</div>
 	            	</form>
                 </div>
                 <div class="modal-footer">
+                	<div class="col">
+	                	<label for="isDefault" class="col-form-label">기본 배송지 설정</label>
+	           			<input type="checkbox" id="isDefault">
+                	</div>
                     <button type="button" id="addAddressBtn" class="btn btn-dark">확인</button>
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">취소</button>
                 </div>
@@ -245,6 +248,48 @@
 		target.value = target.value
 		   .replace(/[^0-9]/g, '')
 		   .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+	}
+	
+	function findAddress() {
+		new daum.Postcode({
+			oncomplete: function(data) {
+				// 각 주소의 노출 규칙에 따라서 주소를 조합한다.
+				// 내려오는 변수가 값이 없는 경우에는 공백('')을 값으로 가진다.
+				let addr = ""; // 주소 변수
+				let extra = ""; // 참고 항목
+				
+				// 사용자가 도로명 주소를 선택한 경우
+				if(data.userSelectedType === 'R') {
+					addr = data.roadAddress;
+				}
+				// 사용자가 지번 주소를 선택한 경우
+				else {
+					addr = data.jibunAddress;
+				}
+				
+				// 사용자가 선택한 주소가 도로명 타입인 경우 참고항목 조합
+				if(data.userSelectedType === 'R') {
+					// 법정동명이 있을 경우 추가(마지막 문자가 '동/로/가' 중에 하나로 종결)
+					if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+						extra += data.bname;
+					}
+					// 건물명이 있고 공동주택인 경우 추가
+					if(data.buildingName !== '' && data.apartment === 'Y') {
+						extra += (extra !== '' ? ', ' + data.buildingName : data.buildingName);
+					}
+					// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열 완성
+					if(extra !== '') {
+						extra = ' (' + extra + ')';
+					}
+					// 조합한 참고항목을 필드에 넣는다.
+					document.getElementById("extra").value = extra;
+				}
+				
+				document.getElementById("postcode").value = data.zonecode;
+				document.getElementById("address").value = addr;
+				document.getElementById("detail").focus();
+			}
+		}).open();
 	}
 
 	// 수정 버튼 이벤트

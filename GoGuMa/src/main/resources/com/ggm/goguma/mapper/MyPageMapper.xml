@@ -21,7 +21,7 @@
 	</select>
 
 	<select id="getOrderList" resultType="OrderDTO">
-		select orderid, pname, cname, price, image, count, status, receiptid
+		select orderid, productid, categoryid, pname, cname, price, image, count, status, receiptid
 		from orderview where receiptId = #{receiptId}
 		order by pname
 	</select>
@@ -232,7 +232,7 @@
 	</update>
 	
 	<update id="changeInfo">
-		update member set nickname = #{nickName}, birthDate = #{birthDate}, gender = #{gender} where memberid = #{memberId}
+		update member set profileImage = #{profileImage}, nickname = #{nickName}, birthDate = #{birthDate}, gender = #{gender} where memberid = #{memberId}
 	</update>
 	
 	<insert id="insertResignMember">

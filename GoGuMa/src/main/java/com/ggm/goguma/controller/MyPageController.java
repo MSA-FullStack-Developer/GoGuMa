@@ -1,8 +1,9 @@
 package com.ggm.goguma.controller;
 
-import java.net.URLDecoder;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLDecoder;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,9 +34,11 @@ import com.ggm.goguma.dto.ImageAttachDTO;
 import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ProductDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
-import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.dto.ReviewDTO;
+import com.ggm.goguma.dto.UpdateMemberDTO;
+import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.service.member.MemberService;
+import com.ggm.goguma.service.mypage.MyPageService;
 import com.ggm.goguma.service.product.CategoryService;
 import com.ggm.goguma.service.product.ImageAttachService;
 import com.ggm.goguma.service.product.ProductService;
@@ -41,9 +46,6 @@ import com.ggm.goguma.service.product.ReviewService;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.CancelData;
-import com.siot.IamportRestClient.response.IamportResponse;
-import com.siot.IamportRestClient.response.Payment;
-import com.ggm.goguma.service.mypage.MyPageService;
 
 import lombok.extern.log4j.Log4j;
 
@@ -58,6 +60,9 @@ import lombok.extern.log4j.Log4j;
 public class MyPageController {
 //	@Value("${contentPerPage}")
 	private int contentPerPage=10; // 한 페이지에 보여지는 게시물의 개수
+	
+//	@Value("${productPerPage}")
+	private int productPerPage=8; // 한 페이지에 보여지는 최근 본 상품의 개수
 	
 //	@Value("${blockPerPage}")
 	private int blockPerPage=10; // 한 페이지에 보여지는 페이지 블록의 개수
@@ -80,34 +85,88 @@ public class MyPageController {
 	@Autowired
 	private ProductService productService;
 	
-	@RequestMapping(value="", method=RequestMethod.GET)
-	public String getMyPageMain(HttpServletRequest request, Principal principal, Model model) throws Exception {
-		MemberDTO memberDTO = memberService.getMember(principal.getName());
-		List<ProductDTO> productList = new ArrayList<>();
-		List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+	// 쿠키에 저장된 상품ID의 개수를 반환하는 메소드
+	public int getSeenProductCount(HttpServletRequest request) throws UnsupportedEncodingException {
 		Cookie[] cookies = request.getCookies();
 		if(cookies != null) {
-			// 가져온 쿠키 중에서
 			for(Cookie cookie : cookies) {
-				// 이름이 'latelySeenProducts'인 쿠키를 찾으면
-				if(cookie.getName().equals("latelySeenProducts")) {
-					// 쿠키의 값을 쉼표로 구분해서 리스트 형식으로 저장
+				// 이름이 'seenProducts'인 쿠키를 찾으면
+				if(cookie.getName().equals("seenProducts")) {
+					// 쿠키에 저장된 상품ID 값을 쉼표로 구분해서 배열 형식으로 저장
 					String[] productIdArr = (URLDecoder.decode(cookie.getValue(), "utf-8")).split(",");
-					for(String productId : productIdArr) {
-						productList.add(productService.getProductInfo(Long.parseLong(productId)));
+					return productIdArr.length;
+				}
+			}
+		}
+		return 0;
+	}
+	
+	// 쿠키에 저장된 상품ID들을 리스트에 각각 저장하는 메소드
+	public List<ProductDTO> setSeenProducts(long page, long productCount, HttpServletRequest request) throws NumberFormatException, Exception {
+		List<ProductDTO> productList = new ArrayList<>();
+		
+		long startNum = (page-1) * productPerPage;
+		long endNum = page * productPerPage - 1;
+		if(endNum >= productCount) endNum = productCount - 1; // endNum이 productCount 보다 커지는 것을 방지
+		
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null) {
+			for(Cookie cookie : cookies) {
+				// 이름이 'seenProducts'인 쿠키를 찾으면
+				if(cookie.getName().equals("seenProducts")) {
+					// 쿠키에 저장된 상품ID 값을 쉼표로 구분해서 배열 형식으로 저장
+					String[] productIdArr = (URLDecoder.decode(cookie.getValue(), "utf-8")).split(",");
+					// 상품ID들을 통해서 가져온 ProductInfo들을 productList에 각각 저장
+					for(int i=(int)startNum; i<=endNum; i++) {
+						productList.add(productService.getProductInfo(Long.parseLong(productIdArr[i])));
 					}
 				}
 			}
 		}
-		log.info(productList);
-		model.addAttribute("memberDTO", memberDTO);
-		model.addAttribute("productList", productList);
-		model.addAttribute("parentCategory", parentCategory);
-		
-		// 작성 가능한 상품평 개수 불러오기
-		List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
-		model.addAttribute("writeableList", writeableList);
-		model.addAttribute("writeableCount", writeableList.size());
+		return productList;
+	}
+	
+	@RequestMapping(value="", method=RequestMethod.GET)
+	public String getMyPageMain(@RequestParam("page") long page, HttpServletRequest request, Principal principal, Model model) throws Exception {
+		try {
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			model.addAttribute("memberDTO", memberDTO);
+			
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+			model.addAttribute("parentCategory", parentCategory);
+			
+			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
+			model.addAttribute("couponCount", couponCount);
+
+			// 작성 가능한 상품평 개수 불러오기
+			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
+			model.addAttribute("writeableList", writeableList);
+			model.addAttribute("writeableCount", writeableList.size());
+			
+			// 최근 본 상품의 개수
+			long productCount = getSeenProductCount(request);
+			// 전체 페이지 개수 = 최근 본 상품의 개수 / 한 페이지에 보여지는 최근 본 상품의 개수
+			long pageCount = productCount / productPerPage;
+			// 예를 들어, 최근 본 상품의 개수가 101개인 경우, 11개의 페이지가 필요하므로 총 페이지의 개수를 증가시켜준다.
+			if(productCount % productPerPage != 0) pageCount++;
+			
+			// 시작 페이지 = (현재 페이지-1) / 페이지 블록 크기 * 페이지 블록 크기 + 1
+			long startPage = (page-1) / blockPerPage * blockPerPage + 1;
+			// 마지막 페이지 (현재 페이지-1) / 페이지 블록 크기 * 페이지 블록 크기 + 페이지 블록 크기
+			long endPage = (page-1) / blockPerPage * blockPerPage + blockPerPage;
+			// 마지막 페이지 개수가 전체 페이지 개수보다 많은 경우, 마지막 페이지를 전체 페이지 개수로 맞춰준다.
+			if(endPage > pageCount) endPage = pageCount;
+			
+			List<ProductDTO> productList = setSeenProducts(page, productCount, request);
+			model.addAttribute("productList", productList);
+			model.addAttribute("page", page);
+			model.addAttribute("startPage", startPage);
+			model.addAttribute("endPage", endPage);
+			model.addAttribute("pageCount", pageCount);
+			model.addAttribute("productCount", productCount);
+		} catch(Exception e) {
+			log.info(e.getMessage());
+		}
 		return "mypage/main";
 	}
 	
@@ -115,19 +174,24 @@ public class MyPageController {
 	public String getOrderHistory(Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-			List<ReceiptDTO> receiptHistory = service.getReceiptHistory(memberDTO.getId()); // 회원ID로 결제정보DTO를 모두 불러오기
-			for(ReceiptDTO dto : receiptHistory) {
-				log.info(dto);
-			}
-			model.addAttribute("parentCategory", parentCategory);
-			model.addAttribute("receiptHistory", receiptHistory);
 			model.addAttribute("memberDTO", memberDTO);
+			
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+			model.addAttribute("parentCategory", parentCategory);
+			
+			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
+			model.addAttribute("couponCount", couponCount);
 			
 			// 작성 가능한 상품평 개수 불러오기
 			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
 			model.addAttribute("writeableList", writeableList);
 			model.addAttribute("writeableCount", writeableList.size());
+			
+			List<ReceiptDTO> receiptHistory = service.getReceiptHistory(memberDTO.getId()); // 회원ID로 결제정보DTO를 모두 불러오기
+			model.addAttribute("receiptHistory", receiptHistory);
+			for(ReceiptDTO dto : receiptHistory) {
+				log.info(dto);
+			}
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}
@@ -138,19 +202,24 @@ public class MyPageController {
 	public String getOrderDetail(@PathVariable("receiptId") long receiptId, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-			ReceiptDTO receiptDTO = service.getReceiptDetail(receiptId); // 결제상세 가져오기
-			long earnablePoint = service.getEarnablePoint(receiptId);
-			model.addAttribute("parentCategory", parentCategory);
-			model.addAttribute("receiptDTO", receiptDTO);
-			model.addAttribute("earnablePoint", earnablePoint);
 			model.addAttribute("memberDTO", memberDTO);
-			log.info(receiptDTO);
+			
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+			model.addAttribute("parentCategory", parentCategory);
+			
+			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
+			model.addAttribute("couponCount", couponCount);
 			
 			// 작성 가능한 상품평 개수 불러오기
 			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
 			model.addAttribute("writeableList", writeableList);
 			model.addAttribute("writeableCount", writeableList.size());
+			
+			ReceiptDTO receiptDTO = service.getReceiptDetail(receiptId); // 결제상세 가져오기
+			model.addAttribute("receiptDTO", receiptDTO);
+			
+			long earnablePoint = service.getEarnablePoint(receiptId);
+			model.addAttribute("earnablePoint", earnablePoint);
 		} catch (Exception e) {
 			log.info(e.getMessage());
 		}
@@ -201,11 +270,22 @@ public class MyPageController {
 		Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			model.addAttribute("memberDTO", memberDTO);
 			
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-			// 특정 포인트 내역의 개수
+			model.addAttribute("parentCategory", parentCategory);
+			
+			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
+			model.addAttribute("couponCount", couponCount);
+			
+			// 작성 가능한 상품평 개수 불러오기
+			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
+			model.addAttribute("writeableList", writeableList);
+			model.addAttribute("writeableCount", writeableList.size());
+			
+			// 포인트 내역의 개수
 			long historyCount = service.getPointHistoryCount(memberDTO.getId(), type, startDate, endDate);
-			// 전체 페이지 개수 = 전체 페이지 개수 / 한 페이지에 보여지는 내역의 수
+			// 전체 페이지 개수 = 포인트 내역의 개수 / 한 페이지에 보여지는 내역의 수
 			long pageCount = historyCount / contentPerPage;
 			// 예를 들어, 내역이 101개인 경우, 11개의 페이지가 필요하므로 총 페이지 개수를 증가시켜준다.
 			if(historyCount % contentPerPage != 0) pageCount++;
@@ -218,8 +298,6 @@ public class MyPageController {
 			if(endPage > pageCount) endPage = pageCount;
 
 			List<PointDTO> pointHistory = service.getPointHistory(memberDTO.getId(), type, page, startDate, endDate);
-			
-			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("pointHistory", pointHistory);
 			model.addAttribute("type", type);
 			model.addAttribute("page", page);
@@ -228,14 +306,6 @@ public class MyPageController {
 			model.addAttribute("startPage", startPage);
 			model.addAttribute("endPage", endPage);
 			model.addAttribute("pageCount", pageCount);
-			model.addAttribute("historyCount", historyCount);
-			model.addAttribute("contentPerPage", contentPerPage);
-			model.addAttribute("memberDTO", memberDTO);
-			
-			// 작성 가능한 상품평 개수 불러오기
-			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
-			model.addAttribute("writeableList", writeableList);
-			model.addAttribute("writeableCount", writeableList.size());
 		} catch (Exception e) {
 			log.info(e.getMessage());
 		}
@@ -246,15 +316,25 @@ public class MyPageController {
 	public String getCouponHistory(@PathVariable("type") String type, @RequestParam("page") long page, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			model.addAttribute("memberDTO", memberDTO);
 			
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-			// 특정 쿠폰의 개수
-			long couponCount = service.getCouponCount(memberDTO.getId(), type);
-
-			// 전체 페이지 개수 = 전체 페이지 개수 / 한 페이지에 보여지는 내역의 수
-			long pageCount = couponCount / contentPerPage;
+			model.addAttribute("parentCategory", parentCategory);
+			
+			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
+			model.addAttribute("couponCount", couponCount);
+			
+			// 작성 가능한 상품평 개수 불러오기
+			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
+			model.addAttribute("writeableList", writeableList);
+			model.addAttribute("writeableCount", writeableList.size());
+			
+			// 쿠폰의 개수
+			long historyCount = service.getCouponCount(memberDTO.getId(), type);
+			// 전체 페이지 개수 = 쿠폰의 개수 / 한 페이지에 보여지는 쿠폰의 개수
+			long pageCount = historyCount / contentPerPage;
 			// 예를 들어, 내역이 101개인 경우, 11개의 페이지가 필요하므로 총 페이지 개수를 증가시켜준다.
-			if(couponCount % contentPerPage != 0) pageCount++;
+			if(historyCount % contentPerPage != 0) pageCount++;
 			
 			// 시작 페이지 = (현재 페이지-1) / 페이지 블록 크기 * 페이지 블록 크기 + 1
 			long startPage = (page-1) / blockPerPage * blockPerPage + 1;
@@ -264,21 +344,12 @@ public class MyPageController {
 			if(endPage > pageCount) endPage = pageCount;
 			
 			List<CouponDTO> couponList = service.getCouponHistory(memberDTO.getId(), type, page);
-			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("couponList", couponList);
 			model.addAttribute("type", type);
 			model.addAttribute("page", page);
 			model.addAttribute("startPage", startPage);
 			model.addAttribute("endPage", endPage);
 			model.addAttribute("pageCount", pageCount);
-			model.addAttribute("historyCount", couponCount);
-			model.addAttribute("contentPerPage", contentPerPage);
-			model.addAttribute("memberDTO", memberDTO);
-			
-			// 작성 가능한 상품평 개수 불러오기
-			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
-			model.addAttribute("writeableList", writeableList);
-			model.addAttribute("writeableCount", writeableList.size());
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}
@@ -289,21 +360,27 @@ public class MyPageController {
 	public String getAddressList(Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-			DeliveryAddressDTO defaultAddress = service.getDefaultAddress(memberDTO.getId());
-			List<DeliveryAddressDTO> addressList = service.getAddressList(memberDTO.getId());
-			for(DeliveryAddressDTO dto : addressList) {
-				log.info(dto);
-			}
-			model.addAttribute("parentCategory", parentCategory);
-			model.addAttribute("defaultAddress", defaultAddress);
-			model.addAttribute("addressList", addressList);
 			model.addAttribute("memberDTO", memberDTO);
+			
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+			model.addAttribute("parentCategory", parentCategory);
+			
+			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
+			model.addAttribute("couponCount", couponCount);
 			
 			// 작성 가능한 상품평 개수 불러오기
 			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
 			model.addAttribute("writeableList", writeableList);
 			model.addAttribute("writeableCount", writeableList.size());
+			
+			DeliveryAddressDTO defaultAddress = service.getDefaultAddress(memberDTO.getId());
+			model.addAttribute("defaultAddress", defaultAddress);
+			
+			List<DeliveryAddressDTO> addressList = service.getAddressList(memberDTO.getId());
+			model.addAttribute("addressList", addressList);
+			for(DeliveryAddressDTO dto : addressList) {
+				log.info(dto);
+			}
 		} catch (Exception e) {
 			log.info(e.getMessage());
 		}
@@ -386,14 +463,23 @@ public class MyPageController {
 	@RequestMapping(value="/myReview", method=RequestMethod.GET)
 	public String getMyReview(Model model, Principal principal) throws Exception {
 		try {
-			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-			model.addAttribute("parentCategory", parentCategory);
-			
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			model.addAttribute("memberDTO", memberDTO);
 			
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+			model.addAttribute("parentCategory", parentCategory);
+			
+			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
+			model.addAttribute("couponCount", couponCount);
+			
+			// 작성 가능한 상품평 개수 불러오기
+			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
+			model.addAttribute("writeableList", writeableList);
+			model.addAttribute("writeableCount", writeableList.size());
+			
 			// 로그인한 회원 아이디로 내가 작성한 상품평 불러오기
 			List<ReviewDTO> reviewList = reviewService.getMyReviewList(memberDTO.getId());
+			model.addAttribute("reviewList", reviewList);
 			log.info(reviewList);
 			
 			// 상품평 이미지 불러오기
@@ -406,13 +492,6 @@ public class MyPageController {
 					e.printStackTrace();
 				}
 			});
-			
-			// 작성 가능한 상품평 개수 불러오기
-			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
-			model.addAttribute("writeableList", writeableList);
-			model.addAttribute("writeableCount", writeableList.size());
-				
-			model.addAttribute("reviewList", reviewList);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}
@@ -427,11 +506,14 @@ public class MyPageController {
 	@RequestMapping(value="/writeableReview", method=RequestMethod.GET)
 	public String getWriteableReview(Model model, Principal principal) throws Exception {
 		try {
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			model.addAttribute("memberDTO", memberDTO);
+			
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
-			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			model.addAttribute("memberDTO", memberDTO);
+			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
+			model.addAttribute("couponCount", couponCount);
 			
 			// 작성 가능한 상품평 개수 불러오기
 			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
@@ -443,20 +525,24 @@ public class MyPageController {
 		return "mypage/writeableReview";
 	}
 	
-	
 	@RequestMapping(value="/confirmPassword/{type}", method=RequestMethod.GET)
 	public String getConfirmForm(@PathVariable("type") String type, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			model.addAttribute("memberDTO", memberDTO);
+			
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
-			model.addAttribute("type", type);
-			model.addAttribute("memberDTO", memberDTO);
+			
+			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
+			model.addAttribute("couponCount", couponCount);
 			
 			// 작성 가능한 상품평 개수 불러오기
 			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
 			model.addAttribute("writeableList", writeableList);
 			model.addAttribute("writeableCount", writeableList.size());
+			
+			model.addAttribute("type", type);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}
@@ -500,7 +586,6 @@ public class MyPageController {
 		@RequestParam("newPassword") String newPassword, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			model.addAttribute("memberDTO", memberDTO);
 			
 			// 작성 가능한 상품평 개수 불러오기
 			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
@@ -520,12 +605,10 @@ public class MyPageController {
 	
 	@ResponseBody
 	@RequestMapping(value="/changeInfo", method=RequestMethod.POST)
-	public String changeInfo(@RequestParam("nickName") String nickName, @RequestParam("birthDate") String birthDate, @RequestParam("gender") String gender,
-		@RequestParam("userPassword") String userPassword, Principal principal, Model model) throws Exception {
+	public String changeInfo(@ModelAttribute UpdateMemberDTO updateDTO, BindingResult result, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			log.info(nickName);
-			if(service.changeInfo(nickName, birthDate, gender, userPassword, memberDTO)) {
+			if(service.changeInfo(updateDTO, memberDTO)) {
 				model.addAttribute("memberDTO", memberDTO);
 				return "1";
 			}
@@ -541,6 +624,12 @@ public class MyPageController {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			model.addAttribute("memberDTO", memberDTO);
+			
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+			model.addAttribute("parentCategory", parentCategory);
+			
+			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
+			model.addAttribute("couponCount", couponCount);
 			
 			// 작성 가능한 상품평 개수 불러오기
 			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());

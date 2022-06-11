@@ -7,6 +7,7 @@ import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
 import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
+import com.ggm.goguma.dto.UpdateMemberDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 
 public interface MyPageService {
@@ -52,7 +53,7 @@ public interface MyPageService {
 
 	boolean changePassword(String curPassword, String newPassword, MemberDTO dto) throws Exception;
 	
-	boolean changeInfo(String nickName, String birthDate, String gender, String userPassword, MemberDTO dto) throws Exception;
+	boolean changeInfo(UpdateMemberDTO updateDTO, MemberDTO memberDTO) throws Exception;
 
 	boolean resignMember(String resignDetail, String userPassword, MemberDTO dto) throws Exception;
 

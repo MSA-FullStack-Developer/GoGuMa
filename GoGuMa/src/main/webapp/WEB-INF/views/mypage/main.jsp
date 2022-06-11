@@ -53,18 +53,10 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            예치금
-                        </div>
-                        <div>
-                            10,000원
-                        </div>
-                    </div>
-                    <div class="d-flex flex-column align-items-center mt-3 mb-3">
-                        <div>
                             <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
                         </div>
                         <div>
-                            <a href="${contextPath}/mypage/couponHistory/available?page=1">3장</a>
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">${couponCount}장</a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -84,15 +76,51 @@
                     	<c:forEach var="productDTO" items="${productList}">
                     		<div class="col-3">
 	                            <div class="border mb-1 p-3">
-	                                <img src="${productDTO.prodimgurl}" style="width: 100%; height: 100%">
+	                            	<a href="${contextPath}/category/1/${productDTO.categoryID}/detail/${productDTO.productID}">
+	                                	<img src="${productDTO.prodimgurl}" style="width: 100%; height: 100%">
+                                	</a>
 	                            </div>
-	                            <div class="text-truncate">
-	                                ${productDTO.productName}
+	                            <div class="text-truncate" align="center">
+	                            	<a href="${contextPath}/category/1/${productDTO.categoryID}/detail/${productDTO.productID}">
+	                            		${productDTO.productName}
+	                            	</a>
 	                            </div>
 	                        </div>
                     	</c:forEach>
                     </div>
                 </div>
+                <ul class="pagination justify-content-center">
+                	<c:if test="${startPage ne 1}">
+                		<li class="page-item">
+                			<a class="page-link" href="${contextPath}/mypage?page=${startPage-1}" aria-label="Previous">
+	                			<span aria-hidden="true">&laquo;</span>
+	                		</a>
+                		</li>
+                	</c:if>
+                	<c:forEach begin="${startPage}" end="${endPage}" var="pageNum">
+                		<c:choose>
+                			<c:when test="${page == pageNum}">
+                				<li class="page-item">
+                					<p class="page-link">${pageNum}</p>
+                				</li>
+                			</c:when>
+                			<c:otherwise>
+                				<li class="page-item">
+                					<a class="page-link" href="${contextPath}/mypage?page=${pageNum}">
+                						${pageNum}
+                					</a>
+                				</li>
+                			</c:otherwise>
+                		</c:choose>
+                	</c:forEach>
+                	<c:if test="${endPage ne pageCount}">
+                		<li class="page-item">
+                			<a class="page-link" href="${contextPath}/mypage?page=${endPage+1}" aria-label="Next">
+					    		<span aria-hidden="true">&raquo;</span>
+					    	</a>
+                		</li>
+                	</c:if>
+                </ul>
             </div>
 		</div>
 	</div>

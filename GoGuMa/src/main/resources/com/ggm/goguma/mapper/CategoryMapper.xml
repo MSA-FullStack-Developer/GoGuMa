@@ -8,6 +8,7 @@
 		SELECT categoryID, parentID, categoryname, categoryType, md
 		FROM category
 		WHERE parentid IS NULL
+		AND categorytype = 'M'
 	</select>
 	
 	<!-- 부모 카테고리 번호로 해당 카테고리 전체 정보 조회 -->

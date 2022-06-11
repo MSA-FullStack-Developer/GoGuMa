@@ -100,7 +100,7 @@
         				
         				var item = "<div class='card mt-3' style='width: 18rem;'>";
         				item += "<a href= '${contextPath}/category/1/" + elem.categoryID + "/detail/" + elem.productID + "'" + " class='text-decoration-none text-dark'>";
-        				item += "<img src='" + elem.prodimgurl + "' class='card-img-top'" + "alt='" + elem.productName + "' > </a>";
+        				item += "<img src='" + elem.prodimgurl + "' class='card-img-top'" + "alt='" + elem.productName + "' style='height: 286px;'> </a>";
         				item += "<div class='card-body'>";
         				item += "<p class='card-text'>" + elem.productName + "</p>";
         				item += "<strong>"  + addComma(elem.productPrice) + "</strong>원</div> </div>";
