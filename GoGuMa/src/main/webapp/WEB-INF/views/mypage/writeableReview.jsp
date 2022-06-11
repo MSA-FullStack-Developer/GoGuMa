@@ -242,34 +242,26 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            포인트
+                            <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
                         </div>
                         <div>
-                            1,000P
-                        </div>
-                    </div>
-                    <div class="d-flex flex-column align-items-center mt-3 mb-3">
-                        <div>
-                            예치금
-                        </div>
-                        <div>
-                            10,000원
+                            <a href="${contextPath}/mypage/pointHistory/all?page=1">1,000P</a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            쿠폰
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
                         </div>
                         <div>
-                            3장
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">${couponCount}장</a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            작성 가능한 상품평
+                            <a href="${contextPath}/mypage/writeableReview">작성 가능한 상품평</a>
                         </div>
                         <div>
-                            ${writeableCount}건
+                            <a href="${contextPath}/mypage/writeableReview">${writeableCount}건</a>
                         </div>
                     </div>
                 </div>
@@ -278,7 +270,7 @@
                 </div>
                 <div class="d-flex flex-wrap">
                 	<c:if test='${writeableList.size() < 1}'>
-   						<div style="text-align: center;">
+   						<div style="text-align: center; margin: 0 auto;">
 	   						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
 	   						<h5 class="no_result">작성 가능한 상품평이 없습니다.</h5>
 	   						<span style="font-size: 11pt; color: #ccc;">[마이페이지 > 주문내역]에서 구매확정시 작성하실 수 있습니다.</span>

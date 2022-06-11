@@ -391,5 +391,4 @@ public class MarketServiceImpl implements MarketService {
 	public Integer getMyMarket(long memberId) throws Exception {
 		return this.marketMapper.getMyMarket(memberId);
 	}
-	
 }

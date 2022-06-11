@@ -64,18 +64,10 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            예치금
-                        </div>
-                        <div>
-                            10,000원
-                        </div>
-                    </div>
-                    <div class="d-flex flex-column align-items-center mt-3 mb-3">
-                        <div>
                             <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
                         </div>
                         <div>
-                            <a href="${contextPath}/mypage/couponHistory/available?page=1">3장</a>
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">${couponCount}장</a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -93,8 +85,13 @@
                 <table class="table">
                     <tbody class="table-group-divider">
                     	<tr class="m-auto">
-                            <th class="col-2">프로필 사진</th>
-                            <td><input type="file" class="form-control form-control-sm" id="profileImage" accept=".jpg, .jpeg, .png" required></td>
+                            <th class="col-2 align-middle">프로필 사진</th>
+                            <td>
+                            	<input type="file" id="uploadFile" accept=".jpg, .jpeg, .png" style="position: absolute; left: -9999px" required>
+                            	<div id="profileImage">
+                            		<img id="preview" class="rounded-circle border mt-2 mb-2" src="${memberDTO.profileImage}" style="width: 100px; height: 100px; object-fit: fill;" />
+                            	</div>
+                            </td>
                         </tr>
                         <tr>
                             <th class="col-2">닉네임</th>
@@ -212,22 +209,23 @@
 <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
 <script type="text/javascript">
 	function changeInfo() {
+		let formData = new FormData();
+		let fileInput = $("#uploadFile");
+		let files = fileInput[0].files;
+		formData.append("profileImage", files[0]);
+		formData.append("nickName", $("#nickName").val());
+		formData.append("birthDate", $("#years :selected").val()+'-'+$("#months :selected").val()+'-'+$("#days :selected").val());
+		formData.append("gender", $('input[name="gender"]:checked').val());
+		formData.append("userPassword", $("#userPassword").val());
+		
 		let token = $("meta[name='_csrf']").attr("content");
 	    let header = $("meta[name='_csrf_header']").attr("content");
-		let formData = new FormData();
-		formData.append("profileImage", $("#profileImage").val());
 		$.ajax({
 			url : "${contextPath}/mypage/changeInfo",
 			type : "POST",
 			processData : false,
 			contentType : false,
-			data : {
-				formData : formData,
-				nickName : $("#nickName").val(),
-				birthDate : $("#years :selected").val()+'-'+$("#months :selected").val()+'-'+$("#days :selected").val(),
-				gender : $('input[name="gender"]:checked').val(),
-				userPassword : $("#userPassword").val()
-			},
+			data : formData,
 			beforeSend : function(xhr) {
 	            xhr.setRequestHeader(header, token);
 	        },
@@ -244,5 +242,24 @@
 			}
 		});
 	}
+	
+	function readFile(input, img) {
+		if(input.files && input.files[0]) {
+			let reader = new FileReader();
+			reader.onload = function(e) {
+				img.attr('src', e.target.result);
+			}
+			reader.readAsDataURL(input.files[0]);
+		}
+	}
+	
+	$(document).ready(function() {
+		$("#profileImage").on("click", function() {
+			$("#uploadFile").click();
+		});
+		$("#uploadFile").change(function() {
+			readFile(this, $("#preview"));
+		});
+	});
 </script>
 </html>

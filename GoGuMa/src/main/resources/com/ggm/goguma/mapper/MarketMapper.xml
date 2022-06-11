@@ -181,7 +181,7 @@
 		메인 화면 - 만들었던 마켓이 있는지 확인하기
 	 -->
 	 <select id="getMyMarket" resultType="Integer">
-	 	SELECT COUNT(*)
+	 	SELECT marketid
 	 	FROM market
 	 	WHERE memberid = #{memberId}
 	 </select>

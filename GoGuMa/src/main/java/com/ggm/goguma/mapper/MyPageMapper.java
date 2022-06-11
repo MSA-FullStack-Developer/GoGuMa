@@ -3,6 +3,7 @@ package com.ggm.goguma.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
@@ -66,14 +67,18 @@ public interface MyPageMapper {
 	void cancelDefault(long memberId) throws Exception;
 
 	int getMemberPoint(long memberId) throws Exception;
+	
+	int estimatedPoints(long receiptId) throws Exception;
 
 	String confirmPassword(long memberId) throws Exception;
 
 	void changePassword(@Param("memberId") long memberId, @Param("newPassword") String newPassword) throws Exception;
 
-	void changeInfo(@Param("memberId") long memberId, @Param("nickName") String nickName, @Param("birthDate") String birthDate, @Param("gender") String gender) throws Exception;
+	void changeInfo(@Param("memberId") long memberId, @Param("profileImage") String profileImage, @Param("nickName") String nickName, @Param("birthDate") String birthDate, @Param("gender") String gender) throws Exception;
 
 	void insertResignMember(@Param("dto") MemberDTO dto, @Param("resignDetail") String resignDetail) throws Exception;
 
 	void disableMember(long memberId) throws Exception;
+
+	List<ReceiptDTO> getReceiptHistoryPages(@Param("memberId") long memberId, @Param("startPages") int startPages) throws Exception;
 }

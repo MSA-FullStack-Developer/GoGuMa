@@ -40,7 +40,8 @@
 		</sec:authorize>
 		
 		<a class="menuB" href="${contextPath}/cart/"><i class="fa-solid fa-cart-shopping" style="margin-right: 5px;"></i>장바구니</a>
-		<a class="menuB" href="${contextPath}/mypage/"><i class="fa-solid fa-circle-user" style="margin-right: 5px;"></i>마이페이지</a>
+		<a class="menuB" href="${contextPath}/mypage?page=1"><i class="fa-solid fa-circle-user" style="margin-right: 5px;"></i>마이페이지</a>
+		<a class="menuB" href="${contextPath}/serviceclient/"><i class="fa-solid fa-comments" style="margin-right: 5px;"></i>고객센터</a>
 	</div>
 </div>
 <div class="header">

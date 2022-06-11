@@ -6,16 +6,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ggm.goguma.amazons3.AmazonS3Utils;
 import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
 import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
+import com.ggm.goguma.dto.UpdateMemberDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.mapper.MyPageMapper;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
 
+@Log4j
 @Service
 @RequiredArgsConstructor
 public class MyPageServiceImpl implements MyPageService {
@@ -23,6 +27,8 @@ public class MyPageServiceImpl implements MyPageService {
 	private int contentPerPage = 10;
 	
 	private final MyPageMapper mapper;
+	
+	private final AmazonS3Utils amazonService;
 	
 	private final BCryptPasswordEncoder passwordEncoder;
 
@@ -172,9 +178,15 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 
 	@Override
-	public boolean changeInfo(String nickName, String birthDate, String gender, String userPassword, MemberDTO dto) throws Exception {
-		if(!confirmPassword(userPassword, dto.getPassword())) return false;
-		mapper.changeInfo(dto.getId(), nickName, birthDate, gender);
+	public boolean changeInfo(UpdateMemberDTO updateDTO, MemberDTO memberDTO) throws Exception {
+		if(!confirmPassword(updateDTO.getUserPassword(), memberDTO.getPassword())) return false;
+		// 프로필 사진을 변경하지 않은 경우(null인 경우)
+		if(updateDTO.getProfileImage()==null) {
+			mapper.changeInfo(memberDTO.getId(), memberDTO.getProfileImage(), updateDTO.getNickName(), updateDTO.getBirthDate(), updateDTO.getGender());
+		} else {
+			String[] result = this.amazonService.uploadFile("profile", updateDTO.getProfileImage());
+			mapper.changeInfo(memberDTO.getId(), result[1], updateDTO.getNickName(), updateDTO.getBirthDate(), updateDTO.getGender());
+		}
 		return true;
 	}
 
@@ -185,5 +197,23 @@ public class MyPageServiceImpl implements MyPageService {
 		mapper.insertResignMember(dto, resignDetail);
 		mapper.disableMember(dto.getId());
 		return true;
+	}
+
+	@Override
+	public int estimatedPoints(long receiptId) throws Exception {
+		return mapper.estimatedPoints(receiptId);
+	}
+
+	
+	//고객 센터에서 불러올 주문내역
+	@Override
+	public List<ReceiptDTO> getReceiptHistoryPages(long memberId, int pages) throws Exception {
+		int startPages = 0;
+		if(pages == 1) {
+			startPages = 0;
+		}else {
+			startPages = ((pages-1) * 10) + 1;
+		}
+		return mapper.getReceiptHistoryPages(memberId, startPages);
 	}
 }

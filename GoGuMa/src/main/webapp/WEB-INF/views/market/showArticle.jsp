@@ -43,21 +43,44 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment-with-locales.min.js" integrity="sha512-vFABRuf5oGUaztndx4KoAEUVQnOvAIFs59y4tO0DILGWhQiFnFHiR+ZJfxLDyJlXgeut9Z07Svuvm+1Jv89w5g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data-10-year-range.js" ></script>
 <style>
-.profile-img {
-	width: 100px;
-	height: 100px;
-	object-fit: cover;
-	margin-right: 10px;
-	border-radius: 50%;
-	margin-left: 25px;
-}
-
-.reply-toggle-btn {
-	cursor: pointer;
-}
-.reply-edit, .reply-delete, .reply-child-edit, .reply-child-delete  {
-	cursor: pointer;
-}
+	.profile-img {
+		width: 100px;
+		height: 100px;
+		object-fit: cover;
+		margin-right: 10px;
+		border-radius: 50%;
+		margin-left: 25px;
+	}
+	
+	.reply-toggle-btn {
+		cursor: pointer;
+	}
+	
+	.reply-edit, .reply-delete, .reply-child-edit, .reply-child-delete  {
+		cursor: pointer;
+	}
+	
+	.btn-success {
+        --bs-btn-color: #fff;
+        --bs-btn-bg: #6426DD;
+        --bs-btn-border-color: #6426DD;
+        --bs-btn-hover-color: #fff;
+        --bs-btn-hover-bg: #6426DD;
+        --bs-btn-hover-border-color: #6426DD;
+        --bs-btn-focus-shadow-rgb: 100, 38, 221;
+        --bs-btn-active-color: #fff;
+        --bs-btn-active-bg: #6426DD;
+        --bs-btn-active-border-color: #6426DD;
+        --bs-btn-active-shadow: inset 0 3px 5pxrgba(0, 0, 0, 0.125);
+        --bs-btn-disabled-color: #fff;
+        --bs-btn-disabled-bg: #6426DD;
+        --bs-btn-disabled-border-color: #6426DD;
+    }
+    
+    .text-success-reply {
+	    --bs-text-opacity: 1;
+	    color: rgb(100, 38, 221);
+	}
 </style>
 
 </head>
@@ -265,12 +288,14 @@
 				
 					var replyId = replyItem.data("replyId");
 					
+					var isParentReply = $(this).data("reply");
+					
 					var data = {
 						replyId
 					};
 					
 					if(confirm('정말로 삭제하시겠습니까?')){
-						deleteReply(data, replyItem);
+						deleteReply(data, replyItem, isParentReply);
 					}
 					
 				});
@@ -387,10 +412,6 @@
 					
 				});
 				
-				
-				
-				
-				
 			} else {
 				console.log("카카오 JDK 초기화 실패")
 			}
@@ -439,7 +460,7 @@
 			}
 			
 			//댓글 & 답글 삭제 AJAX 호출 함수
-			function deleteReply(data, replyItem) {
+			function deleteReply(data, replyItem, isParentReply) {
 			
 				$.ajax({
 					url: "${contextPath}/market/api/deleteReply.do",
@@ -450,9 +471,11 @@
 			            xhr.setRequestHeader(header, token);
 			        },
 			        success: function() {
+			        	if (isParentReply == true) {
+				        	var replyCount = $("#reply-count").text() - 1;
+				        	$("#reply-count").text(replyCount);
+			        	}
 			        	replyItem.remove();
-			        	var replyCount = $("#reply-count").text() - 1;
-			        	$("#reply-count").text(replyCount);
 			        },
 			        error: function(xhr, status, error) {
 	        			console.log(xhr.status);
@@ -601,7 +624,7 @@
 							<c:if test="${me.id eq reply.member.id}">
 								<div class="reply-button-wrapper col-2 d-flex justify-content-end">
 									<span class="reply-edit text-secondary">수정</span>
-									<span class="reply-delete text-secondary ms-1">삭제</span>
+									<span class="reply-delete text-secondary ms-1" data-reply="true">삭제</span>
 								</div>
 							</c:if>
 						</div>
@@ -623,8 +646,8 @@
 							<!-- 답글 영역 시작 -->
 							<div class="reply-btn-area">
 								<div class="reply-toggle-btn" data-toggle="false">
-									<span><i class="bi bi-plus-square text-success"></i></span>
-									<span class="reply-btn text-success">답글 보기</span>
+									<span><i class="bi bi-plus-square text-success-reply"></i></span>
+									<span class="reply-btn text-success-reply">답글 보기</span>
 								</div>
 							</div>
 
@@ -653,7 +676,7 @@
 										<c:if test="${me.id eq childReply.member.id}">
 											<div class="reply-child-button-wrapper col-2 d-flex justify-content-end">
 												<span class="reply-child-edit text-secondary">수정</span>
-												<span class="reply-child-delete text-secondary ms-1">삭제</span>
+												<span class="reply-child-delete text-secondary ms-1" data-reply="false">삭제</span>
 											</div>
 										</c:if>
 									</div>
@@ -696,5 +719,6 @@
 			</div>
 		</div>
 	</section>
+   	<%@ include file="../market/marketFooter.jsp" %>
 </body>
 </html>

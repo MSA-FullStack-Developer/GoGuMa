@@ -62,18 +62,10 @@
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
                         <div>
-                            예치금
-                        </div>
-                        <div>
-                            10,000원
-                        </div>
-                    </div>
-                    <div class="d-flex flex-column align-items-center mt-3 mb-3">
-                        <div>
                             <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
                         </div>
                         <div>
-                            <a href="${contextPath}/mypage/couponHistory/available?page=1">3장</a>
+                            <a href="${contextPath}/mypage/couponHistory/available?page=1">${couponCount}장</a>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-center mt-3 mb-3">
@@ -104,14 +96,20 @@
 	                                <input type="hidden" id="count${orderDTO.orderId}" value="${orderDTO.count}"/>
 	                                <tr class="border-bottom">
 	                                    <td class="col-1 p-3">
-	                                        <img src="${orderDTO.image}" style="width:100px; height:100px">
+	                                    	<a href="${contextPath}/category/1/${orderDTO.categoryId}/detail/${orderDTO.productId}">
+	                                        	<img src="${orderDTO.image}" style="width:100px; height:100px">
+	                                        </a>
 	                                    </td>
 	                                    <td class="col-5 border-end">
 	                                        <div class="text-truncate">
-	                                    		<b>${orderDTO.pname}</b>
+	                                        	<a href="${contextPath}/category/1/${orderDTO.categoryId}/detail/${orderDTO.productId}">
+	                                    			<b>${orderDTO.pname}</b>
+	                                    		</a>
 	                                    	</div>
 	                                    	<div>
-	                                    		옵션 : ${orderDTO.cname}
+	                                    		<a href="${contextPath}/category/1/${orderDTO.categoryId}/detail/${orderDTO.productId}">
+	                                    			옵션 : ${orderDTO.cname}
+	                                    		</a>
 	                                    	</div>
 	                                    </td>
 	                                    <td class="border-end">

@@ -104,9 +104,7 @@
 	                </ul>
 	            </div>
             </c:if>
-            
         </div>
     </section>
 </body>
-
 </html>
