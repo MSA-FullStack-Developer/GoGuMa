@@ -328,7 +328,7 @@
    					<c:if test='${reviewList.size() < 1}'>
    						<div style="text-align: center;">
 	   						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
-	   						<h5 class="no_result">등록된 상품평이 없습니다.</h5>
+	   						<h5 class="no_result" style="margin-top: 0px;">등록된 상품평이 없습니다.</h5>
    						</div>
 					</c:if>
    					
