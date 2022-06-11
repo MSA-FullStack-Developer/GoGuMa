@@ -69,7 +69,7 @@ public class MyPageController {
 	private int productPerPage=8; // 한 페이지에 보여지는 최근 본 상품의 개수
 	
 //	@Value("${blockPerPage}")
-	private int blockPerPage=10; // 한 페이지에 보여지는 페이지 블록의 개수
+	private int blockPerPage=5; // 한 페이지에 보여지는 페이지 블록의 개수
 	
 	@Autowired
 	private MyPageService service;
@@ -140,6 +140,9 @@ public class MyPageController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
 
@@ -184,6 +187,9 @@ public class MyPageController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
 			
@@ -212,6 +218,9 @@ public class MyPageController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
 			
@@ -223,7 +232,7 @@ public class MyPageController {
 			ReceiptDTO receiptDTO = service.getReceiptDetail(receiptId); // 결제상세 가져오기
 			model.addAttribute("receiptDTO", receiptDTO);
 			
-			long estimatedPoints = service.getEstimatedPoints(receiptId);
+			int estimatedPoints = service.getEstimatedPoint(receiptId);
 			model.addAttribute("estimatedPoints", estimatedPoints);
 		} catch (Exception e) {
 			log.info(e.getMessage());
@@ -280,6 +289,9 @@ public class MyPageController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
 			
@@ -326,6 +338,9 @@ public class MyPageController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
 			
@@ -348,6 +363,8 @@ public class MyPageController {
 			// 마지막 페이지 개수가 전체 페이지 개수보다 많은 경우, 마지막 페이지를 전체 페이지 개수로 맞춰준다.
 			if(endPage > pageCount) endPage = pageCount;
 			
+			log.info(startPage+" "+endPage);
+			
 			List<CouponDTO> couponList = service.getCouponHistory(memberDTO.getId(), type, page);
 			model.addAttribute("couponList", couponList);
 			model.addAttribute("type", type);
@@ -369,6 +386,9 @@ public class MyPageController {
 			
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
+			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
 			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
@@ -474,6 +494,9 @@ public class MyPageController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
 			
@@ -517,6 +540,9 @@ public class MyPageController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
 			
@@ -538,6 +564,9 @@ public class MyPageController {
 			
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
+			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
 			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
@@ -632,6 +661,9 @@ public class MyPageController {
 			
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
+			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
 			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
