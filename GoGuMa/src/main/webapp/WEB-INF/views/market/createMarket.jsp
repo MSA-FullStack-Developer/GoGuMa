@@ -33,6 +33,7 @@
 	        background-color: #6426DD;
 	        color: white;
 	    }
+	    
 	    #upload-thumbnail{
 	        width: 100px;
 	        height: 100px;
@@ -103,7 +104,6 @@
 	    }
 	</script>
 </head>
-
 
 <body>
 	<%@ include file="../market/marketHeader.jsp" %>

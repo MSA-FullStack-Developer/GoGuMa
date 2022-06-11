@@ -497,7 +497,7 @@
 		});
 	</script>
 	<section class="container">
-		<div class="w-50 m-auto p-5" style="min-width: 970px;">
+		<div class="w-50 m-auto p-4" style="min-width: 970px;">
 
 			<div class="d-flex justify-content-between">
 
@@ -641,7 +641,7 @@
 								<div class="reply-edit-form-area" data-reply-id="${reply.replyId}" style='display: none;'>
 									<textarea name='reply-edit-textarea' class='w-100 p-2 border border-secondary rounded' style='resize: none; height: 70px;' placeholder='댓글을 작성하세요.'> </textarea>
 									<div class='reply-edit-button-wrapper mt-2 d-flex justify-content-end'> 
-										<button name='close-edit-reply' type='button' class='btn btn-outline-success me-2'>취소</button>
+										<button name='close-edit-reply' type='button' class='btn me-2' style="border-color: var(--bs-btn-hover-border-color);">취소</button>
 										<button name='submit-edit-reply' type='button' class='btn btn-success'>수정하기</button>
 									</div>
 								</div>
