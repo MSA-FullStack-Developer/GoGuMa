@@ -122,6 +122,7 @@ public class ServiceClientController {
 	 * 작성자 : 경민영
 	 * 작성일 : 2022.06.11
 	 * */
+	// 내 상담내역 조회
 	@GetMapping("/myService")
 	public String myService(Model model, Authentication authentication)throws Exception{
 		try {
@@ -138,15 +139,12 @@ public class ServiceClientController {
 				
 				return "servicecnsl/myService";
 			}else {
-				// 로그인 안된 상태라면 사용자 로그인 창으로 이동
-				return "redirect:../member/login.do";
+				return "redirect:../member/login.do"; // 로그인 화면으로 이동
 			}
-		}catch (Exception e) {
-			// TODO: handle exception
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
 	}
-	
 	
 }
