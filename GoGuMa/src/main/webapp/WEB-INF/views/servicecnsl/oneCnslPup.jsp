@@ -45,10 +45,49 @@ const inputPhoneNumber = (target) => {
   function showPage(pg){
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		
+		var data = {
+		  pages : pg
+		};
 		$.ajax({
-		  type: "POST",
-		  
+		 	url : "./api/oneCnslPup",
+		  	type: "POST",
+		  	data : data,
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader(header,token);
+			},
+			success : function(response) {
+			  str = "";
+			  console.log(response);
+/* 			  <c:forEach var="i" items="${receiptHistory }" begin="0" step="1" varStatus="status">
+				str += "<tr class='sel'>";
+				str +=	"<td class='receipt-select'>";
+				str +=		"<input class='form-check-input' type='radio' name='flexRadioDefault' id='flexRadioDefault1'>";
+				str +=	"</td>";
+				str +=  "<td class='imp-num-td'>";
+				str +=		"<div class='imp-num'>";
+				str +=			"${i.impUid }";
+				str +=		"</div>";
+				str +=	"</td>";
+				str +=	"<td class='product-name-td'>";
+				str +=		"<div class='product-name text-truncate'>";
+							<c:forEach var="prod" items="${i.orderList}" begin="0" step="1" varStatus="status">
+				str +=				"${prod.pname}(${prod.cname }).";
+							</c:forEach>
+				str +=		"</div>";
+				str +=	"</td>";
+				str +=	"<td class='imp-price-td'>";
+				str +=		"<div class='imp-price'>";
+				str +=			"${i.totalPrice}";
+				str +=		"</div>";
+				str +=	"</td>";
+				str += "</tr>";
+			</c:forEach>
+			console.log(str);
+			$(".sel-item").html(str); */
+			},
+			error : function(xhr,status,error) {
+				var errorResponse = JSON.parse(xhr.responseText);
+			}												
 		});
   }
 </script>
@@ -96,33 +135,33 @@ const inputPhoneNumber = (target) => {
 																<th scope="col" id="th-product-count">상품명</th>
 																<th scope="col" id="th-product-price">결제금액</th>
 															</tr>
+														</thead>
 															<tbody class="sel-item">
-																<c:forEach var="i" items="${receiptHistory }" begin="0" step="1" end="10" varStatus="status">
-																<tr class="sel">
-																	<td class="receipt-select">
-																		<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-																	</td>
-																	<td class="imp-num-td">
-																		<div class="imp-num">
-																			${i.impUid }
-																		</div>
-																	</td>
-																	<td class="product-name-td">
-																		<div class="product-name text-truncate" >
-																			<c:forEach var="prod" items="${i.orderList }" begin="0" step="1" varStatus="status">
-																				${prod.pname}(${prod.cname }).
-																			</c:forEach>
-																		</div>
-																	</td>
-																	<td class="imp-price-td">
-																		<div class="imp-price">
-																			${i.totalPrice}
-																		</div>
-																	</td>
-																</tr>
+																<c:forEach var="i" items="${receiptHistory }" begin="0" step="1" varStatus="status">
+																	<tr class="sel">
+																		<td class="receipt-select">
+																			<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+																		</td>
+																		<td class="imp-num-td">
+																			<div class="imp-num">
+																				${i.impUid }
+																			</div>
+																		</td>
+																		<td class="product-name-td">
+																			<div class="product-name text-truncate" >
+																				<c:forEach var="prod" items="${i.orderList}" begin="0" step="1" varStatus="status">
+																					${prod.pname}(${prod.cname }).
+																				</c:forEach>
+																			</div>
+																		</td>
+																		<td class="imp-price-td">
+																			<div class="imp-price">
+																				${i.totalPrice}
+																			</div>
+																		</td>
+																	</tr>
 																</c:forEach>
 															</tbody>
-														</thead>
 													</table>
 													<div>
 														<nav aria-label="Page navigation example">
@@ -133,7 +172,7 @@ const inputPhoneNumber = (target) => {
 														      </a>
 														    </li>
 														    <c:forEach var="i" begin="1" step="1" end="${maxPages}" varStatus="status">
-														    <li class="page-item"><a class="page-link" href="./oneCnslPup/1">${i }</a></li>
+														    	<li class="page-item"><button class="page-link" onclick="showPage(${i})">${i }</button></li>
 														    </c:forEach>
 														    <li class="page-item">
 														      <a class="page-link" href="#" aria-label="Next">

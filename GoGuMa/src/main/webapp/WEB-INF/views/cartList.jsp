@@ -100,11 +100,7 @@
 																	error) {
 																var errorResponse = JSON
 																		.parse(xhr.responseText);
-															}/*,
-																																																																																																																																																																																																																																						complete: function(xht, status){
-																																																																																																																																																																																																																																							
-																																																																																																																																																																																																																																							$(this).removeAttr("disabled");
-																																																																																																																																																																																																																																						} */
+															}																																																																																																																																																																																																																										} */
 														});
 											} else {
 												alert("수량이 올바르지 않습니다.");

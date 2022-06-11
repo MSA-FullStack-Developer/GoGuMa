@@ -10,7 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ggm.goguma.constant.Role;
 import com.ggm.goguma.controller.cart.CartController;
@@ -22,6 +26,7 @@ import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.dto.serviceClient.ServiceCategoryDTO;
 import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.mypage.MyPageService;
+import com.ggm.goguma.service.product.CategoryService;
 import com.ggm.goguma.service.serviceClient.ServiceClientService;
 
 import lombok.extern.log4j.Log4j;
@@ -40,10 +45,17 @@ public class ServiceClientController {
 	@Autowired
 	private MyPageService myPageService;
 	
+	@Autowired
+	private CategoryService categoryService;
+	
 	@GetMapping("/")
 	public String cartList(Model model, Authentication authentication) throws Exception {
 		try {
 			String memberEmail = "";
+			
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+			model.addAttribute("parentCategory", parentCategory);
+			
 			//사용자가 로그인 한 경우
 			if(authentication != null) {
 				UserDetails user = (UserDetails)authentication.getPrincipal();
@@ -67,8 +79,8 @@ public class ServiceClientController {
 		}
 	}
 	
-	@GetMapping("oneCnslPup/{pages}")
-	public String oneCnslPup(Model model, @PathVariable(value="pages", required = false) int pages, Authentication authentication)throws Exception{
+	@RequestMapping(value="oneCnslPup", method={RequestMethod.GET})
+	public String oneCnslPup(Model model, Authentication authentication)throws Exception{
 		try {
 			String memberEmail = "";
 			// 사용자가 권한이 있는 경우
@@ -86,12 +98,9 @@ public class ServiceClientController {
 				model.addAttribute("memberDTO", memberDTO);
 				model.addAttribute("scDtoList", scDtoList);
 				
-				log.info("페이지: " + pages);
 				//주문내역조회
-				List<ReceiptDTO> receiptHistory = myPageService.getReceiptHistoryPages(memberDTO.getId(), pages); //페이지와 회원ID로 결제정보DTO를 모두 불러오기
 				List<ReceiptDTO> rcpt = myPageService.getReceiptList(memberDTO.getId()); //회원ID로 결제정보DTO를 모두 불러오기
 				
-				model.addAttribute("receiptHistory" ,receiptHistory);
 				//최대 필요한 페이지 수
 				int maxPages = (rcpt.size() / 10) + 1;
 				model.addAttribute("maxPages", maxPages);
@@ -102,6 +111,26 @@ public class ServiceClientController {
 			}
 		}catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	@PostMapping("api/oneCnslPup")
+	@ResponseBody
+	public List<ReceiptDTO> receiptHis(@RequestParam(value="pages") int pages, Authentication authentication)throws Exception{
+		try {
+			String memberEmail = "";
+			// 사용자가 권한이 있는 경우
+			UserDetails user = (UserDetails)authentication.getPrincipal();
+			//사용자 이메일정보를 가져온다.
+			memberEmail = user.getUsername();
+			//사용자 정보 가져오기
+			MemberDTO memberDTO = memberService.getMember(memberEmail);
+			
+			List<ReceiptDTO> receiptHistory = myPageService.getReceiptHistoryPages(memberDTO.getId(), pages); //페이지와 회원ID로 결제정보DTO를 모두 불러오기
+			return receiptHistory;
+		}catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}

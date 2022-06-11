@@ -38,7 +38,7 @@
      
      if(`${memberDTO}`){
        //로그인 한 경우
-       window.open("oneCnslPup/1", "popup01", "width=800, height=700");
+       window.open("oneCnslPup", "popup01", "width=800, height=700");
      }else{
        location.href="${contextPath}/member/login.do";
      }
@@ -65,13 +65,6 @@
                 </div>
                 <!-- // .side-menu-list -->
 
-                <!--side-info-->
-                <!-- <div class="side-info">
-                    <p class="banner"><strong>현대Hmall</strong><em>1600-0000</em><span>(유료)</span></p>
-                    <p class="banner"><strong>모바일 현대Hmall</strong><em>1600-0009</em><span>(유료)</span></p>
-                    <p class="txt"><span>평일 09:00~20:00<br>주말, 공휴일 휴무</span></p>
-                </div> -->
-                <!--//side-info-->
             </div>
              <!-- // .side-menu-list -->
              <div class="contents">

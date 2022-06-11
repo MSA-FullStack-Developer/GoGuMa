@@ -112,9 +112,8 @@ public class OrderController {
 					 model.addAttribute("memberDTO", memberDTO); // 회원 정보를 저장한다.
 					 model.addAttribute("point", point); //회원이 가진 포인트를 저장한다.
 					 model.addAttribute("defaultAddress", defaultAddress);
-					 model.addAttribute("addressList", addressList); 
+					 model.addAttribute("addressList", addressList);
 					 return "order";
-					 
 				} 
 				List<CartOrderListDTO> dtoList = new ArrayList<CartOrderListDTO>();
 				//상품 주문 dto에서 선택한 상품만 추려내기 위한 작업
