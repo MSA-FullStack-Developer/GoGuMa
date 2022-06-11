@@ -9,16 +9,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ggm.goguma.constant.Role;
 import com.ggm.goguma.controller.cart.CartController;
 import com.ggm.goguma.dto.CategoryDTO;
+import com.ggm.goguma.dto.ReceiptDTO;
 import com.ggm.goguma.dto.cart.CartItemDTO;
 import com.ggm.goguma.dto.cart.CartOrderListDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.dto.serviceClient.ServiceCategoryDTO;
 import com.ggm.goguma.service.member.MemberService;
+import com.ggm.goguma.service.mypage.MyPageService;
 import com.ggm.goguma.service.serviceClient.ServiceClientService;
 
 import lombok.extern.log4j.Log4j;
@@ -33,6 +36,9 @@ public class ServiceClientController {
 	
 	@Autowired
 	private ServiceClientService serviceClientService;
+	
+	@Autowired
+	private MyPageService myPageService;
 	
 	@GetMapping("/")
 	public String cartList(Model model, Authentication authentication) throws Exception {
@@ -61,8 +67,8 @@ public class ServiceClientController {
 		}
 	}
 	
-	@GetMapping("oneCnslPup")
-	public String oneCnslPup(Model model, Authentication authentication)throws Exception{
+	@GetMapping("oneCnslPup/{pages}")
+	public String oneCnslPup(Model model, @PathVariable(value="pages", required = false) int pages, Authentication authentication)throws Exception{
 		try {
 			String memberEmail = "";
 			// 사용자가 권한이 있는 경우
@@ -80,6 +86,15 @@ public class ServiceClientController {
 				model.addAttribute("memberDTO", memberDTO);
 				model.addAttribute("scDtoList", scDtoList);
 				
+				log.info("페이지: " + pages);
+				//주문내역조회
+				List<ReceiptDTO> receiptHistory = myPageService.getReceiptHistoryPages(memberDTO.getId(), pages); //페이지와 회원ID로 결제정보DTO를 모두 불러오기
+				List<ReceiptDTO> rcpt = myPageService.getReceiptList(memberDTO.getId()); //회원ID로 결제정보DTO를 모두 불러오기
+				
+				model.addAttribute("receiptHistory" ,receiptHistory);
+				//최대 필요한 페이지 수
+				int maxPages = (rcpt.size() / 10) + 1;
+				model.addAttribute("maxPages", maxPages);
 				return "servicecnsl/oneCnslPup";
 			}else {
 				// 로그인 안된 상태라면 사용자 로그인 창으로 이동

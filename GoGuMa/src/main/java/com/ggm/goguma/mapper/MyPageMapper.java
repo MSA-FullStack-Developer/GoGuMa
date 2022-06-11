@@ -78,4 +78,6 @@ public interface MyPageMapper {
 	void insertResignMember(@Param("dto") MemberDTO dto, @Param("resignDetail") String resignDetail) throws Exception;
 
 	void disableMember(long memberId) throws Exception;
+
+	List<ReceiptDTO> getReceiptHistoryPages(@Param("memberId") long memberId, @Param("startPages") int startPages) throws Exception;
 }

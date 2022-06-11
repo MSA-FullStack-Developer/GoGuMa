@@ -191,4 +191,17 @@ public class MyPageServiceImpl implements MyPageService {
 	public int estimatedPoints(long receiptId) throws Exception {
 		return mapper.estimatedPoints(receiptId);
 	}
+
+	
+	//고객 센터에서 불러올 주문내역
+	@Override
+	public List<ReceiptDTO> getReceiptHistoryPages(long memberId, int pages) throws Exception {
+		int startPages = 0;
+		if(pages == 1) {
+			startPages = 0;
+		}else {
+			startPages = ((pages-1) * 10) + 1;
+		}
+		return mapper.getReceiptHistoryPages(memberId, startPages);
+	}
 }

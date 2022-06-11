@@ -55,4 +55,7 @@ public interface MyPageService {
 	boolean changeInfo(String nickName, String birthDate, String gender, String userPassword, MemberDTO dto) throws Exception;
 
 	boolean resignMember(String resignDetail, String userPassword, MemberDTO dto) throws Exception;
+
+	//고객센터에서 불러올 주문내역
+	List<ReceiptDTO> getReceiptHistoryPages(long memberId, int pages) throws Exception;
 }

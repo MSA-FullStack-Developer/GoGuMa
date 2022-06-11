@@ -9,4 +9,5 @@
 		FROM category
 		WHERE categorytype = 'C'
 	</select>
+	
 </mapper>

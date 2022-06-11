@@ -3,10 +3,21 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ggm.goguma.mapper.MyPageMapper">
+	<!-- 
+		수정자 : 문석호
+		수정이력 : receipt조회시 DTO에 맞는 컬럼들 추가
+	 -->
 	<select id="getReceiptList" resultType="ReceiptDTO">
-		select receiptid, orderdate, impuid, memberid
+		select receiptid, recipient, rcptcontact, rcptaddress, rcptnickname, requirement, originalprice, membershipdiscount, coupondiscount, usagepoint, totalprice, orderdate, impuid, memberid
 		from receipt where memberid = #{memberId}
 		order by orderdate desc
+	</select>
+	
+	<select id="getReceiptHistoryPages" resultType="ReceiptDTO">
+		select receiptid, recipient, rcptcontact, rcptaddress, rcptnickname, requirement, originalprice, membershipdiscount, coupondiscount, usagepoint, totalprice, orderdate, impuid, memberid
+		from receipt where memberid = #{memberId}
+		order by orderdate desc
+		offset #{startPages} rows FETCH FIRST 10 rows only
 	</select>
 
 	<select id="getOrderList" resultType="OrderDTO">
