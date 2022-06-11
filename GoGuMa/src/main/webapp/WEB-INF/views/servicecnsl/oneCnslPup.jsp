@@ -32,7 +32,7 @@ const inputPhoneNumber = (target) => {
     console.log("${receiptHistory }");
     $('#bphone').attr('value', phone);
     console.log("${memberDTO}");
-    
+
     $('#findReceitpBtn').click(function(e){
       if ($("#popup_layer").css('display') == 'none') {
       	$("#popup_layer").show();
@@ -47,23 +47,47 @@ const inputPhoneNumber = (target) => {
       var radioChk = $('input[name=flexRadioDefault]:checked').parent().parent();
       var impId = radioChk.find(".imp-num").text();
       var prodName = radioChk.find(".product-name").text();
+      var receiptId = parseInt(radioChk.find(".receipt-id").val());
       console.log(radioChk);
       console.log(impId);
       console.log(prodName);
+      console.log(receiptId);
       $('#imp-em').text(impId);
       $('#prod-em').text(prodName);
       $('#find-imp').attr('value', impId);
-      $('#find-pordName').attr('value', prodName);
+      $('#receiptID').attr('value', receiptId);
     });
     $("#cnslSel").change(function(){
   		$("#csCategory").val($(this).val());
   	});
+    
+    $("#FormControlTextarea1").on("input", function() {
+      var currentVal = $(this).val();
+      $('#qna-content').val(currentVal);
+      console.log($('#qna-content').val());
+  	});
   });
-  //제출 전 검증을 위한 함수
+  //제출 전 검증후 post
   function chkConfirm(){
     console.log("클릭");
-   	window.close();
-	$('#frmScInfo').submit();
+    var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	var data = $('#frmScInfo').serialize();
+	$.ajax({
+	  	url : "${contextPath}/serviceclient/api/inquiry",
+  		type: "POST",
+  		data : data,
+  		beforeSend : function(xhr) {
+			xhr.setRequestHeader(header,token);
+		},
+		success : function(response) {
+		  	alert("고객님의 소중한 문의가 등록되었습니다.");
+		  	window.close();
+		},
+		error : function(xhr,status,error) {
+			var errorResponse = JSON.parse(xhr.responseText);
+		}
+	});
   }
   //주문 내역 조회수 불러오는 페이지 (초기 1페이지)
   function showPage(pg){
@@ -83,6 +107,7 @@ const inputPhoneNumber = (target) => {
 			  str = "";
 			  for(var i = 0; i<response.length; i++){
 				    var iUid = response[i].impUid;
+				    console.log(response[i]);
 				    if(response[i].impUid){
 				      iUid = iUid.substring(4);
 				    }else{
@@ -96,6 +121,7 @@ const inputPhoneNumber = (target) => {
 					str +=		"<div class='imp-num'>";
 					str +=			iUid;
 					str +=		"</div>";
+					str +=  	"<input type='hidden' class='receipt-id' value='"+ response[i].receiptId +"'/>";
 					str +=	"</td>";
 					str +=	"<td class='product-name-td'>";
 					str +=		"<div class='product-name text-truncate'>";
@@ -171,7 +197,7 @@ const inputPhoneNumber = (target) => {
 				<div class="pop-content">
 					<p class="desc">문의하고자 하시는 내용을 작성해주세요. 빠른 답변 드리겠습니다.</p>
 					<div>고객센터 > 내 상담내역 조회에서 확인하실 수 있습니다.</div>
-					<form id="frmScInfo" action="${contextPath}/serviceclient/api/inquiry" method="POST">
+					<form id="frmScInfo">
 						<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					<div class="content">
 						<div class="row pop-row">
@@ -184,7 +210,7 @@ const inputPhoneNumber = (target) => {
 										<option value="${i.categoryId}">${i.categoryName}</option>
 									</c:forEach>
 								</select>
-								<input type="hidden" id="csCategory" name="categoryID" value="">
+								<input type="hidden" id="csCategory" name="categoryID" value=0>
 							</div>
 						</div>
 						<div class="row pop-row">
@@ -239,32 +265,33 @@ const inputPhoneNumber = (target) => {
 									<!-- 주문내역에서 찾는 경우 -->
 									<span id="find-order-txt" style="display: none"> 주문번호: <em id="imp-em"></em> 상품명: <em id="prod-em"></em>
 									</span>
-									<input type="hidden" id="find-imp">
-									<input type="hidden" id="find-pordName">
+									<input type="hidden" id="find-imp" name="receiptID">
 								</div>
 							</div>
 						</div>
 						<div class="row pop-row">
 							<div class="col-md-4 col-head">제목</div>
 							<div class="col-md-8 col-content" id="baddress">
-								<input class="form-control" type="text" placeholder="제목을 입력해주세요.">
+								<input class="form-control" type="text" name="qnaTitle" placeholder="제목을 입력해주세요." value="">
 							</div>
 						</div>
 						<div class="row pop-row">
 							<div class="col-md-4 col-head">문의 내용</div>
 							<div class="col-md-8 col-content" id="bcont">
-								<textarea class="form-control" placeholder="문의 내용을 입력하세요." id="exampleFormControlTextarea1" rows="3"></textarea>
+								<textarea class="form-control" placeholder="문의 내용을 입력하세요." id="FormControlTextarea1" rows="3"></textarea>
 							</div>
+							<input type="hidden" id="qna-content" name="qnaContent" value="">
 						</div>
 						<div class="row pop-row">
 							<div class="col-md-4 col-head">연락처</div>
 							<div class="col-md-8 col-content">
-								<input type="text" id="bphone" class="form-control" maxlength="13" oninput="inputPhoneNumber(this);" value="">
+								<input type="text" name="phone" id="bphone" class="form-control" maxlength="13" oninput="inputPhoneNumber(this);" value="">
 							</div>
 						</div>
 						<div class="row pop-row">
 							<div class="col-md-4 col-head">이메일</div>
 							<div class="col-md-8 col-content" id="email">${memberDTO.email}</div>
+							<input type="hidden" name="email" value="${memberDTO.email}">
 						</div>
 						<div class="btnGroup">
 							<button type="button" class="btn btn-primary" onclick="chkConfirm()">문의하기</button>

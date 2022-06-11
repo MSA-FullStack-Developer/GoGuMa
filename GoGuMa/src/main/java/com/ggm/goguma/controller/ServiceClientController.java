@@ -150,7 +150,7 @@ public class ServiceClientController {
 	@ResponseBody
 	public void inquiry(ServiceClientDTO serviceClientDTO, Authentication authentication)throws Exception{
 		try {
-			log.info(serviceClientDTO);
+			
 			String memberEmail = "";
 			// 사용자가 권한이 있는 경우
 			UserDetails user = (UserDetails)authentication.getPrincipal();
@@ -158,7 +158,10 @@ public class ServiceClientController {
 			memberEmail = user.getUsername();
 			//사용자 정보 가져오기
 			MemberDTO memberDTO = memberService.getMember(memberEmail);
-			
+			long memberId = memberDTO.getId();
+			serviceClientDTO.setMemberID(memberId);
+			log.info(serviceClientDTO);
+			serviceClientService.insertQna(serviceClientDTO);
 		}catch (Exception e) {
 			// TODO: handle exception
 		}

@@ -32,4 +32,17 @@
 		AND q.memberid = #{memberID}
 	</select>
 	
+	<insert id="insertQna" parameterType="ServiceClientDTO">
+		INSERT INTO qna(memberid, categoryid, qnatitle, qnacontent, answerstatus, receiptid, phone, email)
+		VALUES(
+			#{serviceClientDTO.memberID},
+			#{serviceClientDTO.categoryID},
+			#{serviceClientDTO.qnaTitle},
+			#{serviceClientDTO.qnaContent},
+			0,
+			#{serviceClientDTO.receiptID},
+			#{serviceClientDTO.phone},
+			#{serviceClientDTO.email}
+		)
+	</insert>
 </mapper>

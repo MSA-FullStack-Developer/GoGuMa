@@ -19,4 +19,6 @@ public interface ServiceClientService {
 	// 내 상담내역 개수
 	long getQnaCount(long id) throws Exception;
 
+	void insertQna(ServiceClientDTO serviceClientDTO) throws Exception;
+
 }
