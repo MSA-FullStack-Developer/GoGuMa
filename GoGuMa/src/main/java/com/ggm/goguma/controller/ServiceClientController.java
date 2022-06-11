@@ -1,9 +1,11 @@
 package com.ggm.goguma.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -133,6 +135,23 @@ public class ServiceClientController {
 		}catch (Exception e) {
 			e.printStackTrace();
 			throw e;
+		}
+	}
+	@PostMapping("api/inquiry")
+	@ResponseBody
+	public void inquiry(HashMap<String, Object> hashMap, Authentication authentication)throws Exception{
+		try {
+			log.info(hashMap);
+			String memberEmail = "";
+			// 사용자가 권한이 있는 경우
+			UserDetails user = (UserDetails)authentication.getPrincipal();
+			//사용자 이메일정보를 가져온다.
+			memberEmail = user.getUsername();
+			//사용자 정보 가져오기
+			MemberDTO memberDTO = memberService.getMember(memberEmail);
+			
+		}catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
 }
