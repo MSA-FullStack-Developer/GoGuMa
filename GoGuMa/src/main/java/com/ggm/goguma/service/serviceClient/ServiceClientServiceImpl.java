@@ -24,4 +24,5 @@ public class ServiceClientServiceImpl implements ServiceClientService{
 		return serviceClientMapper.getSCategory();
 	}
 
+
 }

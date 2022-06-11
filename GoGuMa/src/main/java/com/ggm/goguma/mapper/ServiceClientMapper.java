@@ -7,4 +7,5 @@ import com.ggm.goguma.dto.serviceClient.ServiceCategoryDTO;
 public interface ServiceClientMapper {
 
 	List<ServiceCategoryDTO> getSCategory() throws Exception;
+
 }

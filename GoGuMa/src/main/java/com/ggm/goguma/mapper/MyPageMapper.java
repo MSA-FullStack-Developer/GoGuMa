@@ -67,6 +67,8 @@ public interface MyPageMapper {
 	void cancelDefault(long memberId) throws Exception;
 
 	int getMemberPoint(long memberId) throws Exception;
+	
+	int estimatedPoints(long receiptId) throws Exception;
 
 	String confirmPassword(long memberId) throws Exception;
 
@@ -77,4 +79,6 @@ public interface MyPageMapper {
 	void insertResignMember(@Param("dto") MemberDTO dto, @Param("resignDetail") String resignDetail) throws Exception;
 
 	void disableMember(long memberId) throws Exception;
+
+	List<ReceiptDTO> getReceiptHistoryPages(@Param("memberId") long memberId, @Param("startPages") int startPages) throws Exception;
 }
