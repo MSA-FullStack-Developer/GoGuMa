@@ -184,6 +184,9 @@ const inputPhoneNumber = (target) => {
 
 		return strFormatNum;
 	};
+	function popUpClose(){
+	  window.close();
+	}
 </script>
 
 <body id="popWin">
@@ -295,7 +298,7 @@ const inputPhoneNumber = (target) => {
 						</div>
 						<div class="btnGroup">
 							<button type="button" class="btn btn-primary" onclick="chkConfirm()">문의하기</button>
-							<button type="button" class="btn btn-secondary">취소</button>
+							<button type="button" class="btn btn-secondary" onclick="popUpClose()">취소</button>
 						</div>
 					</div>
 					</form>
