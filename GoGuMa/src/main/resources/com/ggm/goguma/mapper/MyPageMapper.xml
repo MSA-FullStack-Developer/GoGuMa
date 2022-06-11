@@ -40,6 +40,35 @@
 		update pointevent set inquirable = 1 where orderid = #{orderId}
 	</update>
 	
+	<!-- 
+		@작성자: 문석호
+		@기능:  사용자의 현재 포인트를 조회한다.
+	 -->
+	<select id="getMemberPoints" resultType="int">
+		SELECT ((SELECT NVL((SELECT sum(pointvalue)
+				FROM pointevent
+				WHERE memberid= #{memberId} AND inquirable=1
+				GROUP BY pointtype
+				having pointtype='earn'), 0)
+            FROM DUAL) - (SELECT NVL((SELECT sum(pointvalue)
+                FROM pointevent
+                WHERE memberid= #{memberId} AND inquirable=1
+                GROUP BY pointtype
+                having pointtype='usage'), 0)
+            FROM DUAL)) AS point
+		FROM DUAL
+	</select>
+	
+	<!-- 
+		@작성자: 문석호
+		@기능: 주문별 예상 적립 포인트 조회 	
+	 -->
+	<select id="getEstimatedPoints" resultType="int">
+		SELECT sum(pointvalue)
+		FROM pointevent
+		WHERE receiptid = #{receiptId} and pointtype='earn' and inquirable=0
+	</select>
+	
 	<select id="getPointValue" resultType="long">
 		select pointvalue from pointevent where receiptId = #{receiptId}
 	</select>
@@ -198,34 +227,6 @@
 	<update id="cancelDefault">
 		update deliveryaddress set isdefault = 0 where memberId = #{memberId}
 	</update>
-	
-	<!-- 
-		@작성자: 문석호
-		@기능:  사용자의 현재 포인트를 조회한다.
-	 -->
-	<select id="getMemberPoint" resultType="int">
-		SELECT ((SELECT NVL((SELECT sum(pointvalue)
-				FROM pointevent
-				WHERE memberid= #{memberId} AND inquirable=1
-				GROUP BY pointtype
-				having pointtype='earn'), 0)
-            FROM DUAL) - (SELECT NVL((SELECT sum(pointvalue)
-                FROM pointevent
-                WHERE memberid= #{memberId} AND inquirable=1
-                GROUP BY pointtype
-                having pointtype='usage'), 0)
-            FROM DUAL)) AS point
-		FROM DUAL
-	</select>
-	<!-- 
-		@작성자: 문석호
-		@기능: 주문별 예상 적립 포인트 조회 	
-	 -->
-	<select id="estimatedPoints" resultType="int">
-		SELECT sum(pointvalue)
-		FROM pointevent
-		WHERE receiptid = #{receiptId} and pointtype='earn' and inquirable=0
-	</select>
 	
 	<update id="changePassword">
 		update member set password = #{newPassword} where memberid = #{memberId}

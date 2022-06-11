@@ -146,10 +146,6 @@ public class MemberServiceImpl implements MemberService {
 	public void createMember(CreateMemberDTO data) throws CreateMemberFailException {
 
 		try {
-			String[] result = this.amazonService.uploadFile("profile", data.getProfile());
-		
-			String profileImageURL = result[1];
-			
 			MemberDTO member = MemberDTO.builder()
 					.email(data.getEmail())
 					.password(this.passwordEncoder.encode(data.getPassword()))
@@ -158,9 +154,19 @@ public class MemberServiceImpl implements MemberService {
 					.age(data.getAge())
 					.nickName(data.getNickName())
 					.birthDate(data.getBirthDate())
-					.profileImage(profileImageURL)
 					.gender(data.getGender())
 					.build();
+			
+			if(!data.getProfile().isEmpty()) {
+				String[] result = this.amazonService.uploadFile("profile", data.getProfile());
+				
+				String profileImageURL = result[1];
+				
+				member.setProfileImage(profileImageURL);
+			} else {
+				member.setProfileImage("https://hd-goguma.s3.ap-northeast-2.amazonaws.com/profile/1654741131039default.png");
+			}
+		
 
 			this.memberMapper.createMember(member);
 			
