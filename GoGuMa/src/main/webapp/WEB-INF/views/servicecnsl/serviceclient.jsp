@@ -62,9 +62,7 @@
                         <li><a href="/p/ccb/noticeList.do">공지사항</a></li>
                     </ul>
                 </div>
-                <!-- // .side-menu-list -->
-            </div>
-             </div>
+                <!-- // .side-menu-list --
              <!-- // .side-menu-list -->
              <div class="contents">
 				<!--search : 자주 묻는 질문-->

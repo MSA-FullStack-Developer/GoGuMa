@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +22,7 @@ import com.ggm.goguma.constant.Role;
 import com.ggm.goguma.controller.cart.CartController;
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
+import com.ggm.goguma.dto.ServiceClientDTO;
 import com.ggm.goguma.dto.cart.CartItemDTO;
 import com.ggm.goguma.dto.cart.CartOrderListDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
@@ -143,9 +145,9 @@ public class ServiceClientController {
 	}
 	@PostMapping("api/inquiry")
 	@ResponseBody
-	public void inquiry(HashMap<String, Object> hashMap, Authentication authentication)throws Exception{
+	public void inquiry(ServiceClientDTO serviceClientDTO, Authentication authentication)throws Exception{
 		try {
-			log.info(hashMap);
+			log.info(serviceClientDTO);
 			String memberEmail = "";
 			// 사용자가 권한이 있는 경우
 			UserDetails user = (UserDetails)authentication.getPrincipal();

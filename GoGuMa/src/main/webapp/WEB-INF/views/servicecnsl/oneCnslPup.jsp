@@ -59,7 +59,12 @@ const inputPhoneNumber = (target) => {
   		$("#csCategory").val($(this).val());
   	});
   });
-  
+  //제출 전 검증을 위한 함수
+  function chkConfirm(){
+    console.log("클릭");
+   	window.close();
+	$('#frmScInfo').submit();
+  }
   //주문 내역 조회수 불러오는 페이지 (초기 1페이지)
   function showPage(pg){
 		var token = $("meta[name='_csrf']").attr("content");
@@ -174,12 +179,12 @@ const inputPhoneNumber = (target) => {
 							<div class="col-md-8 col-content" id="bname">
 								<!--상담유형선택-->
 								<select name="cnslSel" class="form-select" id="cnslSel">
-									<option value="">상담 분야 선택</option>
+									<option value=0>상담 분야 선택</option>
 									<c:forEach var="i" items="${scDtoList }" begin="0" step="1" varStatus="status">
-										<option value="${i.categoryName}">${i.categoryName}</option>
+										<option value="${i.categoryId}">${i.categoryName}</option>
 									</c:forEach>
 								</select>
-								<input type="hidden" id="csCategory" name="csCategory" value="">
+								<input type="hidden" id="csCategory" name="categoryID" value="">
 							</div>
 						</div>
 						<div class="row pop-row">
@@ -262,7 +267,7 @@ const inputPhoneNumber = (target) => {
 							<div class="col-md-8 col-content" id="email">${memberDTO.email}</div>
 						</div>
 						<div class="btnGroup">
-							<button type="submit" class="btn btn-primary">문의하기</button>
+							<button type="button" class="btn btn-primary" onclick="chkConfirm()">문의하기</button>
 							<button type="button" class="btn btn-secondary">취소</button>
 						</div>
 					</div>
