@@ -23,6 +23,10 @@ public interface MyPageService {
 	
 	long getEarnablePoint(long receiptId) throws Exception;
 	
+	int getMemberPoints(long memberId) throws Exception;
+	
+	int getEstimatedPoints(long receiptId) throws Exception;
+	
 	long getPointHistoryCount(long memberId, String type, String startDate, String endDate) throws Exception;
 	
 	long getCouponCount(long memberId, String type) throws Exception;
@@ -44,10 +48,6 @@ public interface MyPageService {
 	void setDefault(long memberId, long addressId) throws Exception;
 
 	void cancelDefault(long memberId) throws Exception;
-
-	int getMemberPoint(long memberId) throws Exception;
-	
-	int estimatedPoints(long receiptId) throws Exception;
 
 	boolean confirmPassword(String userPassword, String comparePassword) throws Exception;
 

@@ -3,7 +3,6 @@ package com.ggm.goguma.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
@@ -25,6 +24,10 @@ public interface MyPageMapper {
 	void updateOrderStatus(@Param("orderId") long orderId, @Param("status") String status) throws Exception;
 	
 	void makeInquirable(long orderId) throws Exception;
+	
+	int getMemberPoints(long memberId) throws Exception;
+	
+	int getEstimatedPoints(long receiptId) throws Exception;
 	
 	List<Long> getPointValue(long receiptId) throws Exception;
 	
@@ -65,10 +68,6 @@ public interface MyPageMapper {
 	void setDefault(@Param("memberId") long memberId, @Param("addressId") long addressId) throws Exception;
 
 	void cancelDefault(long memberId) throws Exception;
-
-	int getMemberPoint(long memberId) throws Exception;
-	
-	int estimatedPoints(long receiptId) throws Exception;
 
 	String confirmPassword(long memberId) throws Exception;
 
