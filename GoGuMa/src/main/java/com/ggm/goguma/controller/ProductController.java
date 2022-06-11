@@ -234,13 +234,18 @@ public class ProductController {
 				Cookie[] cookies = request.getCookies();
 				if (cookies != null) {
 					for (Cookie cookie : cookies) {
-						if(cookie.getName().equals("latelySeenProducts")) {
+						if(cookie.getName().equals("seenProducts")) {
+							
 							String[] productIdArr = (URLDecoder.decode(cookie.getValue(), "utf-8")).split(",");
+							
+							log.info(productIdArr);
 							long parentCID = categoryService.getCategoryId(Long.parseLong(productIdArr[productIdArr.length-1])); // 최근 본 상품의 부모 카테고리 번호
 							recommendList = productService.getSameParentCategoryProductList(parentCID); // 추천 상품 목록
 						}
 					}
 				}
+				log.info("[search] recommendList : " + recommendList);
+				
 				
 				model.addAttribute("recommendList", recommendList);
 			}
