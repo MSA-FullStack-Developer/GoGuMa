@@ -40,7 +40,7 @@
             --bs-btn-active-color: #fff;
             --bs-btn-active-bg: #6426DD;
             --bs-btn-active-border-color: #6426DD;
-            --bs-btn-active-shadow: inset 0 3px 5pxrgba(0, 0, 0, 0.125);
+            --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
             --bs-btn-disabled-color: #fff;
             --bs-btn-disabled-bg: #6426DD;
             --bs-btn-disabled-border-color: #6426DD;
@@ -72,7 +72,7 @@
         
 		.card-img-top {
 		    width: 100%;
-		    height: 300px;
+		    height: 286px;
 		    object-fit: cover;
 		}
     </style>
@@ -162,8 +162,8 @@
                 </c:if>
             </div>
             <c:if test="${fn:length(pagination.data) == 0}">
-            	<div name="no-data" class="h-50 d-flex flex-column justify-content-around align-items-center">
-	                <div>
+            	<div name="no-data" class="h-50 d-flex flex-column align-items-center">
+	                <div style="margin-top: 100px; margin-bottom: 30px;">
 	                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor"
 	                        class="bi bi-exclamation-circle" viewBox="0 0 16 16">
 	                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
@@ -171,7 +171,7 @@
 	                            d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z" />
 	                    </svg>
 	                </div>
-	                <p class="fs-3">등록한 게시글이 없습니다. 게시글을 등록해주세요.</p>
+	                <p class="fs-3">등록한 게시글이 없습니다. 글을 작성해주세요.</p>
 	            </div> 
             </c:if>
             
@@ -281,5 +281,6 @@
         </section>
         </c:if>
     </div>
+  	<%@ include file="../market/marketFooter.jsp" %>
 </body>
 </html>

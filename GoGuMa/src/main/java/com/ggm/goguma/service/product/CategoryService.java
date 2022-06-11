@@ -18,4 +18,7 @@ public interface CategoryService {
 	public List<CategoryDTO> getMdsCategoryParentList();
 	
 	public List<CategoryDTO> showCategoryMenu() throws Exception;
+
+	// 상품 번호로 부모 카테고리 번호 조회
+	public long getCategoryId(long productID) throws Exception;
 }

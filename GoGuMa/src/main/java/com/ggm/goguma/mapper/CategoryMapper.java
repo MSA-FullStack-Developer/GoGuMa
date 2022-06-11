@@ -24,4 +24,7 @@ public interface CategoryMapper {
 	 * 작업일 : 22.06.03
 	 * */
 	public CategoryDTO findCategoryById(@Param("id") long categoryId);
+	
+	// 상품 번호로 부모 카테고리 번호 조회
+	public long getCategoryId(long productID) throws Exception;
 }

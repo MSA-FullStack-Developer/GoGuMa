@@ -13,7 +13,8 @@
     <style>
 	    <%@ include file="/resources/css/product.css" %>
     </style>
-     <!-- bootstrap css -->
+    
+    <!-- bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
@@ -61,7 +62,8 @@
         	<c:forEach items="${list}" var="product">
         	<c:set var="categoryID" value="${product.categoryID}"/>
             <div class="product">
-                <a href="${contextPath}/category/${pg}/${product.categoryID}/detail/${product.productID}"><img class="listImg" src="${product.prodimgurl}" /></a>
+                <a href="${contextPath}/category/${pg}/${product.categoryID}/detail/${product.productID}">
+                <img class="listImg" src="${product.prodimgurl}" /></a>
                 <p class="product-name">
                 	${product.productName}
                	</p>
@@ -71,7 +73,26 @@
         </div>
         
         <c:if test="${isSearch == true && recordCount == 0}">
-        	<h3 class="no_result">해당하는 상품이 없습니다.</h3>
+        	<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+			<lottie-player src="https://assets5.lottiefiles.com/packages/lf20_6rwtym6l.json" 
+				background="transparent" speed="1" style="width: 250px; height: 250px; margin: 0 auto;" loop autoplay></lottie-player>
+        	<h5 class="no_result">검색결과가 없습니다.</h5>
+        	
+        	<c:if test="${recommendList.size() > 0}">
+	        	<h4><b>이 제품은 어떠세요?</b></h4><br>
+	       	    <div class="listBox">
+		        	<c:forEach items="${recommendList}" var="product" begin="0" end="3">
+		        	<c:set var="categoryID" value="${product.categoryID}"/>
+		            <div class="product">
+		                <a href="${contextPath}/category/${pg}/${product.categoryID}/detail/${product.productID}">
+		                <img class="listImg" src="${product.prodimgurl}" style="border-radius: 10pt; border: #F3F3F3 0.5px solid"/></a>
+		                <p class="product-name"å>
+		                	${product.productName}
+		               	</p>
+		            </div>
+		            </c:forEach>
+		        </div>
+	        </c:if>
         </c:if>
         
 		<c:if test="${isSearch == false}">

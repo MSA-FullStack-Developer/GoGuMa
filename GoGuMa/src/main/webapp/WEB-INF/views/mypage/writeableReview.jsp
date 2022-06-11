@@ -269,6 +269,14 @@
                     <h5><b>작성 가능한 상품평</b></h5>
                 </div>
                 <div class="d-flex flex-wrap">
+                	<c:if test='${writeableList.size() < 1}'>
+   						<div style="text-align: center; margin: 0 auto;">
+	   						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
+	   						<h5 class="no_result">작성 가능한 상품평이 없습니다.</h5>
+	   						<span style="font-size: 11pt; color: #ccc;">[마이페이지 > 주문내역]에서 구매확정시 작성하실 수 있습니다.</span>
+   						</div>
+					</c:if>
+                
                     <c:forEach items="${writeableList}" var="product">
                     <div class="myReview-writeable">
 	                    <div style="width: 100%; margin-bottom: 10px;">

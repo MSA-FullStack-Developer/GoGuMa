@@ -25,7 +25,7 @@
             <div>
                 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
                 <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_kcsr6fcp.json"
-                    background="transparent" speed="1" style="width: 100%; height: 70%;" loop autoplay></lottie-player>
+                	background="transparent" speed="1" style="width: 100%; height: 70%;" loop autoplay></lottie-player>
             </div>
             <a type="button" class="btn btn-primary" href="${contextPath}/main.do">홈으로 이동하기</a>
         </div>

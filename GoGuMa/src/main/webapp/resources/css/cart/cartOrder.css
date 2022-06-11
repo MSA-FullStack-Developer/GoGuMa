@@ -5,6 +5,14 @@
 	padding-right: 0 !important;
 }
 
+.moveProduct:hover {
+	color: #FF493C;
+}
+
+.pProductName:hover {
+	color: #FF493C;
+}
+
 .contents {
 	position: relative;
 	width: 1200px;
@@ -346,7 +354,7 @@ ul, ol, menu, li {
 #th-product-name{
 	text-align: center;
 	vertical-align: middle;
-	width: 45%;
+	width: 40%;
 }
 #th-product-count{
 	text-align: center;
@@ -371,6 +379,7 @@ ul, ol, menu, li {
 #th-order-delete{
 	text-align: center;
 	vertical-align: middle;
+	width: 5%
 }
 .product-img{
 	float: left;

@@ -60,4 +60,9 @@ public class CategoryServiceImpl implements CategoryService {
 		
 		return parentCategory;
 	}
+	
+	@Override
+	public long getCategoryId(long productID) throws Exception {
+		return this.categoryMapper.getCategoryId(productID);
+	}
 }

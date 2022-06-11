@@ -240,10 +240,10 @@ public class OrderController {
 		}
 	}
 	
-	@PostMapping("/orderResult")
-	public String ReceiveFormData()throws Exception {
-		return "redirect:/";
-	}
+	/*
+	 * @PostMapping("/orderResult") public String ReceiveFormData()throws Exception
+	 * { return "redirect:/"; }
+	 */
 	
 	@PostMapping("receipt")
 	public String receipt(@RequestParam(value="ipUid") String ipUid, Model model) throws IamportResponseException, IOException {

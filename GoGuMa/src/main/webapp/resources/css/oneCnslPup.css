@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+.content{
+	border-top: 2px solid #d8d8d8;
+	border-bottom: 2px solid #d8d8d8;
+}
+.pop-row{
+	
+}
+.col-head{
+	border-right: 1px solid #ddd;
+	text-align: center;
+    padding: 10px 0;
+}
+.btnGroup{
+	text-align: center;
+}

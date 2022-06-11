@@ -1,6 +1,6 @@
 @charset "UTF-8";
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
-		
+
 select {
 	width: 100px; 
 	border: 1px solid #999;
@@ -8,6 +8,12 @@ select {
 	float: right;
 	padding-left: 10px;
 	margin-right: 15px;
+}
+
+.no-review-img {
+    width: 100px;
+    height: 100px;
+    margin: 70px 0px 20px 0px;
 }
 
 .selectbox {
@@ -23,10 +29,8 @@ select {
 
 .no_result {
 	text-align: center;
-    margin-top: 200px;
+    margin-top: 20px;
     margin-bottom: 100px;
-    color: #FF493C;
-    height: 100px;
 }
 
 .no_keyword {
@@ -75,14 +79,9 @@ input {
 }
 
 #deleteBtn {
-	width: auto;
-	height: auto;
-	color: #fff;
-	background: #6426DD;
-	border: none;
-	font-size: 10pt;
-	margin-left: 5px;
-	border-radius: 5pt;
+	background: #F8F8F8;
+    border: none;
+    width: 25px;
 }
 
 .imgList {

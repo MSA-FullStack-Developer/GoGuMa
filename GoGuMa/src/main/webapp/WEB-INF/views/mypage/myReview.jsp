@@ -322,6 +322,13 @@
                     <h5><b>내가 작성한 상품평</b></h5>
                 </div>
                 <div class="d-flex flex-column">
+                	<c:if test='${reviewList.size() < 1}'>
+   						<div style="text-align: center;">
+	   						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
+	   						<h5 class="no_result">작성한 상품평이 없습니다.</h5>
+   						</div>
+					</c:if>
+					
                     <c:forEach items="${reviewList}" var="review">
                     <div class="myReview">
 	                    <div style="width: 100%; margin-bottom: 10px;">

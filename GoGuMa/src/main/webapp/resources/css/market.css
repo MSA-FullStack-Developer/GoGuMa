@@ -46,6 +46,8 @@ a:hover {
     border-radius: 10pt;
     color: white;
     background-color: #6426DD;
+    text-align: center;
+    padding-top: 13px;
 }
 
 .createMarketBtn:hover {

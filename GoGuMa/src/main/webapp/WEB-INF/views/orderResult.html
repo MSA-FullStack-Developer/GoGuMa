@@ -1,8 +1,8 @@
-<!-- <%@ page session="false" pageEncoding="UTF-8"%>
+<!-- %@ page session="false" pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> -->
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
@@ -34,7 +34,7 @@
 <script type="text/javascript"
 	src="${contextPath}/webjars/jquery-ui/1.13.0/jquery-ui.js"></script>
 
-<!-- 바디 전체-->
+바디 전체
 <div class="cbody">
     <div class="contents">
         <div class="csection">
@@ -53,7 +53,7 @@
                             </ol>
                         </div>
                         <div class="cart-bottom">
-                            <span>${memberDTO.name } </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> G.Point: <span>
+                            <span>${memberDTO.name} </span>고객님의 혜택 정보 회원등급: <span> ${memberDTO.grade.name } </span> G.Point: <span>
                                  포인트 조회해야함</span>
                             <div class="btngroup">
                                 <button type="button" class="btn btn-cart-del"
@@ -63,7 +63,7 @@
                             </div>
                         </div>
                     </div>
-                    <!--장바구니에 담긴 상품이 있는 경우-->
+                    장바구니에 담긴 상품이 있는 경우
                     <c:if test="${list != null or fn:length(list) != 0}">
                         <div class="cart-body">
                             <table class="table table-bordered border-white" id="nrmProd">
@@ -123,7 +123,7 @@
                                                 <div class="cart-product-price">
                                                     <input type=hidden id="nrmOriPrc" name="cartOrderListDTO[${status.index}].nrmOriPrc"
                                                         value="${i.cartPrice }" />
-                                                    <!-- 처음 불러올때 보이는 금액 -->
+                                                    처음 불러올때 보이는 금액
                                                     <c:set var="proPrice"
                                                         value="${i.cartPrice * i.cartAmount}" />
                                                     <fmt:formatNumber var="pp" value="${proPrice}"
@@ -135,7 +135,7 @@
                                                 <div class="cart-product-discount">
                                                     <input type=hidden id="disOriPrc" name="cartOrderListDTO[${status.index}].disOriPrc"
                                                         value="${i.cartPrice * i.discountPercent / 100}" />
-                                                    <!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
+                                                    처음 불러올때 보이는 할인률, 할인 금액
                                                     <span>${i.discountPercent }%할인</span>
                                                     <c:set var="disPrice"
                                                         value="${proPrice  * i.discountPercent / 100 }" />
@@ -147,7 +147,7 @@
                                                 <div class="cart-total-price">
                                                     <input type=hidden id="totOriPrc" name="cartOrderListDTO[${status.index}].totOriPrc"
                                                         value="${i.cartPrice - (i.cartPrice * i.discountPercent / 100)}" />
-                                                    <!-- 처음 불러올때 보이는 할인률, 할인 금액 -->
+                                                    처음 불러올때 보이는 할인률, 할인 금액
                                                     <c:set var="totPrice" value="${proPrice - disPrice}" />
                                                     <span><fmt:formatNumber value="${totPrice}"
                                                             type="currency" currencySymbol="" /></span>원
@@ -168,7 +168,7 @@
                             </table>
                         </div>
                     </c:if>
-                    <!-- 장바구니에 담긴 상품이 없는 경우-->
+                    장바구니에 담긴 상품이 없는 경우
                     <c:if test="${list == null or fn:length(list) == 0}">
                         <div class="nodata">
                             <span class="bgcircle"> <i class="icon nodata-type"></i>
@@ -199,4 +199,4 @@
             </form>
         </div>
     </div>
-</div>
+</div> --> -->
