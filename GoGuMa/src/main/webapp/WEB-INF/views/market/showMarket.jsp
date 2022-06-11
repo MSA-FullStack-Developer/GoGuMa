@@ -281,5 +281,6 @@
         </section>
         </c:if>
     </div>
+  	<%@ include file="../market/marketFooter.jsp" %>
 </body>
 </html>

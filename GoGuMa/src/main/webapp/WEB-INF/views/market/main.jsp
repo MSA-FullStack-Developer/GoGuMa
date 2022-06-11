@@ -42,10 +42,6 @@
 			object-fit: cover;
 		}
 	</style>
-	
-	<script>
-	
-	</script>
 </head>
 
 <body>
@@ -154,5 +150,6 @@
             </div>
         </section>
 	</div>
+  	<%@ include file="../market/marketFooter.jsp" %>
 </body>
 </html>

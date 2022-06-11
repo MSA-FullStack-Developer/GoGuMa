@@ -719,5 +719,6 @@
 			</div>
 		</div>
 	</section>
+   	<%@ include file="../market/marketFooter.jsp" %>
 </body>
 </html>
