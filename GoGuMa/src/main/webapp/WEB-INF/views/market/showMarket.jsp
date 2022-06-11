@@ -138,7 +138,7 @@
                 </div>
                 
                 <div class="col-9" style="margin-left: 10px;">
-                    <h5>${market.marketName}</h5>
+                    <h5 style="">${market.marketName}</h5>
                     <p class="text-secondary">${market.marketDetail}</p>
                     <span class="badge text-light" style="background-color: #FF493C;">${market.category.categoryName}</span>
                 </div>
@@ -187,7 +187,7 @@
 	                    <a href="${contextPath}/market/article/${article.articleId}/show.do"
 	                        class="text-decoration-none text-dark">
 	                        <img src="${article.thumbnail.imagePath}"
-	                            class="card-img-top" alt="...">
+	                            class="card-img-top border-bottom" alt="...">
 	                        <div class="card-body">
 	                            <p class="card-text text-truncate">${article.articleTitle}</p>
 	                        </div>

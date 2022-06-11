@@ -88,10 +88,8 @@
 			$("a.showmore").click(function (e) {
 				e.preventDefault();
 			    var targetrow = $(this).closest('tr').next('.detail');
-			    var btn = $(this).text("닫기");
 			    targetrow.show().find('div').slideToggle(0, function(){
 			    	if (!$(this).is(':visible')) {
-			    		btn.text("보기");
 			        	targetrow.hide();
 			      	}
 			    });
@@ -120,6 +118,7 @@
 	         <div class="contents" style="height: 100%;">
 	         	<div class="cus-wrap">
                     <h3>내 상담내역 조회</h3>
+                    <p style="font-size: 10pt; color: #ccc;">제목을 누르면 상담 내용을 확인할 수 있습니다.</p>
                 </div>
                 <div style="margin-top: 20px;">
                 	<c:if test="${myQnaList.size() < 1}">
@@ -136,15 +135,14 @@
 					      		<th>제목</th>
 					    		<th>문의일</th>
 					    		<th>문의상태</th>
-					    		<th></th>
 					    	</tr>
 				 		</thead>
 				 		<tbody>
 				 			<c:forEach items="${myQnaList}" var="qna" varStatus="status">
 						   		<tr>
-						      		<th scope="row">${status.count + ((pg - 1) * 10)}</th>
+						      		<th scope="row">${status.count+((pg-1)*10)}</th>
 						      		<td>${qna.categoryName}</td>
-						      		<td>${qna.qnaTitle}</td>
+						      		<td><a class="showmore">${qna.qnaTitle}</a></td>
 						      		<td><fmt:formatDate value="${qna.createdAt}" pattern="yyyy-MM-dd" /></td>
 						      		<td>
 						      			<c:if test="${qna.answerStatus == 0}">
@@ -154,19 +152,18 @@
 						      				답변완료
 						      			</c:if>
 					      			</td>
-					      			<td><a class="showmore">보기</a></td>
 						    	</tr>
 						    	<tr class="detail">
 						    		<th>내용</th>
-						    		<td colspan="5">
-						    			<div><h6>${qna.qnaContent}</h6></div>
+						    		<td colspan="4">
+						    			<div>${qna.qnaContent}</div>
 						    		</td>
 						    	</tr>
 					    	</c:forEach>
 						</tbody>
 					</table>
 				</div>
-				<ul class="pagination justify-content-center">
+				<ul class="pagination justify-content-center" style="margin-top: 30px;">
                 	<c:if test="${startPage != 1}">
                 		<li class="page-item">
                 			<a class="page-link" href="${contextPath}/serviceclient/myService/${startPage-1}" aria-label="Previous">
@@ -175,10 +172,16 @@
                 		</li>
                 	</c:if>
                 	<c:forEach begin="${startPage}" end="${endPage}" var="p">
-                		<li class="page-item">
-						<c:if test="${p == pg}"><a class="page-link">${p}</a></c:if>
-						<c:if test="${p != pg}"><a class="page-link" href="${contextPath}/serviceclient/myService/${p}" >${p}</a></c:if>
-						</li>
+						<c:if test="${p == pg}">
+							<li class="page-item active">
+								<a class="page-link">${p}</a>
+							</li>
+						</c:if>
+						<c:if test="${p != pg}">
+							<li class="page-item">
+								<a class="page-link" href="${contextPath}/serviceclient/myService/${p}">${p}</a>
+							</li>
+						</c:if>
 					</c:forEach>
                 	<c:if test="${endPage != pageCount}">
                 		<li class="page-item">
