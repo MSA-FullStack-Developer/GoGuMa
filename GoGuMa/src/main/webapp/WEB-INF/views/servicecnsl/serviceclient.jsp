@@ -68,10 +68,6 @@
 			<div class="cus-wrap">
 				<div class="tit-wrap">
 					<h3>베스트 FAQ 5</h3>
-					<p>
-						<a class="#" href="">전체보기</a>
-						<i class="fas fa-angle-right"></i>
-					</p>
 				</div>
 				<div class="accordion accordion-flush" id="accordionFlushFAQ">
 					<div class="accordion-item">
@@ -187,7 +183,7 @@
 						<div class="tit-wrap">
 							<h3>공지사항</h3>
 							<p>
-								<a href="/p/ccb/noticeList.do">전체보기</a>
+								<a href="https://www.hmall.com/p/ccb/noticeList.do">전체보기</a>
 								<i class="fas fa-angle-right"></i>
 							</p>
 						</div>
@@ -201,7 +197,7 @@
 								<tbody>
 									<tr>
 										<td class="nowrap">
-											<a href="/p/ccb/noticeView.do?ancmId=53744&page=1">현대홈쇼핑 멤버십 제도 개편 안내</a>
+											<a href="https://www.hmall.com/p/ccb/noticeView.do?ancmId=53744&page=1&topFixYn=N">현대홈쇼핑 멤버십 제도 개편 안내</a>
 										</td>
 										<td class="txt-center">
 											<span class="date">2022.05.02</span>
@@ -210,7 +206,7 @@
 
 									<tr>
 										<td class="nowrap">
-											<a href="/p/ccb/noticeView.do?ancmId=53740&page=1">현대홈쇼핑 상시채용 안내</a>
+											<a href="https://www.hmall.com/p/ccb/noticeView.do?ancmId=53740&page=1&topFixYn=N">현대홈쇼핑 상시채용 안내</a>
 										</td>
 										<td class="txt-center">
 											<span class="date">2022.04.15</span>
@@ -219,7 +215,7 @@
 
 									<tr>
 										<td class="nowrap">
-											<a href="/p/ccb/noticeView.do?ancmId=53722&page=1">개인정보처리방침 변경 안내(01/27)</a>
+											<a href="https://www.hmall.com/p/ccb/noticeView.do?ancmId=53722&page=1&topFixYn=N">개인정보처리방침 변경 안내(01/27)</a>
 										</td>
 										<td class="txt-center">
 											<span class="date">2022.01.27</span>
@@ -228,7 +224,7 @@
 
 									<tr>
 										<td class="nowrap">
-											<a href="/p/ccb/noticeView.do?ancmId=53597&page=1">현대홈쇼핑 금융소비자보호 내부통제기준 및 금융소비자보호기준</a>
+											<a href="https://www.hmall.com/p/ccb/noticeView.do?ancmId=53597&page=1&topFixYn=N">현대홈쇼핑 금융소비자보호 내부통제기준 및 금융소비자보호기준</a>
 										</td>
 										<td class="txt-center">
 											<span class="date">2021.09.24</span>
@@ -237,7 +233,7 @@
 
 									<tr>
 										<td class="nowrap">
-											<a href="/p/ccb/noticeView.do?ancmId=53596&page=1">현대홈쇼핑 보험대리점등록증</a>
+											<a href="https://www.hmall.com/p/ccb/noticeView.do?ancmId=53596&page=1&topFixYn=N">현대홈쇼핑 보험대리점등록증</a>
 										</td>
 										<td class="txt-center">
 											<span class="date">2021.09.24</span>
@@ -251,15 +247,15 @@
 					<!--//공지사항-->
 					<!--1:1 문의하기-->
 					<div class="question-wrap" onclick="openCnslPup(); return false;">
-						<div class="q-cont" onclick="">
+						<div class="q-cont">
 							<strong>1:1 문의하기 </strong><i class="fas fa-angle-right"></i>
 							<div id="cont-txt">쇼핑을 하다가 생긴 궁금증 언제든지 물어보세요.</div>
 						</div>
 					</div>
 					<!--//1:1 문의하기-->
 					<!-- 내 상담내역 조회-->
-					<div class="question-wrap">
-						<div class="sel-cont" onclick="">
+					<div class="question-wrap" onclick="location.href='${contextPath}/serviceclient/myService/1'">
+						<div class="sel-cont">
 							<strong>내 상담내역 조회 </strong><i class="fas fa-angle-right"></i>
 							<div id="cont-txt">문의사항에 대한 답변을 확인하실 수 있습니다.</div>
 						</div>
