@@ -176,6 +176,7 @@ div, ul, li {
 .cus-wrap.noti {
     display: flex;
     justify-content: space-between;
+    margin-top: 30px;
 }
 .question-wrap{
 	width: 220px;
