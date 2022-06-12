@@ -76,7 +76,7 @@ public class ServiceClientController {
 			}
 			//로그인을 하지 않은 경우
 			else {
-				
+				return "redirect:../../member/login.do";
 			}
 			return "servicecnsl/serviceclient";
 		}
@@ -150,7 +150,6 @@ public class ServiceClientController {
 	@ResponseBody
 	public void inquiry(ServiceClientDTO serviceClientDTO, Authentication authentication)throws Exception{
 		try {
-			
 			String memberEmail = "";
 			// 사용자가 권한이 있는 경우
 			UserDetails user = (UserDetails)authentication.getPrincipal();
