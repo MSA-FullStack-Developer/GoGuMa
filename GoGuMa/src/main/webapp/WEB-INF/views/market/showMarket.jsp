@@ -137,7 +137,7 @@
                     <img class="border border-secondary rounded-circle" src="${market.marketThumbnail}" style="width: 100px; height: 100px; object-fit: cover; margin-right: 10px;"/>
                 </div>
                 
-                <div class="col-9" style="margin-left: 10px;">
+                <div class="col-9" style="margin-left: 10px; padding-top: 3px;">
                     <h5 style="">${market.marketName}</h5>
                     <p class="text-secondary">${market.marketDetail}</p>
                     <span class="badge text-light" style="background-color: #FF493C;">${market.category.categoryName}</span>
