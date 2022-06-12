@@ -322,7 +322,7 @@
                     <div class="modal-background">
 						<div class="modal-window">
 							<div class="popup">
-		                        <h4 class="membername"><i class="fa-solid fa-heart" style="color: FF493C"></i>
+		                        <h4 class="membername"><i class="fa-solid fa-heart" style="margin-right: 2px; margin-left: 10px; color: #FF493C"></i>
 		                        	<b>${memberDTO.name}</b>님, 수정할 후기를 다시 입력해주세요.
 		                        	<input type="hidden" id="content" value="">
 		                        	<input type="hidden" id="reviewID" value="">
