@@ -83,7 +83,7 @@
 	<select id="getUnavailableCouponCount" resultType="long">
 		select count(*) from couponview where memberId = #{memberId}
 		<![CDATA[
-			and used = 1 or (used = 0 and sysdate > expirationdate)
+			and (used = 1 or (used = 0 and sysdate > expirationdate))
 		]]>
 	</select>
 	
