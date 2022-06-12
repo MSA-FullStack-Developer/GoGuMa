@@ -333,15 +333,13 @@
 	 function cancelAllPay(receiptId, membershipDiscount, couponDiscount, usagePoint) {
 	  	let token = $("meta[name='_csrf']").attr("content");
    		let header = $("meta[name='_csrf_header']").attr("content");
-   		console.log();
-   		var tot = parseInt("${receiptDTO.totalPrice}");
-   		console.log(tot);
-		$.ajax({
+
+		 $.ajax({
 			url : "${contextPath}/mypage/api/payment/cancel",
 			type : "POST",
 			data : {
 			    uid : $("#impUid"+receiptId).val(),
-			  	cancelAmount : (tot - couponDiscount - usagePoint),
+			  	cancelAmount : //여기 넣어줘! (tot - couponDiscount - usagePoint),
 			  	reason : "",
 			  	refundBank : "",
 			  	refundHolder : "",
