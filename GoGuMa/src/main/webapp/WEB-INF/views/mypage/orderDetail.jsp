@@ -49,13 +49,16 @@
                 <div class="col border border-2 rounded p-4 mb-3">
                     <div class="d-flex flex-row">
                         <div class="col">
-                            <h5><b><fmt:formatDate pattern="yyyy-MM-dd" value="${receiptDTO.orderDate}" /> ${fn:split(receiptDTO.impUid,'_')[1]}</b></h5>
+                            <h5><b><fmt:formatDate pattern="yyyy-MM-dd" value="${receiptDTO.orderDate}" /></b></h5>
+                            <div class="d-flex justify-content-between mb-2">
+	                        	<span>주문번호 : ${fn:split(receiptDTO.impUid,'_')[1]}</span>
+	                        </div>
                         </div>
                     </div>
                     <div class="border border-1 rounded">
                         <table>
                             <tbody>
-                            	<c:forEach var="orderDTO" items="${receiptDTO.orderList}">
+                            	<c:forEach var="orderDTO" items="${receiptDTO.orderList}" varStatus="status">
 	                                <!-- 주문 forEach 시작 -->
 	                                <input type="hidden" id="price${orderDTO.orderId}" value="${orderDTO.price}"/>
 	                                <input type="hidden" id="count${orderDTO.orderId}" value="${orderDTO.count}"/>
@@ -86,6 +89,7 @@
 	                                            </div>
 	                                        </div>
 	                                    </td>
+	                                    
 	                                    <!-- 무통장입금 방식으로 결제하거나 여러 개의 주문 상품을 쿠폰 또는 포인트를 사용하고 결제했을 때 전체 상품에 대해서만 환불 가능 -->
 	                                    <!-- 하나 이상의 주문 상품을 쿠폰 또는 포인트를 사용하지 않고 결제했을 때 각각의 상품에 대해서 환불 가능 -->
 	                                    <c:choose>
