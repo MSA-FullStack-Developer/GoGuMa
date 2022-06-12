@@ -201,7 +201,7 @@
 
         		if (confirm("상품평을 삭제하시겠습니까?")) {
             		$.ajax({
-        	            url: "${contextPath}/category/1/deleteReview",
+        	            url: "${contextPath}/category/1/api/deleteReview",
         	            type: "POST",
         	            data: data,
         	            beforeSend : function(xhr) {
