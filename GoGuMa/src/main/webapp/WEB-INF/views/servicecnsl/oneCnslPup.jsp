@@ -72,6 +72,24 @@ const inputPhoneNumber = (target) => {
     console.log("클릭");
     var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
+
+	console.log($('#find-imp').val());
+	if($('#csCategory').val() == 0){
+	  alert("문의 유형을 선택해주세요.");
+	  return;
+	} else if(!$('#find-imp').val()){
+	  alert("주문내역을 선택해주세요.");
+	  return;
+	} else if(!$('#qnaTitle').val()){
+	  alert("제목을 입력해 주세요.");
+	  return;
+	} else if(!$('#qna-content').val()){
+	  alert("문의 내용을 입력해 주세요.");
+	  return;
+	} else if(!$('#bphone').val()){
+	  alert("연락처를 입력해 주세요.");
+	  return;
+	}
 	var data = $('#frmScInfo').serialize();
 	$.ajax({
 	  	url : "${contextPath}/serviceclient/api/inquiry",
@@ -275,7 +293,7 @@ const inputPhoneNumber = (target) => {
 						<div class="row pop-row">
 							<div class="col-md-4 col-head">제목</div>
 							<div class="col-md-8 col-content" id="baddress">
-								<input class="form-control" type="text" name="qnaTitle" placeholder="제목을 입력해주세요." value="">
+								<input class="form-control" type="text" id="qnaTitle" name="qnaTitle" placeholder="제목을 입력해주세요." value="">
 							</div>
 						</div>
 						<div class="row pop-row">
