@@ -68,7 +68,7 @@
 	                    <div class="border border-1 rounded">
 	                        <table>
 	                            <tbody>
-		                    		<c:forEach var="orderDTO" items="${receiptDTO.orderList}">
+		                    		<c:forEach var="orderDTO" items="${receiptDTO.orderList}" varStatus="status">
 	                            		<!-- 주문 forEach 시작 -->
 	                            		<input type="hidden" id="price${orderDTO.orderId}" value="${orderDTO.price}"/>
 	                            		<input type="hidden" id="count${orderDTO.orderId}" value="${orderDTO.count}"/>
@@ -99,6 +99,13 @@
 		                                            </div>
 		                                        </div>
 		                                    </td>
+		                                    <c:choose>
+		                                    	<!-- 
+		                                    	<c:when test="${}">
+		                                    		
+		                                    	</c:when>
+		                                    	 -->
+		                                    </c:choose>
 		                                    <c:if test="${receiptDTO.couponDiscount == 0 && receiptDTO.usagePoint == 0}">
 		                                    	<td class="border-bottom">
 			                                        <div class="col" align="center">
@@ -135,6 +142,13 @@
 			                                        </div>
 			                                    </td>
 		                                    </c:if>
+		                                    <c:choose>
+		                                    	<c:if test="${status.first}">
+			                                    	<td rowspan="${receiptDTO.orderList.size()}">
+			                                    	
+			                                    	</td>
+			                                    </c:if>
+		                                    </c:choose>
 		                                </tr>
 		                                <!-- 주문 forEach 종료 -->
 	                                </c:forEach>

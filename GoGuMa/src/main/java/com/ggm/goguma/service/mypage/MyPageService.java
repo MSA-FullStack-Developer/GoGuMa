@@ -11,9 +11,9 @@ import com.ggm.goguma.dto.UpdateMemberDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 
 public interface MyPageService {
-	List<ReceiptDTO> getReceiptHistory(long memberId) throws Exception;
+	List<ReceiptDTO> getReceiptHistory(long memberId, long page) throws Exception;
 	
-	List<ReceiptDTO> getReceiptList(long memberId) throws Exception;
+	List<ReceiptDTO> getReceiptList(long memberId, long startNum, long endNum) throws Exception;
 	
 	List<OrderDTO> getOrderList(long receiptId) throws Exception;
 	
@@ -24,6 +24,8 @@ public interface MyPageService {
 	int getMemberPoint(long memberId) throws Exception;
 	
 	int getEstimatedPoint(long receiptId) throws Exception;
+	
+	long getReceiptCount(long membeId) throws Exception;
 	
 	long getCouponCount(long memberId, String type) throws Exception;
 	

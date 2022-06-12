@@ -8,9 +8,14 @@
 		수정이력 : receipt조회시 DTO에 맞는 컬럼들 추가
 	 -->
 	<select id="getReceiptList" resultType="ReceiptDTO">
-		select receiptid, recipient, rcptcontact, rcptaddress, rcptnickname, requirement, originalprice, membershipdiscount, coupondiscount, usagepoint, totalprice, orderdate, impuid, memberid
-		from receipt where memberid = #{memberId}
-		order by orderdate desc
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+				 (select receiptid, recipient, rcptcontact, rcptaddress, rcptnickname, requirement, originalprice, membershipdiscount, coupondiscount, usagepoint, totalprice, orderdate, impuid, memberid
+				  from receipt where memberid = #{memberId}
+				  order by orderdate desc) a) b
+		where rnum between #{startNum} and #{endNum}
 	</select>
 	
 	<select id="getReceiptHistoryPages" resultType="ReceiptDTO">
@@ -71,6 +76,10 @@
 		SELECT sum(pointvalue)
 		FROM pointevent
 		WHERE receiptid = #{receiptId} and pointtype='earn'
+	</select>
+	
+	<select id="getReceiptCount" resultType="long">
+		select count(*) from receipt where memberid = #{memberId}
 	</select>
 	
 	<select id="getAvailableCouponCount" resultType="long">
