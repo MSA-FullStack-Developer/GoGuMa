@@ -716,6 +716,11 @@ public class MyPageController {
 			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
+			
+			// 작성 가능한 상품평 개수 불러오기
+			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
+			model.addAttribute("writeableList", writeableList);
+			model.addAttribute("writeableCount", writeableList.size());
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}

@@ -61,32 +61,18 @@
                             </div>  
                         </div>
                     </div>
-                    <div class="d-flex flex-column align-items-center align-self-center lh-sm">
-                        <div>
-                            <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
-                        </div>
-                        <div>
-                            <a href="${contextPath}/mypage/pointHistory/all?page=1">
-                            	<fmt:formatNumber value="${memberPoint}"/>P
-                            </a>
-                        </div>
-                    </div>
-                    <div class="d-flex flex-column align-items-center align-self-center lh-sm">
-                        <div>
-                            <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
-                        </div>
-                        <div>
-                            <a href="${contextPath}/mypage/couponHistory/available?page=1">${couponCount}장</a>
-                        </div>
-                    </div>
-                    <div class="d-flex flex-column align-items-center align-self-center lh-sm">
-                        <div>
-                            <a href="${contextPath}/mypage/writeableReview">작성 가능한 상품평</a>
-                        </div>
-                        <div>
-                            <a href="${contextPath}/mypage/writeableReview">${writeableCount}건</a>
-                        </div>
-                    </div>
+                    <a href="${contextPath}/mypage/pointHistory/all?page=1" class="d-flex flex-column align-items-center align-self-center lh-sm">
+                    	<span>포인트</span>
+                       	<span><fmt:formatNumber value="${memberPoint}"/>P</span>
+                    </a>
+                    <a href="${contextPath}/mypage/couponHistory/available?page=1" class="d-flex flex-column align-items-center align-self-center lh-sm">
+                    	<span>쿠폰</span>
+	                    <span>${couponCount}장</span>
+                    </a>
+                    <a href="${contextPath}/mypage/writeableReview" class="d-flex flex-column align-items-center align-self-center lh-sm">
+                    	<span>작성 가능한 상품평</span>
+	                    <span>${writeableCount}건</span>
+                    </a>
                 </div>
                 <div>
                     <h5><b>멤버십 등급 안내</b></h5>
