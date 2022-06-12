@@ -118,7 +118,7 @@ public class ServiceClientController {
 				return "servicecnsl/oneCnslPup";
 			}else {
 				// 로그인 안된 상태라면 사용자 로그인 창으로 이동
-				return "redirect:../member/login.do";
+				return "redirect:../../member/login.do";
 			}
 		}catch (Exception e) {
 			// TODO: handle exception
@@ -208,7 +208,7 @@ public class ServiceClientController {
 				
 				return "servicecnsl/myService";
 			}else {
-				return "redirect:../member/login.do"; // 로그인 화면으로 이동
+				return "redirect:../../member/login.do"; // 로그인 화면으로 이동
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
