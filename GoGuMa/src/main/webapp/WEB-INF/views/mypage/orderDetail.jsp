@@ -59,12 +59,12 @@
 	                                <input type="hidden" id="price${orderDTO.orderId}" value="${orderDTO.price}"/>
 	                                <input type="hidden" id="count${orderDTO.orderId}" value="${orderDTO.count}"/>
 	                                <tr class="border-bottom">
-	                                    <td class="col-1 p-3">
+	                                    <td class="col-1 p-3 border-bottom">
 	                                    	<a href="${contextPath}/category/1/${orderDTO.categoryId}/detail/${orderDTO.productId}">
 	                                        	<img src="${orderDTO.image}" style="width:100px; height:100px">
 	                                        </a>
 	                                    </td>
-	                                    <td class="col-5 border-end">
+	                                    <td class="col-5 border-end border-bottom">
 	                                    	<a href="${contextPath}/category/1/${orderDTO.categoryId}/detail/${orderDTO.productId}" class="text-truncate">
 	                                    		<span class="d-inline-block text-truncate" style="max-width: 300px;">
 	                                    			<b>${orderDTO.pname}</b>
@@ -75,7 +75,7 @@
 	                                    		</span>
 	                                    	</a>
 	                                    </td>
-	                                    <td class="border-end">
+	                                    <td class="border-end border-bottom">
 	                                        <div class="col m-auto" style="width: 100px" align="center">
 	                                            <div>
 	                                                <fmt:formatNumber value="${orderDTO.price}" />원
@@ -85,41 +85,84 @@
 	                                            </div>
 	                                        </div>
 	                                    </td>
-	                                    <td>
-	                                        <div class="col" align="center">
-	                                        	<c:choose>
-	                                        		<c:when test="${orderDTO.status eq 'N'}">
-		                                        		<div>
-			                                                <h5><b>주문 완료</b></h5>
-			                                            </div>
-			                                            <div class="mb-2">
-			                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="configBtn(${orderDTO.orderId})">구매확정</button>
-			                                            </div>
-			                                            <div class="mt-2">
-			                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="cancelBtn(${receiptDTO.receiptId}, ${orderDTO.orderId})">주문취소</button>
-			                                            </div>
-	                                        		</c:when>
-	                                        		<c:when test="${orderDTO.status eq 'F'}">
-	                                        			<div>
-			                                                <h5><b>구매 완료</b></h5>
-			                                            </div>
-			                                            <div class="mb-2">
-			                                                <button type="button" class="btn btn-sm btn-outline-dark">상품평 쓰기</button>
-			                                            </div>
-	                                        		</c:when>
-	                                        		<c:when test="${orderDTO.status eq 'V'}">
-	                                        			<div>
-			                                                <h5><b>입금 예정</b></h5>
-			                                            </div>
-	                                        		</c:when>
-	                                        		<c:otherwise>
-	                                        			<div>
-			                                                <h5><b>취소 완료</b></h5>
-			                                            </div>
-	                                        		</c:otherwise>
-	                                        	</c:choose>
-	                                        </div>
-	                                    </td>
+	                                    <!-- 무통장입금 방식으로 결제하거나 여러 개의 주문 상품을 쿠폰 또는 포인트를 사용하고 결제했을 때 전체 상품에 대해서만 환불 가능 -->
+	                                    <c:choose>
+	                                    	<c:when test="${receiptDTO.couponDiscount > 0 || receiptDTO.usagePoint > 0 || receiptDTO.orderDTO.status == 'V'}">
+	                                    		<c:if test="${status.first}">
+			                                    	<td rowspan="${receiptDTO.orderList.size()}" align="center">
+			                                    		<c:choose>
+			                                    			<c:when test="${orderDTO.status eq 'N'}">
+				                                        		<div>
+					                                                <h5><b>주문 완료</b></h5>
+					                                            </div>
+					                                            <div class="mb-2">
+					                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="configBtn(${orderDTO.orderId})">구매확정</button>
+					                                            </div>
+					                                            <div class="mt-2">
+					                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="cancelBtn(${receiptDTO.receiptId}, ${orderDTO.orderId}, ${receiptDTO.membershipDiscount}, ${receiptDTO.couponDiscount}, ${receiptDTO.usagePoint})">주문취소</button>
+					                                            </div>
+			                                        		</c:when>
+			                                        		<c:when test="${orderDTO.status eq 'F'}">
+			                                        			<div>
+					                                                <h5><b>구매 완료</b></h5>
+					                                            </div>
+					                                            <div class="mb-2">
+					                                            </div>
+			                                        		</c:when>
+			                                        		<c:when test="${orderDTO.status eq 'V'}">
+			                                        			<div>
+					                                                <h5><b>입금 예정</b></h5>
+					                                            </div>
+			                                        		</c:when>
+			                                        		<c:otherwise>
+			                                        			<div>
+					                                                <h5><b>취소 완료</b></h5>
+					                                            </div>
+			                                        		</c:otherwise>
+			                                    		</c:choose>
+			                                    	</td>
+			                                    </c:if>
+	                                    	</c:when>
+	                                    	<!-- 하나 이상의 주문 상품을 쿠폰 또는 포인트를 사용하지 않고 결제했을 때 각각의 상품에 대해서 환불 가능 -->
+	                                    	<c:otherwise>
+		                                    	<td class="border-bottom">
+			                                        <div class="col" align="center">
+			                                        	<c:choose>
+			                                        		<c:when test="${orderDTO.status eq 'N'}">
+				                                        		<div>
+					                                                <h5><b>주문 완료</b></h5>
+					                                            </div>
+					                                            <div class="mb-2">
+					                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="configBtn(${orderDTO.orderId})">구매확정</button>
+					                                            </div>
+					                                            
+					                                            <div class="mt-2">
+					                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="cancelBtn(${receiptDTO.receiptId}, ${orderDTO.orderId}, ${receiptDTO.membershipDiscount}, ${receiptDTO.couponDiscount}, ${receiptDTO.usagePoint})">주문취소</button>
+					                                            </div>
+			                                        		</c:when>
+			                                        		<c:when test="${orderDTO.status eq 'F'}">
+					                                            <div>
+					                                                <h5><b>구매 완료</b></h5>
+					                                            </div>
+					                                            <div class="mb-2">
+					                                                <button type="button" class="btn btn-sm btn-outline-dark">상품평 쓰기</button>
+					                                            </div>
+			                                        		</c:when>
+			                                        		<c:when test="${orderDTO.status eq 'V'}">
+			                                        			<div>
+					                                                <h5><b>입금 예정</b></h5>
+					                                            </div>
+			                                        		</c:when>
+			                                        		<c:otherwise>
+			                                        			<div>
+					                                                <h5><b>취소 완료</b></h5>
+					                                            </div>
+			                                        		</c:otherwise>
+			                                        	</c:choose>
+			                                        </div>
+			                                    </td>
+		                                    </c:otherwise>
+	                                    </c:choose>
                                     </tr>
                                     <!-- 주문 forEach 종료 -->
 	                            </c:forEach>
@@ -245,20 +288,22 @@
 	
 	/**
 	 * @작성자: Moon Seokho
-	 * @Date: 2022. 6. 7.
-	 * @프로그램설명: 환불요청을 받을 URL
-	 * @변경이력: 
+	 * @작성일자 : 2022.06.7
+	 * @작업내용 : 각각의 상품에 대한 환불처리 메소드 구현
+	 * @수정자 : 송진호
+	 * @수정일자 : 2022.06.12
+	 * @수정내용 : 환불에 필요한 멤버십할인금액 추가
 	 */
-	function cancelPay(receiptId, orderId) {
-	  	let token = $("meta[name='_csrf']").attr("content");
-    	let header = $("meta[name='_csrf_header']").attr("content");
+	function cancelPay(receiptId, orderId, membershipDiscount) {
+		let token = $("meta[name='_csrf']").attr("content");
+	   	let header = $("meta[name='_csrf_header']").attr("content");
     	console.log();
 		$.ajax({
 			url : "${contextPath}/mypage/api/payment/cancel",
 			type : "POST",
 			data : {
 			    uid : $("#impUid"+receiptId).val(),
-			  	cancelAmount : $("#price"+orderId).val() * $("#count"+orderId).val(),
+			  	cancelAmount : ($("#price"+orderId).val() - membershipDiscount) * $("#count"+orderId).val(),
 			  	reason : "",
 			  	refundBank : "",
 			  	refundHolder : "",
@@ -279,7 +324,7 @@
         });
 	}
 	
-	function cancelBtn(receiptId, orderId) {
+	function cancelBtn(receiptId, orderId, membershipDiscount, couponDiscount, usagePoint) {
 		if(confirm("주문을 취소하시겠습니까?")) {
 			let token = $("meta[name='_csrf']").attr("content");
 		    let header = $("meta[name='_csrf_header']").attr("content");
@@ -295,11 +340,15 @@
 	            },
 				success:function(result) {
 					if(result==1) {
-						cancelPay(receiptId, orderId);
-				  		alert("상품 주문이 취소되었습니다. 전액 환불 처리됩니다.");
-						window.location.href = "${contextPath}/mypage/orderHistory/${receiptDTO.receiptId}";
+				  		if(couponDiscount == 0 && usagePoint == 0) {
+				  			cancelPay(receiptId, orderId, membershipDiscount);
+				  		} else {
+				  			//cancelEntirePay(receiptId, orderId, membershipDiscount, couponDiscount, usagePoint); // 전체 환불 처리 메소드(가제)
+				  		}
+				  		alert("주문하신 상품이 취소되었습니다. 빠른 시일 이내에 환불 처리 됩니다.");
+						window.location.href = "${contextPath}/mypage/orderHistory";
 					} else {
-						alert('주문취소 오류');
+						alert('주문을 취소하는 과정에서 오류가 발생했습니다.');
 					}
 				},
 				error:function(xhr, status, error) {
@@ -308,7 +357,7 @@
     				var message = errorResponse.message;
     				alert(message);
     			}
-			})
+			});
 		}
 	}
 	
