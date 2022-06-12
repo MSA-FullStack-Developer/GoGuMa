@@ -139,7 +139,7 @@
 						              			</div>
 						              		</div>
 						             		<div>
-						              			<input type="text" class="form-control mb-1" id="postCode-${addressDTO.addressId}" placeholder="우편번호" value="${addressDTO.postCode}" disabled>
+						              			<input type="text" class="form-control mb-1" id="postCode-${addressDTO.addressId}" value="${addressDTO.postCode}" placeholder="우편번호" style="width: 196px" disabled>
 						              			<input type="text" class="form-control mb-1" id="address-${addressDTO.addressId}" placeholder="주소" value="${addressDTO.address}" disabled>
 					              				<input type="text" class="form-control mb-1" id="detail-${addressDTO.addressId}" placeholder="상세주소" value="${addressDTO.detail}">
 						             		</div>
@@ -205,7 +205,7 @@
 	              			</div>
 	              		</div>
 	              		<div>
-	              			<input type="text" class="form-control mb-1" id="postCode" placeholder="우편번호" disabled>
+	              			<input type="text" class="form-control mb-1" id="postCode" placeholder="우편번호" style="width: 196px" disabled>
 	              			<input type="text" class="form-control mb-1" id="address" placeholder="주소" disabled>
               				<input type="text" class="form-control mb-1" id="detail" placeholder="상세주소">
 	             		</div>
@@ -232,12 +232,14 @@
 <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
+	// 숫자 입력시 자동 하이픈 생성
 	const autoHyphen = (target) => {
 		target.value = target.value
 		   .replace(/[^0-9]/g, '')
 		   .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
 	}
 	
+	// 배송지 등록시 우편번호찾기
 	function getAddressByFindingPostCode() {
 		new daum.Postcode({
 			oncomplete: function(data) {
@@ -262,6 +264,7 @@
 		}).open();
 	}
 	
+	// 배송지 수정시 우편번호찾기
 	function updateAddressByFindingPostCode(addressId) {
 		new daum.Postcode({
 			oncomplete: function(data) {
@@ -287,6 +290,30 @@
 		}).open();
 	}
 	
+	// 값이 비었는지 확인하는 함수
+	function checkEmpty(data) {
+		if(data.nickName == '') {
+			alert('배송지 별칭을 입력해주세요.');
+			return 'empty';
+		}
+		else if(data.recipient == '') {
+			alert('받는 분을 입력해주세요.');
+			return 'empty';
+		}
+		else if(data.postCode == '') {
+			alert('우편번호 찾기로 배송지를 입력해주세요.');
+			return 'emtpy';
+		}
+		else if(data.detail == '') {
+			alert('상세주소를 입력해주세요.');
+			return 'empty';
+		}
+		else if(data.contact == '') {
+			alert('연락처를 입력해주세요.');
+			return 'empty';
+		}
+	}
+	
 	// 배송지 등록 버튼 이벤트
 	function addAddress() {
 		let isDefault = 0;
@@ -306,29 +333,31 @@
 			isDefault : isDefault
 	    }
 	    
-		$.ajax({
-			url : '${contextPath}/mypage/manageAddress/addAddress',
-			type : 'POST',
-			data : JSON.stringify(data),
-			contentType : 'application/json; charset=utf-8;',
-			beforeSend : function(xhr) {
-	            xhr.setRequestHeader(header, token);
-	        },
-	        success:function(result) {
-	        	if(result==1) {
-	        		alert('배송지를 추가했습니다.');
-	        		window.location.href = "${contextPath}/mypage/manageAddress";
-	        	} else {
-					alert('배송지를 추가하는 과정에서 오류가 발생했습니다.');
+	    if(checkEmpty(data) != 'empty') {
+			$.ajax({
+				url : '${contextPath}/mypage/manageAddress/addAddress',
+				type : 'POST',
+				data : JSON.stringify(data),
+				contentType : 'application/json; charset=utf-8;',
+				beforeSend : function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
+		        success:function(result) {
+		        	if(result==1) {
+		        		alert('배송지를 추가했습니다.');
+		        		window.location.href = "${contextPath}/mypage/manageAddress";
+		        	} else {
+						alert('배송지를 추가하는 과정에서 오류가 발생했습니다.');
+					}
+		        },
+				error:function(xhr, status, error) {
+					var errorResponse = JSON.parse(xhr.responseText);
+					var errorCode = errorResponse.code;
+					var message = errorResponse.message;
+					alert(message);
 				}
-	        },
-			error:function(xhr, status, error) {
-				var errorResponse = JSON.parse(xhr.responseText);
-				var errorCode = errorResponse.code;
-				var message = errorResponse.message;
-				alert(message);
-			}
-		});
+			});
+	    }
 	}
 
 	// 수정 버튼 이벤트
@@ -351,29 +380,31 @@
 			isDefault : isDefault
 	    }
 	    
-	    $.ajax({
-	    	url : '${contextPath}/mypage/manageAddress/updateAddress',
-	    	type : 'POST',
-	    	data : JSON.stringify(data),
-			contentType : 'application/json; charset=utf-8;',
-			beforeSend : function(xhr) {
-	            xhr.setRequestHeader(header, token);
-	        },
-	        success:function(result) {
-	        	if(result==1) {
-	        		alert('배송지 정보를 수정했습니다.');
-	        		window.location.href = "${contextPath}/mypage/manageAddress";
-	        	} else {
-					alert('배송지 정보를 수정하는 과정에서 오류가 발생했습니다.');
+	    if(checkEmpty(data) != 'empty') {
+		    $.ajax({
+		    	url : '${contextPath}/mypage/manageAddress/updateAddress',
+		    	type : 'POST',
+		    	data : JSON.stringify(data),
+				contentType : 'application/json; charset=utf-8;',
+				beforeSend : function(xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
+		        success:function(result) {
+		        	if(result==1) {
+		        		alert('배송지 정보를 수정했습니다.');
+		        		window.location.href = "${contextPath}/mypage/manageAddress";
+		        	} else {
+						alert('배송지 정보를 수정하는 과정에서 오류가 발생했습니다.');
+					}
+		        },
+				error:function(xhr, status, error) {
+					var errorResponse = JSON.parse(xhr.responseText);
+					var errorCode = errorResponse.code;
+					var message = errorResponse.message;
+					alert(message);
 				}
-	        },
-			error:function(xhr, status, error) {
-				var errorResponse = JSON.parse(xhr.responseText);
-				var errorCode = errorResponse.code;
-				var message = errorResponse.message;
-				alert(message);
-			}
-	    });
+		    });
+	    }
 	}
 	
 	// 삭제 버튼 이벤트
