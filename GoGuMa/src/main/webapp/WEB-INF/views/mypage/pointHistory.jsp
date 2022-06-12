@@ -43,7 +43,7 @@
                 <div class="d-flex flex-row justify-content-evenly border border-2 rounded p-3 mb-3">
                     <div class="d-flex flex-row align-items-center">
                         <div class="me-2">
-                        	<a href="${contextPath}/mypage/membershipZone">
+                        	<a href="${contextPath}/mypage/membershipZone" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-offset="0,10" title="${memberDTO.grade.name}">
                         		<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-gold.png" style="width: 50px; height: 50px; object-fit: contain;">
                         	</a>
                         </div>
@@ -53,9 +53,7 @@
                                 	<b>${memberDTO.name}님</b>
                                 </a>
                             </div>
-                            <div>
-                                <a href="${contextPath}/mypage/membershipZone" style="font-size: 16px">Gold</a>
-                            </div>  
+                            <a href="${contextPath}/mypage/membershipZone" class="btn btn-sm border" style="font-size: 10pt; padding:1px 8px 1px 8px">혜택보기</a>
                         </div>
                     </div>
                     <a href="${contextPath}/mypage/pointHistory/all?page=1" class="d-flex flex-column align-items-center align-self-center lh-sm">
@@ -274,6 +272,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.kr.min.js"></script>
 <script type="text/javascript">
+	const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+	const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 	$(document).ready(function() {
 		$('input[name=startDate]').datepicker({
 			format: 'yyyy-mm-dd',

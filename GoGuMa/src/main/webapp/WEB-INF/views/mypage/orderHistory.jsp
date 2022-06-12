@@ -14,7 +14,6 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 	<!-- bootstrap css -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-	<!-- bootstrap js -->
 	<style>
         a {
             text-decoration: none;
@@ -47,7 +46,7 @@
                 <div class="d-flex flex-row justify-content-evenly border border-2 rounded p-3 mb-3">
                     <div class="d-flex flex-row align-items-center">
                         <div class="me-2">
-                        	<a href="${contextPath}/mypage/membershipZone">
+                        	<a href="${contextPath}/mypage/membershipZone" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-offset="0,10" title="${memberDTO.grade.name}">
                         		<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-gold.png" style="width: 50px; height: 50px; object-fit: contain;">
                         	</a>
                         </div>
@@ -57,9 +56,7 @@
                                 	<b>${memberDTO.name}님</b>
                                 </a>
                             </div>
-                            <div>
-                                <a href="${contextPath}/mypage/membershipZone" style="font-size: 16px">Gold</a>
-                            </div>  
+                            <a href="${contextPath}/mypage/membershipZone" class="btn btn-sm border" style="font-size: 10pt; padding:1px 8px 1px 8px">혜택보기</a>
                         </div>
                     </div>
                     <a href="${contextPath}/mypage/pointHistory/all?page=1" class="d-flex flex-column align-items-center align-self-center lh-sm">
@@ -180,6 +177,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
 <script type="text/javascript">
+	const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+	const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 	function configBtn(orderId) {
 		if(confirm("구매확정 하시겠습니까?")) {
 			let token = $("meta[name='_csrf']").attr("content");
