@@ -342,7 +342,7 @@
 	                        <div>
 	                    		<input type="hidden" id="reviewID" name="${review.reviewID}" value="${review.reviewID}">
 	                            <p class="review-profile-name">
-	                            	${review.name}
+	                            	${review.nickName}
 		                        	<c:if test="${review.name == memberDTO.name}">
 		                        		<button type="button" class="deleteBtn" id="deleteBtn"><i class="fa-solid fa-trash-can"></i></button>
 		                        	</c:if>
