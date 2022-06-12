@@ -60,10 +60,11 @@
 					<div class="col border border-2 rounded p-4 mb-3">
 	                    <div class="d-flex flex-row">
 	                        <div class="col">
-	                            <h5><b><fmt:formatDate pattern="yyyy-MM-dd" value="${receiptDTO.orderDate}" /> ${fn:split(receiptDTO.impUid,'_')[1]}</b></h5>
-	                        </div>
-	                        <div class="d-flex flex-column">
-	                            <a href="${contextPath}/mypage/orderHistory/${receiptDTO.receiptId}">주문 상세보기</a>
+	                            <h5><b><fmt:formatDate pattern="yyyy-MM-dd" value="${receiptDTO.orderDate}" /></b></h5>
+	                            <div class="d-flex justify-content-between mb-2">
+		                        	<span>주문번호 : ${fn:split(receiptDTO.impUid,'_')[1]}</span>
+		                        	<span><a href="${contextPath}/mypage/orderHistory/${receiptDTO.receiptId}">주문 상세보기</a></span>
+		                        </div>
 	                        </div>
 	                    </div>
 	                    <div class="border border-1 rounded">
@@ -182,6 +183,38 @@
 	                </div>
 	                <!-- 결제 forEach 종료 -->
 				</c:forEach>
+				<ul class="pagination justify-content-center">
+                	<c:if test="${startPage ne 1}">
+                		<li class="page-item">
+                			<a class="page-link" href="${contextPath}/mypage/orderHistory?page=${startPage-1}" aria-label="Previous">
+	                			<span aria-hidden="true">&laquo;</span>
+	                		</a>
+                		</li>
+                	</c:if>
+                	<c:forEach begin="${startPage}" end="${endPage}" var="pageNum">
+                		<c:choose>
+                			<c:when test="${page == pageNum}">
+                				<li class="page-item active">
+                					<p class="page-link">${pageNum}</p>
+                				</li>
+                			</c:when>
+                			<c:otherwise>
+                				<li class="page-item">
+                					<a class="page-link" href="${contextPath}/mypage/orderHistory?page=${pageNum}">
+                						${pageNum}
+                					</a>
+                				</li>
+                			</c:otherwise>
+                		</c:choose>
+                	</c:forEach>
+                	<c:if test="${endPage ne pageCount}">
+                		<li class="page-item">
+                			<a class="page-link" href="${contextPath}/mypage/orderHistory?page=${endPage+1}" aria-label="Next">
+					    		<span aria-hidden="true">&raquo;</span>
+					    	</a>
+                		</li>
+                	</c:if>
+                </ul>
             </div>
         </div>
     </div>
