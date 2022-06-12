@@ -10,7 +10,7 @@
 <meta charset="UTF-8">
 <meta name="_csrf" content="${_csrf.token}">
 <meta name="_csrf_header" content="${_csrf.headerName}">
-<title>게시글 작성 - 고구마</title>
+<title>고구마 - 고객과 구성하는 마켓</title>
 
 
 <script
@@ -77,6 +77,22 @@
         --bs-btn-disabled-border-color: #6426DD;
     }
     
+    .btn-outline-success {
+	    --bs-btn-color: #6426DD;
+	    --bs-btn-border-color: #6426DD;
+	    --bs-btn-hover-color: #fff;
+	    --bs-btn-hover-bg: #6426DD;
+	    --bs-btn-hover-border-color: #6426DD;
+	    --bs-btn-focus-shadow-rgb: 100, 38, 221;
+	    --bs-btn-active-color: #fff;
+	    --bs-btn-active-bg: #6426DD;
+	    --bs-btn-active-border-color: #6426DD;
+	    --bs-btn-active-shadow: inset 0 3px 5pxrgba(0, 0, 0, 0.125);
+	    --bs-btn-disabled-color: #6426DD;
+	    --bs-btn-disabled-bg: transparent;
+	    --bs-gradient: none;
+	}
+   
     .text-success-reply {
 	    --bs-text-opacity: 1;
 	    color: rgb(100, 38, 221);
@@ -211,7 +227,7 @@
 		        		success: function(data) {
 		        			console.log(data);
 		        			var elem = "";
-		        			elem += "<div class='reply-child-item pt-2 pb-2 border-bottom border-secondary mb-2' data-reply-id='"+ data.replyId + "'>"
+		        			elem += "<div class='reply-child-item pt-2 pb-2 mb-2' data-reply-id='"+ data.replyId + "'>"
 							elem += "<div class='row mb-4'>";
 			
 							elem +=	"<div class='col-1'>";
@@ -496,10 +512,9 @@
 		});
 	</script>
 	<section class="container">
-		<div class="w-50 m-auto p-5" style="min-width: 970px;">
+		<div class="w-50 m-auto p-4" style="min-width: 970px;">
 
 			<div class="d-flex justify-content-between">
-
 				<h1>${article.articleTitle}</h1>
 				<button type="button" id="kakao-share-btn"
 					class="border-0 bg-transparent" data-bs-toggle="tooltip"
@@ -510,16 +525,7 @@
 						alt="카카오톡 공유 보내기 버튼" style="width: 40px; height: 40px;" />
 				</button>
 			</div>
-			<div class="d-flex justify-content-between">
-				<p>
-					<strong>${article.market.marketName}</strong>
-					<span class="badge text-light" style="background-color: #FF493C;">${article.market.category.categoryName}</span>
-				</p>
-				<span class="ms-1 text-secondary"><fmt:formatDate
-						value="${article.regDate}" pattern="yyyy-MM-dd HH:mm" /></span>
-			</div>
-
-			<div id="article-area">
+			<div class="mt-3 d-flex">
 				<c:if test="${isMyArticle}">
 					<a class="text-decoration-none text-secondary"
 						href="${contextPath}/market/${article.market.marketId}/article/${article.articleId}/edit.do">
@@ -533,7 +539,41 @@
 						</svg>
 					</a>
 				</c:if>
-				<div class="accordion mb-3 mt-3" id="accordionSelectedProducts">
+				<div class="ms-auto">
+					<span><strong>작성일</strong></span>
+					<span class="ms-1 text-secondary"><fmt:formatDate value="${article.regDate}" pattern="yyyy-MM-dd HH:mm" /></span>
+				</div>
+			</div>
+			<div id="market-info-area" class="row mt-2">
+				<div class="col-2" style="width: 13%;">
+					<a
+						href="${contextPath}/market/show.do?marketNum=${article.market.marketId}"
+						class="h4 text-decoration-none text-dark"> <img
+						class="border border-secondary rounded-circle profile-img m-0"
+						src="${article.market.marketThumbnail}" />
+					</a>
+				</div>
+				<div class="col d-flex flex-column justify-content-center" style="padding-top: 10px;">
+					<div class="d-flex align-items-center">
+						<a
+						href="${contextPath}/market/show.do?marketNum=${article.market.marketId}"
+						class="h4 text-decoration-none text-dark m-0">${article.market.marketName}</a>
+						<span class="badge text-light ms-2" style="background-color: #FF493C;">${article.market.category.categoryName}</span>
+					</div>
+					
+					<p class="text-secondary mt-1">${article.market.marketDetail}</p>
+				</div>
+			</div>
+			
+
+			<div id="article-area" class="mt-3">
+				
+				
+				<div id="content-area" style="padding: 10px;">
+					${article.articleContent}</div>
+			</div>
+			<!-- article-area 끝 -->
+			<div class="accordion mb-3 mt-3" id="accordionSelectedProducts">
 					<div class="accordion-item">
 						<h2 class="accordion-header" id="headingOne">
 							<button class="accordion-button" type="button"
@@ -569,28 +609,8 @@
 							</div>
 						</div>
 					</div>
-				</div>
-				<div id="content-area" style="padding: 10px;">
-					${article.articleContent}</div>
 			</div>
-			<!-- article-area 끝 -->
-			<div id="market-info-area" class="row mt-2">
-				<div class="col-2">
-					<a
-						href="${contextPath}/market/show.do?marketNum=${article.market.marketId}"
-						class="h4 text-decoration-none text-dark"> <img
-						class="border border-secondary rounded-circle profile-img"
-						src="${article.market.marketThumbnail}" />
-					</a>
-				</div>
-				<div class="col d-flex flex-column justify-content-center">
-					<a
-						href="${contextPath}/market/show.do?marketNum=${article.market.marketId}"
-						class="h4 text-decoration-none text-dark">${article.market.marketName}</a>
-					<p class="text-secondary mt-1">${article.market.marketDetail}</p>
-				</div>
-			</div>
-			<!-- market-info-area 끝 -->
+		
 			<div id="reply-area" class="w-100 mt-5">
 				<h5><span id="reply-count">${fn:length(replies)}</span>개 댓글</h5>
 				<div class="mt-4">
@@ -603,15 +623,15 @@
 				</div> <!-- 댓글 작성 폼 영역 끝-->
 				<div class="mt-3"> <!-- 댓글 리스트 영역 시작-->
 					<c:forEach items="${replies}" var="reply">
-					<div class="reply-item pt-4 pb-4 border-bottom border-secondary" data-reply-id="${reply.replyId}" >
+					<div class="reply-item pt-4 pb-4" data-reply-id="${reply.replyId}" >
 						<!-- 댓글 아이템 시작 -->
 						<div class="row mb-4">
 							<!-- 프로필 영역 시작 -->
 							<div class="col-1">
-								<img class="w-100 rounded-circle bg-success" src="${reply.member.profileImage}"
-									style="object-fit: cover;" />
+								<img class="rounded-circle bg-success border border-light" src="${reply.member.profileImage}"
+									style="object-fit: cover; width: 53px; height: 53px;" />
 							</div>
-							<div class="col">
+							<div class="col" style="padding-top: 5px;">
 								<div name="user-nick-name">
 									<strong>${reply.member.nickName}</strong>
 								</div>
@@ -654,16 +674,16 @@
 							<div class="reply-reply-list w-100 p-3 bg-light rounded" style="display: none;">
 								<!-- 답글 리스트 영역 시작-->
 								<c:forEach items="${reply.childReplies}" var="childReply">
-								<div class="reply-child-item pt-2 pb-2 border-bottom border-secondary mb-2" data-reply-id="${childReply.replyId}">
+								<div class="reply-child-item pt-2 pb-2 mb-2" data-reply-id="${childReply.replyId}">
 									<!-- 답글 아이템 시작 -->
 
 									<div class="row mb-4">
 										<!-- 프로필 영역 시작 -->
 										<div class="col-1">
 											<img class="w-100 rounded-circle bg-success" src="${childReply.member.profileImage}"
-												style="object-fit: cover;" />
+												style="object-fit: cover; width: 53px; height: 53px;" />
 										</div>
-										<div class="col">
+										<div class="col" style="padding-top: 5px;">
 											<div name="user-nick-name">
 												<strong>${childReply.member.nickName}</strong>
 											</div>

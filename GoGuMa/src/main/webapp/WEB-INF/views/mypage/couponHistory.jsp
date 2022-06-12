@@ -9,7 +9,7 @@
 	<meta charset="utf-8">
 	<meta name="_csrf" content="${_csrf.token}">
 	<meta name="_csrf_header" content="${_csrf.headerName}">
-	<title>Insert title here</title>
+	<title>고구마 - 고객과 구성하는 마켓</title>
     <!-- bootstrap icon -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 	<!-- bootstrap css -->
@@ -113,6 +113,14 @@
 		                        </tr>
 		                    </thead>
 		                    <tbody>
+		                    <c:if test="${couponList.size() < 1}">
+                   			<tr>
+		                		<td style="text-align: center;" colspan="3">
+			   						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
+			   						<h5 class="no_result" style="margin-top: 0px;">조회 내역이 없습니다.</h5>
+		   						</td>
+		   					</tr>
+                			</c:if>
 		                    	<c:forEach var="couponDTO" items="${couponList}">
 			                        <tr>
 			                            <td>${couponDTO.couponName}</td>
@@ -137,6 +145,14 @@
 		                        </tr>
 		                    </thead>
 		                    <tbody>
+		                    <c:if test="${couponList.size() < 1}">
+                   			<tr>
+		                		<td style="text-align: center;" colspan="4">
+			   						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
+			   						<h5 class="no_result" style="margin-top: 0px;">조회 내역이 없습니다.</h5>
+		   						</td>
+		   					</tr>
+                			</c:if>
 		                    	<c:forEach var="couponDTO" items="${couponList}">
 		                    		<tr>
 		                    			<td>${couponDTO.couponName}</td>

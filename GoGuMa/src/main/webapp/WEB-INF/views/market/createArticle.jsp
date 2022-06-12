@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>게시글 작성 - 고구마</title>
+    <title>고구마 - 고객과 구성하는 마켓</title>
 
     <!-- bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -165,7 +165,7 @@
                 <input id="thumbnail" name="thumbnail" type="file" class="form-control" accept=".jpg, .jpeg, .png"
                     style="position: absolute; left: -9999px;" required>
                 <div id="upload-thumbnail">
-                    <img id="preview-thumbnail" class="w-100 h-100" src="${contextPath}/resources/img/gallery.png" />
+                    <img id="preview-thumbnail" class="w-100 h-100" src="${contextPath}/resources/img/gallery.png" style="object-fit: cover;"/>
                 </div>
 
                 <div class="accordion mb-3 mt-3" id="accordionSelectedProducts">

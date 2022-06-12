@@ -6,7 +6,7 @@
 <script type="text/javascript" src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.min.js"></script>
 <html>
 <head>
-	<title>Home</title>
+	<title>고구마 - 고객과 구성하는 마켓</title>
 </head>
 <body>
 <h1>

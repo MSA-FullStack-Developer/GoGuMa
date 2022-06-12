@@ -2,14 +2,11 @@
 <%@ page session="false" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/security/tags"
 	prefix="sec"%>
-
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-
-<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Home</title>
+<title>고구마 - 고객과 구성하는 마켓</title>
 <script type="text/javascript"
 	src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.min.js"></script>
 </head>

@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <meta name="_csrf" content="${_csrf.token}" />
     <meta name="_csrf_header" content="${_csrf.headerName}" />
-    <title>마켓 - 고구마</title>
+    <title>고구마 - 고객과 구성하는 마켓</title>
 
     <!-- bootstrap css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
@@ -138,7 +138,7 @@
                 </div>
                 
                 <div class="col-9" style="margin-left: 10px;">
-                    <h5>${market.marketName}</h5>
+                    <h5 style="">${market.marketName}</h5>
                     <p class="text-secondary">${market.marketDetail}</p>
                     <span class="badge text-light" style="background-color: #FF493C;">${market.category.categoryName}</span>
                 </div>
@@ -158,7 +158,7 @@
             <div class="d-flex justify-content-between">
                 <h2>${market.marketName}의 진열대</h2>
                 <c:if test="${isMine}">
-                	 <a type="button" class="btn articleWriteBtn" href="${contextPath}/market/${market.marketId}/article/write.do">글 작성하기</a>
+                	 <a type="button" class="btn articleWriteBtn" href="${contextPath}/market/${market.marketId}/article/write.do" style="width: auto;">글 작성하기</a>
                 </c:if>
             </div>
             <c:if test="${fn:length(pagination.data) == 0}">
@@ -187,7 +187,7 @@
 	                    <a href="${contextPath}/market/article/${article.articleId}/show.do"
 	                        class="text-decoration-none text-dark">
 	                        <img src="${article.thumbnail.imagePath}"
-	                            class="card-img-top" alt="...">
+	                            class="card-img-top border-bottom" alt="...">
 	                        <div class="card-body">
 	                            <p class="card-text text-truncate">${article.articleTitle}</p>
 	                        </div>

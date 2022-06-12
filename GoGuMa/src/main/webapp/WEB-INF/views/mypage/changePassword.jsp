@@ -8,7 +8,7 @@
 	<meta charset="utf-8">
 	<meta name="_csrf" content="${_csrf.token}">
 	<meta name="_csrf_header" content="${_csrf.headerName}">
-	<title>Insert title here</title>
+	<title>고구마 - 고객과 구성하는 마켓</title>
     <!-- bootstrap icon -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 	<!-- bootstrap css -->

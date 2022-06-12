@@ -9,7 +9,7 @@
 	<meta charset="utf-8">
 	<meta name="_csrf" content="${_csrf.token}">
 	<meta name="_csrf_header" content="${_csrf.headerName}">
-	<title>Insert title here</title>
+	<title>고구마 - 고객과 구성하는 마켓</title>
     <!-- bootstrap icon -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 	<!-- bootstrap css -->
@@ -34,6 +34,9 @@
         	word-break: break-all;
         }
     </style>
+    <style>
+	<%@ include file="/resources/css/myreview.css" %>
+	</style>
 </head>
 <body>
 	<%@ include file="../header.jsp" %>
@@ -89,6 +92,14 @@
                 <div>
                     <h5><b>주문내역</b></h5>
                 </div>
+               
+                <c:if test="${receiptHistory.size() < 1}">
+						
+						<div style="text-align: center;">
+							<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
+						   	<h5 class="no_result" style="margin-top: 0px;">조회 내역이 없습니다.</h5>
+				   		</div>
+		         </c:if>
 				<c:forEach var="receiptDTO" items="${receiptHistory}">
 					<!-- 결제 forEach 시작 -->
 					<input type="hidden" id="impUid${receiptDTO.receiptId}" value="${receiptDTO.impUid}" />
@@ -104,7 +115,7 @@
 	                    <div class="border border-1 rounded">
 	                        <table>
 	                            <tbody>
-	                            	<c:forEach var="orderDTO" items="${receiptDTO.orderList}">
+			                    		<c:forEach var="orderDTO" items="${receiptDTO.orderList}">
 	                            		<!-- 주문 forEach 시작 -->
 	                            		<input type="hidden" id="price${orderDTO.orderId}" value="${orderDTO.price}"/>
 	                            		<input type="hidden" id="count${orderDTO.orderId}" value="${orderDTO.count}"/>

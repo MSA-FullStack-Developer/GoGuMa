@@ -10,4 +10,28 @@
 		WHERE categorytype = 'C'
 	</select>
 	
+	<!-- 작성자 : 경민영
+		 작성일 : 2022.06.12
+		 내 상담내역 조회 -->
+	<select id="getQnaList" resultType="ServiceClientDTO">
+		SELECT B.*
+		FROM (SELECT A.*, rownum as rnum
+				FROM (SELECT q.qnaID, q.memberID, c.categoryName AS categoryName, q.qnaTitle, q.qnaContent, q.createdAt, q.answerStatus
+					FROM qna q, category c
+					WHERE q.categoryid = c.categoryid
+					AND q.memberid = #{memberID}
+					ORDER BY q.createdAt DESC) A ) B 
+		WHERE rnum BETWEEN #{startNum} AND #{endNum}
+	</select>
+	
+	<!-- 작성자 : 경민영
+		 작성일 : 2022.06.12
+		 내 상담내역 개수 -->
+	<select id="getQnaCount" parameterType="long" resultType="long">
+		SELECT COUNT(*) AS cnt
+		FROM qna q, category c
+		WHERE q.categoryid = c.categoryid
+		AND q.memberid = #{memberID}
+	</select>
+	
 </mapper>
