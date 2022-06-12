@@ -121,12 +121,7 @@
                     <p style="font-size: 10pt; color: #ccc;">제목을 누르면 상담 내용을 확인할 수 있습니다.</p>
                 </div>
                 <div style="margin-top: 20px;">
-                	<c:if test="${myQnaList.size() < 1}">
-                		<div style="text-align: center;">
-	   						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
-	   						<h5 class="no_result">상담내역이 없습니다.</h5>
-   						</div>
-                	</c:if>
+                	
 					<table class="table table-sm">
 				 		<thead>
 					    	<tr>
@@ -138,6 +133,14 @@
 					    	</tr>
 				 		</thead>
 				 		<tbody>
+				 			<c:if test="${myQnaList.size() < 1}">
+		                		<tr style="text-align: center;" >
+		                			<td colspan="5">
+			   						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
+			   						<h5 class="no_result">상담내역이 없습니다.</h5>
+			   						</td>
+		   						</tr>
+                			</c:if>
 				 			<c:forEach items="${myQnaList}" var="qna" varStatus="status">
 						   		<tr>
 						      		<th scope="row">${status.count+((pg-1)*10)}</th>
