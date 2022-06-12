@@ -205,6 +205,17 @@ public class MyPageServiceImpl implements MyPageService {
 		}else {
 			startPages = ((pages-1) * 10) + 1;
 		}
-		return mapper.getReceiptHistoryPages(memberId, startPages);
+		
+		List<ReceiptDTO> receiptList = mapper.getReceiptHistoryPages(memberId, startPages);
+		
+		for(ReceiptDTO receipt : receiptList) {
+			try {
+				List<OrderDTO> orderList = getOrderList(receipt.getReceiptId());
+				receipt.setOrderList(orderList);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return receiptList;
 	}
 }

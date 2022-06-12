@@ -20,4 +20,6 @@ public interface ServiceClientMapper {
 
 	// 내 상담내역 개수
 	long getQnaCount(long memberID) throws Exception;
+
+	void insertQna(@Param("serviceClientDTO") ServiceClientDTO serviceClientDTO)throws Exception;
 }

@@ -46,6 +46,13 @@
 	    	console.log("옵션 아이디 : " + optionID);
 	    	$('.selectedOption').text(optionName);
 	    	$('#product-id').val(optionID);
+	    	$('#product-price').val(optionPrice);	//전달할 상품가격
+	    	var disPrice = optionPrice * "${memberDTO.grade.discountPercent / 100}";
+	    	console.log("할인 가격" + disPrice);
+	    	var totPrc = optionPrice - disPrice;
+	    	
+	    	$('#product-discount').val(parseInt(disPrice));	//전달할 할인가격
+	    	$('#tot-prc').val(totPrc); //전체 넘길 가격
 	    	$('.total_price').text(optionPrice.format() + "원"); // 초기화
 	    }
 	    
@@ -194,7 +201,7 @@
 
         		if (confirm("상품평을 삭제하시겠습니까?")) {
             		$.ajax({
-        	            url: "${contextPath}/category/1/deleteReview",
+        	            url: "${contextPath}/category/1/api/deleteReview",
         	            type: "POST",
         	            data: data,
         	            beforeSend : function(xhr) {
@@ -277,12 +284,10 @@
                 </table>
                 <form id="product-order" action="${contextPath}/order/" method="post">
                 	<input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                	<input type="hidden" id="product-price" name="productOrder.nrmOriPrc" value="${productInfo.productPrice}"/>
-                	<fmt:parseNumber var="disPrc" value="${productInfo.productPrice * (memberDTO.grade.discountPercent / 100)}" integerOnly="true"/>
-                	<input type="hidden" id="product-discount" name="productOrder.disOriPrc" value="${disPrc}" />
                 	
-                	<fmt:parseNumber var="totPrc" value="${productInfo.productPrice - disPrc}" integerOnly="true"/>
-                	<input type="hidden" id="product-discount" name="productOrder.totOriPrc" value="${totPrc}" />
+                	<input type="hidden" id="product-price" name="productOrder.nrmOriPrc" value=""/>
+                	<input type="hidden" id="product-discount" name="productOrder.disOriPrc" value="" />
+                	<input type="hidden" id="tot-prc" name="productOrder.totOriPrc" value="" />
                 	
 	                <div class="selectedInfo">
 	                	<h5 class="selectedOption">선택 없음</h5>
