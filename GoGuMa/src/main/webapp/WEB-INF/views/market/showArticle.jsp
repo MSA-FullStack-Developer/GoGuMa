@@ -680,7 +680,7 @@
 									<div class="row mb-4">
 										<!-- 프로필 영역 시작 -->
 										<div class="col-1">
-											<img class="w-100 rounded-circle bg-success" src="${childReply.member.profileImage}"
+											<img class="rounded-circle bg-success" src="${childReply.member.profileImage}"
 												style="object-fit: cover; width: 53px; height: 53px;" />
 										</div>
 										<div class="col" style="padding-top: 5px;">

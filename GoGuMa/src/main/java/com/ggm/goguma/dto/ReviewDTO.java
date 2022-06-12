@@ -9,6 +9,7 @@ import lombok.Data;
 public class ReviewDTO {
 	private long reviewID;
 	private String name;
+	private String nickName;
 	private Date createDate;
 	private long productPID;
 	private long productID;
@@ -24,8 +25,4 @@ public class ReviewDTO {
 	// 마이페이지 상품평
 	private long categoryID;
 	private String optionName;
-	
-	// 미사용 컬럼
-	// private String prodimgurl;
-	// private Date updateDate;
 }

@@ -313,7 +313,7 @@ public class MyPageController {
 			long endPage = (page-1) / blockPerPage * blockPerPage + blockPerPage;
 			// 마지막 페이지 개수가 전체 페이지 개수보다 많은 경우, 마지막 페이지를 전체 페이지 개수로 맞춰준다.
 			if(endPage > pageCount) endPage = pageCount;
-
+			
 			List<PointDTO> pointHistory = service.getPointHistory(memberDTO.getId(), type, page, startDate, endDate);
 			model.addAttribute("pointHistory", pointHistory);
 			model.addAttribute("type", type);
@@ -362,8 +362,6 @@ public class MyPageController {
 			long endPage = (page-1) / blockPerPage * blockPerPage + blockPerPage;
 			// 마지막 페이지 개수가 전체 페이지 개수보다 많은 경우, 마지막 페이지를 전체 페이지 개수로 맞춰준다.
 			if(endPage > pageCount) endPage = pageCount;
-			
-			log.info(startPage+" "+endPage);
 			
 			List<CouponDTO> couponList = service.getCouponHistory(memberDTO.getId(), type, page);
 			model.addAttribute("couponList", couponList);
@@ -718,6 +716,11 @@ public class MyPageController {
 			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
+			
+			// 작성 가능한 상품평 개수 불러오기
+			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
+			model.addAttribute("writeableList", writeableList);
+			model.addAttribute("writeableCount", writeableList.size());
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}
