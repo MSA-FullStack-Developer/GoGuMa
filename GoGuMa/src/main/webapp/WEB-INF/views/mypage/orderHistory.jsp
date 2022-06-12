@@ -100,8 +100,9 @@
 		                                        </div>
 		                                    </td>
 		                                    <!-- 무통장입금 방식으로 결제하거나 여러 개의 주문 상품을 쿠폰 또는 포인트를 사용하고 결제했을 때 전체 상품에 대해서만 환불 가능 -->
+		                                    <!-- 하나 이상의 주문 상품을 쿠폰 또는 포인트를 사용하지 않고 결제했을 때 각각의 상품에 대해서 환불 가능 -->
 		                                    <c:choose>
-		                                    	<c:when test="${receiptDTO.couponDiscount > 0 || receiptDTO.usagePoint > 0 || receiptDTO.orderDTO.status == 'V'}">
+		                                    	<c:when test="${receiptDTO.couponDiscount > 0 || receiptDTO.usagePoint > 0 || orderDTO.status == 'V'}">
 		                                    		<c:if test="${status.first}">
 				                                    	<td rowspan="${receiptDTO.orderList.size()}" align="center">
 				                                    		<c:choose>
@@ -135,7 +136,6 @@
 				                                    	</td>
 				                                    </c:if>
 		                                    	</c:when>
-		                                    	<!-- 하나 이상의 주문 상품을 쿠폰 또는 포인트를 사용하지 않고 결제했을 때 각각의 상품에 대해서 환불 가능 -->
 		                                    	<c:otherwise>
 			                                    	<td class="border-bottom">
 				                                        <div class="col" align="center">
