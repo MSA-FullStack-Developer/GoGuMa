@@ -6,6 +6,8 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <meta name="_csrf" content="${_csrf.token}">
 <meta name="_csrf_header" content="${_csrf.headerName}">
+<title>고구마 - 고객과 구성하는 마켓</title>
+
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -31,12 +33,12 @@
 	src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.js"></script>
 <script type="text/javascript"
 	src="${contextPath}/webjars/jquery-ui/1.13.0/jquery-ui.js"></script>
-
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
  	  var token = $("meta[name='_csrf']").attr("content");
 	  var header = $("meta[name='_csrf_header']").attr("content");
-	  
+	  console.log("${resp.payMethod}");
 	});
 
 	 //  unix time stamp to Date
@@ -122,6 +124,9 @@
 						</div>
 					<div class="all-fin">
 						<div class="all-fin-ment">
+							<div class="lotti-cart">
+								<lottie-player src="https://assets9.lottiefiles.com/packages/lf20_47pyyfcf.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  loop  autoplay></lottie-player>
+							</div>
 							<div class="fin-txt-div">
 								<strong class="fin-txt">주문이 성공적으로 <em id="finTT">완료</em>되었습니다.</strong>
 							</div>
@@ -177,6 +182,11 @@
 								<div class="col-md-8" id="ptype">카카오페이</div>
 							</c:if>
 							<!-- /카카오페이인 경우 -->
+							<!-- 카드인 경우 -->
+							<c:if test="${resp.payMethod =='card'}">
+								<div class="col-md-8" id="ptype">카드결제</div>
+							</c:if>
+							<!-- /카드인 경우 -->
 						</div>
 						<!-- 무통장 입금인 경우 -->
 						<c:if test="${resp.payMethod =='vbank'}">

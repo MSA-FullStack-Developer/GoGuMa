@@ -8,7 +8,7 @@
 	<meta charset="utf-8">
 	<meta name="_csrf" content="${_csrf.token}">
 	<meta name="_csrf_header" content="${_csrf.headerName}">
-	<title>Insert title here</title>
+	<title>고구마 - 고객과 구성하는 마켓</title>
     <!-- bootstrap icon -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 	<!-- bootstrap css -->
@@ -39,43 +39,7 @@
 		<div class="row">
 			<%@ include file="mypageMenu.jsp" %>
             <div class="col">
-                <div>
-                    <h4><b>${memberDTO.name}님</b></h4>
-                </div>
-                <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-3">
-                    <div class="d-flex flex-column align-items-center mt-3 mb-3">
-                        <div>
-                            회원등급
-                        </div>
-                        <div>
-                            💎
-                        </div>
-                    </div>
-                    <div class="d-flex flex-column align-items-center mt-3 mb-3">
-                        <div>
-                            <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
-                        </div>
-                        <div>
-                            <a href="${contextPath}/mypage/pointHistory/all?page=1">1,000P</a>
-                        </div>
-                    </div>
-                    <div class="d-flex flex-column align-items-center mt-3 mb-3">
-                        <div>
-                            <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
-                        </div>
-                        <div>
-                            <a href="${contextPath}/mypage/couponHistory/available?page=1">${couponCount}장</a>
-                        </div>
-                    </div>
-                    <div class="d-flex flex-column align-items-center mt-3 mb-3">
-                        <div>
-                            <a href="${contextPath}/mypage/writeableReview">작성 가능한 상품평</a>
-                        </div>
-                        <div>
-                            <a href="${contextPath}/mypage/writeableReview">${writeableCount}건</a>
-                        </div>
-                    </div>
-                </div>
+                <%@ include file="quickMenu.jsp" %>
                 <div>
                     <h5><b>회원탈퇴 안내</b></h5>
                 </div>
@@ -130,6 +94,4 @@
     </div>
     <%@ include file="../footer.jsp" %>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-<script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
 </html>

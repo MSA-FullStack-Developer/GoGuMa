@@ -38,16 +38,11 @@ import com.ggm.goguma.dto.cart.CartOrderDTO;
 import com.ggm.goguma.dto.cart.CartOrderListDTO;
 import com.ggm.goguma.dto.cart.TransactionDTO;
 import com.ggm.goguma.dto.coupon.MemberCouponOrderDTO;
-import com.ggm.goguma.dto.member.IamportCertificateTokenRspDTO.Response;
 import com.ggm.goguma.dto.member.MemberDTO;
-import com.ggm.goguma.service.cart.CartService;
 import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.mypage.MyPageService;
 import com.ggm.goguma.service.order.OrderService;
 import com.ggm.goguma.service.product.CategoryService;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
@@ -106,15 +101,14 @@ public class OrderController {
 					 log.info("단일상품 구매 리스트: " + list); // 기본 배송지와 저장된 배송지를 불러온다.
 					 DeliveryAddressDTO defaultAddress = myPageService.getDefaultAddress(memberId); 
 					 List<DeliveryAddressDTO> addressList = myPageService.getAddressList(memberId); // 회원이 가진 포인트 조회한다.
-					 int point = myPageService.getMemberPoints(memberId);
+					 int point = myPageService.getMemberPoint(memberId);
 					 
 					 model.addAttribute("list", list); model.addAttribute("dtoList", dtoList);
 					 model.addAttribute("memberDTO", memberDTO); // 회원 정보를 저장한다.
 					 model.addAttribute("point", point); //회원이 가진 포인트를 저장한다.
 					 model.addAttribute("defaultAddress", defaultAddress);
-					 model.addAttribute("addressList", addressList); 
+					 model.addAttribute("addressList", addressList);
 					 return "order";
-					 
 				} 
 				List<CartOrderListDTO> dtoList = new ArrayList<CartOrderListDTO>();
 				//상품 주문 dto에서 선택한 상품만 추려내기 위한 작업
@@ -138,7 +132,7 @@ public class OrderController {
 				List<DeliveryAddressDTO> addressList = myPageService.getAddressList(memberId);
 				System.out.println("리스트 : " + list);
 				// 회원이 가진 포인트 조회한다.
-				int point = myPageService.getMemberPoints(memberId);
+				int point = myPageService.getMemberPoint(memberId);
 				
 				model.addAttribute("point", point);	 //회원이 가진 포인트를 저장한다.
 				model.addAttribute("list", list); // 회원이 담은 카트나 단품 상품 정보를 저장한다.

@@ -69,7 +69,7 @@ public class MyPageController {
 	private int productPerPage=8; // 한 페이지에 보여지는 최근 본 상품의 개수
 	
 //	@Value("${blockPerPage}")
-	private int blockPerPage=10; // 한 페이지에 보여지는 페이지 블록의 개수
+	private int blockPerPage=5; // 한 페이지에 보여지는 페이지 블록의 개수
 	
 	@Autowired
 	private MyPageService service;
@@ -140,6 +140,9 @@ public class MyPageController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
 
@@ -184,6 +187,9 @@ public class MyPageController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
 			
@@ -212,6 +218,9 @@ public class MyPageController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
 			
@@ -223,7 +232,7 @@ public class MyPageController {
 			ReceiptDTO receiptDTO = service.getReceiptDetail(receiptId); // 결제상세 가져오기
 			model.addAttribute("receiptDTO", receiptDTO);
 			
-			long estimatedPoints = service.getEstimatedPoints(receiptId);
+			int estimatedPoints = service.getEstimatedPoint(receiptId);
 			model.addAttribute("estimatedPoints", estimatedPoints);
 		} catch (Exception e) {
 			log.info(e.getMessage());
@@ -280,6 +289,9 @@ public class MyPageController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
 			
@@ -301,7 +313,7 @@ public class MyPageController {
 			long endPage = (page-1) / blockPerPage * blockPerPage + blockPerPage;
 			// 마지막 페이지 개수가 전체 페이지 개수보다 많은 경우, 마지막 페이지를 전체 페이지 개수로 맞춰준다.
 			if(endPage > pageCount) endPage = pageCount;
-
+			
 			List<PointDTO> pointHistory = service.getPointHistory(memberDTO.getId(), type, page, startDate, endDate);
 			model.addAttribute("pointHistory", pointHistory);
 			model.addAttribute("type", type);
@@ -325,6 +337,9 @@ public class MyPageController {
 			
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
+			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
 			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
@@ -369,6 +384,9 @@ public class MyPageController {
 			
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
+			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
 			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
@@ -474,6 +492,9 @@ public class MyPageController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
 			
@@ -517,6 +538,9 @@ public class MyPageController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
 			
@@ -538,6 +562,9 @@ public class MyPageController {
 			
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
+			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
 			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
@@ -633,6 +660,9 @@ public class MyPageController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
 			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
 			model.addAttribute("couponCount", couponCount);
 			
@@ -670,5 +700,30 @@ public class MyPageController {
 			log.info(e.getMessage());
 			return "redirect:/mypage/resignMember";
 		}
+	}
+	
+	@RequestMapping(value="/membershipZone", method=RequestMethod.GET)
+	public String loadMembershipZone(Principal principal, Model model) throws Exception {
+		try {
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			model.addAttribute("memberDTO", memberDTO);
+			
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+			model.addAttribute("parentCategory", parentCategory);
+			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
+			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
+			model.addAttribute("couponCount", couponCount);
+			
+			// 작성 가능한 상품평 개수 불러오기
+			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
+			model.addAttribute("writeableList", writeableList);
+			model.addAttribute("writeableCount", writeableList.size());
+		} catch(Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/membershipZone";
 	}
 }

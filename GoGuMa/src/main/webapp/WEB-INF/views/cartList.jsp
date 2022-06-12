@@ -6,6 +6,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <meta name="_csrf" content="${_csrf.token}">
 <meta name="_csrf_header" content="${_csrf.headerName}">
+<title>고구마 - 고객과 구성하는 마켓</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -89,22 +90,13 @@
 															},
 															success : function(response) {
 																console.log("onclick ajax카트수량증가");
-
 																//현재 가격 계산
 																calculateItemSellPrice(itemObj, this);
 																calculateSellPrice();
 															},
-															error : function(
-																	xhr,
-																	status,
-																	error) {
-																var errorResponse = JSON
-																		.parse(xhr.responseText);
-															}/*,
-																																																																																																																																																																																																																																						complete: function(xht, status){
-																																																																																																																																																																																																																																							
-																																																																																																																																																																																																																																							$(this).removeAttr("disabled");
-																																																																																																																																																																																																																																						} */
+															error : function(xhr,status,error) {
+																var errorResponse = JSON.parse(xhr.responseText);
+															}
 														});
 											} else {
 												alert("수량이 올바르지 않습니다.");

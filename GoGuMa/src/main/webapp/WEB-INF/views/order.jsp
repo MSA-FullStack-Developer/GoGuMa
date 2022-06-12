@@ -903,7 +903,7 @@
 						                                    <div class="commentbox" id="floatingTextcomment" style="display:none;">
 						                                        
 						                                        <textarea class="form-control commentarea" rows="5" placeholder="배송 요청사항" onkeyup="checkBytes(this, 100);"></textarea>
-						                                        <div class="tc">
+						                                        <div class="tc" style="margin-top: 8px;">
 						                                        <span class="txtcount"><em id="cntnLen">0</em>/<b>100</b></span>
 						                                        </div>
 						                                    </div>
@@ -961,7 +961,7 @@
 						                                    <div class="commentbox" id="floatingTextcomment" style="display:none;">
 						                                        
 						                                        <textarea class="form-control commentarea" rows="5" placeholder="배송 요청사항" onkeyup="checkBytes(this, 100);"></textarea>
-						                                        <div class="tc">
+						                                        <div class="tc" style="margin-top: 8px;">
 						                                        <span class="txtcount"><em id="cntnLen">0</em>/<b>100</b></span>
 						                                        </div>
 						                                    </div>
@@ -983,7 +983,7 @@
 								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="true" aria-controls="panelsStayOpen-collapseFour"><strong>결제 정보 선택</strong></button>
 							</h3>
 							<div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingFour">
-								<div class="accordion-body" style="padding-top: 0px;">
+								<div class="accordion-body">
 									<table>
 										<tr>
 											<td class="pay-type">
@@ -991,17 +991,17 @@
 													<input type='radio' name='card-type' value='html5_inicis' id="cardRadio">
 													<div style="display: inline-block;">
 														<label for="cardRadio" class="insertImgCardRadio"></label>
-														<div class="pt-txt">카드</div>
+														<div class="pt-txt" style="margin-bottom: 20px;">카드</div>
 													</div>
 													<input type='radio' name='card-type' value='kakaopay'id="kakaoRadio"/>
 													<div style="display: inline-block;">
 														<label for="kakaoRadio" class="insertImgKakaoRadio"></label>
-														<div class="pt-txt">카카오 페이</div>
+														<div class="pt-txt" style="margin-bottom: 20px;">카카오 페이</div>
 													</div>
 													<input type='radio' name='card-type' value='nobank' id="vbankRadio"/>
 													<div style="display: inline-block;">
 														<label for="vbankRadio" class="insertImgVbankRadio"></label>
-														<div class="pt-txt">무통장 입금</div>
+														<div class="pt-txt" style="margin-bottom: 20px;">무통장 입금</div>
 													</div>
 											</td>
 										</tr>

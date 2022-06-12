@@ -8,7 +8,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>마켓 - 고구마</title>
+    <title>고구마 - 고객과 구성하는 마켓</title>
 	
 	<!-- bootstrap css -->
 	<link

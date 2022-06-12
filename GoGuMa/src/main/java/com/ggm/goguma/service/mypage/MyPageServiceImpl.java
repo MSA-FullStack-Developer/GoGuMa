@@ -71,22 +71,19 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 
 	@Override
-	public int getMemberPoints(long memberId) throws Exception {
-		return mapper.getMemberPoints(memberId);
+	public int getMemberPoint(long memberId) throws Exception {
+		return mapper.getMemberPoint(memberId);
 	}
 	
 	@Override
-	public int getEstimatedPoints(long receiptId) throws Exception {
-		return mapper.getEstimatedPoints(receiptId);
+	public int getEstimatedPoint(long receiptId) throws Exception {
+		return mapper.getEstimatedPoint(receiptId);
 	}
 
 	@Override
-	public long getEarnablePoint(long receiptId) throws Exception {
-		List<Long> list = mapper.getPointValue(receiptId);
-		long sum = 0;
-		for(long item : list)
-			sum += item;
-		return sum;
+	public long getCouponCount(long memberId, String type) throws Exception {
+		if(type.equals("available")) return mapper.getAvailableCouponCount(memberId);
+		return mapper.getUnavailableCouponCount(memberId);
 	}
 
 	@Override
@@ -99,12 +96,6 @@ public class MyPageServiceImpl implements MyPageService {
 			if(type.equals("all")) return mapper.getPointHistoryCountByPeriod(memberId, startDate, endDate);
 			return mapper.getSpecificPointHistoryCountByPeriod(memberId, type, startDate, endDate);
 		}
-	}
-	
-	@Override
-	public long getCouponCount(long memberId, String type) throws Exception {
-		if(type.equals("available")) return mapper.getAvailableCouponCount(memberId);
-		return mapper.getUnavailableCouponCount(memberId);
 	}
 	
 	@Override
@@ -140,12 +131,14 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 
 	@Override
+	@Transactional
 	public void addAddress(DeliveryAddressDTO dto) throws Exception {
 		if(dto.getIsDefault()==1) mapper.cancelDefault(dto.getMemberId()); // 기본 배송지가 설정돼있으면 제거
 		mapper.addAddress(dto);
 	}
 
 	@Override
+	@Transactional
 	public void updateAddress(DeliveryAddressDTO dto) throws Exception {
 		if(dto.getIsDefault()==1) mapper.cancelDefault(dto.getMemberId()); // 기본 배송지가 설정돼있으면 제거
 		mapper.updateAddress(dto);
@@ -203,8 +196,6 @@ public class MyPageServiceImpl implements MyPageService {
 		return true;
 	}
 
-
-	
 	//고객 센터에서 불러올 주문내역
 	@Override
 	public List<ReceiptDTO> getReceiptHistoryPages(long memberId, int pages) throws Exception {
@@ -214,6 +205,17 @@ public class MyPageServiceImpl implements MyPageService {
 		}else {
 			startPages = ((pages-1) * 10) + 1;
 		}
-		return mapper.getReceiptHistoryPages(memberId, startPages);
+		
+		List<ReceiptDTO> receiptList = mapper.getReceiptHistoryPages(memberId, startPages);
+		
+		for(ReceiptDTO receipt : receiptList) {
+			try {
+				List<OrderDTO> orderList = getOrderList(receipt.getReceiptId());
+				receipt.setOrderList(orderList);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return receiptList;
 	}
 }

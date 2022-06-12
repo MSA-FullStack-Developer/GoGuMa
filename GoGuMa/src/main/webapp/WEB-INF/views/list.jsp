@@ -8,7 +8,7 @@
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 
 <head>
-    <title>List</title>
+    <title>고구마 - 고객과 구성하는 마켓</title>
     
     <style>
 	    <%@ include file="/resources/css/product.css" %>

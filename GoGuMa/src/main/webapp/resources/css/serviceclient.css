@@ -176,11 +176,16 @@ div, ul, li {
 .cus-wrap.noti {
     display: flex;
     justify-content: space-between;
+    margin-top: 30px;
 }
 .question-wrap{
 	width: 220px;
 	border: 3px solid #ddd;
     border-radius: 20px;
+}
+.question-wrap:hover{
+	cursor: pointer;
+	outline: 3px solid #6426DD;
 }
 .q-cont, .sel-cont{
 	text-align: center;

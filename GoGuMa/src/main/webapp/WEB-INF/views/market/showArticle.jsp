@@ -10,7 +10,7 @@
 <meta charset="UTF-8">
 <meta name="_csrf" content="${_csrf.token}">
 <meta name="_csrf_header" content="${_csrf.headerName}">
-<title>게시글 작성 - 고구마</title>
+<title>고구마 - 고객과 구성하는 마켓</title>
 
 
 <script
@@ -77,6 +77,21 @@
         --bs-btn-disabled-border-color: #6426DD;
     }
     
+    .btn-outline-success {
+	    --bs-btn-color: #6426DD;
+	    --bs-btn-border-color: #6426DD;
+	    --bs-btn-hover-color: #fff;
+	    --bs-btn-hover-bg: #6426DD;
+	    --bs-btn-hover-border-color: #6426DD;
+	    --bs-btn-focus-shadow-rgb: 100, 38, 221;
+	    --bs-btn-active-color: #fff;
+	    --bs-btn-active-bg: #6426DD;
+	    --bs-btn-active-border-color: #6426DD;
+	    --bs-btn-active-shadow: inset 0 3px 5pxrgba(0, 0, 0, 0.125);
+	    --bs-btn-disabled-color: #6426DD;
+	    --bs-btn-disabled-bg: transparent;
+	    --bs-gradient: none;
+	}
    
     .text-success-reply {
 	    --bs-text-opacity: 1;
@@ -500,7 +515,6 @@
 		<div class="w-50 m-auto p-4" style="min-width: 970px;">
 
 			<div class="d-flex justify-content-between">
-
 				<h1>${article.articleTitle}</h1>
 				<button type="button" id="kakao-share-btn"
 					class="border-0 bg-transparent" data-bs-toggle="tooltip"
@@ -531,7 +545,7 @@
 				</div>
 			</div>
 			<div id="market-info-area" class="row mt-2">
-				<div class="col-2">
+				<div class="col-2" style="width: 13%;">
 					<a
 						href="${contextPath}/market/show.do?marketNum=${article.market.marketId}"
 						class="h4 text-decoration-none text-dark"> <img
@@ -539,7 +553,7 @@
 						src="${article.market.marketThumbnail}" />
 					</a>
 				</div>
-				<div class="col d-flex flex-column justify-content-center">
+				<div class="col d-flex flex-column justify-content-center" style="padding-top: 10px;">
 					<div class="d-flex align-items-center">
 						<a
 						href="${contextPath}/market/show.do?marketNum=${article.market.marketId}"
@@ -614,10 +628,10 @@
 						<div class="row mb-4">
 							<!-- 프로필 영역 시작 -->
 							<div class="col-1">
-								<img class="w-100 rounded-circle bg-success border border-light" src="${reply.member.profileImage}"
-									style="object-fit: cover;" />
+								<img class="rounded-circle bg-success border border-light" src="${reply.member.profileImage}"
+									style="object-fit: cover; width: 53px; height: 53px;" />
 							</div>
-							<div class="col">
+							<div class="col" style="padding-top: 5px;">
 								<div name="user-nick-name">
 									<strong>${reply.member.nickName}</strong>
 								</div>
@@ -641,7 +655,7 @@
 								<div class="reply-edit-form-area" data-reply-id="${reply.replyId}" style='display: none;'>
 									<textarea name='reply-edit-textarea' class='w-100 p-2 border border-secondary rounded' style='resize: none; height: 70px;' placeholder='댓글을 작성하세요.'> </textarea>
 									<div class='reply-edit-button-wrapper mt-2 d-flex justify-content-end'> 
-										<button name='close-edit-reply' type='button' class='btn me-2' style="border-color: var(--bs-btn-hover-border-color);">취소</button>
+										<button name='close-edit-reply' type='button' class='btn btn-outline-success me-2'>취소</button>
 										<button name='submit-edit-reply' type='button' class='btn btn-success'>수정하기</button>
 									</div>
 								</div>
@@ -666,10 +680,10 @@
 									<div class="row mb-4">
 										<!-- 프로필 영역 시작 -->
 										<div class="col-1">
-											<img class="w-100 rounded-circle bg-success" src="${childReply.member.profileImage}"
-												style="object-fit: cover;" />
+											<img class="rounded-circle bg-success" src="${childReply.member.profileImage}"
+												style="object-fit: cover; width: 53px; height: 53px;" />
 										</div>
-										<div class="col">
+										<div class="col" style="padding-top: 5px;">
 											<div name="user-nick-name">
 												<strong>${childReply.member.nickName}</strong>
 											</div>
