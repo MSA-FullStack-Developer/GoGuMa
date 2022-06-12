@@ -59,4 +59,6 @@ public interface MyPageService {
 
 	//고객센터에서 불러올 주문내역
 	List<ReceiptDTO> getReceiptHistoryPages(long memberId, int pages) throws Exception;
+
+	void updateAllOrderStatus(long receiptId, String status)throws Exception;
 }

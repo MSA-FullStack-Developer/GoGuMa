@@ -76,7 +76,7 @@ public class ServiceClientController {
 			}
 			//로그인을 하지 않은 경우
 			else {
-				
+				return "redirect:../../member/login.do";
 			}
 			return "servicecnsl/serviceclient";
 		}
@@ -106,11 +106,11 @@ public class ServiceClientController {
 				model.addAttribute("scDtoList", scDtoList);
 				
 				//주문내역조회
-//				List<ReceiptDTO> rcpt = myPageService.getReceiptList(memberDTO.getId(), 1); //회원ID로 결제정보DTO를 모두 불러오기
-				
+				//List<ReceiptDTO> rcpt = myPageService.getReceiptList(memberDTO.getId(), 1); //회원ID로 결제정보DTO를 모두 불러오기
+				long mp = myPageService.getReceiptCount(memberDTO.getId());
 				//최대 필요한 페이지 수
-//				int maxPages = (rcpt.size() / 10) + 1;
-//				model.addAttribute("maxPages", maxPages);
+				int maxPages = (int) ((mp / 10) + 1);
+				model.addAttribute("maxPages", maxPages);
 				
 				List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 				model.addAttribute("parentCategory", parentCategory);
@@ -150,7 +150,6 @@ public class ServiceClientController {
 	@ResponseBody
 	public void inquiry(ServiceClientDTO serviceClientDTO, Authentication authentication)throws Exception{
 		try {
-			
 			String memberEmail = "";
 			// 사용자가 권한이 있는 경우
 			UserDetails user = (UserDetails)authentication.getPrincipal();

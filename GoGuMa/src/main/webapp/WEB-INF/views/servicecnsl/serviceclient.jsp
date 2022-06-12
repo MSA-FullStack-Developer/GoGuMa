@@ -245,6 +245,7 @@
 						<!--//tblwrap tbl-list-->
 					</div>
 					<!--//공지사항-->
+					
 					<!--1:1 문의하기-->
 					<div class="question-wrap" onclick="openCnslPup(); return false;">
 						<div class="q-cont">
@@ -269,8 +270,6 @@
 	</div>
 		<!-- //.container -->
 </main>
-<%@ include file="../footer.jsp"%>
-
 <!-- CLOUDTURING -->
 <script>
   window.dyc = {
@@ -279,3 +278,6 @@
 </script>
 <script async src="https://cloudturing.chat/v1.0/chat.js"></script>
 <!-- End CLOUDTURING -->
+
+<%@ include file="../footer.jsp"%>
+
