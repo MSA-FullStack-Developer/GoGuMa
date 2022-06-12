@@ -145,7 +145,7 @@
 						             		</div>
 						             		<div class="mb-3">
 						             			<label for="contact" class="col-form-label">연락처</label>
-						             			<input type="text" class="form-control" id="contact-${addressDTO.addressId}" value="${addressDTO.contact}">
+						             			<input type="text" class="form-control" id="contact-${addressDTO.addressId}" value="${addressDTO.contact}" maxlength="13" oninput="autoHyphen(this)">
 						            		</div>
 						            	</form>
 					                </div>
