@@ -5,8 +5,8 @@
 
 	<!-- 상품평 목록 -->
 	<select id="getReviewList" parameterType="long" resultType="com.ggm.goguma.dto.ReviewDTO">
-		SELECT A.name, A.reviewid, B.productname, A.productid, B.parentpid AS parentid, A.content, A.createdate
-        FROM (SELECT m.name, r.reviewid, r.productid, r.content, r.createdate
+		SELECT A.name, A.reviewid, B.productname, A.productid, B.parentpid AS parentid, A.content, A.createdate, A.nickname AS nickName
+        FROM (SELECT m.name, r.reviewid, r.productid, r.content, r.createdate, m.nickname
                 FROM review r, member m
                 WHERE r.memberid = m.memberid) A, product B
         WHERE B.productid = A.productid

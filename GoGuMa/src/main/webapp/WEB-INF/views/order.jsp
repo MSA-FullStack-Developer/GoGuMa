@@ -903,7 +903,7 @@
 						                                    <div class="commentbox" id="floatingTextcomment" style="display:none;">
 						                                        
 						                                        <textarea class="form-control commentarea" rows="5" placeholder="배송 요청사항" onkeyup="checkBytes(this, 100);"></textarea>
-						                                        <div class="tc">
+						                                        <div class="tc" style="margin-top: 8px;">
 						                                        <span class="txtcount"><em id="cntnLen">0</em>/<b>100</b></span>
 						                                        </div>
 						                                    </div>
@@ -961,7 +961,7 @@
 						                                    <div class="commentbox" id="floatingTextcomment" style="display:none;">
 						                                        
 						                                        <textarea class="form-control commentarea" rows="5" placeholder="배송 요청사항" onkeyup="checkBytes(this, 100);"></textarea>
-						                                        <div class="tc">
+						                                        <div class="tc" style="margin-top: 8px;">
 						                                        <span class="txtcount"><em id="cntnLen">0</em>/<b>100</b></span>
 						                                        </div>
 						                                    </div>
