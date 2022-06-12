@@ -76,7 +76,7 @@
 	<script>
 		function openCnslPup() {
 		   if (`${memberDTO}`) {
-			   window.open("oneCnslPup/1", "popup01", "width=800, height=700");
+			   window.open("../oneCnslPup/1", "popup01", "width=800, height=700");
 	       } else {
 	    	   location.href="${contextPath}/member/login.do";
 		   }

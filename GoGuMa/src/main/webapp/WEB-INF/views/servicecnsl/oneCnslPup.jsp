@@ -57,7 +57,7 @@ const inputPhoneNumber = (target) => {
 <body id="popWin">
 	<div class="popup-win cus-consult">
 		<!--pop-wrap-->
-		<div class="pop-wrap">
+		<div class="pop-wrap" style="margin: 45px;">
 			<!--pop-content-wrap-->
 			<div class="pop-content-wrap">
 				<strong class="pop-title">1:1 문의하기</strong>
@@ -182,7 +182,7 @@ const inputPhoneNumber = (target) => {
 								<div class="col-md-8 col-content" id="email">${memberDTO.email}</div>
 							</div>
 						</div>
-					<div class="btnGroup">
+					<div class="btnGroup" style="margin-top: 20px;">
 						<button class="btn btn-primary">문의하기</button>
 						<button class="btn btn-secondary">취소</button>
 					</div>
