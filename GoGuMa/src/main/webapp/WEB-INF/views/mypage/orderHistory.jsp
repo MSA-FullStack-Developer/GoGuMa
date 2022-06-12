@@ -120,8 +120,6 @@
 				                                        			<div>
 						                                                <h5><b>구매 완료</b></h5>
 						                                            </div>
-						                                            <div class="mb-2">
-						                                            </div>
 				                                        		</c:when>
 				                                        		<c:when test="${orderDTO.status eq 'V'}">
 				                                        			<div>
@@ -157,9 +155,6 @@
 				                                        		<c:when test="${orderDTO.status eq 'F'}">
 						                                            <div>
 						                                                <h5><b>구매 완료</b></h5>
-						                                            </div>
-						                                            <div class="mb-2">
-						                                                <button type="button" class="btn btn-sm btn-outline-dark">상품평 쓰기</button>
 						                                            </div>
 				                                        		</c:when>
 				                                        		<c:when test="${orderDTO.status eq 'V'}">
