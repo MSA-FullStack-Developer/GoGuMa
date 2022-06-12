@@ -39,6 +39,7 @@
 		FROM 
 			ArticleReply
 		WHERE deleted = 0 AND articleId = #{articleId} AND replyPid IS NULL
+		ORDER BY createdat DESC
 	</select>
 
 
@@ -48,6 +49,7 @@
 		FROM 
 			ArticleReply
 		WHERE deleted = 0 AND replyPId = #{replyId}
+		ORDER BY createdat DESC
 	</select>
 	
 	<select id="findReplyById" parameterType="long" resultMap="ReplySimpleResult">
@@ -56,6 +58,7 @@
 		FROM 
 			ArticleReply
 		WHERE deleted = 0 AND replyId = #{replyId}
+		ORDER BY createdat DESC
 	</select>
 	
 	<insert id="insertArticleReply" parameterType="ArticleReplyDTO" useGeneratedKeys="true" keyColumn="replyId" keyProperty="replyId">
