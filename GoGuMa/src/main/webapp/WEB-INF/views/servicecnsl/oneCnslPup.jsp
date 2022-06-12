@@ -210,7 +210,7 @@ const inputPhoneNumber = (target) => {
 <body id="popWin">
 	<div class="popup-win cus-consult">
 		<!--pop-wrap-->
-		<div class="pop-wrap">
+		<div class="pop-wrap" style="margin: 45px;">
 			<!--pop-content-wrap-->
 			<div class="pop-content-wrap">
 				<strong class="pop-title">1:1 문의하기</strong>
