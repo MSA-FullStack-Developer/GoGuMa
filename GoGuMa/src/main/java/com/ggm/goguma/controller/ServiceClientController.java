@@ -163,8 +163,8 @@ public class ServiceClientController {
 				model.addAttribute("endPage", endPage);
 				
 				return "servicecnsl/myService";
-			}else {
-				return "redirect:../member/login.do"; // 로그인 화면으로 이동
+			} else {
+				return "redirect:../../member/login.do"; // 로그인 화면으로 이동
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

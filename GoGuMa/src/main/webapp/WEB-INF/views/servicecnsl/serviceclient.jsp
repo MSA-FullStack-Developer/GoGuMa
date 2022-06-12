@@ -59,7 +59,7 @@
                         <li><a href="${contextPath}/serviceclient/">자주 묻는 질문</a></li>
                         <li><a href="#" onclick="openCnslPup(); return false;">1:1 문의하기</a></li>
                         <li><a href="${contextPath}/serviceclient/myService/1">내 상담내역 조회</a></li>
-                        <li><a href="/p/ccb/noticeList.do">공지사항</a></li>
+                        <li><a href="https://www.hmall.com/p/ccb/noticeList.do">공지사항</a></li>
                     </ul>
                 </div>
                 <!-- // .side-menu-list -->
@@ -235,7 +235,7 @@
                     <div class="noti-wrap">
                         <div class="tit-wrap">
                             <h3>공지사항</h3>
-                            <p><a href="/p/ccb/noticeList.do">전체보기</a><i class="fas fa-angle-right"></i></p>
+                            <p><a href="https://www.hmall.com/p/ccb/noticeList.do">전체보기</a><i class="fas fa-angle-right"></i></p>
                         </div>
                         <!--tblwrap tbl-list-->
                         <div class="tblwrap tbl-list">
