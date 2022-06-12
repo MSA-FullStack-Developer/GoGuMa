@@ -31,9 +31,6 @@
             table-layout: fixed;
             word-break: keep-all;
         }
-        .custom-tooltip {
-        	--bs-tooltip-bg: var(--bs-secondary);
-        }
     </style>
 </head>
 <body>

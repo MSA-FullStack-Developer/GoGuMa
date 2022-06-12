@@ -34,9 +34,6 @@
         input {
         	margin: 10px 0px 10px 0px;
         }
-        .custom-tooltip {
-        	--bs-tooltip-bg: var(--bs-secondary);
-        }
     </style>
 </head>
 <body>

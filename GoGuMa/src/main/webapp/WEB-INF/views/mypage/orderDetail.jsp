@@ -371,7 +371,6 @@
 			else if(payMethod == 'vbank') {
 				
 			}
-			
 		});
 	});
 </script>
