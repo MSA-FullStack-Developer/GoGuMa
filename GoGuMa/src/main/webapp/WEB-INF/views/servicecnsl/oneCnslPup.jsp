@@ -314,7 +314,7 @@ const inputPhoneNumber = (target) => {
 							<div class="col-md-8 col-content" id="email">${memberDTO.email}</div>
 							<input type="hidden" name="email" value="${memberDTO.email}">
 						</div>
-						<div class="btnGroup">
+						<div class="btnGroup" style="margin: 20px;">
 							<button type="button" class="btn btn-primary" onclick="chkConfirm()">문의하기</button>
 							<button type="button" class="btn btn-secondary" onclick="popUpClose()">취소</button>
 						</div>

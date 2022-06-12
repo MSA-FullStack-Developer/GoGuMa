@@ -1,9 +1,5 @@
 @charset "UTF-8";
 
-.content{
-	border-top: 2px solid #d8d8d8;
-	border-bottom: 2px solid #d8d8d8;
-}
 .col-content{
 	border-left: 1px solid #ddd;
 	margin: auto;

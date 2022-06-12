@@ -15,7 +15,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 		
 	<style>
-	
 	    a {
 	        text-decoration: none;
 	    }
@@ -56,7 +55,9 @@
                     </div>
                     <div class="d-flex flex-column align-items-center align-self-center lh-sm">
                         <div>
-                            <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
+                            <a href="${contextPath}/mypage/pointHistory/all?page=1">
+                            	포인트
+                           	</a>
                         </div>
                         <div>
                             <a href="${contextPath}/mypage/pointHistory/all?page=1">
