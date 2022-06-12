@@ -47,13 +47,11 @@
                 <div>
                     <h5><b>주문내역</b></h5>
                 </div>
-               
                 <c:if test="${receiptHistory.size() < 1}">
-						
-						<div style="text-align: center;">
-							<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
-						   	<h5 class="no_result" style="margin-top: 0px;">조회 내역이 없습니다.</h5>
-				   		</div>
+					<div style="text-align: center;">
+						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
+					   	<h5 class="no_result" style="margin-top: 0px;">조회 내역이 없습니다.</h5>
+			   		</div>
 		         </c:if>
 				<c:forEach var="receiptDTO" items="${receiptHistory}">
 					<!-- 결제 forEach 시작 -->
@@ -70,24 +68,28 @@
 	                    <div class="border border-1 rounded">
 	                        <table>
 	                            <tbody>
-			                    		<c:forEach var="orderDTO" items="${receiptDTO.orderList}">
+		                    		<c:forEach var="orderDTO" items="${receiptDTO.orderList}" varStatus="status">
 	                            		<!-- 주문 forEach 시작 -->
 	                            		<input type="hidden" id="price${orderDTO.orderId}" value="${orderDTO.price}"/>
 	                            		<input type="hidden" id="count${orderDTO.orderId}" value="${orderDTO.count}"/>
-		                                <tr class="border-bottom">
-		                                    <td class="col-1 p-3">
+		                                <tr>
+		                                    <td class="col-1 p-3 border-bottom">
 		                                    	<a href="${contextPath}/category/1/${orderDTO.categoryId}/detail/${orderDTO.productId}">
 		                                        	<img class="orderHistoryImg" src="${orderDTO.image}" style="width:100px; height:100px;">
 		                                        </a>
 		                                    </td>
-		                                    <td class="col-5 border-end">
+		                                    <td class="col-5 border-end border-bottom">
 		                                    	<a href="${contextPath}/category/1/${orderDTO.categoryId}/detail/${orderDTO.productId}" class="text-truncate">
-		                                    		<span><b>${orderDTO.pname}</b></span>
+		                                    		<span class="d-inline-block text-truncate" style="max-width: 300px;">
+		                                    			<b>${orderDTO.pname}</b>
+		                                    		</span>
 		                                    		<br>
-		                                    		<span>옵션 : ${orderDTO.cname}</span>
+		                                    		<span class="d-inline-block text-truncate" style="max-width: 300px;">
+		                                    			옵션 : ${orderDTO.cname}
+		                                    		</span>
 		                                    	</a>
 		                                    </td>
-		                                    <td class="border-end">
+		                                    <td class="border-end border-bottom">
 		                                        <div class="col m-auto" style="width: 100px" align="center">
 		                                            <div>
 		                                                <fmt:formatNumber value="${orderDTO.price}" />원
@@ -97,40 +99,56 @@
 		                                            </div>
 		                                        </div>
 		                                    </td>
-		                                    <td>
-		                                        <div class="col" align="center">
-		                                        	<c:choose>
-		                                        		<c:when test="${orderDTO.status eq 'N'}">
-			                                        		<div>
-				                                                <h5><b>주문 완료</b></h5>
-				                                            </div>
-				                                            <div class="mb-2">
-				                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="configBtn(${orderDTO.orderId})">구매확정</button>
-				                                            </div>
-				                                            <div class="mt-2">
-				                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="cancelBtn(${receiptDTO.receiptId}, ${orderDTO.orderId})">주문취소</button>
-				                                            </div>
-		                                        		</c:when>
-		                                        		<c:when test="${orderDTO.status eq 'F'}">
-		                                        			<div>
-				                                                <h5><b>구매 완료</b></h5>
-				                                            </div>
-				                                            <div class="mb-2">
-				                                            </div>
-		                                        		</c:when>
-		                                        		<c:when test="${orderDTO.status eq 'V'}">
-		                                        			<div>
-				                                                <h5><b>입금 예정</b></h5>
-				                                            </div>
-		                                        		</c:when>
-		                                        		<c:otherwise>
-		                                        			<div>
-				                                                <h5><b>취소 완료</b></h5>
-				                                            </div>
-		                                        		</c:otherwise>
-		                                        	</c:choose>
-		                                        </div>
-		                                    </td>
+		                                    <c:choose>
+		                                    	<!-- 
+		                                    	<c:when test="${}">
+		                                    		
+		                                    	</c:when>
+		                                    	 -->
+		                                    </c:choose>
+		                                    <c:if test="${receiptDTO.couponDiscount == 0 && receiptDTO.usagePoint == 0}">
+		                                    	<td class="border-bottom">
+			                                        <div class="col" align="center">
+			                                        	<c:choose>
+			                                        		<c:when test="${orderDTO.status eq 'N'}">
+				                                        		<div>
+					                                                <h5><b>주문 완료</b></h5>
+					                                            </div>
+					                                            <div class="mb-2">
+					                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="configBtn(${orderDTO.orderId})">구매확정</button>
+					                                            </div>
+					                                            <div class="mt-2">
+					                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="cancelBtn(${receiptDTO.receiptId}, ${orderDTO.orderId})">주문취소</button>
+					                                            </div>
+			                                        		</c:when>
+			                                        		<c:when test="${orderDTO.status eq 'F'}">
+			                                        			<div>
+					                                                <h5><b>구매 완료</b></h5>
+					                                            </div>
+					                                            <div class="mb-2">
+					                                            </div>
+			                                        		</c:when>
+			                                        		<c:when test="${orderDTO.status eq 'V'}">
+			                                        			<div>
+					                                                <h5><b>입금 예정</b></h5>
+					                                            </div>
+			                                        		</c:when>
+			                                        		<c:otherwise>
+			                                        			<div>
+					                                                <h5><b>취소 완료</b></h5>
+					                                            </div>
+			                                        		</c:otherwise>
+			                                        	</c:choose>
+			                                        </div>
+			                                    </td>
+		                                    </c:if>
+		                                    <c:choose>
+		                                    	<c:if test="${status.first}">
+			                                    	<td rowspan="${receiptDTO.orderList.size()}">
+			                                    	
+			                                    	</td>
+			                                    </c:if>
+		                                    </c:choose>
 		                                </tr>
 		                                <!-- 주문 forEach 종료 -->
 	                                </c:forEach>
@@ -140,7 +158,6 @@
 	                </div>
 	                <!-- 결제 forEach 종료 -->
 				</c:forEach>
-
             </div>
         </div>
     </div>
@@ -149,8 +166,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
 <script type="text/javascript">
-	const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-	const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 	function configBtn(orderId) {
 		if(confirm("구매확정 하시겠습니까?")) {
 			let token = $("meta[name='_csrf']").attr("content");

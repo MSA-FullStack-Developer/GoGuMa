@@ -24,6 +24,9 @@ public class MyPageServiceImpl implements MyPageService {
 //	@Value("${contentPerPage}")
 	private int contentPerPage = 10;
 	
+//	@Value("${receiptPerPage}")
+	private int receiptPerPage = 5;
+	
 	private final MyPageMapper mapper;
 	
 	private final AmazonS3Utils amazonService;
@@ -32,8 +35,10 @@ public class MyPageServiceImpl implements MyPageService {
 
 	@Override
 	@Transactional
-	public List<ReceiptDTO> getReceiptHistory(long memberId) throws Exception {
-		List<ReceiptDTO> receiptList = getReceiptList(memberId);
+	public List<ReceiptDTO> getReceiptHistory(long memberId, long page) throws Exception {
+		long startNum = (page-1) * receiptPerPage + 1;
+		long endNum = page * receiptPerPage;
+		List<ReceiptDTO> receiptList = getReceiptList(memberId, startNum, endNum);
 		for(ReceiptDTO receipt : receiptList) {
 			try {
 				List<OrderDTO> orderList = getOrderList(receipt.getReceiptId());
@@ -46,8 +51,8 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 	
 	@Override
-	public List<ReceiptDTO> getReceiptList(long memberId) throws Exception {
-		return mapper.getReceiptList(memberId);
+	public List<ReceiptDTO> getReceiptList(long memberId, long startNum, long endNum) throws Exception {
+		return mapper.getReceiptList(memberId, startNum, endNum);
 	}
 
 	@Override
@@ -79,7 +84,12 @@ public class MyPageServiceImpl implements MyPageService {
 	public int getEstimatedPoint(long receiptId) throws Exception {
 		return mapper.getEstimatedPoint(receiptId);
 	}
-
+	
+	@Override
+	public long getReceiptCount(long membeId) throws Exception {
+		return mapper.getReceiptCount(membeId);
+	}
+	
 	@Override
 	public long getCouponCount(long memberId, String type) throws Exception {
 		if(type.equals("available")) return mapper.getAvailableCouponCount(memberId);

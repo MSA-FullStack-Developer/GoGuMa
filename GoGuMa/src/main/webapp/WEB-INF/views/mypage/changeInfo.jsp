@@ -170,8 +170,6 @@
     <%@ include file="../footer.jsp" %>
 </body>
 <script type="text/javascript">
-	const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-	const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 	function changeInfo() {
 		let formData = new FormData();
 		let fileInput = $("#uploadFile");
