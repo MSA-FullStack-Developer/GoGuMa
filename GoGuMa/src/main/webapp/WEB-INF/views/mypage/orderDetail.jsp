@@ -65,10 +65,14 @@
 	                                        </a>
 	                                    </td>
 	                                    <td class="col-5 border-end">
-	                                    	<a href="${contextPath}/category/1/${orderDTO.categoryId}/detail/${orderDTO.productId}" class="lh-base text-truncate">
-	                                    		<span><b>${orderDTO.pname}</b></span>
+	                                    	<a href="${contextPath}/category/1/${orderDTO.categoryId}/detail/${orderDTO.productId}" class="text-truncate">
+	                                    		<span class="d-inline-block text-truncate" style="max-width: 300px;">
+	                                    			<b>${orderDTO.pname}</b>
+	                                    		</span>
 	                                    		<br>
-	                                    		<span>옵션 : ${orderDTO.cname}</span>
+	                                    		<span class="d-inline-block text-truncate" style="max-width: 300px;">
+	                                    			옵션 : ${orderDTO.cname}
+	                                    		</span>
 	                                    	</a>
 	                                    </td>
 	                                    <td class="border-end">
@@ -196,7 +200,7 @@
                         </tr>
                         <tr>
                             <th>결제수단</th>
-                            <td>우리카드 일시불</td>
+                            <td><b id="paymentMethod"></b></td>
                         </tr>
                     </tbody>
                 </table>
@@ -319,14 +323,15 @@
 			}
 		}).done(function(data) {
 			let payMethod = data.response.payMethod;
+			console.log(data.response);
 			if(payMethod == 'point') {
-				console.log(data.response.pgProvider);
-			}
-			else if(payMethod == 'card') {
-				console.log(data.response.cardName);
+				$("#paymentMethod").text(data.response.pgProvider);
 			}
 			else if(payMethod == 'vbank') {
-				
+				$("#paymentMethod").text(data.response.vbankName);
+			}
+			else if(payMethod == 'card') {
+				$("#paymentMethod").text(data.response.cardName);
 			}
 		});
 	});
