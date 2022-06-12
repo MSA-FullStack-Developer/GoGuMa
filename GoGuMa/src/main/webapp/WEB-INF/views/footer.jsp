@@ -5,7 +5,7 @@
     <!-- 회사 링크 영역 -->
     <section class="w-100 border-secondary">
          <div class="row pt-2 pb-2" style="width: 1320px; margin: 0 auto;">
-             <div class="col-8">
+             <div class="col-10">
                  <ul class="list-group list-group-horizontal">
                      <li class="list-group-item border-0 ps-0">
                          <a class="text-decoration-none text-secondary"
