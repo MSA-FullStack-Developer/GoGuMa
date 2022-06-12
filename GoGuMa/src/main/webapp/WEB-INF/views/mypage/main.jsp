@@ -74,7 +74,7 @@
                 	<c:forEach begin="${startPage}" end="${endPage}" var="pageNum">
                 		<c:choose>
                 			<c:when test="${page == pageNum}">
-                				<li class="page-item">
+                				<li class="page-item active">
                 					<p class="page-link">${pageNum}</p>
                 				</li>
                 			</c:when>
