@@ -1,5 +1,6 @@
 package com.ggm.goguma.service.member;
 
+import com.ggm.goguma.dto.ServiceClientDTO;
 import com.ggm.goguma.dto.member.CreateMemberDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.dto.member.ResignMemberDTO;
@@ -22,4 +23,5 @@ public interface MemberService {
 	void updateMemberPassword(MemberDTO member);
 
 	ResignMemberDTO getResignMember(MemberDTO member) throws Exception;
+
 }

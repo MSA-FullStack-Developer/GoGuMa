@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.ggm.goguma.amazons3.AmazonS3Utils;
+import com.ggm.goguma.dto.ServiceClientDTO;
 import com.ggm.goguma.dto.member.CertificationUserDTO;
 import com.ggm.goguma.dto.member.CreateMemberDTO;
 import com.ggm.goguma.dto.member.IamportCertificateTokenRspDTO;
@@ -197,6 +198,8 @@ public class MemberServiceImpl implements MemberService {
 	public ResignMemberDTO getResignMember(MemberDTO member) throws Exception {
 		return this.memberMapper.findResignMember(member.getId()).orElseThrow(() -> new Exception("탈퇴된 회원 조회 실패"));
 	}
+
+
 	
 	
 

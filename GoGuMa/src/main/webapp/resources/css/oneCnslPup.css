@@ -78,3 +78,9 @@
 .pagination{
 	justify-content: center;
 }
+.show-sc{
+	color: #999;
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: -0.52px;
+}

@@ -39,5 +39,11 @@ public class ServiceClientServiceImpl implements ServiceClientService{
 	public long getQnaCount(long id) throws Exception {
 		return serviceClientMapper.getQnaCount(id);
 	}
+
+	@Override
+	public void insertQna(ServiceClientDTO serviceClientDTO) throws Exception {
+		serviceClientMapper.insertQna(serviceClientDTO);
+		
+	}
 	
 }
