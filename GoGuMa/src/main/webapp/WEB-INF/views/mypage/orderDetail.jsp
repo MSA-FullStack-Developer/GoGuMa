@@ -40,27 +40,35 @@
 		<div class="row">
             <%@ include file="mypageMenu.jsp" %>
             <div class="col">
-                <div>
-                    <h4><b>${memberDTO.name}님</b></h4>
-                </div>
-                <div class="d-flex flex-row justify-content-evenly border border-2 rounded mb-3">
-                    <div class="d-flex flex-column align-items-center mt-3 mb-3">
-                        <div>
-                            회원등급
+                <div class="d-flex flex-row justify-content-evenly border border-2 rounded p-3 mb-3">
+                    <div class="d-flex flex-row align-items-center">
+                        <div class="me-2">
+                        	<a href="${contextPath}/mypage/membershipZone">
+                        		<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-gold.png" style="width: 50px; height: 50px; object-fit: contain;">
+                        	</a>
                         </div>
-                        <div>
-                            💎
+                        <div class="lh-sm" align="center">
+                            <div>
+                                <a href="${contextPath}/mypage/confirmPassword/changeInfo" style="font-size: 20px">
+                                	<b>${memberDTO.name}님</b>
+                                </a>
+                            </div>
+                            <div>
+                                <a href="${contextPath}/mypage/membershipZone" style="font-size: 16px">Gold</a>
+                            </div>  
                         </div>
                     </div>
-                    <div class="d-flex flex-column align-items-center mt-3 mb-3">
+                    <div class="d-flex flex-column align-items-center align-self-center lh-sm">
                         <div>
                             <a href="${contextPath}/mypage/pointHistory/all?page=1">포인트</a>
                         </div>
                         <div>
-                            <a href="${contextPath}/mypage/pointHistory/all?page=1">1,000P</a>
+                            <a href="${contextPath}/mypage/pointHistory/all?page=1">
+                            	<fmt:formatNumber value="${memberPoint}"/>P
+                            </a>
                         </div>
                     </div>
-                    <div class="d-flex flex-column align-items-center mt-3 mb-3">
+                    <div class="d-flex flex-column align-items-center align-self-center lh-sm">
                         <div>
                             <a href="${contextPath}/mypage/couponHistory/available?page=1">쿠폰</a>
                         </div>
@@ -68,7 +76,7 @@
                             <a href="${contextPath}/mypage/couponHistory/available?page=1">${couponCount}장</a>
                         </div>
                     </div>
-                    <div class="d-flex flex-column align-items-center mt-3 mb-3">
+                    <div class="d-flex flex-column align-items-center align-self-center lh-sm">
                         <div>
                             <a href="${contextPath}/mypage/writeableReview">작성 가능한 상품평</a>
                         </div>
@@ -229,7 +237,7 @@
                         </tr>
                         <tr>
                             <th>예상 적립 포인트</th>
-                            <td>+ <fmt:formatNumber value="${earnablePoint}" />P</td>
+                            <td>+ <fmt:formatNumber value="${estimatedPoints}" />P</td>
                         </tr>
                         <tr>
                             <th>최종 결제금액</th>
@@ -348,5 +356,28 @@
 			})
 		}
 	}
+	$(document).ready(function() {
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		$.ajax({
+			url : "${contextPath}/order/api/verifyIamport/${receiptDTO.impUid}",
+			type : "POST",
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader(header,token);
+			}
+		}).done(function(data) {
+			let payMethod = data.response.payMethod;
+			if(payMethod == 'point') {
+				console.log(data.response.pgProvider);
+			}
+			else if(payMethod == 'card') {
+				console.log(data.response.cardName);
+			}
+			else if(payMethod == 'vbank') {
+				
+			}
+			
+		});
+	});
 </script>
 </html>
