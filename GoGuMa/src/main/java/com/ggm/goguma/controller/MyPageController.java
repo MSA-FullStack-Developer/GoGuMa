@@ -703,4 +703,24 @@ public class MyPageController {
 			return "redirect:/mypage/resignMember";
 		}
 	}
+	
+	@RequestMapping(value="/membershipZone", method=RequestMethod.GET)
+	public String loadMembershipZone(Principal principal, Model model) throws Exception {
+		try {
+			MemberDTO memberDTO = memberService.getMember(principal.getName());
+			model.addAttribute("memberDTO", memberDTO);
+			
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+			model.addAttribute("parentCategory", parentCategory);
+			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
+			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
+			model.addAttribute("couponCount", couponCount);
+		} catch(Exception e) {
+			log.info(e.getMessage());
+		}
+		return "mypage/membershipZone";
+	}
 }

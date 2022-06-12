@@ -23,6 +23,10 @@
         a:visited {
             color: black;
         }
+        img {
+            width: 100%;
+            height: 100%;
+        }
         table {
             table-layout: fixed;
         }
@@ -30,9 +34,6 @@
             line-height: 3rem;
             table-layout: fixed;
             word-break: keep-all;
-        }
-        input {
-        	margin: 10px 0px 10px 0px;
         }
     </style>
 </head>
@@ -88,74 +89,102 @@
                     </div>
                 </div>
                 <div>
-                    <h5><b>비밀번호변경</b></h5>
-                </div>
-                <div>
-                    <h5>기존 비밀번호 입력</h5>
+                    <h5><b>멤버십 등급 안내</b></h5>
                 </div>
                 <table class="table">
                     <tbody class="table-group-divider">
-                        <tr>
-                            <th class="col-2 table-active" style="text-align: center;">기존 비밀번호</th>
-                            <td><input type="password" class="form-control form-control-sm ms-2" id="curPassword" maxlength="16" style="width:200px; height:25px"/></td>
+                        <tr align="center">
+                            <th class="col-2">멤버십 등급</th>
+                            <td>Silver</td>
+                            <td>Gold</td>
+                            <td>Platinum</td>
+                            <td>Diamond</td>
+                        </tr>
+                        <tr align="center">
+                            <th class="col-2">등급 할인</th>
+                            <td>0%</td>
+                            <td>1%</td>
+                            <td>2%</td>
+                            <td>3%</td>
+                        </tr>
+                        <tr align="center">
+                            <th class="col-2">적립 포인트</th>
+                            <td>0%</td>
+                            <td>1%</td>
+                            <td>2%</td>
+                            <td>5%</td>
+                        </tr>
+                        <tr class="lh-base" align="center">
+                            <th class="col-2 align-middle">등급 기준</th>
+                            <td class="align-middle">미주문</td>
+                            <td class="align-middle">1회 이상 구매</td>
+                            <td class="align-middle">
+                                <div>
+                                    5회 & 50만원
+                                </div>
+                                <div>
+                                    이상 구매
+                                </div>
+                            </td>
+                            <td class="align-middle">
+                                <div>
+                                    10회 & 100만원
+                                </div>
+                                <div>
+                                    이상 구매
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
                 <div>
-                    <h5>새 비밀번호 입력</h5>
+                    <h5><b>멤버십 등급 선정 기준 안내</b></h5>
                 </div>
-                <table class="table">
-                    <tbody class="table-group-divider">
+                <table class="table border">
+                    <tbody>
                         <tr>
-                            <th class="col-2 table-active" style="text-align: center;">새 비밀번호</th>
-                            <td><input type="password" class="form-control form-control-sm ms-2" id="newPassword" maxlength="16" style="width:200px; height:25px"/></td>
+                            <th class="col-2 table-active">반영 시기</th>
+                            <td>매월 1일</td>
                         </tr>
                         <tr>
-                            <th class="col-2 table-active" style="text-align: center;">새 비밀번호 확인</th>
-                            <td><input type="password" class="form-control form-control-sm ms-2" id="newConfirm" maxlength="16" style="width:200px; height:25px"/></td>
+                            <th class="col-2 table-active">등급 기준</th>
+                            <td>최근 1개월 고구마몰에서 주문한 횟수와 금액 기준</td>
+                        </tr>
+                        <tr>
+                            <th class="col-2 table-active">대상 고객</th>
+                            <td>고구마몰 모든 회원 (회원가입 필수)</td>
+                        </tr>
+                        <tr class="lh-base">
+                            <th class="col-2 table-active align-middle">대상 주문</th>
+                            <td>
+                                고구마몰에서 주문한 모든 주문 건
+                                <br>
+                                단, 금융(보험) / 렌탈 / 모바일 쿠폰 등 일부 주문 및 취소 건 제외
+                            </td>
+                        </tr>
+                        <tr class="lh-base">
+                            <th class="col-2 table-active align-middle">유의사항</th>
+                            <td>
+                                <div>
+                                    등급별 혜택은 고구마몰 가입 고객에 한해 누리실 수 있습니다.
+                                </div>
+                                <div>
+                                    등급별 혜택은 고구마몰의 사정에 따라서 변경될 수 있습니다.
+                                </div>
+                                <div>
+                                    부당한 방법(대리주문, 상업적 목적의 대량구매 등)에 의한 참여가 밝혀질 경우,
+                                </div>
+                                <div>
+                                    심사 후 등급이 재조정될 수 있습니다.
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
-                <div align="center">
-                    <button type="button" class="btn btn-dark" onclick="changePassword()">변경</button>
-                    <button type="button" class="btn btn-secondary">취소</button>
-                </div>
             </div>
         </div>
     </div>
-    <%@ include file="../footer.jsp" %>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
-<script type="text/javascript">
-	function changePassword() {
-		if($("#newPassword").val() != $("#newConfirm").val()) alert('새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.');
-		else {
-			let token = $("meta[name='_csrf']").attr("content");
-		    let header = $("meta[name='_csrf_header']").attr("content");
-			$.ajax({
-				url : "${contextPath}/mypage/changePassword",
-				type : "POST",
-				data : {
-					curPassword : $("#curPassword").val(),
-					newPassword : $("#newPassword").val()
-				},
-				beforeSend : function(xhr) {
-		            xhr.setRequestHeader(header, token);
-		        },
-		        success:function(result) {
-		        	if(result==1) window.location.href = "${contextPath}/mypage";
-		        	else if(result==2) alert('비밀번호가 일치하지 않습니다.');
-		        	else alert("서버에 오류가 발생했습니다.");
-		        },
-				error:function(xhr, status, error) {
-					var errorResponse = JSON.parse(xhr.responseText);
-					var errorCode = errorResponse.code;
-					var message = errorResponse.message;
-					alert(message);
-				}
-			});
-		}
-	}
-</script>
 </html>
