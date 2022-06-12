@@ -99,13 +99,13 @@
 		                                            </div>
 		                                        </div>
 		                                    </td>
-		                                    <c:choose>
+		                                    <%-- <c:choose>
 		                                    	<!-- 
 		                                    	<c:when test="${}">
 		                                    		
 		                                    	</c:when>
 		                                    	 -->
-		                                    </c:choose>
+		                                    </c:choose> --%>
 		                                    <c:if test="${receiptDTO.couponDiscount == 0 && receiptDTO.usagePoint == 0}">
 		                                    	<td class="border-bottom">
 			                                        <div class="col" align="center">
@@ -142,13 +142,13 @@
 			                                        </div>
 			                                    </td>
 		                                    </c:if>
-		                                    <c:choose>
+		                                    <%-- <c:choose>
 		                                    	<c:if test="${status.first}">
 			                                    	<td rowspan="${receiptDTO.orderList.size()}">
 			                                    	
 			                                    	</td>
 			                                    </c:if>
-		                                    </c:choose>
+		                                    </c:choose> --%>
 		                                </tr>
 		                                <!-- 주문 forEach 종료 -->
 	                                </c:forEach>
