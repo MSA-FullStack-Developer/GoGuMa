@@ -49,7 +49,7 @@
                     	</c:if>
                     	<c:forEach var="productDTO" items="${productList}">
                     		<div class="col-3">
-	                            <div class="border mb-1 p-3">
+	                            <div class="border border-2 mb-1 p-3">
 	                            	<a href="${contextPath}/category/1/${productDTO.categoryID}/detail/${productDTO.productID}">
 	                                	<img src="${productDTO.prodimgurl}" style="width: 100%; height: 100%">
                                 	</a>
