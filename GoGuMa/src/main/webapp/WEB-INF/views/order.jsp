@@ -22,6 +22,7 @@
  <!-- iamport.payment.js -->
  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
  
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
  <style>
  	.col-md-4 {
 	    padding: 0px 0px;
@@ -44,8 +45,11 @@
 	}
  </style>
  <script type="text/javascript">
-
-
+ 	const autoHyphen = (target) => {
+		target.value = target.value
+		   .replace(/[^0-9]/g, '')
+		   .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/(\-{1,2})$/g, "");
+	}
   //모달 쿠폰 적용 클릭이벤트
   $(document).on('click', '.coupon-list-box', function() {
     var coupon_discount = $(this).find(".coupon-benefit").text();
@@ -54,7 +58,6 @@
     var coupon_id = $(this).find("#coupon-id").val();
     
     var totalAmount = $('#lastStlAmtDd1').text();
-    console.log();
     // 쿠폰 금액이 최종 결제 금액보다 크면 사용할 수 없다.
     console.log(totalAmount);
     console.log(coupon_discount);
@@ -71,10 +74,7 @@
     calDisPrice();
     alert(coupon_name + " 할인이 적용되었습니다.");
   });
-
   $(document).ready(function() {
-
-    console.log($('.pProductName').text());
     //총 판매 금액, 총 멤버십 할인, 적립예정 G.Point
     console.log("적립예정 포인트: " + $('#pregp').val());
     var gp = parseInt($('#pregp').val());
@@ -94,7 +94,6 @@
     $('#getCoupon-btn').on('click', function() {
       let token = $("meta[name='_csrf']").attr("content");
       let header = $("meta[name='_csrf_header']").attr("content");
-
       $.ajax({
       url : '${contextPath}/order/api/getMemberCoupon',
       type : 'POST',
@@ -128,43 +127,48 @@
       }
       });
     });
-
     // 모달 배송지 등록 이벤트
     $('#addAddressBtn').on('click', function() {
       let isDefault = 0;
-      if ($('#isDefault').prop('checked')) {
-        isDefault = 1;
-      }
-
-      let token = $("meta[name='_csrf']").attr("content");
-      let header = $("meta[name='_csrf_header']").attr("content");
-
-      let data = {
-      nickName : $('#addressBody').find('#nickName').val(),
-      recipient : $('#addressBody').find('#recipient').val(),
-      address : $('#addressBody').find('#address').val(),
-      contact : $('#addressBody').find('#contact').val(),
-      isDefault : isDefault
-      }
-
-      $.ajax({
-      url : '${contextPath}/mypage/manageAddress/addAddress',
-      type : 'POST',
-      data : JSON.stringify(data),
-      contentType : 'application/json; charset=utf-8;',
-      beforeSend : function(xhr) {
-        xhr.setRequestHeader(header, token);
-      },
-      success : function(result) {
-        var url = "${contextPath}/order/"
-        if (result == 1) {
-          alert('배송지 추가 완료');
-          location.reload();
-        } else {
-          alert('입력이 올바르지 않습니다.');
-        }
-      }
-      });
+  		if($('#isDefault').prop('checked')) {
+  			isDefault = 1;
+  		}
+  		
+  		let token = $("meta[name='_csrf']").attr("content");
+  	    let header = $("meta[name='_csrf_header']").attr("content");
+  	    let data = {
+      		nickName : $('#addressBody').find('#nickName').val(),
+  			recipient : $('#addressBody').find('#recipient').val(),
+  			postCode : $('#addressBody').find('#postCode').val(),
+  			address : $('#addressBody').find('#address').val(),
+  			detail : $('#addressBody').find('#detail').val(),
+  			contact : $('#addressBody').find('#contact').val(),
+  			isDefault : isDefault
+  	    }
+  	    
+  		$.ajax({
+  			url : '${contextPath}/mypage/manageAddress/addAddress',
+  			type : 'POST',
+  			data : JSON.stringify(data),
+  			contentType : 'application/json; charset=utf-8;',
+  			beforeSend : function(xhr) {
+  	            xhr.setRequestHeader(header, token);
+  	        },
+  	        success:function(result) {
+  	        	if(result==1) {
+  	        		alert('배송지를 추가했습니다.');
+  	        		location.reload();
+  	        	} else {
+  					alert('배송지를 추가하는 과정에서 오류가 발생했습니다.');
+  				}
+  	        },
+  			error:function(xhr, status, error) {
+  				var errorResponse = JSON.parse(xhr.responseText);
+  				var errorCode = errorResponse.code;
+  				var message = errorResponse.message;
+  				alert(message);
+  			}
+  		});
     });
     // 배송지 등록 이벤트
     $('.address-list-box').click(function() {
@@ -173,13 +177,14 @@
         $('.tbody-on').show();
       }
       
-
       var name = $(this).find('.delivery-address-name').text();
       var addressNickName = $(this).find('.delivery-address-nickname').text();
       var addressAlias = $(this).find('.delivery-address-alias').text();
+      var addressPostNum = $(this).find('.address-post-num').text();
       var addressPer = $(this).find('.delivery-address-per').text();
+      var addressDetail = $(this).find('.delivery-address-detail').text();
       var phonenumber = $(this).find('.delivery-phone-num-td').text();
-
+      
       if (addressAlias == "") {
         console.log("기본배송지가 아님");
         $('#addressAlias').hide();
@@ -187,12 +192,12 @@
         console.log(addressAlias);
         $('#addressAlias').show();
       }
-
       $('#name').text(name);
       $('#addressNickName').text(addressNickName);
+      $('#addressPostcode').text(addressPostNum);
       $('#addressName').text(addressPer);
+      $('#addressDetail').text(addressDetail);
       $('#phonenumber').text(phonenumber);
-
       $('#myModal').modal('hide');
       alert("배송지가 적용되었습니다.");
     });
@@ -201,7 +206,7 @@
       var radioVal = $('input[name="card-type"]:checked').val();
       var addressInfo = $('#addressName').text();
       
-      //결제 종류 선택했는지 체크
+      //결제 종류와 배송지 선택했는지 체크
       var chkPayType = $('input[name=card-type]').is(":checked");
       console.log(chkPayType);
       if(addressInfo == ""){
@@ -307,13 +312,13 @@
 		    pg : radioVal,
 		    pay_method : 'card',
 		    merchant_uid : 'merchant_' + new Date().getTime(),
-		    name : $('.pProductName').text(), //결제창에서 보여질 이름
+		    name : $('#pay-name').val(), //결제창에서 보여질 이름
 		    amount : $('#lastStlAmtDd1').text(), //실제 결제되는 가격
 		    buyer_email : "${memberDTO.email}",
 		    buyer_name : $('#name').text(),
 		    buyer_tel : $('#phonenumber').text(),
-		    buyer_addr : $('#addressName').text(),
-		    buyer_postcode : '123-456',
+		    buyer_addr : $('#addressName').text() + " " + $('#addressDetail').text(),
+		    buyer_postcode : $('#addressPostcode').text(),
 		}, function(rsp) {
 			  console.log("결제 완료 후 로그 : " + rsp);
 		      //아임포트 검증절차
@@ -354,13 +359,13 @@
 	    pg : 'html5_inicis',
 	    pay_method : 'vbank',
 	    merchant_uid : 'merchant_' + new Date().getTime(),
-	    name : $('.pProductName').text(), //결제창에서 보여질 이름
+	    name : $('#pay-name').val(), //결제창에서 보여질 이름
 	    amount : $('#lastStlAmtDd1').text(), //실제 결제되는 가격
 	    buyer_email : "${memberDTO.email}",
 	    buyer_name : $('#name').text(),
 	    buyer_tel : $('#phonenumber').text(),
-	    buyer_addr : $('#addressName').text(),
-	    buyer_postcode : '123-456',
+	    buyer_addr : $('#addressName').text() + " " + $('#addressDetail').text(),
+	    buyer_postcode : $('#addressPostcode').text(),
 	}, function(rsp) {
 	  	console.log("결제 완료 후 로그 : ");
 		  console.log(rsp);
@@ -389,25 +394,20 @@
 	      	}
 	      });
 		  
-
 	});
 }
 	 //  unix time stamp to Date
 	  function UnixTimeToDate(UnixTime){
-	  var origin = new Date(UnixTime);
-	  
-	  var year = origin.getFullYear();
-	  var month = ('0' + (origin.getMonth() + 1)).slice(-2);
-	  var day = ('0' + origin.getDate()).slice(-2);
-	  
-	  var hours = ('0' + today.getHours()).slice(-2); 
-	  var minutes = ('0' + today.getMinutes()).slice(-2);
-	  var seconds = ('0' + today.getSeconds()).slice(-2);
-	   
-	  var val_time = year+"-"+month+"-"+day + " " + hours + ":"+minutes + ":" + seconds;
-	  
-	  return val_time;
-	  }
+		  var origin = new Date(UnixTime);
+		  var year = origin.getFullYear();
+		  var month = ('0' + (origin.getMonth() + 1)).slice(-2);
+		  var day = ('0' + origin.getDate()).slice(-2);
+		  var hours = ('0' + today.getHours()).slice(-2); 
+		  var minutes = ('0' + today.getMinutes()).slice(-2);
+		  var seconds = ('0' + today.getSeconds()).slice(-2);
+		  var val_time = year+"-"+month+"-"+day + " " + hours + ":"+minutes + ":" + seconds;
+		  return val_time;
+		}
 	//결제가 완료 된 후 트랜잭션처리
 	function paytransaction(impUid, status){
 	  	var token = $("meta[name='_csrf']").attr("content");
@@ -476,21 +476,17 @@
 			return "";
 		if (nDetail == null)
 			nDetail = 0;
-
 		nNumber = parseFloat(nNumber);
 		nNumber = Math.round(nNumber, nDetail);
-
 		var minusFlag = false;
 		if (nNumber < 0) {
 			nNumber = nNumber * -1;
 			minusFlag = true;
 		}
-
 		var strNumber = new String(nNumber);
 		var arrNumber = strNumber.split(".");
 		var strFormatNum = "";
 		var j = 0;
-
 		for (var i = arrNumber[0].length - 1; i >= 0; i--) {
 			if (i != strNumber.length && j == 3) {
 				strFormatNum = arrNumber[0].charAt(i) + "," + strFormatNum;
@@ -500,13 +496,10 @@
 			}
 			j++;
 		}
-
 		if (arrNumber.length > 1)
 			strFormatNum = strFormatNum + "." + arrNumber[1];
-
 		if (minusFlag)
 			strFormatNum = '-' + strFormatNum;
-
 		return strFormatNum;
 	};
 	
@@ -552,6 +545,30 @@
 	    	console.log("직접입력 로그 : " + $('#requirement').val())
 	    	$('#cntnLen').text(content.length);
 	    }
+	}
+	// 다음 배송지 조회
+	function getAddressByFindingPostCode() {
+		new daum.Postcode({
+			oncomplete: function(data) {
+				// 각 주소의 노출 규칙에 따라서 주소를 조합한다.
+				// 내려오는 변수가 값이 없는 경우에는 공백('')을 값으로 가진다.
+				let addr = ""; // 주소 변수
+				let extra = ""; // 참고 항목
+				
+				// 사용자가 도로명 주소를 선택한 경우
+				if(data.userSelectedType === 'R') {
+					addr = data.roadAddress;
+				}
+				// 사용자가 지번 주소를 선택한 경우
+				else {
+					addr = data.jibunAddress;
+				}
+				
+				document.getElementById("postCode").value = data.zonecode;
+				document.getElementById("address").value = addr;
+				document.getElementById("detail").focus();
+			}
+		}).open();
 	}
 </script>
 
@@ -692,6 +709,12 @@
 									<input type="hidden" id="GPoint" value="0"/>
 									<input type="hidden" id="finalPrice" value="${total - membershipDiscount }" />
 									<input type="hidden" id="requirement" class="requirement-in" value="" />
+									<c:if test="${fn:length(list) > 1}">
+										<input id="pay-name" type="hidden" value="${list[0].parentProductName }(${list[0].productName }) 외${fn:length(list)}">
+									</c:if>
+									<c:if test="${fn:length(list) == 1}">
+										<input id="pay-name" type="hidden" value="${list[0].parentProductName }(${list[0].productName })">
+									</c:if>
 								</div>
 							</div>
 						</div>
@@ -780,19 +803,27 @@
 															</div>
 															<c:if test="${i.isDefault == 1}">
 																<div class="col-md-4">
-																	<span class="delivery-address-alias">기본배송지</span>
+																	<span class="delivery-address-alias">기본 배송지</span>
 																</div>
 															</c:if>
 														</div>
 														<div class="row">
-															<div class="col-md-4 delivery-address-th">배송지이름</div>
+															<div class="col-md-4 delivery-address-th">배송지 별칭</div>
 															<div class="col-md-8 delivery-address-td">
 																<span class="delivery-address-nickname">${i.nickName }</span>
 															</div>
 														</div>
 														<div class="row">
-															<div class="col-md-4 delivery-address-th">배송주소</div>
+															<div class="col-md-4 delivery-address-th">우편번호</div>
+															<div class="col-md-8 delivery-address-td address-post-num">${i.postCode }</div>
+														</div>
+														<div class="row">
+															<div class="col-md-4 delivery-address-th">배송지 주소</div>
 															<div class="col-md-8 delivery-address-td delivery-address-per">${i.address }</div>
+														</div>
+														<div class="row">
+															<div class="col-md-4 delivery-address-th">상세 주소</div>
+															<div class="col-md-8 delivery-address-td delivery-address-detail">${i.detail }</div>
 														</div>
 														<div class="row">
 															<div class="col-md-4 delivery-address-th delivery-phone-num-th">연락처</div>
@@ -812,41 +843,46 @@
 							<div class="modal fade" id="deliveryAddressModal" tabindex="-1">
 								<div class="modal-dialog modal-dialog-centered">
 									<div class="modal-content">
-										<div class="modal-header">
-											<h5 class="modal-title" id="exampleModalLabel">
-												<b>배송지 등록</b>
-											</h5>
-											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-										</div>
-										<div id="addressBody" class="modal-body">
-											<form>
-												<div class="mb-1">
-													<label for="nickName" class="col-form-label">배송지 별칭</label>
-													<input type="text" class="form-control" id="nickName">
-												</div>
-												<div class="mb-1">
-													<label for="recipient" class="col-form-label">받는 분</label>
-													<input type="text" class="form-control" id="recipient">
-												</div>
-												<div class="mb-1">
-													<label for="address" class="col-form-label">배송지 주소</label>
-													<input type="text" class="form-control" id="address">
-												</div>
-												<div class="mb-3">
-													<label for="contact" class="col-form-label">연락처</label>
-													<input type="text" class="form-control" id="contact">
-												</div>
-												<div class="">
-													<label for="checkDefault" class="col-form-label">기본 배송지 설정</label>
-													<input type="checkbox" id="isDefault">
-												</div>
-											</form>
-										</div>
-										<div class="modal-footer">
-											<button type="button" class="btn btn-light" data-bs-target="#myModal" data-bs-toggle="modal" data-bs-dismiss="modal">뒤로가기</button>
-											<button type="button" id="addAddressBtn" class="orderPageBtn">확인</button>
-										</div>
-									</div>
+						                <div class="modal-header">
+						                    <h5 class="modal-title"><b>배송지 등록</b></h5>
+						                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						                </div>
+						                <div class="modal-body" id="addressBody">
+						                	<form>
+							               		<div class="mb-1">
+							               			<label for="recipient" class="col-form-label">받는 분</label>
+							               			<input type="text" class="form-control" id="recipient">
+							              		</div>
+							              		<div class="mb-1">
+							                		<label for="nickName" class="col-form-label">배송지 별칭</label>
+							                		<input type="text" class="form-control" id="nickName">
+							               		</div>
+							              		<div class="mb-1">
+							              			<div class="d-flex flex-row align-items-center mb-1">
+							              				<label for="address" class="col-form-label me-1">배송지 주소</label>
+							              				<button type="button" class="btn btn-sm btn-warning" onclick="getAddressByFindingPostCode()">우편번호 찾기</button>
+							              			</div>
+							              		</div>
+							              		<div>
+							              			<input type="text" class="form-control mb-1" id="postCode" placeholder="우편번호" disabled>
+							              			<input type="text" class="form-control mb-1" id="address" placeholder="주소" disabled>
+						              				<input type="text" class="form-control mb-1" id="detail" placeholder="상세주소">
+							             		</div>
+							             		<div class="mb-1">
+							             			<label for="contact" class="col-form-label">연락처</label>
+							             			<input type="text" class="form-control" id="contact" maxlength="13" oninput="autoHyphen(this)">
+							            		</div>
+							            	</form>
+						                </div>
+						                <div class="modal-footer">
+						                	<div class="col">
+							                	<label for="isDefault" class="col-form-label">기본 배송지 설정</label>
+							           			<input type="checkbox" id="isDefault">
+						                	</div>
+						                    <button type="button" class="btn btn-dark" id="addAddressBtn">확인</button>
+						                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">취소</button>
+						                </div>
+						            </div>
 								</div>
 							</div>
 							<!-- /배송정보 조회 Modal -->
@@ -870,14 +906,24 @@
 													</td>
 												</tr>
 												<tr>
-													<th class="delivery-address-th">배송지이름</th>
+													<th class="delivery-address-th">배송지 별칭</th>
 													<td class="delivery-address-td">
 														<span class="delivery-address-nickname" id="addressNickName">${defaultAddress.nickName }</span>
 													</td>
 												</tr>
 												<tr>
-													<th class="delivery-address-th">배송주소</th>
+													<th class="delivery-address-th">우편번호</th>
+													<td class="delivery-address-td">
+														<span class="delivery-address-postcode" id="addressPostcode">${defaultAddress.postCode }</span>
+													</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th">배송지 주소</th>
 													<td class="delivery-address-td delivery-address-per" id="addressName">${defaultAddress.address }</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th">상세 주소</th>
+													<td class="delivery-address-td delivery-address-detail" id="addressDetail">${defaultAddress.detail }</td>
 												</tr>
 												<tr>
 													<th class="delivery-address-th delivery-phone-num-th">연락처</th>
@@ -928,23 +974,29 @@
 													</td>
 												</tr>
 												<tr>
-													<th class="delivery-address-th">배송지이름</th>
+													<th class="delivery-address-th">배송지 별칭</th>
 													<td class="delivery-address-td">
 														<span class="delivery-address-nickname" id="addressNickName">${defaultAddress.nickName }</span>
 													</td>
 												</tr>
 												<tr>
-													<th class="delivery-address-th">배송주소</th>
+													<th class="delivery-address-th">우편번호</th>
+													<td class="delivery-address-td">
+														<span class="delivery-address-postcode" id="addressPostcode">${defaultAddress.postCode }</span>
+													</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th">배송지 주소</th>
 													<td class="delivery-address-td delivery-address-per" id="addressName">${defaultAddress.address }</td>
+												</tr>
+												<tr>
+													<th class="delivery-address-th">상세 주소</th>
+													<td class="delivery-address-td delivery-address-detail" id="addressDetail">${defaultAddress.detail }</td>
 												</tr>
 												<tr>
 													<th class="delivery-address-th delivery-phone-num-th">연락처</th>
 													<td class="delivery-address-td delivery-phone-num-td" id="phonenumber">${defaultAddress.contact }</td>
 												</tr>
-												<!-- <tr>
-													<th class="delivery-address-th delivery-requirement-th">요청사항</th>
-													<td class="delivery-address-td delivery-requirement-td" id="requirement"><input class="requirement-in" type="text" value="" id="requirement"></td>
-												</tr> -->
 												<tr>
 													<td colspan="2">
 														<div class="all-comment-box">

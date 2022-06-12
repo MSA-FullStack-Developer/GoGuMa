@@ -198,7 +198,7 @@
 	</select>
 	
 	<select id="getDefaultAddress" resultType="DeliveryAddressDTO">
-		select addressId, nickname, recipient, address, detail, contact
+		select addressId, nickname, recipient, postcode, address, detail, contact
 		from deliveryaddress
 		where memberId = #{memberId} and isdefault = 1
 	</select>

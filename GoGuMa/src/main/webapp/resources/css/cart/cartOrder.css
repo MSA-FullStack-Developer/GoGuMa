@@ -4,7 +4,9 @@
 	padding-left: 0 !important;
 	padding-right: 0 !important;
 }
-
+#nrmProd{
+	margin-bottom: 0rem;
+}
 .moveProduct:hover {
 	color: #FF493C;
 }
@@ -407,8 +409,8 @@ ul, ol, menu, li {
 	background: white;
     border: none;
 }
-.modal-body{
-    margin: 20;
+.row>* {
+	padding-left: 0;
 }
 .modal-header{
 	height: 68px;

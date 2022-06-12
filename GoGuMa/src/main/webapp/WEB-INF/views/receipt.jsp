@@ -187,6 +187,11 @@
 								<div class="col-md-8" id="ptype">카드결제</div>
 							</c:if>
 							<!-- /카드인 경우 -->
+							<!-- 포인트인 경우 -->
+							<c:if test="${resp.payMethod =='point'}">
+								<div class="col-md-8" id="ptype">포인트결제</div>
+							</c:if>
+							<!-- /포인트인 경우 -->
 						</div>
 						<!-- 무통장 입금인 경우 -->
 						<c:if test="${resp.payMethod =='vbank'}">
