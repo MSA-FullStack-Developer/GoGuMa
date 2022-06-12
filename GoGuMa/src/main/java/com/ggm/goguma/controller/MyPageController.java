@@ -68,6 +68,9 @@ public class MyPageController {
 //	@Value("${productPerPage}")
 	private int productPerPage=8; // 한 페이지에 보여지는 최근 본 상품의 개수
 	
+//	@Value("${receiptPerPage}")
+	private int receiptPerPage=5; // 한 페이지에 보여지는 주문내역의 개수
+	
 //	@Value("${blockPerPage}")
 	private int blockPerPage=5; // 한 페이지에 보여지는 페이지 블록의 개수
 	
@@ -179,7 +182,8 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/orderHistory", method=RequestMethod.GET)
-	public String getOrderHistory(Principal principal, Model model) throws Exception {
+	public String getOrderHistory(@RequestParam(value="page", defaultValue="1") long page,
+		Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			model.addAttribute("memberDTO", memberDTO);
@@ -198,11 +202,30 @@ public class MyPageController {
 			model.addAttribute("writeableList", writeableList);
 			model.addAttribute("writeableCount", writeableList.size());
 			
-			List<ReceiptDTO> receiptHistory = service.getReceiptHistory(memberDTO.getId()); // 회원ID로 결제정보DTO를 모두 불러오기
+			// 주문 내역의 개수
+			long historyCount = service.getReceiptCount(memberDTO.getId());
+			// 전체 페이지 개수 = 포인트 내역의 개수 / 한 페이지에 보여지는 내역의 수
+			long pageCount = historyCount / receiptPerPage;
+			// 예를 들어, 내역이 101개인 경우, 11개의 페이지가 필요하므로 총 페이지 개수를 증가시켜준다.
+			if(historyCount % receiptPerPage != 0) pageCount++;
+			
+			// 시작 페이지 = (현재 페이지-1) / 페이지 블록 크기 * 페이지 블록 크기 + 1
+			long startPage = (page-1) / blockPerPage * blockPerPage + 1;
+			// 마지막 페이지 (현재 페이지-1) / 페이지 블록 크기 * 페이지 블록 크기 + 페이지 블록 크기
+			long endPage = (page-1) / blockPerPage * blockPerPage + blockPerPage;
+			// 마지막 페이지 개수가 전체 페이지 개수보다 많은 경우, 마지막 페이지를 전체 페이지 개수로 맞춰준다.
+			if(endPage > pageCount) endPage = pageCount;
+			
+			List<ReceiptDTO> receiptHistory = service.getReceiptHistory(memberDTO.getId(), page); // 회원ID로 결제정보DTO를 모두 불러오기
 			model.addAttribute("receiptHistory", receiptHistory);
 			for(ReceiptDTO dto : receiptHistory) {
 				log.info(dto);
 			}
+			
+			model.addAttribute("page", page);
+			model.addAttribute("startPage", startPage);
+			model.addAttribute("endPage", endPage);
+			model.addAttribute("pageCount", pageCount);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}
@@ -278,9 +301,8 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/pointHistory/{type}", method=RequestMethod.GET)
-	public String getPointHistory(@PathVariable("type") String type, @RequestParam("page") long page,
-		@RequestParam(value="startDate", required=false) String startDate,
-		@RequestParam(value="endDate", required=false) String endDate,
+	public String getPointHistory(@PathVariable("type") String type, @RequestParam(value="page", defaultValue="1") long page,
+		@RequestParam(value="startDate", required=false) String startDate, @RequestParam(value="endDate", required=false) String endDate,
 		Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
@@ -330,7 +352,8 @@ public class MyPageController {
 	}
 	
 	@RequestMapping(value="/couponHistory/{type}", method=RequestMethod.GET)
-	public String getCouponHistory(@PathVariable("type") String type, @RequestParam("page") long page, Principal principal, Model model) throws Exception {
+	public String getCouponHistory(@RequestParam(value="page", defaultValue="1") long page,
+		@PathVariable("type") String type, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
 			model.addAttribute("memberDTO", memberDTO);

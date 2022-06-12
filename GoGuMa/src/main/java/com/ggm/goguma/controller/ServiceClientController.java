@@ -106,11 +106,11 @@ public class ServiceClientController {
 				model.addAttribute("scDtoList", scDtoList);
 				
 				//주문내역조회
-				List<ReceiptDTO> rcpt = myPageService.getReceiptList(memberDTO.getId()); //회원ID로 결제정보DTO를 모두 불러오기
+//				List<ReceiptDTO> rcpt = myPageService.getReceiptList(memberDTO.getId(), 1); //회원ID로 결제정보DTO를 모두 불러오기
 				
 				//최대 필요한 페이지 수
-				int maxPages = (rcpt.size() / 10) + 1;
-				model.addAttribute("maxPages", maxPages);
+//				int maxPages = (rcpt.size() / 10) + 1;
+//				model.addAttribute("maxPages", maxPages);
 				
 				List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 				model.addAttribute("parentCategory", parentCategory);

@@ -15,7 +15,7 @@ public interface MyPageMapper {
 //	@Select("SELECT nickname, recipient, address, contact FROM deliveryaddress")
 //	public List<DeliveryAddressDTO> testWithAnnotation();
 	
-	List<ReceiptDTO> getReceiptList(long memberId) throws Exception;
+	List<ReceiptDTO> getReceiptList(@Param("memberId") long memberId, @Param("startNum") long startNum, @Param("endNum") long endNum) throws Exception;
 	
 	List<OrderDTO> getOrderList(long receiptId) throws Exception;
 	
@@ -28,6 +28,8 @@ public interface MyPageMapper {
 	int getMemberPoint(long memberId) throws Exception;
 	
 	int getEstimatedPoint(long receiptId) throws Exception;
+	
+	long getReceiptCount(long membeId) throws Exception;
 	
 	long getAvailableCouponCount(long memberId) throws Exception;
 
