@@ -41,7 +41,20 @@
                     <div class="d-flex flex-row align-items-center">
                         <div class="me-2">
                         	<a href="${contextPath}/mypage/membershipZone" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-offset="0,10" title="${memberDTO.grade.name}">
-                        		<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-gold.png" style="width: 50px; height: 50px; object-fit: contain;">
+                        		<c:choose>
+                        			<c:when test="${memberDTO.grade.name eq '실버'}">
+                        				<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-silver.png" style="width: 50px; height: 50px; object-fit: contain;">
+                        			</c:when>
+                        			<c:when test="${memberDTO.grade.name eq '골드'}">
+                        				<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-gold.png" style="width: 50px; height: 50px; object-fit: contain;">
+                        			</c:when>
+                        			<c:when test="${memberDTO.grade.name eq '플래티넘'}">
+                        				<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-platinum.png" style="width: 50px; height: 50px; object-fit: contain;">
+                        			</c:when>
+                        			<c:when test="${memberDTO.grade.name eq '다이아몬드'}">
+                        				<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-diamond.png" style="width: 50px; height: 50px; object-fit: contain;">
+                        			</c:when>
+                        		</c:choose>
                         	</a>
                         </div>
                         <div class="lh-sm" align="center">
