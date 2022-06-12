@@ -452,7 +452,7 @@
 							</div>
 						</div>
 						<!--장바구니에 담긴 상품이 있는 경우-->
-						<c:if test="${list != null or fn:length(list) != 0}">
+						<c:if test="${fn:length(list) != 0}">
 							<div class="cart-body">
 								<table class="table" id="nrmProd">
 									<thead>
@@ -580,7 +580,7 @@
 						</div>
 					</div>
 					<div class="order-buttons">
-						<button type="button" class="btn text-black continue" onClick="location.href='${contextPath}'">쇼핑 계속하기</button>
+						<button type="button" class="btn text-black continue" style="background: white; border: 1px solid #eee;" onClick="location.href='${contextPath}'">쇼핑 계속하기</button>
 						<button type="submit" id="orderBtn" class="btn text-white btn-default purchase">구매하기</button>
 					</div>
 				</form>
