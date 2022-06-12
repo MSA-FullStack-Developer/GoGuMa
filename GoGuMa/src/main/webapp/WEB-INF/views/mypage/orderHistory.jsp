@@ -80,9 +80,13 @@
 		                                    </td>
 		                                    <td class="col-5 border-end">
 		                                    	<a href="${contextPath}/category/1/${orderDTO.categoryId}/detail/${orderDTO.productId}" class="text-truncate">
-		                                    		<span><b>${orderDTO.pname}</b></span>
+		                                    		<span class="d-inline-block text-truncate" style="max-width: 300px;">
+		                                    			<b>${orderDTO.pname}</b>
+		                                    		</span>
 		                                    		<br>
-		                                    		<span>옵션 : ${orderDTO.cname}</span>
+		                                    		<span class="d-inline-block text-truncate" style="max-width: 300px;">
+		                                    			옵션 : ${orderDTO.cname}
+		                                    		</span>
 		                                    	</a>
 		                                    </td>
 		                                    <td class="border-end">
