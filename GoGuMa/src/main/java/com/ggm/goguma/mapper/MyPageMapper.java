@@ -86,4 +86,5 @@ public interface MyPageMapper {
 	void makeAllInquirable(long receiptId)throws Exception;
 
 	void refundAllPoint(long receiptId)throws Exception;
+
 }
