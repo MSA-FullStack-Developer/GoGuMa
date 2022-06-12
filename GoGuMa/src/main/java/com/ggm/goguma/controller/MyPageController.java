@@ -277,6 +277,23 @@ public class MyPageController {
 	
 	/*
 	 * @작성자: Moon Seokho
+	 * @Date: 2022. 6. 12.
+	 * @프로그램설명: 상품 전체 상태 C처리
+	 * @변경이력: 
+	 */
+	@ResponseBody
+	@RequestMapping(value="/orderHistory/updateAllOrderStatus", method=RequestMethod.POST)
+	public String updateAllOrderStatus(@RequestParam("receiptId") long receiptId, @RequestParam("status") String status) throws Exception {
+		try {
+			service.updateAllOrderStatus(receiptId, status);
+		} catch (Exception e) {
+			log.info(e.getMessage());
+			return "2";
+		}
+		return "1";
+	}
+	/*
+	 * @작성자: Moon Seokho
 	 * @Date: 2022. 6. 7.
 	 * @프로그램설명: 환불요청을 받을 URL
 	 * @변경이력: 

@@ -45,6 +45,19 @@
 		update pointevent set inquirable = 1 where orderid = #{orderId}
 	</update>
 	
+	
+	<!-- 
+		@작성자: 문석호
+		@기능:  구매 확정인 경우 포인트를 사용가능상태로 만들기
+	 -->
+	<update id="makeAllInquirable">
+		UPDATE pointevent 
+		SET inquirable = 1 
+		WHERE orderid IN (SELECT orderid
+							FROM pointevent
+							WHERE receiptid = #{receiptId}   
+							)
+	</update>
 	<!-- 
 		@작성자: 문석호
 		@기능:  사용자의 현재 포인트를 조회한다.
@@ -64,6 +77,12 @@
 		FROM DUAL
 	</select>
 	
+	<insert id="refundAllPoint">
+		INSERT INTO pointevent(memberid, receiptid, pointtype, pointvalue, inquirable)
+		SELECT memberid, receiptid, 'refund', pointvalue, 1
+		FROM pointevent
+		WHERE receiptid = #{receiptid} and pointtype='usage'
+	</insert>
 	<!-- 
 		@작성자 : 문석호
 		@작성내용 : 주문별 예상 적립 포인트 조회
@@ -77,6 +96,16 @@
 		FROM pointevent
 		WHERE receiptid = #{receiptId} and pointtype='earn'
 	</select>
+	
+	<update id="updateAllOrderStatus">
+		UPDATE orderdetail 
+		SET orderstatus = #{status} 
+		where orderid IN (
+							SELECT orderid
+							FROM orderdetail
+							WHERE receiptid = #{receiptId}
+							)
+	</update>
 	
 	<select id="getReceiptCount" resultType="long">
 		select count(*) from receipt where memberid = #{memberId}

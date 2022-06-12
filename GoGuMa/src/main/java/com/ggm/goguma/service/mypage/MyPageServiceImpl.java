@@ -228,4 +228,13 @@ public class MyPageServiceImpl implements MyPageService {
 		}
 		return receiptList;
 	}
+
+	@Override
+	@Transactional
+	public void updateAllOrderStatus(long receiptId, String status) throws Exception {
+		mapper.updateAllOrderStatus(receiptId, status);
+		if(status.equals("F")) mapper.makeAllInquirable(receiptId);
+		//구매 취소한경우 사용 포인트 전부 돌력주기
+		if(status.equals("C")) mapper.refundAllPoint(receiptId);
+	}
 }

@@ -232,6 +232,44 @@
 			}
         });
 	}
+	/**
+	 * @작성자: Moon Seokho
+	 * @Date: 2022. 6. 7.
+	 * @프로그램설명: 상품 전체 취소
+	 * @변경이력: 
+	 */
+	function cancelAllBtn(receiptId) {
+		if(confirm("전체 취소하시겠습니까?")) {
+			let token = $("meta[name='_csrf']").attr("content");
+		    let header = $("meta[name='_csrf_header']").attr("content");
+			$.ajax({
+				url : "${contextPath}/mypage/orderHistory/updateAllOrderStatus",
+				type : "POST",
+				data : {
+					receipdId : receiptId,
+					status : 'C'
+				},
+				beforeSend : function(xhr) {
+		            xhr.setRequestHeader(header, token);
+	            },
+				success:function(result) {
+					if(result==1) {
+				  		cancelPay(receiptId, orderId);
+				  		alert("상품 주문이 취소되었습니다. 빠른 시일 이내에 환불 처리 됩니다.");
+						window.location.href = "${contextPath}/mypage/orderHistory";
+					} else {
+						alert('주문취소 중에 오류가 발생했습니다.');
+					}
+				},
+				error:function(xhr, status, error) {
+    				var errorResponse = JSON.parse(xhr.responseText);
+    				var errorCode = errorResponse.code;
+    				var message = errorResponse.message;
+    				alert(message);
+    			}
+			});
+		}
+	}
 	
 	function cancelBtn(receiptId, orderId) {
 		if(confirm("주문을 취소하시겠습니까?")) {

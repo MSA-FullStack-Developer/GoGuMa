@@ -80,4 +80,10 @@ public interface MyPageMapper {
 	void disableMember(long memberId) throws Exception;
 
 	List<ReceiptDTO> getReceiptHistoryPages(@Param("memberId") long memberId, @Param("startPages") int startPages) throws Exception;
+
+	void updateAllOrderStatus(@Param("receiptId")long receiptId, @Param("status")String status)throws Exception;
+
+	void makeAllInquirable(long receiptId)throws Exception;
+
+	void refundAllPoint(long receiptId)throws Exception;
 }
