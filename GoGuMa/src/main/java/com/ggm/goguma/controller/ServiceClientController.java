@@ -76,7 +76,7 @@ public class ServiceClientController {
 			}
 			//로그인을 하지 않은 경우
 			else {
-				return "redirect:../../member/login.do";
+				
 			}
 			return "servicecnsl/serviceclient";
 		}
@@ -231,39 +231,38 @@ public class ServiceClientController {
 				memberEmail = user.getUsername();
 				
 				MemberDTO memberDTO = memberService.getMember(memberEmail);
-				List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-				
-				// 자주 묻는 질문 내역 불러오기
-				List<ServiceClientDTO> faqList = serviceClientService.getFaqList(pg);
-				log.info(faqList);
-				
-				// 페이징
-				long recordCount = serviceClientService.getFaqCount();
-				long pageCount = recordCount / pageSize; // 총 페이지 수
-				if (recordCount % pageSize != 0) pageCount++;
-				
-				// 하단부에 보여줄 페이지 번호
-				long startPage = (pg - 1) / blockSize * blockSize + 1;
-				long endPage = startPage + blockSize - 1; 
-				if (endPage > pageCount) endPage = pageCount;
-				
 				model.addAttribute("memberDTO", memberDTO);
-				model.addAttribute("parentCategory", parentCategory);
-				model.addAttribute("faqList", faqList);
-				model.addAttribute("pg", pg);
-				model.addAttribute("recordCount", recordCount);
-				model.addAttribute("pageSize", pageSize);
-				model.addAttribute("pageCount", pageCount);
-				model.addAttribute("startPage", startPage);
-				model.addAttribute("endPage", endPage);
-				
-				return "servicecnsl/faqList";
-			} else {
-				return "redirect:../../member/login.do"; // 로그인 화면으로 이동
 			}
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+			
+			// 자주 묻는 질문 내역 불러오기
+			List<ServiceClientDTO> faqList = serviceClientService.getFaqList(pg);
+			log.info(faqList);
+			
+			// 페이징
+			long recordCount = serviceClientService.getFaqCount();
+			long pageCount = recordCount / pageSize; // 총 페이지 수
+			if (recordCount % pageSize != 0) pageCount++;
+			
+			// 하단부에 보여줄 페이지 번호
+			long startPage = (pg - 1) / blockSize * blockSize + 1;
+			long endPage = startPage + blockSize - 1; 
+			if (endPage > pageCount) endPage = pageCount;
+			
+			model.addAttribute("parentCategory", parentCategory);
+			model.addAttribute("faqList", faqList);
+			model.addAttribute("pg", pg);
+			model.addAttribute("recordCount", recordCount);
+			model.addAttribute("pageSize", pageSize);
+			model.addAttribute("pageCount", pageCount);
+			model.addAttribute("startPage", startPage);
+			model.addAttribute("endPage", endPage);
+
+			return "servicecnsl/faqList";
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
 	}
+	
 }
