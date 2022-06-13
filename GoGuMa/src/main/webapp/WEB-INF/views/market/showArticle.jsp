@@ -632,7 +632,7 @@
 						<div class="row mb-4">
 							<!-- 프로필 영역 시작 -->
 							<div class="col-1">
-								<img class="rounded-circle bg-success border border-light" src="${reply.member.profileImage}"
+								<img class="rounded-circle border border-light" src="${reply.member.profileImage}"
 									style="object-fit: cover; width: 53px; height: 53px;" />
 							</div>
 							<div class="col" style="padding-top: 5px;">
@@ -684,7 +684,7 @@
 									<div class="row mb-4">
 										<!-- 프로필 영역 시작 -->
 										<div class="col-1">
-											<img class="rounded-circle bg-success" src="${childReply.member.profileImage}"
+											<img class="rounded-circle" src="${childReply.member.profileImage}"
 												style="object-fit: cover; width: 53px; height: 53px;" />
 										</div>
 										<div class="col" style="padding-top: 5px;">
