@@ -73,9 +73,11 @@
 	                    WHERE A.memberid = m.memberid) B
 		WHERE rnum BETWEEN #{startNum} AND #{endNum}
 	</select>
+	
 	<select id="keywordCount" resultType="long">
 		SELECT COUNT(*) AS cnt
 		FROM qna q
 		WHERE qnatitle like '%' ||  #{keyword} || '%'
 	</select>
+	
 </mapper>
