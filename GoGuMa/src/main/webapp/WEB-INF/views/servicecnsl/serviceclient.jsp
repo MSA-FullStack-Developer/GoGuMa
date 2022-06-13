@@ -90,7 +90,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="accordion-item">
+						<div class="accordion-item border-top">
 							<h3 class="accordion-header order-products" id="flush-heading2">
 								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse2" aria-expanded="false" aria-controls="#flush-collapse2">
 									<i class="fa-solid fa-q"></i><strong>취소/반품 완료 후 환불 언제 되나요?</strong>
