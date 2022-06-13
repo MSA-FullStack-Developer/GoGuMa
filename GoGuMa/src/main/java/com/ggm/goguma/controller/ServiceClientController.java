@@ -252,7 +252,7 @@ public class ServiceClientController {
 			
 			// 하단부에 보여줄 페이지 번호
 			long startPage = (pg - 1) / blockSize * blockSize + 1;
-			long endPage = startPage + blockSize - 1; 
+			long endPage = startPage + blockSize - 1 ; 
 			if (endPage > pageCount) endPage = pageCount;
 			
 			model.addAttribute("parentCategory", parentCategory);

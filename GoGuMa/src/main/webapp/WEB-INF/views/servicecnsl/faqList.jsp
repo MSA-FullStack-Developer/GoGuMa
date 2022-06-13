@@ -140,7 +140,7 @@
 				 		<tbody>
 				 			<c:if test="${faqList.size() < 1}">
 		                		<tr style="text-align: center;" >
-		                			<td colspan="5">
+		                			<td colspan="6">
 			   						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
 			   						<h5 class="no_result">자주 묻는 질문이 없습니다.</h5>
 			   						</td>
