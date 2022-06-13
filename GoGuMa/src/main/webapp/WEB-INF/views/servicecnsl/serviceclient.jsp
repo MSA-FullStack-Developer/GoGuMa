@@ -55,9 +55,9 @@
 			<div class="cus-wrap">
 				<h3>자주 묻는 질문</h3>
 				<div class="search-area">
-					<form id="searchForm" action="">
+					<form id="searchForm" action="se" method="get">
 						<div class="inputbox">
-							<label class="inplabel icon-find"><input type="text" name="ancmCntn" placeholder="질문을 검색해보세요" title="검색어 입력" value=""></label>
+							<label class="inplabel icon-find"><input type="text" name="search" placeholder="질문을 검색해보세요" title="검색어 입력" value=""></label>
 							<button type="button" class="btn btn-find searchBtn" onclick="searchCntn();" style="height: auto;"></button>
 						</div>
 					</form>
