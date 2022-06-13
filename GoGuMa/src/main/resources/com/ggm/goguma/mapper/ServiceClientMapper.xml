@@ -16,11 +16,11 @@
 	<select id="getQnaList" resultType="ServiceClientDTO">
 		SELECT B.*
 		FROM (SELECT A.*, rownum as rnum
-				FROM (SELECT q.qnaID, q.memberID, c.categoryName AS categoryName, q.qnaTitle, q.qnaContent, q.createdAt, q.answerStatus
+				FROM (SELECT q.qnaid, q.memberid, c.categoryname AS categoryName, q.qnatitle, q.qnacontent, q.createdat, q.answerstatus
 					FROM qna q, category c
 					WHERE q.categoryid = c.categoryid
 					AND q.memberid = #{memberID}
-					ORDER BY q.createdAt DESC) A ) B 
+					ORDER BY q.createdat DESC) A ) B 
 		WHERE rnum BETWEEN #{startNum} AND #{endNum}
 	</select>
 	
@@ -47,4 +47,22 @@
 			#{serviceClientDTO.email}
 		)
 	</insert>
+	
+	<select id="getFaqList" resultType="ServiceClientDTO">
+		SELECT B.*
+		FROM (SELECT A.qnaid, A.memberid, m.nickname AS nickName, A.categoryname AS categoryName, A.qnatitle, A.qnacontent, A.createdat, A.answerstatus, rownum as rnum
+				FROM (SELECT q.qnaid, q.memberid, c.categoryname AS categoryName, q.qnatitle, q.qnacontent, q.createdat, q.answerstatus
+						FROM qna q, category c
+						WHERE q.categoryid = c.categoryid
+						ORDER BY q.createdat DESC) A, member m
+	                    WHERE A.memberid = m.memberid) B
+		WHERE rnum BETWEEN #{startNum} AND #{endNum}
+	</select>
+	
+	<select id="getFaqCount" parameterType="long" resultType="long">
+		SELECT COUNT(*) AS cnt
+		FROM qna q, category c
+		WHERE q.categoryid = c.categoryid
+	</select>
+	
 </mapper>

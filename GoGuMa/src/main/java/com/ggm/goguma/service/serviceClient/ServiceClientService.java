@@ -17,8 +17,14 @@ public interface ServiceClientService {
 	List<ServiceClientDTO> getQnaList(long pg, long memberID) throws Exception;
 
 	// 내 상담내역 개수
-	long getQnaCount(long id) throws Exception;
+	long getQnaCount(long memberID) throws Exception;
 
 	void insertQna(ServiceClientDTO serviceClientDTO) throws Exception;
+
+	// 자주 묻는 질문
+	List<ServiceClientDTO> getFaqList(long pg) throws Exception;
+
+	// 자주 묻는 질문 개수
+	long getFaqCount() throws Exception;
 
 }

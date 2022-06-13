@@ -146,6 +146,7 @@ public class ServiceClientController {
 			throw e;
 		}
 	}
+	
 	@PostMapping("api/inquiry")
 	@ResponseBody
 	public void inquiry(ServiceClientDTO serviceClientDTO, Authentication authentication)throws Exception{
@@ -165,6 +166,7 @@ public class ServiceClientController {
 			// TODO: handle exception
 		}
 	}
+	
 	/* *
 	 * 작성자 : 경민영
 	 * 작성일 : 2022.06.11
@@ -186,7 +188,7 @@ public class ServiceClientController {
 				log.info(myQnaList);
 				
 				// 페이징
-				long recordCount = serviceClientService.getQnaCount(memberDTO.getId()); // 카테고리별 상품 개수
+				long recordCount = serviceClientService.getQnaCount(memberDTO.getId());
 				long pageCount = recordCount / pageSize; // 총 페이지 수
 				if (recordCount % pageSize != 0) pageCount++;
 				
@@ -206,6 +208,56 @@ public class ServiceClientController {
 				model.addAttribute("endPage", endPage);
 				
 				return "servicecnsl/myService";
+			} else {
+				return "redirect:../../member/login.do"; // 로그인 화면으로 이동
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	/* *
+	 * 작성자 : 경민영
+	 * 작성일 : 2022.06.11
+	 * */
+	// 자주 묻는 질문
+	@GetMapping("/faqList/{pg}")
+	public String faqList(@PathVariable long pg, Model model, Authentication authentication)throws Exception{
+		try {
+			String memberEmail = "";
+			if (authentication != null){
+				UserDetails user = (UserDetails) authentication.getPrincipal();
+				memberEmail = user.getUsername();
+				
+				MemberDTO memberDTO = memberService.getMember(memberEmail);
+				List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+				
+				// 자주 묻는 질문 내역 불러오기
+				List<ServiceClientDTO> faqList = serviceClientService.getFaqList(pg);
+				log.info(faqList);
+				
+				// 페이징
+				long recordCount = serviceClientService.getFaqCount();
+				long pageCount = recordCount / pageSize; // 총 페이지 수
+				if (recordCount % pageSize != 0) pageCount++;
+				
+				// 하단부에 보여줄 페이지 번호
+				long startPage = (pg - 1) / blockSize * blockSize + 1;
+				long endPage = startPage + blockSize - 1; 
+				if (endPage > pageCount) endPage = pageCount;
+				
+				model.addAttribute("memberDTO", memberDTO);
+				model.addAttribute("parentCategory", parentCategory);
+				model.addAttribute("faqList", faqList);
+				model.addAttribute("pg", pg);
+				model.addAttribute("recordCount", recordCount);
+				model.addAttribute("pageSize", pageSize);
+				model.addAttribute("pageCount", pageCount);
+				model.addAttribute("startPage", startPage);
+				model.addAttribute("endPage", endPage);
+				
+				return "servicecnsl/faqList";
 			} else {
 				return "redirect:../../member/login.do"; // 로그인 화면으로 이동
 			}

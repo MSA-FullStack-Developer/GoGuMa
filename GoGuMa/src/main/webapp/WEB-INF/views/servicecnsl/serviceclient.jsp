@@ -42,7 +42,7 @@
                 <h2 class="side-menu-title" onclick='javascript:location.href="${contextPath}/serviceclient/"' style="cursor:pointer;">고객센터</h2>
                 <div class="side-menu-list">
                     <ul>
-                        <li><a href="${contextPath}/serviceclient/">자주 묻는 질문</a></li>
+                        <li><a href="${contextPath}/serviceclient/faqList/1">자주 묻는 질문</a></li>
                         <li><a href="#" onclick="openCnslPup(); return false;">1:1 문의하기</a></li>
                         <li><a href="${contextPath}/serviceclient/myService/1">내 상담내역 조회</a></li>
                         <li><a href="https://www.hmall.com/p/ccb/noticeList.do">공지사항</a></li>
