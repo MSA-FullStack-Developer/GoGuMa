@@ -29,9 +29,8 @@
 		 내 상담내역 개수 -->
 	<select id="getQnaCount" parameterType="long" resultType="long">
 		SELECT COUNT(*) AS cnt
-		FROM qna q, category c
-		WHERE q.categoryid = c.categoryid
-		AND q.memberid = #{memberID}
+		FROM qna q
+		WHERE q.memberid = #{memberID}
 	</select>
 	
 	<insert id="insertQna" parameterType="ServiceClientDTO">
@@ -61,8 +60,7 @@
 	
 	<select id="getFaqCount" parameterType="long" resultType="long">
 		SELECT COUNT(*) AS cnt
-		FROM qna q, category c
-		WHERE q.categoryid = c.categoryid
+		FROM qna
 	</select>
 	
 </mapper>
