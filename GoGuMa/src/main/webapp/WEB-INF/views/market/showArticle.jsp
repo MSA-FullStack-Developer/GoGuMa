@@ -590,7 +590,7 @@
 											<a href="${contextPath}/category/1/${product.categoryId}/detail/${product.parentId}" class="text-decoration-none text-dark">
 												<div class="row">
 													<div class="col-2" style="padding-right: 0px;">
-														<img src="${product.prodImgUrl}" class="w-100 h-100" />
+														<img src="${product.prodImgUrl}" class="w-100" />
 													</div>
 													<div class="col"
 														style="margin-top: 12px; margin-left: 10px;">

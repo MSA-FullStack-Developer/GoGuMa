@@ -38,7 +38,7 @@
                 elem += "<input name='productId' type='hidden' value='" + productId + "' />";
                 elem += "<div class='row'>";
                 elem += "<div class='col-2'>";
-                elem += "<img src='" + imgSrc + "' class='w-100 h-100'/> </div>";
+                elem += "<img src='" + imgSrc + "' class='w-100'/> </div>";
                 elem += "<div class='col'>";
                 elem += "<p>" + productName + "</p>";
                 elem += "<p class='text-secondary' style='font-size: 13px;'>" + optionName + "</p> </div>";
