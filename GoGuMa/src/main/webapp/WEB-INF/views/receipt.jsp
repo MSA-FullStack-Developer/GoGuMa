@@ -101,6 +101,10 @@
 
 <style>
 	<%@ include file="/resources/css/header.css" %>
+	
+	.row>div {
+		padding-left: 13px;
+	}
 </style>
 
 <%@ include file="header.jsp" %>
