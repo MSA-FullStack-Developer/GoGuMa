@@ -166,6 +166,12 @@ public class ServiceClientController {
 			// TODO: handle exception
 		}
 	}
+	// 자주 묻는 질문 검색
+	@GetMapping("searchSubmit")
+	public String searchSubmit(@RequestParam String s, Model model)throws Exception{
+		
+		return "faqList";
+	}
 	
 	/* *
 	 * 작성자 : 경민영
