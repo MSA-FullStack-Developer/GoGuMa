@@ -74,7 +74,7 @@ public class OrderServiceImpl implements OrderService{
 			orderMapper.minusPointEvent(memberId, receiptKey, transactionDTO.getUsagePoint());
 		}
 		//3. 구매한 상품 수량만큼 상품 수량이 감소 업데이트 된다.
-		//orderMapper.minusProductStock(map);
+		orderMapper.minusProductStock(map);
 		
 		//4. 쿠폰을 사용한 경우 결제 상세테이블에서 회원 ID와 사용한 쿠폰ID로 쿠폰을 사용처리한다.
 		 if(transactionDTO.getCouponId() != 0){

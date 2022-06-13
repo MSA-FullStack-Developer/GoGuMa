@@ -125,17 +125,16 @@
 						description : "${article.market.category.categoryName}",
 						imageUrl : "${article.thumbnail.imagePath}",
 						link : {
-							mobileWebUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
-							webUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
+							mobileWebUrl : "https://9b85-112-151-119-150.jp.ngrok.io/goguma/market/article/${article.articleId}/show.do",
+							webUrl : "https://9b85-112-151-119-150.jp.ngrok.io/goguma/market/article/${article.articleId}/show.do",
 						},
 					  },
-					 
 					  buttons : [
 						{
 							title : '웹으로 보기',
 							link : {
-								mobileWebUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
-								webUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
+								mobileWebUrl : "https://9b85-112-151-119-150.jp.ngrok.io/goguma/market/article/${article.articleId}/show.do",
+								webUrl : "https://9b85-112-151-119-150.jp.ngrok.io/${article.articleId}/show.do",
 							},
 						}]
 				});
