@@ -342,7 +342,8 @@
 				  		}
 				  		alert("주문하신 상품이 취소되었습니다. 빠른 시일 이내에 환불 처리 됩니다.");
 						window.location.href = "${contextPath}/mypage/orderHistory";
-					} else {
+					} 
+					else {
 						alert('주문을 취소하는 과정에서 오류가 발생했습니다.');
 					}
 				},
