@@ -1,7 +1,6 @@
 package com.ggm.goguma.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,19 +11,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ggm.goguma.constant.Role;
-import com.ggm.goguma.controller.cart.CartController;
 import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
 import com.ggm.goguma.dto.ServiceClientDTO;
-import com.ggm.goguma.dto.cart.CartItemDTO;
-import com.ggm.goguma.dto.cart.CartOrderListDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
 import com.ggm.goguma.dto.serviceClient.ServiceCategoryDTO;
 import com.ggm.goguma.service.member.MemberService;
@@ -62,19 +56,19 @@ public class ServiceClientController {
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
 			model.addAttribute("parentCategory", parentCategory);
 			
-			//사용자가 로그인 한 경우
+			// 사용자가 로그인 한 경우
 			if(authentication != null) {
 				UserDetails user = (UserDetails)authentication.getPrincipal();
-				//사용자 이메일정보를 가져온다.
+				// 사용자 이메일정보를 가져온다.
 				memberEmail = user.getUsername();
-				//사용자 정보 가져오기
+				// 사용자 정보 가져오기
 				MemberDTO memberDTO = memberService.getMember(memberEmail);
 				log.info("고객센터에서 사용될 사용자 정보: " + memberDTO);
 				
 				model.addAttribute("memberDTO", memberDTO);
 				model.addAttribute("parentCategory", parentCategory);
 			}
-			//로그인을 하지 않은 경우
+			// 로그인을 하지 않은 경우
 			else {
 				
 			}
@@ -93,22 +87,22 @@ public class ServiceClientController {
 			// 사용자가 권한이 있는 경우
 			if (authentication != null){
 				UserDetails user = (UserDetails)authentication.getPrincipal();
-				//사용자 이메일정보를 가져온다.
+				// 사용자 이메일정보를 가져온다.
 				memberEmail = user.getUsername();
-				//사용자 정보 가져오기
+				// 사용자 정보 가져오기
 				MemberDTO memberDTO = memberService.getMember(memberEmail);
 				
-				//카테고리 문의 유형 가져오기
+				// 카테고리 문의 유형 가져오기
 				List<ServiceCategoryDTO> scDtoList = new ArrayList<ServiceCategoryDTO>();
 				scDtoList = serviceClientService.getSCategory();
 				log.info("고객센터 카테고리 리스트" + scDtoList);
 				model.addAttribute("memberDTO", memberDTO);
 				model.addAttribute("scDtoList", scDtoList);
 				
-				//주문내역조회
-				//List<ReceiptDTO> rcpt = myPageService.getReceiptList(memberDTO.getId(), 1); //회원ID로 결제정보DTO를 모두 불러오기
+				// 주문내역조회
+				// List<ReceiptDTO> rcpt = myPageService.getReceiptList(memberDTO.getId(), 1); //회원ID로 결제정보DTO를 모두 불러오기
 				long mp = myPageService.getReceiptCount(memberDTO.getId());
-				//최대 필요한 페이지 수
+				// 최대 필요한 페이지 수
 				int maxPages = (int) ((mp / 10) + 1);
 				model.addAttribute("maxPages", maxPages);
 				
@@ -134,9 +128,9 @@ public class ServiceClientController {
 			String memberEmail = "";
 			// 사용자가 권한이 있는 경우
 			UserDetails user = (UserDetails)authentication.getPrincipal();
-			//사용자 이메일정보를 가져온다.
+			// 사용자 이메일정보를 가져온다.
 			memberEmail = user.getUsername();
-			//사용자 정보 가져오기
+			// 사용자 정보 가져오기
 			MemberDTO memberDTO = memberService.getMember(memberEmail);
 			
 			List<ReceiptDTO> receiptHistory = myPageService.getReceiptHistoryPages(memberDTO.getId(), pages); //페이지와 회원ID로 결제정보DTO를 모두 불러오기
@@ -154,30 +148,18 @@ public class ServiceClientController {
 			String memberEmail = "";
 			// 사용자가 권한이 있는 경우
 			UserDetails user = (UserDetails)authentication.getPrincipal();
-			//사용자 이메일정보를 가져온다.
+			// 사용자 이메일정보를 가져온다.
 			memberEmail = user.getUsername();
-			//사용자 정보 가져오기
+			// 사용자 정보 가져오기
 			MemberDTO memberDTO = memberService.getMember(memberEmail);
 			long memberId = memberDTO.getId();
 			serviceClientDTO.setMemberID(memberId);
 			log.info(serviceClientDTO);
 			serviceClientService.insertQna(serviceClientDTO);
-		}catch (Exception e) {
-			// TODO: handle exception
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
-	// 자주 묻는 질문 검색 (키워드)
-	/*
-	 * @GetMapping("faqList/1") public String searchKeyword(@RequestParam("search")
-	 * String search, Model model)throws Exception{ log.info(search); // 키워드에 맞는 질문
-	 * 갯수를 리턴 String keyword = search; long faqCount =
-	 * serviceClientService.keywordCount(keyword);
-	 * 
-	 * model.addAttribute("faqCount", faqCount); // 키워드에 맞는 리스트를 가져온다.
-	 * List<ServiceClientDTO> faqList = serviceClientService.searchKeyword(keyword,
-	 * pg); model.addAttribute("faqList", faqList); log.info(faqCount);
-	 * log.info(faqList); return "servicecnsl/faqList"; }
-	 */
 	
 	/* *
 	 * 작성자 : 경민영
@@ -257,8 +239,8 @@ public class ServiceClientController {
 				recordCount = serviceClientService.keywordCount(keyword);
 				// 키워드에 맞는 리스트를 가져온다.
 				faqList = serviceClientService.searchKeyword(keyword, pg);
-			}else {	//검색하지 않은 경우
-				//페이징을 위한 갯수
+			}else {	// 검색하지 않은 경우
+				// 페이징을 위한 갯수
 				recordCount = serviceClientService.getFaqCount();
 				// 자주 묻는 질문 내역 불러오기
 				faqList = serviceClientService.getFaqList(pg);
@@ -270,7 +252,6 @@ public class ServiceClientController {
 			long startPage = (pg - 1) / blockSize * blockSize + 1;
 			long endPage = startPage + blockSize - 1 ; 
 			if (endPage > pageCount) endPage = pageCount;
-			log.info(faqList);
 			
 			model.addAttribute("keyword", keyword);
 			model.addAttribute("parentCategory", parentCategory);
