@@ -231,7 +231,10 @@
             
             $('#buyBtn').on("click", function() { // 바로구매
             	var stock = $("#option option:selected").val();
-           		if (stock < 1 && stock != '') {
+           		if (stock == '') {
+           			alert("옵션을 선택하세요.");
+           			return false;
+           		} else if (stock == 0) {
            			alert("품절된 상품입니다.");
            			return false;
            		} else {
