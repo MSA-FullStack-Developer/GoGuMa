@@ -87,7 +87,9 @@
 	
 	<select id="getEarnedPoint" resultType="int">
 		select sum(pointvalue) from pointevent 
-		where memberid = #{memberId} and pointtype = 'earn'
+		where memberid = #{memberId}
+		and pointtype = 'earn'
+		and inquirable = 1
 		<![CDATA[
 			and pointcreateddate >= to_char(add_months(sysdate,-12),'yyyy-mm-dd')
 			and pointcreateddate <= sysdate
@@ -95,17 +97,21 @@
 	</select>
 	
 	<select id="getPurchaseAmount" resultType="int">
-		select sum(totalprice) from receipt
-		where memberid = #{memberId}
+		select sum(o.price) from receipt r, orderview o
+		where r.receiptid = o.receiptid 
+		and r.memberid = #{memberId}
+		and o.status = 'F'
 		<![CDATA[
-			and orderdate >= to_char(add_months(sysdate,-12),'yyyy-mm-dd')
-			and orderdate <= sysdate
+			and r.orderdate >= to_char(add_months(sysdate,-12),'yyyy-mm-dd')
+			and r.orderdate <= sysdate
 		]]>
 	</select>
 	
 	<select id="getDiscountAmount" resultType="int">
-		select sum(membershipdiscount) from receipt
-		where memberid = #{memberId}
+		select sum(r.membershipdiscount) from receipt r, orderview o
+		where r.receiptid = o.receiptid
+		and r.memberid = #{memberId}
+		and o.status = 'F'
 		<![CDATA[
 			and orderdate >= to_char(add_months(sysdate,-12),'yyyy-mm-dd')
 			and orderdate <= sysdate
