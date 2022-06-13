@@ -66,6 +66,29 @@
             var li = $(this).parents("li")[0];
             li.remove();
         });
+        
+        $("#submit-btn").click(function(e) {
+        	e.preventDefault();
+        	
+        	var productIdCount = $("input[name=productId]").length;
+        	
+        	var title = $("#articleTitle").val();
+        	var thumbnail = $("#thumbnail").val();
+        	
+        	
+			if(productIdCount == 0) {
+				alert("상품을 추가해주세요.");
+			}else if(!title) {
+				alert("제목을 입력해주세요.");
+			}else if(!thumbnail) {
+				alert("썸네일을 입력해주세요.");
+			} else if($("#summernote").summernote('isEmpty')) {
+				alert("본문 내용을 입력해주세요.");
+			} else {
+				$("#articleForm").submit();
+			}
+			
+        });
     })
 
     $(document).ready(function () {
