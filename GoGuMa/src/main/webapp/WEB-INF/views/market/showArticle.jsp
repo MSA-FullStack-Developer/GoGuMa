@@ -129,16 +129,15 @@
 						imageUrl : "${article.thumbnail.imagePath}",
 						link : {
 							mobileWebUrl : "${domain}/goguma/market/article/${article.articleId}/show.do",
-							webUrl : "${domain}/goguma/market/article/${article.articleId}/show.do",
+							webUrl : "${domain}/goguma/market/article/${article.articleId}/show.do"
 						},
 					  },
-					 
 					  buttons : [
 						{
 							title : '웹으로 보기',
 							link : {
 								mobileWebUrl : "${domain}/goguma/market/article/${article.articleId}/show.do",
-								webUrl : "${domain}/goguma/market/article/${article.articleId}/show.do",
+								webUrl : "${domain}/goguma/market/article/${article.articleId}/show.do"
 							},
 						}]
 				});

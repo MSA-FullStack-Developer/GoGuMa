@@ -73,7 +73,12 @@
                 WHERE memberid= #{memberId} AND inquirable=1
                 GROUP BY pointtype
                 having pointtype='usage'), 0)
-            FROM DUAL)) AS point
+            FROM DUAL) + (SELECT NVL((SELECT sum(pointvalue)
+                            FROM pointevent
+                            WHERE memberid= #{memberId} AND inquirable=1
+                            GROUP BY pointtype
+                            having pointtype='refund'), 0)
+                            FROM DUAL)) AS point
 		FROM DUAL
 	</select>
 	
