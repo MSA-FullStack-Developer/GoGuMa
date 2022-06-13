@@ -424,7 +424,7 @@
 		var addr = {
 		    nickName: $('#addressNickName').text(),
 			recipient: $('#name').text(),
-			address: $('#addressName').text(),
+			address: $('#addressName').text() + " " + $('#addressDetail').text(),
 			contact: $('#phonenumber').text()
 		  };
 		var req = $('#requirement').val();
