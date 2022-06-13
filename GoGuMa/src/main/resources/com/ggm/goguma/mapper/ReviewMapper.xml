@@ -51,7 +51,7 @@
 		                WHERE A.receiptid = B.receiptid
 		                AND B.memberid = #{memberID}) C, product D
 		        WHERE C.parentpid = D.productid) E, productimage F
-		WHERE E.parentpid = F.productid
+		WHERE E.productid = F.productid
         AND NOT EXISTS (SELECT * FROM review R WHERE memberid = #{memberID} AND E.productid = R.productid)
 	</select>
 	
