@@ -5,7 +5,8 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script> -->
 
 <head>
     <title>고구마 - 고객과 구성하는 마켓</title>
