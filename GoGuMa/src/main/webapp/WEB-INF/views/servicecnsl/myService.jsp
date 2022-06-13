@@ -105,7 +105,7 @@
 <body>
 	<%@ include file="../header.jsp" %>
 	
-	<main class="cmain customer" role="main" id="mainContents" style="height: 100%;">
+	<main class="cmain customer" role="main" id="mainContents">
 		<div class="container">
 	    	<!-- .side-menu-list -->
 	       	<div class="side-content">
@@ -119,7 +119,7 @@
                     </ul>
                 </div>
 	         </div>
-	         <div class="contents" style="height: 100%;">
+	         <div class="contents" style="height: auto%;">
 	         	<div class="cus-wrap">
                     <h3>내 상담내역 조회</h3>
                     <p style="font-size: 10pt; color: #ccc;">제목을 누르면 상담 내용을 확인할 수 있습니다.</p>

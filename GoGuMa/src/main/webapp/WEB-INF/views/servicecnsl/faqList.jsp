@@ -107,7 +107,7 @@
 <body>
 	<%@ include file="../header.jsp" %>
 	
-	<main class="cmain customer" role="main" id="mainContents" style="height: 100%;">
+	<main class="cmain customer" role="main" id="mainContents">
 		<div class="container">
 	    	<!-- .side-menu-list -->
 	       	<div class="side-content">
@@ -121,7 +121,7 @@
                     </ul>
                 </div>
 	         </div>
-	         <div class="contents" style="height: 100%;">
+	         <div class="contents" style="height: auto;">
 				<!--search : 자주 묻는 질문-->
 				<div class="cus-wrap">
 					<h3>자주 묻는 질문</h3>
@@ -182,7 +182,7 @@
 						</tbody>
 					</table>
 				</div>
-				<ul class="pagination justify-content-center" style="margin-top: 30px;">
+				<ul class="pagination justify-content-center" style="margin-top: 30px; margin-bottom: 30px;">
                 	<c:if test="${startPage != 1}">
                 		<li class="page-item">
                 			<a class="page-link" href="${contextPath}/serviceclient/faqList/${startPage-1}" aria-label="Previous">
