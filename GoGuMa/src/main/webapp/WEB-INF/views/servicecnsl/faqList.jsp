@@ -174,7 +174,7 @@
 						    	</tr>
 						    	<tr class="detail">
 						    		<th>내용</th>
-						    		<td colspan="4">
+						    		<td colspan="5">
 						    			<div>${faq.qnaContent}</div>
 						    		</td>
 						    	</tr>
