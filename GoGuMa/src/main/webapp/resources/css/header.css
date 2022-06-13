@@ -1,0 +1,290 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
+.main {
+	width: auto;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.market-main {
+	width: auto;
+    height: auto;
+    margin-bottom: 50px;
+}
+
+.header-top {
+    width: 1320px;
+    height: 30px;
+    text-align: center;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin: 25px auto;
+}
+
+.menu {
+	width: auto;
+	float: right;
+	position: static;
+}
+
+#goguma {
+	border: none;
+    color: black;
+    transform: translate(-50%, -50%);
+    border-radius: 10pt;
+    width: 600px;
+    height: 50px;
+}
+
+#market-goguma {
+	border: none;
+    color: black;
+    border-radius: 10pt;
+    width: 600px;
+    height: 50px;
+}
+
+#goguma:hover {
+    color: #6426DD;
+}
+
+#market-goguma:hover {
+	color: #6426DD;
+}
+
+.menuA {
+	margin-top: 20px;
+}
+
+.menuB {
+	margin-right: 10px;
+	font-size: 9.5pt;
+}
+
+.backG {
+    font-size: 9.5pt;
+    color: gray;
+}
+
+.gotoGGM {
+    float: right;
+}
+
+.menuA:hover {
+	color: #FF493C;
+}
+
+.menuB:hover {
+	color: #FF493C;
+}
+
+.backG:hover {
+	color: #FF493C;
+}
+	
+.search {
+    position: relative;
+    width: 500px;
+    margin: auto;
+}
+
+.header {
+    height: auto;
+    width: 1320px;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.search input {
+    width: 100%;
+    border: 0.5px solid #F3F3F3;
+    border-radius: 30px;
+    padding: 12px 0px 12px 16px;
+    background-color: #F3F3F3;
+    font-size: 15px;
+    height: 50px;
+}
+
+.searchBtn::before {
+    content: "\f002";
+}
+
+.searchBtn {
+	font-weight: 900;
+    font-family: "Font Awesome 5 Free";
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    width: 60px;
+    height: 50px;
+    right: 2px;
+    margin: 0;
+    font-size: 20px;
+}
+.commentarea{
+	resize: none;
+}
+.fs{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.tc{
+	text-align: right;
+}
+.bp{
+	text-align: left;
+    margin-top: 8px;
+    color: #888;
+    line-height: 17px;
+    letter-spacing: -0.56px;
+}
+.textareabox {
+    margin-top: 10px;
+    padding: 20px 0 30px;
+}
+#menu {
+    width: 170px;
+    height: 50px;
+    background-color: #F3F3F3;
+    z-index: 10000;
+    float: left;
+}
+
+.back {
+    width: auto;
+    float: left;
+    position: static;
+    padding-top: 6.5px;
+}
+
+.main1 {
+    margin: 0 auto;
+    z-index: 10000;
+}
+
+.main1>li {
+    float: left;
+    width: 170px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    position: relative;
+}
+
+.main1>li:hover .main2 {
+    left: 0;
+}
+
+.main1>li a {
+    display: block;
+    height: 50px
+}
+
+.main1>li a:hover {
+    background: #FF493C;
+    color: #fff;
+    font-weight: bold;
+}
+
+.main2 {
+    width: 170px;
+    height: 50px;
+    position: absolute;
+    left: -9999px;
+    background: #F3F3F3;
+    z-index: 10000;
+}
+
+.main2>li {
+    position: relative;
+    background: #F3F3F3;
+}
+
+.main2>li:hover {
+	color: #FF493C;
+}
+
+.main2>li:hover .main3 {
+    left: 100%;
+}
+
+.main2>li a,
+.main3>li a {
+    border-radius: 0px;
+    background: #F3F3F3;
+}
+
+.main3 {
+    position: absolute;
+    top: 0;
+    background: #F3F3F3;
+    width: 170px;
+    height: 50px;
+    left: -9999px;
+    z-index: 10000;
+}
+
+.main3>li a:hover {
+    background: #FF493C;
+    color: #fff;
+}
+
+.fa-solid {
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 40px;
+}
+
+.category {
+    color: #FF493C;
+    font-weight: bold;
+}
+ul,
+ol,
+li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul.submenu {
+    display: none;
+    position: absolute;
+    left: 0;
+}
+
+ul.submenu {
+    display: block;
+}
+
+ul.submenu>li {
+    display: inline-block;
+    width: 170px;
+    height: 50px;
+    background: #eee;
+    border: 1px solid #eee;
+    text-align: left;
+}
+
+ul.submenu>li:hover {
+    background: #fff;
+}
+
+.fa-solid {
+    width: 20px;
+    height: 20px;
+    margin-left: 0px;
+    margin-right: 10px;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+}

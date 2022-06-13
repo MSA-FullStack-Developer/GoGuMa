@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="com.ggm.goguma.mapper.ContractMapper">
+	
+	<resultMap type="com.ggm.goguma.dto.member.ContractDTO" id="ContractResult">
+		<id property="id" column="contractid" />
+		<result property="id" column="CONTRACTID"/>
+		<result property="title" column="CONTRACTTITLE"/>
+		<result property="content" column="CONTRACTCONTENT"/>
+		<result property="isRequired" column="CONTRACTTYPE"/>
+	</resultMap>
+
+	<select id="findAll" resultMap="ContractResult">
+		SELECT 
+			*
+		FROM 
+			contract
+	</select>
+
+
+	<insert id="createContractHistory">
+		INSERT INTO contractHistory(memberId, contractId)
+		VALUES(#{memberId}, #{contractId})
+	</insert>
+</mapper>

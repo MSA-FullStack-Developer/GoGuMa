@@ -1,0 +1,230 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
+.review-buttons {
+    position: relative;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.imgDeleteBtn {
+	border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    font-size: 8pt;
+    text-align: center;
+    padding-left: 5px;
+    border: none;
+    font-weight: bold;
+}
+
+.no-review-img {
+    width: 100px;
+    height: 100px;
+    margin: 70px 0px 20px 0px;
+}
+
+.membername {
+    margin-top: 0px;
+    text-align: left;
+    padding-top: 30px;
+    padding-left: 22px;
+    font-size: 14pt;
+}
+
+#finishBtn {
+	width: 90px;
+	height: 40px;
+	color: #fff;
+	background: #6426DD;
+	border: none;
+	margin-left: 5px;
+	border-radius: 5pt;
+}
+
+#cancelBtn {
+	width: 90px;
+	height: 40px;
+	border: none;
+	color: #000;
+	background: #fff;
+	margin-right: 5px;
+	border-radius: 5pt;
+}
+
+#show {
+    border: none;
+    background-color: #6426DD;
+    color: white;
+    border-radius: 5pt;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    right: 0%;
+    position: absolute;
+}
+
+.uploadResult{
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.uploadResult ul{
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.uploadResult ul li{
+	list-style: none;
+	padding: 10px;
+	align-content: center;
+	text-align: center;
+}
+
+.uploadResult img{
+	width: 100px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.review {
+	height: auto;
+	margin: 30px 30px 30px 30px;
+}
+
+.review-content {
+    width: 95%;
+    margin-left: 22px;
+    margin-right: 22px;
+    font-size: 13pt;
+    color: #111;
+    word-wrap: break-word;
+}
+
+.write-review-content {
+	width: 1260px;
+	height: 120px;
+    margin: 10px 30px 10px 30px;
+}
+
+.myReviewImg {
+    width: 60px;
+    height: 60px;
+    float: left;
+}
+
+.myReviewProduct {
+	margin-left: 20px;
+	color: #010101;
+}
+
+.myReview {
+	width: 100%;
+    height: auto;
+    background-color: #F8F8F8;
+    border-radius: 8pt;
+    margin: 10px 5px 10px 5px;
+}
+
+.myReview-writeable {
+	width: 470px;
+    height: auto;
+    background-color: #F8F8F8;
+    border-radius: 8pt;
+    margin: 10px 5px 10px 5px;
+}
+
+.myReviewTop {
+    height: 80px;
+    margin: 17px 10px 13px 20px;
+    padding: 10px 10px 10px 10px;
+    position: relative;
+}
+
+.myReviewBottom {
+	width: 100%;
+	height: auto;
+}
+
+.myReviewMemeberImg {
+    float: right;
+    width: 185px;
+    margin-left: 20px;
+    margin-right: 20px;
+    object-fit: contain;
+    margin: 10px 20px 20px 20px;
+}
+
+.review-create-date {
+	float: left;
+	margin-left: 20px;
+    padding-top: 2px;
+    color: #aaa;
+}
+
+.review-content {
+	color: #000;
+    margin: 20px 5px 20px 5px;
+    font-size: 13pt;
+    width: 620px;
+    word-wrap: break-word;
+}
+
+#deleteBtn {
+    background: #F8F8F8;
+    border: none;
+    width: 25px;
+}
+
+#editBtn {
+	background: #F8F8F8;
+    border: none;
+    width: 25px;
+}
+
+.productlink:hover>span {
+	color: #FF493C;
+}
+
+.modal-background {
+	 position: fixed;
+	 top: 0;
+	 left: 0;
+	 width: 100%;
+	 height: 100vh;
+	 background-color: rgba(0, 0, 0, 0.3);
+	 z-index: 1000;
+	 z-index: -1;
+	 opacity: 0;
+}
+
+.show {
+	 opacity: 1;
+	 z-index: 1000;
+	 float: right;
+	 font-size: 11pt;
+}
+
+.modal-window {
+	 position: relative;
+	 width: 100%;
+	 height: 100%;
+}
+
+.popup {
+	 position: absolute;
+	 top: 50%;
+	 left: 50%;
+	 transform: translate(-50%, -50%);
+	 background-color: #F8F8F8;
+	 box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
+	 width: 1320px;
+	 height: auto;
+	 border-radius: 10pt;
+}
+
+.show .popup {
+	 transform: translate(-50%, -50%);
+}

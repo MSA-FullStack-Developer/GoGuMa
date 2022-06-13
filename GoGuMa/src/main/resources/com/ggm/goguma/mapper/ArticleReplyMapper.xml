@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="com.ggm.goguma.mapper.ArticleReplyMapper">
+	
+	<resultMap type="com.ggm.goguma.dto.articleReply.ArticleReplyDTO" id="ReplyResult">
+		<id property="replyId" column="replyId" />
+		<result property="replyId" column="replyId"/>
+		<result property="replyContent" column="replyContent"/>
+		<result property="createdAt" column="createdAt"/>
+		<result property="deleted" column="deleted"/>
+		<association property="member" column="memberId" select="com.ggm.goguma.mapper.MemberMapper.findMemberById"></association>
+		<collection property="childReplies" javaType="java.util.ArrayList" column="replyId" select="com.ggm.goguma.mapper.ArticleReplyMapper.findChildRepliesByReplypId"></collection>
+	</resultMap>
+	
+	<resultMap type="com.ggm.goguma.dto.articleReply.ArticleReplyDTO" id="ReplySimpleResult">
+		<id property="replyId" column="replyId" />
+		<result property="replyId" column="replyId"/>
+		<result property="replyContent" column="replyContent"/>
+		<result property="createdAt" column="createdAt"/>
+		<result property="deleted" column="deleted"/>
+		<association property="member" column="memberId" select="com.ggm.goguma.mapper.MemberMapper.findMemberById"></association>
+	</resultMap>
+	
+	
+	<resultMap type="com.ggm.goguma.dto.articleReply.ArticleReplyDTO" id="ChildReplyResult">
+		<id property="replyId" column="replyId" />
+		<result property="replyId" column="replyId"/>
+		<result property="replyContent" column="replyContent"/>
+		<result property="createdAt" column="createdAt"/>
+		<result property="deleted" column="deleted"/>
+		<association property="member" column="memberId" select="com.ggm.goguma.mapper.MemberMapper.findMemberById"></association>
+	</resultMap>
+
+	<select id="findRepliesByArticleId" resultMap="ReplyResult">
+		SELECT 
+			*
+		FROM 
+			ArticleReply
+		WHERE deleted = 0 AND articleId = #{articleId} AND replyPid IS NULL
+		ORDER BY createdat DESC
+	</select>
+
+
+	<select id="findChildRepliesByReplypId" resultMap="ChildReplyResult">
+		SELECT 
+			*
+		FROM 
+			ArticleReply
+		WHERE deleted = 0 AND replyPId = #{replyId}
+		ORDER BY createdat DESC
+	</select>
+	
+	<select id="findReplyById" parameterType="long" resultMap="ReplySimpleResult">
+		SELECT 
+			*
+		FROM 
+			ArticleReply
+		WHERE deleted = 0 AND replyId = #{replyId}
+		ORDER BY createdat DESC
+	</select>
+	
+	<insert id="insertArticleReply" parameterType="ArticleReplyDTO" useGeneratedKeys="true" keyColumn="replyId" keyProperty="replyId">
+		INSERT INTO ArticleReply(articleId, memberId, replyContent)
+		VALUES (#{articleId},#{member.id},#{replyContent})
+	</insert>
+	
+	<insert id="insertChildArticleReply" parameterType="ArticleReplyDTO" useGeneratedKeys="true" keyColumn="replyId" keyProperty="replyId">
+		INSERT INTO ArticleReply(replyPId, articleId, memberId, replyContent)
+		VALUES (#{replyPId}, #{articleId},#{member.id},#{replyContent})
+	</insert>
+	
+	
+	<update id="updateArticleReply" parameterType="ArticleReplyDTO">
+		UPDATE ArticleReply
+		SET replyContent = #{replyContent} 
+		WHERE replyId = #{replyId}
+	</update>
+	
+	<update id="deleteArticleReply" parameterType="long">
+		UPDATE ArticleReply
+		SET deleted = 1
+		WHERE replyId = #{replyId}
+	</update>
+</mapper>

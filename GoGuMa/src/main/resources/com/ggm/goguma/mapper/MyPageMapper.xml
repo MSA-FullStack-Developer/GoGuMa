@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ggm.goguma.mapper.MyPageMapper">
+	<!-- 
+		수정자 : 문석호
+		수정이력 : receipt조회시 DTO에 맞는 컬럼들 추가
+	 -->
+	<select id="getReceiptList" resultType="ReceiptDTO">
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+				 (select receiptid, recipient, rcptcontact, rcptaddress, rcptnickname, requirement, originalprice, membershipdiscount, coupondiscount, usagepoint, totalprice, orderdate, impuid, memberid
+				  from receipt where memberid = #{memberId}
+				  order by orderdate desc) a) b
+		where rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<select id="getReceiptHistoryPages" resultType="ReceiptDTO">
+		select receiptid, recipient, rcptcontact, rcptaddress, rcptnickname, requirement, originalprice, membershipdiscount, coupondiscount, usagepoint, totalprice, orderdate, impuid, memberid
+		from receipt where memberid = #{memberId}
+		order by orderdate desc
+		offset #{startPages} rows FETCH FIRST 10 rows only
+	</select>
+
+	<select id="getOrderList" resultType="OrderDTO">
+		select orderid, productid, categoryid, pname, cname, price, image, count, status, receiptid
+		from orderview where receiptId = #{receiptId}
+		order by pname
+	</select>
+	
+	<select id="getReceiptDetail" resultType="ReceiptDTO">
+		select receiptid, recipient, rcptcontact, rcptaddress, rcptnickname, requirement,
+		originalprice, membershipdiscount, coupondiscount, usagepoint, totalprice, orderdate, memberid, impuid
+		from receipt where receiptid = #{receiptId}
+	</select>
+	
+	<update id="updateOrderStatus">
+		update orderdetail set orderstatus = #{status} where orderid = #{orderId}
+	</update>
+	
+	<update id="makeInquirable">
+		update pointevent set inquirable = 1 where orderid = #{orderId}
+	</update>
+	
+	
+	<!-- 
+		@작성자: 문석호
+		@기능:  구매 확정인 경우 포인트를 사용가능상태로 만들기
+	 -->
+	<update id="makeAllInquirable">
+		UPDATE pointevent 
+		SET inquirable = 1 
+		WHERE orderid IN (SELECT orderid
+							FROM pointevent
+							WHERE receiptid = #{receiptId}   
+							)
+	</update>
+	<!-- 
+		@작성자: 문석호
+		@기능:  사용자의 현재 포인트를 조회한다.
+	 -->
+	<select id="getMemberPoint" resultType="int">
+		SELECT ((SELECT NVL((SELECT sum(pointvalue)
+				FROM pointevent
+				WHERE memberid= #{memberId} AND inquirable=1
+				GROUP BY pointtype
+				having pointtype='earn'), 0)
+            FROM DUAL) - (SELECT NVL((SELECT sum(pointvalue)
+                FROM pointevent
+                WHERE memberid= #{memberId} AND inquirable=1
+                GROUP BY pointtype
+                having pointtype='usage'), 0)
+            FROM DUAL)) AS point
+		FROM DUAL
+	</select>
+	
+	<insert id="refundAllPoint">
+		INSERT INTO pointevent(memberid, receiptid, pointtype, pointvalue, inquirable)
+		SELECT memberid, receiptid, 'refund', pointvalue, 1
+		FROM pointevent
+		WHERE receiptid = #{receiptid} and pointtype='usage'
+	</insert>
+	<!-- 
+		@작성자 : 문석호
+		@작성내용 : 주문별 예상 적립 포인트 조회
+		@작성일자 : 2022.06.11
+		@수정자 : 송진호
+		@수정내용 : 불필요한 컬럼(and inquirable=0) 제거
+		@수정일자 : 2022.06.11
+	 -->
+	<select id="getEstimatedPoint" resultType="int">
+		SELECT sum(pointvalue)
+		FROM pointevent
+		WHERE receiptid = #{receiptId} and pointtype='earn'
+	</select>
+	
+	<update id="updateAllOrderStatus">
+		UPDATE orderdetail 
+		SET orderstatus = #{status} 
+		where orderid IN (
+							SELECT orderid
+							FROM orderdetail
+							WHERE receiptid = #{receiptId}
+							)
+	</update>
+	
+	<select id="getReceiptCount" resultType="long">
+		select count(*) from receipt where memberid = #{memberId}
+	</select>
+	
+	<select id="getAvailableCouponCount" resultType="long">
+		select count(*) from couponview where memberid = #{memberId}
+		<![CDATA[
+			and used = 0 and sysdate <= expirationdate
+		]]>
+	</select>
+	
+	<select id="getUnavailableCouponCount" resultType="long">
+		select count(*) from couponview where memberId = #{memberId}
+		<![CDATA[
+			and (used = 1 or (used = 0 and sysdate > expirationdate))
+		]]>
+	</select>
+	
+	<select id="getPointHistoryCount" resultType="long">
+		select count(*) from pointevent where memberid = #{memberId} and inquirable = 1
+	</select>
+	
+	<select id="getSpecificPointHistoryCount" resultType="long">
+		select count(*) from pointevent where memberid = #{memberId} and pointtype = #{type} and inquirable = 1
+	</select>
+
+	<select id="getPointHistoryCountByPeriod" resultType="long">
+		select count(*) from pointevent where memberid = #{memberId} and inquirable = 1
+		<![CDATA[
+			and pointcreateddate >= to_date(#{startDate}, 'yyyy-mm-dd hh24:mi:ss')
+			and pointcreateddate <= (to_date(#{endDate}, 'yyyy-mm-dd hh24:mi:ss') + 0.99999)
+		]]>
+	</select>
+	
+	<select id="getSpecificPointHistoryCountByPeriod" resultType="long">
+		select count(*) from pointevent where memberid = #{memberId} and pointtype = #{type} and inquirable = 1
+		<![CDATA[
+			and pointcreateddate >= to_date(#{startDate}, 'yyyy-mm-dd hh24:mi:ss')
+			and pointcreateddate <= (to_date(#{endDate}, 'yyyy-mm-dd hh24:mi:ss') + 0.99999)
+		]]>
+	</select>
+	
+	<select id="getPointHistory" resultType="PointDTO">
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+			 	 (select pointeventid, pointtype, pointvalue, inquirable, pointCreatedDate, receiptid, orderid
+				  from pointevent where memberid = #{memberId} and inquirable = 1
+				  order by pointcreateddate desc) a) b
+		where rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<select id="getSpecificPointHistory" resultType="PointDTO">
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+			 	 (select pointeventid, pointtype, pointvalue, inquirable, pointCreatedDate, receiptid, orderid
+				  from pointevent where memberid = #{memberId} and pointtype = #{type} and inquirable = 1
+				  order by pointcreateddate desc) a) b
+		where rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<select id="getPointHistoryByPeriod" resultType="PointDTO">
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+			 	 (select pointeventid, pointtype, pointvalue, inquirable, pointCreatedDate, receiptid, orderid
+				  from pointevent where memberid = #{memberId} and inquirable = 1
+		  		  <![CDATA[
+					  and pointcreateddate >= to_date(#{startDate}, 'yyyy-mm-dd hh24:mi:ss')
+					  and pointcreateddate <= (to_date(#{endDate}, 'yyyy-mm-dd hh24:mi:ss') + 0.99999)
+				  ]]>
+				  order by pointcreateddate desc) a) b
+		where rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<select id="getSpecificPointHistoryByPeriod" resultType="PointDTO">
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+			 	 (select pointeventid, pointtype, pointvalue, inquirable, pointCreatedDate, receiptid, orderid
+			 	  from pointevent where memberid = #{memberId} and pointtype = #{type} and inquirable = 1
+  		  		  <![CDATA[
+					  and pointcreateddate >= to_date(#{startDate}, 'yyyy-mm-dd hh24:mi:ss')
+					  and pointcreateddate <= (to_date(#{endDate}, 'yyyy-mm-dd hh24:mi:ss') + 0.99999)
+				  ]]>
+				  order by pointcreateddate desc) a) b
+		where rnum between #{startNum} and #{endNum}
+	</select>
+
+	<select id="getAvailableCoupon" resultType="CouponDTO">
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+			 	 (select couponid, couponname, benefit, restriction, createddate, expirationdate, used
+				  from couponview where memberid = #{memberId}
+				  <![CDATA[
+					  and used = 0 and sysdate <= expirationdate
+				  ]]>
+				  order by createddate desc) a) b
+		where rnum between #{startNum} and #{endNum}
+	</select>
+	
+	<select id="getUnavailableCoupon" resultType="CouponDTO">
+		select b.*
+		from
+			(select rownum as rnum, a.*
+			 from
+				 (select couponid, couponname, benefit, restriction, createddate, expirationdate, used
+			  	  from couponview where memberid = #{memberId}
+			  	  <![CDATA[
+			 	  	  and (used = 1 or (used = 0 and sysdate > expirationdate))
+			  	  ]]>
+			  	  order by createddate desc) a) b
+		where rnum between #{startNum} and #{endNum}
+	</select>
+
+	<select id="getAddressList" resultType="DeliveryAddressDTO">
+		select addressId, nickname, recipient, postcode, address, detail, contact, isdefault
+		from deliveryaddress where memberId = #{memberId}
+		order by addressId
+	</select>
+	
+	<select id="getDefaultAddress" resultType="DeliveryAddressDTO">
+		select addressId, nickname, recipient, postcode, address, detail, contact
+		from deliveryaddress
+		where memberId = #{memberId} and isdefault = 1
+	</select>
+	
+	<insert id="addAddress" parameterType="DeliveryAddressDTO">
+		insert into deliveryaddress(memberid, nickname, recipient, postcode, address, detail, contact, isdefault)
+		values(#{memberId}, #{nickName}, #{recipient}, #{postCode}, #{address}, #{detail}, #{contact}, #{isDefault})
+	</insert>
+	
+	<update id="updateAddress" parameterType="DeliveryAddressDTO">
+		update deliveryaddress set nickname = #{nickName}, recipient = #{recipient}, postcode = #{postCode},
+		address = #{address}, detail = #{detail}, contact = #{contact}, isdefault = #{isDefault}
+		where memberid = #{memberId} and addressid = #{addressId}
+	</update>
+	
+	<delete id="deleteAddress">
+		delete from deliveryaddress
+		where memberId = #{memberId} and addressid = #{addressId}
+	</delete>
+	
+	<update id="setDefault">
+		update deliveryaddress set isdefault = 1
+		where memberId = #{memberId} and addressId = #{addressId}
+	</update>
+	
+	<update id="cancelDefault">
+		update deliveryaddress set isdefault = 0 where memberId = #{memberId}
+	</update>
+	
+	<update id="changePassword">
+		update member set password = #{newPassword} where memberid = #{memberId}
+	</update>
+	
+	<update id="changeInfo">
+		update member set profileImage = #{profileImage}, nickname = #{nickName}, birthDate = #{birthDate}, gender = #{gender} where memberid = #{memberId}
+	</update>
+	
+	<insert id="insertResignMember">
+		insert into resignmember(memberid, email, password, name, gender, age, birthdate, phone, grade, joindate, resigndetail)
+		values(#{dto.id}, #{dto.email}, #{dto.password}, #{dto.name}, #{dto.gender}, #{dto.age}, #{dto.birthDate}, #{dto.phone}, #{dto.grade.id}, #{dto.joinDate}, #{resignDetail})
+	</insert>
+	
+	<update id="disableMember">
+		update member set disabled=1 where memberid = #{memberId}
+	</update>
+</mapper>

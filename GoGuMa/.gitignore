@@ -2,14 +2,21 @@
 
 datasource-context.xml
 
+src/test/java
 .classpath
 .project
+
+dataSource-context.xml
 
 WebContent/META-INF/context.xml
 
 build/
 
 WebContent/upload
+
+
+system.properties
+
 
 
 

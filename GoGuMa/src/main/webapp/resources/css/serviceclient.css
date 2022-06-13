@@ -1,0 +1,209 @@
+@charset "UTF-8";
+
+div, ul, li {
+	margin: 0;
+    padding: 0;
+    vertical-align: top;
+    box-sizing: border-box;
+}
+.container{
+	width:1320px; 
+	max-width:none!important;
+	margin: 50px auto 80px;
+}
+.contents {
+    display: inline-block;
+    width: 1000px;
+    padding: 0 0 40px 0;
+    position: relative;
+    margin: 0 auto;
+}
+.side-content {
+    display: inline-block;
+    width: 183px;
+    margin-right: 83px;
+}
+.side-menu-title {
+    margin-bottom: 30px;
+    font-size: 30px;
+    color: #333;
+    font-weight: 700;
+    line-height: 28px;
+    letter-spacing: -1.2px;
+    text-align: left;
+}
+.side-menu-list > ul > li > a {
+    color: #333;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: -0.75px;
+}
+.side-menu-list > ul > li + li {
+    margin-top: 15px;
+}
+.cus-wrap .tit-wrap {
+    position: relative;
+}
+.cus-wrap h3 {
+    color: #333;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 29px;
+}
+.cus-wrap + .cus-wrap {
+    margin-top: 50px;
+}
+.cus-wrap .tit-wrap p {
+    position: absolute;
+    top: 0;
+    right: 0;
+    line-height: 25px;
+    cursor: pointer;
+}
+.cus-wrap .tit-wrap p a {
+    display: inline-block;
+    padding-right: 10px;
+    color: #333;
+    background-size: 7px 10px;
+}
+
+.search-area {
+    padding: 30px 85px;
+    background: #f8f8f8;
+    border-radius: 5px;
+}
+.inplabel {
+    display: flex;
+    width: 100%;
+}
+.inputbox {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 46px;
+    padding: 0;
+}
+.inputbox .btn-find {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    transform: translateY(-50%);
+}
+.inputbox .inplabel input {
+    border: 1px solid #ddd;
+    color: #666;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+}
+.searchBtn::before {
+    content: "\f002";
+}
+#searchForm{
+	margin-block-end: 0em !important;
+}
+[type="text"]{
+    display: inline-flex;
+    width: 100%;
+    padding: 0 14px;
+    border: 0;
+    color: #aaa;
+    font-size: 14px;
+    letter-spacing: -0.56px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    cursor: text;
+    -webkit-appearance: button;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: text;
+    outline: 0;
+}
+.accordion-flush {
+    margin-top: 20px;
+    border-top: 2px solid #666;
+}
+.cus-wrap .tblwrap table td.nowrap a, .cus-wrap.noti .noti-wrap .tblwrap table td.nowrap a {
+    max-width: calc(100% - 70px);
+}
+.tblwrap {
+    overflow: auto;
+    width: 100%;
+    max-width: 1081px;
+    margin: 0;
+    padding: 0;
+}
+.tblwrap table td.nowrap a {
+    overflow: hidden;
+    display: inline-block;
+    max-width: calc(100% - 30px);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.cus-wrap.noti .noti-wrap {
+}
+.tblwrap table td {
+    color: #666;
+    line-height: 22px;
+}
+.cus-wrap.noti .noti-wrap .tblwrap table td {
+    padding: 4px 0;
+    font-size: 15px;
+    line-height: 21px;
+}
+.order-products{
+    color: #333;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 29px;
+}
+.accordion-button:not(.collapsed) {
+    color: var(--bs-accordion-active-color);
+    background-color: white;
+    box-shadow: inset 0 calc(var(--bs-accordion-border-width) * -1) 0 var(--bs-accordion-border-color);
+}
+.cus-wrap.noti {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+.question-wrap{
+	width: 220px;
+	border: 3px solid #ddd;
+    border-radius: 20px;
+}
+.question-wrap:hover{
+	cursor: pointer;
+	outline: 3px solid #6426DD;
+}
+.q-cont, .sel-cont{
+	text-align: center;
+    margin-top: 10px;
+    position: relative;
+    top: 30;
+}
+#cont-txt{
+	margin: 20;
+    color: #666;
+    font-size: 14;
+}
+.jJSyVw .launcher-chatbubble-position {
+    inset: auto 10px 20px auto;
+    display: block;
+    flex-direction: row;
+    margin: 20px;
+}
+.dychat-20210908{
+	position: absolute;
+}

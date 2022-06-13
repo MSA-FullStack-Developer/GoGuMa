@@ -2,12 +2,65 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:security="http://www.springframework.org/schema/security"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
-	<security:http>
-		<security:form-login/>
+	<bean id="bcryptPasswordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+	
+	<bean id="customUserDetailsService" class="com.ggm.goguma.security.CustomUserDetailsService" />
+	
+	<bean id="loginFailHandler" class="com.ggm.goguma.security.UserLoginFailHandler"/>
+	
+	<bean id="customAuthenticationEntryPoint" class="com.ggm.goguma.security.CustomAuthenticationEntryPoint"/>
+
+	<security:http pattern="/category/*/api/**" entry-point-ref="customAuthenticationEntryPoint" use-expressions="true">
+		<security:intercept-url pattern="/category/*/api/**" access="isAuthenticated()" />
 	</security:http>
+
+	<security:http pattern="/cart/api/**" entry-point-ref="customAuthenticationEntryPoint" use-expressions="true">
+		<security:intercept-url pattern="/cart/api/**" access="isAuthenticated()" />
+	</security:http>
+	 
+	<security:http pattern="/mypage/api/**" entry-point-ref="customAuthenticationEntryPoint" use-expressions="true">
+		<security:intercept-url pattern="/cart/api/**" access="isAuthenticated()" />
+	</security:http>
+	
+	<security:http pattern="/market/api/**" entry-point-ref="customAuthenticationEntryPoint" use-expressions="true">
+		<security:intercept-url pattern="/market/api/**" access="isAuthenticated()" />
+	</security:http>
+
+	<security:http pattern="/order/nobankcomplete/**" entry-point-ref="customAuthenticationEntryPoint" use-expressions="true">
+			<security:csrf disabled="true"/>
+	</security:http>
+
+	<security:http  use-expressions="true">
+		<security:form-login login-page="/member/login.do" default-target-url="/"  authentication-failure-handler-ref="loginFailHandler"/>
+		<security:remember-me remember-me-parameter="remember-me" data-source-ref="dataSource" token-validity-seconds="604800"/>
+		<security:logout logout-url="/logout.do" logout-success-url="/" delete-cookies="remember-me,JSESSION_ID"/>
+		<security:intercept-url pattern="/mypage/**" access="isAuthenticated()" />
+		<security:intercept-url pattern="/cart/**" access="isAuthenticated()" />
+		<security:intercept-url pattern="/order/**" access="isAuthenticated()" />	
+		<security:intercept-url pattern="/order/nobankcomplete" access="permitAll()" />	
+		<security:intercept-url pattern="/market/write.do" access="isAuthenticated()" />	
+		<security:intercept-url pattern="/market/createMarket.do" access="isAuthenticated()" />	
+		<security:intercept-url pattern="/market/*/article/**" access="isAuthenticated()" />
+		<security:intercept-url pattern="/market/article/searchProudct.do" access="isAuthenticated()" />
+		<security:intercept-url pattern="/market/article/createArticle.do" access="isAuthenticated()" />	
+		<security:intercept-url pattern="/market/article/editArticle.do" access="isAuthenticated()" />		
+		<security:intercept-url pattern="/market/article/*/show.do" access="permitAll()" />	
+	</security:http>
+	
 	<security:authentication-manager>
+		
+		<security:authentication-provider
+			user-service-ref="customUserDetailsService">
+			<security:password-encoder
+				ref="bcryptPasswordEncoder" />
+		</security:authentication-provider>
+
 	</security:authentication-manager>
+	
 </beans>

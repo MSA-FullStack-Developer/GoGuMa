@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ggm.goguma.mapper.ProductMapper">
+
+	<!-- 상품 목록 정렬 조건 -->
+	<sql id="sort">
+		<if test="sortType == 'recent'">
+			ORDER BY productid DESC
+		</if>
+		<if test="sortType == 'expensive'">
+			ORDER BY productprice DESC
+		</if>
+		<if test="sortType == 'cheap'">
+			ORDER BY productprice ASC
+		</if>
+	</sql>
+	
+	<!-- 상품 목록 -->
+	<select id="getProductList" parameterType="long" resultType="ProductDTO">
+		SELECT C.*
+		FROM (SELECT DISTINCT B.categoryid, A.productname, A.productprice, A.prodimgurl, A.productid, rownum AS rnum
+				FROM (SELECT p.productid, p.productname, p.productprice, i.prodimgurl, p.categoryid
+						FROM product p, productimage i
+						WHERE p.productid = i.productid AND p.parentpid IS NULL
+						<include refid="sort"></include>) A, category B
+				WHERE B.categoryid = A.categoryid AND A.categoryid = #{categoryID}
+				<include refid="sort"></include>) C
+		WHERE rnum BETWEEN #{startNum} AND #{endNum}
+	</select>
+	
+	<!-- 상품 개수 -->
+	<select id="getProductCount" parameterType="long" resultType="long">
+		SELECT COUNT(*) AS cnt
+		FROM product
+		WHERE categoryid = #{categoryID} AND parentpid IS NULL
+	</select>
+	
+	<!-- 상품 상세 정보 -->
+	<select id="getProductInfo" parameterType="long" resultType="ProductDTO">
+		SELECT p.productid, p.parentpid, p.productname, p.productprice, p.productdetail, i.prodimgurl, p.categoryid, p.stock, p.company
+		FROM product p, productimage i
+		WHERE p.productid = i.productid AND p.parentpid IS NULL AND p.productid = #{productID}
+	</select>
+	
+	<!-- 상품 옵션 목록 -->
+	<select id="getOptionList" parameterType="long" resultType="ProductDTO">
+		SELECT p.productid, p.productname, p.stock, p.productprice, i.prodimgurl
+		FROM product p, productimage i
+		WHERE p.productid = i.productid
+		AND parentpid = #{parentPID}
+	</select>
+	
+	<!-- 상품 옵션 개수 -->
+	<select id="getOptionCount" parameterType="long" resultType="long">
+		SELECT COUNT(*) AS cnt
+		FROM product
+		WHERE parentpid = #{parentPID}
+	</select>
+	
+	<!-- 
+		작성자 : 이승준
+		작업일 : 22.05.25
+		대분류 카테고리 아이디로 해당 카테고리에 속한 최신 상품 목록 조회
+	 -->
+	<select id="findProductListByParentCategoryId" parameterType="long" resultType="ProductDTO">
+		SELECT c.CATEGORYID, p.PRODUCTID, p.PRODUCTNAME, p.PRODUCTPRICE, pm.PRODIMGURL FROM 
+			(SELECT cc.CATEGORYID  FROM CATEGORY pc, CATEGORY cc WHERE pc.CATEGORYID = cc.PARENTID AND pc.CATEGORYID  = #{categoryID}) c, PRODUCT p, PRODUCTIMAGE pm
+			WHERE  c.CATEGORYID = p.CATEGORYID AND p.PARENTPID IS NULL AND p.PRODUCTID = pm.PRODUCTID AND pm.ISTHUMBNAIL = 1
+			ORDER BY p.PRODUCTID DESC
+			OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+	</select>
+	
+	<!-- 상품 검색 -->
+	<select id="getSearchList" resultType="ProductDTO">
+		SELECT p.productid, p.productname, p.productprice, i.prodimgurl, p.categoryid
+		FROM product p, productimage i
+		WHERE p.productid = i.productid AND p.parentpid IS NULL
+		AND p.productname LIKE '%'||#{keyword}||'%'
+		<include refid="sort"></include>
+	</select>
+	
+	<!-- 검색된 상품 개수 -->
+	<select id="getSearchCount" parameterType="String" resultType="long">
+		SELECT count(*) AS cnt
+		FROM product
+		WHERE parentpid IS NULL AND productname LIKE '%'||#{keyword}||'%'
+	</select>
+	
+</mapper>
