@@ -231,7 +231,7 @@
 							elem += "<div class='row mb-4'>";
 			
 							elem +=	"<div class='col-1'>";
-							elem +=	"<img class='w-100 rounded-circle' src='" + data.member.profileImage + "' style='object-fit: cover;' />";
+							elem +=	"<img class='w-100 rounded-circle' src='" + data.member.profileImage + "' style='object-fit: cover; width: 53px; height: 53px;' />";
 							elem += "</div>";
 							elem += "<div class='col'>";
 							elem +=	"<div name='user-nick-name'>";

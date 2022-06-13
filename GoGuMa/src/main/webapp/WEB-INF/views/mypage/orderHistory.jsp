@@ -92,7 +92,7 @@
 		                                    	</a>
 		                                    </td>
 		                                    <td class="border-end border-bottom">
-		                                        <div class="col m-auto" style="width:100px; align:center;">
+		                                        <div class="col m-auto" style="width: 100px; text-align: center;">
 		                                            <div>
 		                                                <fmt:formatNumber value="${orderDTO.price}" />원
 		                                            </div>
