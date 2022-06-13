@@ -29,7 +29,9 @@
 	
 	<link rel="stylesheet"
 		href="${contextPath}/webjars/jquery-ui/1.13.0/jquery-ui.css">
-		
+
+	<link rel="stylesheet" href="${contextPath}/resources/css/serviceclient.css">
+	
 	<script type="text/javascript"
 		src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.js"></script>
 		
@@ -120,12 +122,20 @@
                 </div>
 	         </div>
 	         <div class="contents" style="height: 100%;">
-	         	<div class="cus-wrap">
-                    <h3>자주 묻는 질문</h3>
-                    <p style="font-size: 10pt; color: #ccc;">제목을 누르면 상담 내용을 확인할 수 있습니다.</p>
-                </div>
+				<!--search : 자주 묻는 질문-->
+				<div class="cus-wrap">
+					<h3>자주 묻는 질문</h3>
+					<div class="search-area">
+						<form id="searchForm" action="${contextPath}/serviceclient/faqList/1" method="get">
+							<div class="inputbox">
+								<label class="inplabel icon-find"><input type="text" name="keyword" placeholder="질문을 검색해보세요" title="검색어 입력" value="${faqKeyword}"></label>
+								<button type="submit" class="btn btn-find searchBtn" style="height: auto;"></button>
+							</div>
+						</form>
+					</div>
+				</div>
+                <p style="font-size: 10pt; margin-top: 20px; color: #ccc;">제목을 누르면 상담 내용을 확인할 수 있습니다.</p>
                 <div style="margin-top: 20px;">
-                	
 					<table class="table table-sm">
 				 		<thead>
 					    	<tr>
@@ -142,7 +152,7 @@
 		                		<tr style="text-align: center;" >
 		                			<td colspan="6">
 			   						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
-			   						<h5 class="no_result">자주 묻는 질문이 없습니다.</h5>
+			   						<h5 class="no_result">검색 결과가 없습니다.</h5>
 			   						</td>
 		   						</tr>
                 			</c:if>
@@ -188,7 +198,7 @@
 						</c:if>
 						<c:if test="${p != pg}">
 							<li class="page-item">
-								<a class="page-link" href="${contextPath}/serviceclient/faqList/${p}?keyword=${keyword}">${p}</a>
+								<a class="page-link" href="${contextPath}/serviceclient/faqList/${p}?keyword=${faqKeyword}">${p}</a>
 							</li>
 						</c:if>
 					</c:forEach>

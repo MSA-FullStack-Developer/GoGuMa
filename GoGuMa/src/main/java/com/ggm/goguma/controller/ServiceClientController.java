@@ -253,7 +253,7 @@ public class ServiceClientController {
 			long endPage = startPage + blockSize - 1 ; 
 			if (endPage > pageCount) endPage = pageCount;
 			
-			model.addAttribute("keyword", keyword);
+			model.addAttribute("faqKeyword", keyword);
 			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("faqList", faqList);
 			model.addAttribute("pg", pg);
