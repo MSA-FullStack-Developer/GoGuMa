@@ -25,7 +25,17 @@ public interface MyPageMapper {
 	
 	void makeInquirable(long orderId) throws Exception;
 	
+	void makeAllInquirable(long receiptId)throws Exception;
+	
+	void refundAllPoint(long receiptId)throws Exception;
+	
 	int getMemberPoint(long memberId) throws Exception;
+	
+	int getEarnedPoint(long memberId) throws Exception;
+
+	int getPurchaseAmount(long memberId) throws Exception;
+
+	int getDiscountAmount(long memberId) throws Exception;
 	
 	int getEstimatedPoint(long receiptId) throws Exception;
 	
@@ -82,9 +92,4 @@ public interface MyPageMapper {
 	List<ReceiptDTO> getReceiptHistoryPages(@Param("memberId") long memberId, @Param("startPages") int startPages) throws Exception;
 
 	void updateAllOrderStatus(@Param("receiptId")long receiptId, @Param("status")String status)throws Exception;
-
-	void makeAllInquirable(long receiptId)throws Exception;
-
-	void refundAllPoint(long receiptId)throws Exception;
-
 }

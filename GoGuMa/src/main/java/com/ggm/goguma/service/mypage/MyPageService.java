@@ -22,6 +22,12 @@ public interface MyPageService {
 	void updateOrderStatus(long orderId, String status) throws Exception;
 	
 	int getMemberPoint(long memberId) throws Exception;
+
+	int getEarnedPoint(long memberId) throws Exception;
+
+	int getPurchaseAmount(long memberId) throws Exception;
+	
+	int getDiscountAmount(long memberId) throws Exception;
 	
 	int getEstimatedPoint(long receiptId) throws Exception;
 	

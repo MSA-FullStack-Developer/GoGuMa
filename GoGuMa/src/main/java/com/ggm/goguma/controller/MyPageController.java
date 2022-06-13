@@ -761,6 +761,15 @@ public class MyPageController {
 			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
 			model.addAttribute("writeableList", writeableList);
 			model.addAttribute("writeableCount", writeableList.size());
+			
+			int purchaseAmount = service.getPurchaseAmount(memberDTO.getId());
+			model.addAttribute("purchaseAmount", purchaseAmount);
+			
+			int discountAmount = service.getDiscountAmount(memberDTO.getId());
+			model.addAttribute("discountAmount", discountAmount);
+			
+			int earnedPoint = service.getEarnedPoint(memberDTO.getId());
+			model.addAttribute("earnedPoint", earnedPoint);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}

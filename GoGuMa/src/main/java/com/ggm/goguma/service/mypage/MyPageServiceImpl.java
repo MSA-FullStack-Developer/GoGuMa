@@ -79,6 +79,21 @@ public class MyPageServiceImpl implements MyPageService {
 	public int getMemberPoint(long memberId) throws Exception {
 		return mapper.getMemberPoint(memberId);
 	}
+
+	@Override
+	public int getEarnedPoint(long memberId) throws Exception {
+		return mapper.getEarnedPoint(memberId);
+	}
+
+	@Override
+	public int getPurchaseAmount(long memberId) throws Exception {
+		return mapper.getPurchaseAmount(memberId);
+	}
+
+	@Override
+	public int getDiscountAmount(long memberId) throws Exception {
+		return mapper.getDiscountAmount(memberId);
+	}
 	
 	@Override
 	public int getEstimatedPoint(long receiptId) throws Exception {
