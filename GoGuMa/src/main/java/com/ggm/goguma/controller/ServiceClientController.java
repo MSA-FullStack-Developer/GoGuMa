@@ -166,12 +166,18 @@ public class ServiceClientController {
 			// TODO: handle exception
 		}
 	}
-	// 자주 묻는 질문 검색
-	@GetMapping("searchSubmit")
-	public String searchSubmit(@RequestParam String s, Model model)throws Exception{
-		
-		return "faqList";
-	}
+	// 자주 묻는 질문 검색 (키워드)
+	/*
+	 * @GetMapping("faqList/1") public String searchKeyword(@RequestParam("search")
+	 * String search, Model model)throws Exception{ log.info(search); // 키워드에 맞는 질문
+	 * 갯수를 리턴 String keyword = search; long faqCount =
+	 * serviceClientService.keywordCount(keyword);
+	 * 
+	 * model.addAttribute("faqCount", faqCount); // 키워드에 맞는 리스트를 가져온다.
+	 * List<ServiceClientDTO> faqList = serviceClientService.searchKeyword(keyword,
+	 * pg); model.addAttribute("faqList", faqList); log.info(faqCount);
+	 * log.info(faqList); return "servicecnsl/faqList"; }
+	 */
 	
 	/* *
 	 * 작성자 : 경민영
@@ -226,10 +232,12 @@ public class ServiceClientController {
 	/* *
 	 * 작성자 : 경민영
 	 * 작성일 : 2022.06.11
+	 * 수정자 : 문석호
+	 * 수정내용 : 자주묻는 질문 검색기능 추가
 	 * */
 	// 자주 묻는 질문
 	@GetMapping("/faqList/{pg}")
-	public String faqList(@PathVariable long pg, Model model, Authentication authentication)throws Exception{
+	public String faqList(@PathVariable long pg, @RequestParam(value="keyword", required=false, defaultValue="") String keyword, Model model, Authentication authentication)throws Exception{
 		try {
 			String memberEmail = "";
 			if (authentication != null){
@@ -240,13 +248,21 @@ public class ServiceClientController {
 				model.addAttribute("memberDTO", memberDTO);
 			}
 			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
-			
-			// 자주 묻는 질문 내역 불러오기
-			List<ServiceClientDTO> faqList = serviceClientService.getFaqList(pg);
-			log.info(faqList);
-			
-			// 페이징
-			long recordCount = serviceClientService.getFaqCount();
+			long recordCount = 0;
+			List<ServiceClientDTO> faqList;
+			// 검색한 경우
+			if(keyword != "") {
+				log.info(keyword);
+				// 키워드에 맞는 질문 갯수를 리턴
+				recordCount = serviceClientService.keywordCount(keyword);
+				// 키워드에 맞는 리스트를 가져온다.
+				faqList = serviceClientService.searchKeyword(keyword, pg);
+			}else {	//검색하지 않은 경우
+				//페이징을 위한 갯수
+				recordCount = serviceClientService.getFaqCount();
+				// 자주 묻는 질문 내역 불러오기
+				faqList = serviceClientService.getFaqList(pg);
+			}
 			long pageCount = recordCount / pageSize; // 총 페이지 수
 			if (recordCount % pageSize != 0) pageCount++;
 			
@@ -254,7 +270,9 @@ public class ServiceClientController {
 			long startPage = (pg - 1) / blockSize * blockSize + 1;
 			long endPage = startPage + blockSize - 1 ; 
 			if (endPage > pageCount) endPage = pageCount;
+			log.info(faqList);
 			
+			model.addAttribute("keyword", keyword);
 			model.addAttribute("parentCategory", parentCategory);
 			model.addAttribute("faqList", faqList);
 			model.addAttribute("pg", pg);

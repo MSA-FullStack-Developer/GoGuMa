@@ -55,10 +55,10 @@
 			<div class="cus-wrap">
 				<h3>자주 묻는 질문</h3>
 				<div class="search-area">
-					<form id="searchForm" action="se" method="get">
+					<form id="searchForm" action="${contextPath}/serviceclient/faqList/1" method="get">
 						<div class="inputbox">
-							<label class="inplabel icon-find"><input type="text" name="search" placeholder="질문을 검색해보세요" title="검색어 입력" value=""></label>
-							<button type="button" class="btn btn-find searchBtn" onclick="searchCntn();" style="height: auto;"></button>
+							<label class="inplabel icon-find"><input type="text" name="keyword" placeholder="질문을 검색해보세요" title="검색어 입력" value=""></label>
+							<button type="submit" class="btn btn-find searchBtn" style="height: auto;"></button>
 						</div>
 					</form>
 				</div>

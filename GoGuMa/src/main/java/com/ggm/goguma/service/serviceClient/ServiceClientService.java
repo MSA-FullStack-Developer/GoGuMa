@@ -27,4 +27,8 @@ public interface ServiceClientService {
 	// 자주 묻는 질문 개수
 	long getFaqCount() throws Exception;
 
+	List<ServiceClientDTO> searchKeyword(String keyword, long pg) throws Exception;
+
+	long keywordCount(String keyword)throws Exception;
+
 }

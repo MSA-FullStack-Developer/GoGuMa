@@ -28,4 +28,8 @@ public interface ServiceClientMapper {
 
 	// 자주 하는 질문 개수
 	long getFaqCount() throws Exception;
+
+	List<ServiceClientDTO> searchKeyword(@Param("keyword") String keyword, @Param("startNum") long startNum, @Param("endNum") long endNum) throws Exception;
+
+	long keywordCount(@Param("keyword") String keyword)throws Exception;
 }

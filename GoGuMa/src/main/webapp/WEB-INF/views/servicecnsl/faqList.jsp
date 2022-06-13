@@ -188,7 +188,7 @@
 						</c:if>
 						<c:if test="${p != pg}">
 							<li class="page-item">
-								<a class="page-link" href="${contextPath}/serviceclient/faqList/${p}">${p}</a>
+								<a class="page-link" href="${contextPath}/serviceclient/faqList/${p}?keyword=${keyword}">${p}</a>
 							</li>
 						</c:if>
 					</c:forEach>
