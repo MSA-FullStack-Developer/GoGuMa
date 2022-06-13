@@ -85,16 +85,31 @@
                     </a>
                 </div>
                 <div class="d-flex flex-row justify-content-evenly border border-2 rounded p-5 mb-3">
-                    <div class="d-flex flex-column">
-                        <span>다음달 <b>플래티넘</b> 등급이 되시려면,</span>
-                        <span>이번달 <b>4회</b> 이상 <b>400,000원</b> 이상의 구매실적이 필요합니다.</span>
+                    <div class="d-flex flex-column align-self-center">
+                    	<c:choose>
+                    		<c:when test="${memberDTO.grade.name eq '실버'}">
+                    			<span>다음달 <b>골드</b> 등급이 되시려면,</span>
+                        		<span>이번달 <b>1회</b> 이상의 구매실적이 필요합니다.</span>
+                    		</c:when>
+                    		<c:when test="${memberDTO.grade.name eq '골드'}">
+                    			<span>다음달 <b>플래티넘</b> 등급이 되시려면,</span>
+                        		<span>이번달 <b>4회</b> 이상 <b>400,000원</b> 이상의 구매실적이 필요합니다.</span>
+                    		</c:when>
+                    		<c:when test="${memberDTO.grade.name eq '플래티넘'}">
+                    			<span>다음달 <b>다이아몬드</b> 등급이 되시려면,</span>
+                        		<span>이번달 <b>8회</b> 이상 <b>800,000원</b> 이상의 구매실적이 필요합니다.</span>
+                    		</c:when>
+                    	</c:choose>
                     </div>
                     <div class="d-flex flex-column">
                         <div>
                             <span>1년 간 나의 구매 금액 : </span>
                         </div>
                         <div>
-                            <span>1년 간 내가 받은 혜택 : </span>
+                            <span>1년 간 내가 받은 할인 : </span>
+                        </div>
+                        <div>
+                            <span>1년 간 내가 적립한 포인트 : </span>
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-end">
@@ -103,6 +118,9 @@
                         </div>
                         <div>
                             <span><b>20,000</b>원</span>
+                        </div>
+                        <div>
+                            <span><b>10,000</b>P</span>
                         </div>
                     </div>
                 </div>
