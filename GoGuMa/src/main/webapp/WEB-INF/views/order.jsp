@@ -151,29 +151,31 @@
   			isDefault : isDefault
   	    }
   	    
-  		$.ajax({
-  			url : '${contextPath}/mypage/manageAddress/addAddress',
-  			type : 'POST',
-  			data : JSON.stringify(data),
-  			contentType : 'application/json; charset=utf-8;',
-  			beforeSend : function(xhr) {
-  	            xhr.setRequestHeader(header, token);
-  	        },
-  	        success:function(result) {
-  	        	if(result==1) {
-  	        		alert('배송지를 추가했습니다.');
-  	        		location.reload();
-  	        	} else {
-  					alert('배송지를 추가하는 과정에서 오류가 발생했습니다.');
-  				}
-  	        },
-  			error:function(xhr, status, error) {
-  				var errorResponse = JSON.parse(xhr.responseText);
-  				var errorCode = errorResponse.code;
-  				var message = errorResponse.message;
-  				alert(message);
-  			}
-  		});
+  	    if(checkEmpty(data) != 'empty') {
+	  		$.ajax({
+	  			url : '${contextPath}/mypage/manageAddress/addAddress',
+	  			type : 'POST',
+	  			data : JSON.stringify(data),
+	  			contentType : 'application/json; charset=utf-8;',
+	  			beforeSend : function(xhr) {
+	  	            xhr.setRequestHeader(header, token);
+	  	        },
+	  	        success:function(result) {
+	  	        	if(result==1) {
+	  	        		alert('배송지를 추가했습니다.');
+	  	        		location.reload();
+	  	        	} else {
+	  					alert('배송지를 추가하는 과정에서 오류가 발생했습니다.');
+	  				}
+	  	        },
+	  			error:function(xhr, status, error) {
+	  				var errorResponse = JSON.parse(xhr.responseText);
+	  				var errorCode = errorResponse.code;
+	  				var message = errorResponse.message;
+	  				alert(message);
+	  			}
+	  		});
+  	    }
     });
     // 배송지 등록 이벤트
     $('.address-list-box').click(function() {
@@ -574,6 +576,30 @@
 				document.getElementById("detail").focus();
 			}
 		}).open();
+	}
+	
+	// 값이 비었는지 확인하는 함수
+	function checkEmpty(data) {
+		if(data.nickName == '') {
+			alert('배송지 별칭을 입력해주세요.');
+			return 'empty';
+		}
+		else if(data.recipient == '') {
+			alert('받는 분을 입력해주세요.');
+			return 'empty';
+		}
+		else if(data.postCode == '') {
+			alert('우편번호 찾기로 배송지를 입력해주세요.');
+			return 'emtpy';
+		}
+		else if(data.detail == '') {
+			alert('상세주소를 입력해주세요.');
+			return 'empty';
+		}
+		else if(data.contact == '') {
+			alert('연락처를 입력해주세요.');
+			return 'empty';
+		}
 	}
 </script>
 

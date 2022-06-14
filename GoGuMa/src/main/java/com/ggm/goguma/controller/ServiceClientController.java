@@ -270,4 +270,9 @@ public class ServiceClientController {
 		}
 	}
 	
+	@PostMapping("chatbot")
+	public void chatbot() {
+		log.info("챗봇 포스트 로그! : ");
+	}
+	
 }
