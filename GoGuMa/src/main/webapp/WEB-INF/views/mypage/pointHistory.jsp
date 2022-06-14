@@ -52,7 +52,6 @@
 	                    <input type="hidden" name="page" value="1" />
                 	</form>
                 </div>
-                
                 <div class="d-flex flex-row mb-2">
                     <div class="d-flex flex-column me-2">
                     	<c:choose>
@@ -116,14 +115,13 @@
                     </thead>
                     <tbody>
                    		<c:if test="${pointHistory.size() < 1}">
-                   		<tr>
-		                	<td style="text-align: center;" colspan="5">
-			   					<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
-			   					<h5 class="no_result" style="margin-top: 0px;">조회 내역이 없습니다.</h5>
-		   					</td>
+                   			<tr>
+			                	<td style="text-align: center;" colspan="5">
+				   					<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" style="margin-top: 50px"/>
+				   					<h5 class="no_result" style="margin-top: 0px; margin-bottom: 50px">조회 내역이 없습니다.</h5>
+			   					</td>
 		   					</tr>
                 		</c:if>
-                	
 	                    <c:forEach var="pointDTO" items="${pointHistory}">
 	                    	<tr>
 	                    		<td>
