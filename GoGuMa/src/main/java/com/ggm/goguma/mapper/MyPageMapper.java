@@ -7,9 +7,11 @@ import org.apache.ibatis.annotations.Param;
 import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
+import com.ggm.goguma.dto.OrderPerformanceDTO;
 import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
+import com.ggm.goguma.dto.member.MemberGradeDTO;
 
 public interface MyPageMapper {
 //	@Select("SELECT nickname, recipient, address, contact FROM deliveryaddress")
@@ -22,10 +24,22 @@ public interface MyPageMapper {
 	ReceiptDTO getReceiptDetail(long receiptId) throws Exception;
 	
 	void updateOrderStatus(@Param("orderId") long orderId, @Param("status") String status) throws Exception;
+
+	void updateAllOrderStatus(@Param("receiptId")long receiptId, @Param("status")String status)throws Exception;
 	
 	void makeInquirable(long orderId) throws Exception;
 	
+	void makeAllInquirable(long receiptId)throws Exception;
+	
+	void refundAllPoint(long receiptId)throws Exception;
+	
 	int getMemberPoint(long memberId) throws Exception;
+	
+	int getEarnedPoint(long memberId) throws Exception;
+
+	int getPurchaseAmount(long memberId) throws Exception;
+
+	int getDiscountAmount(long memberId) throws Exception;
 	
 	int getEstimatedPoint(long receiptId) throws Exception;
 	
@@ -81,10 +95,13 @@ public interface MyPageMapper {
 
 	List<ReceiptDTO> getReceiptHistoryPages(@Param("memberId") long memberId, @Param("startPages") int startPages) throws Exception;
 
-	void updateAllOrderStatus(@Param("receiptId")long receiptId, @Param("status")String status)throws Exception;
+	OrderPerformanceDTO getOrderPerformance(long memberId) throws Exception;
 
-	void makeAllInquirable(long receiptId)throws Exception;
+	List<OrderPerformanceDTO> getOrderPerformanceAll() throws Exception;
+	
+	List<MemberGradeDTO> getMemberGrade() throws Exception;
 
-	void refundAllPoint(long receiptId)throws Exception;
+	void updateMemberGrade(long memberId, long gradeId) throws Exception;
 
+	
 }

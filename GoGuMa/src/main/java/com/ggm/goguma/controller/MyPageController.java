@@ -35,12 +35,14 @@ import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.ImageAttachDTO;
+import com.ggm.goguma.dto.OrderPerformanceDTO;
 import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ProductDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
 import com.ggm.goguma.dto.ReviewDTO;
 import com.ggm.goguma.dto.UpdateMemberDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
+import com.ggm.goguma.dto.member.MemberGradeDTO;
 import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.mypage.MyPageService;
 import com.ggm.goguma.service.product.CategoryService;
@@ -56,7 +58,7 @@ import lombok.extern.log4j.Log4j;
 /**
  * @작성자 : 송진호
  * @시작일자 : 2022.05.04
- * @완료일자 : 2022.06.10
+ * @완료일자 : 2022.06.14
  */
 @Log4j
 @Controller
@@ -91,6 +93,11 @@ public class MyPageController {
 	
 	@Autowired
 	private ProductService productService;
+	
+	// 저번달 실적에 따라서 이번달에 회원의 등급을 승급하거나 강등시키는 메소드
+	public void updateMemberGrade() throws Exception {
+		service.updateMemberGrade();
+	}
 	
 	// 쿠키에 저장된 상품ID의 개수를 반환하는 메소드
 	public int getSeenProductCount(HttpServletRequest request) throws UnsupportedEncodingException {
@@ -761,6 +768,34 @@ public class MyPageController {
 			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
 			model.addAttribute("writeableList", writeableList);
 			model.addAttribute("writeableCount", writeableList.size());
+			
+			int purchaseAmount = service.getPurchaseAmount(memberDTO.getId());
+			model.addAttribute("purchaseAmount", purchaseAmount);
+			
+			int discountAmount = service.getDiscountAmount(memberDTO.getId());
+			model.addAttribute("discountAmount", discountAmount);
+			
+			int earnedPoint = service.getEarnedPoint(memberDTO.getId());
+			model.addAttribute("earnedPoint", earnedPoint);
+			
+			OrderPerformanceDTO orderPerformanceDTO = service.getOrderPerformance(memberDTO.getId());
+			
+			List<MemberGradeDTO> memberGradeList = service.getMemberGrade();
+			MemberGradeDTO expectedGrade = memberGradeList.get(0);
+			MemberGradeDTO targetGrade = memberGradeList.get(1);
+			for(MemberGradeDTO dto : memberGradeList) {
+				if(orderPerformanceDTO.getOrderCount() >= dto.getOrderCriteria() && orderPerformanceDTO.getOrderAmount() >= dto.getPriceCriteria()) {
+					orderPerformanceDTO = new OrderPerformanceDTO(memberDTO.getId(), orderPerformanceDTO.getOrderCount()-dto.getOrderCriteria(), orderPerformanceDTO.getOrderAmount()-dto.getPriceCriteria());
+					expectedGrade = dto;
+				}
+				else if(orderPerformanceDTO.getOrderCount() < dto.getOrderCriteria() || orderPerformanceDTO.getOrderAmount() < dto.getPriceCriteria()) {
+					targetGrade = dto;
+					break;
+				}
+			}
+			model.addAttribute("expectedGrade", expectedGrade);
+			model.addAttribute("targetGrade", targetGrade);
+			model.addAttribute("orderPerformanceDTO", orderPerformanceDTO);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}

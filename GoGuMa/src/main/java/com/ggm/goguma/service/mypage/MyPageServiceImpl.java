@@ -10,10 +10,12 @@ import com.ggm.goguma.amazons3.AmazonS3Utils;
 import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
+import com.ggm.goguma.dto.OrderPerformanceDTO;
 import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
 import com.ggm.goguma.dto.UpdateMemberDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
+import com.ggm.goguma.dto.member.MemberGradeDTO;
 import com.ggm.goguma.mapper.MyPageMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -78,6 +80,21 @@ public class MyPageServiceImpl implements MyPageService {
 	@Override
 	public int getMemberPoint(long memberId) throws Exception {
 		return mapper.getMemberPoint(memberId);
+	}
+
+	@Override
+	public int getEarnedPoint(long memberId) throws Exception {
+		return mapper.getEarnedPoint(memberId);
+	}
+
+	@Override
+	public int getPurchaseAmount(long memberId) throws Exception {
+		return mapper.getPurchaseAmount(memberId);
+	}
+
+	@Override
+	public int getDiscountAmount(long memberId) throws Exception {
+		return mapper.getDiscountAmount(memberId);
 	}
 	
 	@Override
@@ -155,6 +172,15 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 	
 	@Override
+	@Transactional
+	public void updateAllOrderStatus(long receiptId, String status) throws Exception {
+		mapper.updateAllOrderStatus(receiptId, status);
+		if(status.equals("F")) mapper.makeAllInquirable(receiptId);
+		//구매 취소한경우 사용 포인트 돌력주기
+		if(status.equals("C")) mapper.refundAllPoint(receiptId);
+	}
+	
+	@Override
 	public void deleteAddress(long memberId, long addressId) throws Exception {
 		mapper.deleteAddress(memberId, addressId);
 	}
@@ -217,7 +243,6 @@ public class MyPageServiceImpl implements MyPageService {
 		}
 		
 		List<ReceiptDTO> receiptList = mapper.getReceiptHistoryPages(memberId, startPages);
-		
 		for(ReceiptDTO receipt : receiptList) {
 			try {
 				List<OrderDTO> orderList = getOrderList(receipt.getReceiptId());
@@ -230,11 +255,30 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 
 	@Override
+	public OrderPerformanceDTO getOrderPerformance(long memberId) throws Exception {
+		return mapper.getOrderPerformance(memberId);
+	}
+
+	@Override
+	public List<MemberGradeDTO> getMemberGrade() throws Exception {
+		return mapper.getMemberGrade();
+	}
+
+	@Override
 	@Transactional
-	public void updateAllOrderStatus(long receiptId, String status) throws Exception {
-		mapper.updateAllOrderStatus(receiptId, status);
-		if(status.equals("F")) mapper.makeAllInquirable(receiptId);
-		//구매 취소한경우 사용 포인트 돌력주기
-		if(status.equals("C")) mapper.refundAllPoint(receiptId);
+	public void updateMemberGrade() throws Exception {
+		List<MemberGradeDTO> memberGradeList = getMemberGrade();
+		List<OrderPerformanceDTO> orderPerformanceList = mapper.getOrderPerformanceAll();
+		for(OrderPerformanceDTO orderPerformanceDTO : orderPerformanceList) {
+			MemberGradeDTO updateGrade = memberGradeList.get(0);
+			for(MemberGradeDTO dto : memberGradeList) {
+				if(orderPerformanceDTO.getOrderCount() >= dto.getOrderCriteria() && orderPerformanceDTO.getOrderAmount() >= dto.getPriceCriteria()) {
+					orderPerformanceDTO.setOrderAmount(orderPerformanceDTO.getOrderAmount()-dto.getPriceCriteria());
+					orderPerformanceDTO.setOrderCount(orderPerformanceDTO.getOrderCount()-dto.getOrderCriteria());
+					updateGrade = dto;
+				}
+			}
+			mapper.updateMemberGrade(orderPerformanceDTO.getMemberId(), updateGrade.getId());
+		}
 	}
 }
