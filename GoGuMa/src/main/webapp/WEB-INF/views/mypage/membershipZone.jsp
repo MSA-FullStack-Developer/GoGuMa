@@ -68,12 +68,21 @@
                    						</c:if>
                     				</c:when>
                     				<c:otherwise>
-                    					<span style="font-size: 10pt">다음달에 <b>${targetGrade.name}</b> 등급이 되시려면,</span>
-	                        			<span style="font-size: 10pt">이번달에 <b>${targetGrade.orderCriteria - orderPerformanceDTO.orderCount}회</b> & <b>${targetGrade.priceCriteria - orderPerformanceDTO.orderAmount}원</b> 이상의 구매실적이 필요합니다.</span>
+                    					<c:if test="${targetGrade.orderCriteria > orderPerformanceDTO.orderCount && targetGrade.priceCriteria > orderPerformanceDTO.orderAmount}">
+                    						<span style="font-size: 10pt">다음달에 <b>${targetGrade.name}</b> 등급이 되시려면,</span>
+	                        				<span style="font-size: 10pt">이번달에 <b>${targetGrade.orderCriteria - orderPerformanceDTO.orderCount}회</b> & <b>${targetGrade.priceCriteria - orderPerformanceDTO.orderAmount}원</b> 이상의 구매실적이 필요합니다.</span>
+                    					</c:if>
+                    					<c:if test="${targetGrade.orderCriteria > orderPerformanceDTO.orderCount && targetGrade.priceCriteria <= orderPerformanceDTO.orderAmount}">
+                    						<span style="font-size: 10pt">다음달에 <b>${targetGrade.name}</b> 등급이 되시려면,</span>
+	                        				<span style="font-size: 10pt">이번달에 <b>${targetGrade.orderCriteria - orderPerformanceDTO.orderCount}회</b> 이상의 구매실적이 필요합니다.</span>
+                    					</c:if>
+                    					<c:if test="${targetGrade.orderCriteria <= orderPerformanceDTO.orderCount && targetGrade.priceCriteria > orderPerformanceDTO.orderAmount}">
+                    						<span style="font-size: 10pt">다음달에 <b>${targetGrade.name}</b> 등급이 되시려면,</span>
+	                        				<span style="font-size: 10pt">이번달에 <b>${targetGrade.priceCriteria - orderPerformanceDTO.orderAmount}원</b> 이상의 구매실적이 필요합니다.</span>
+                    					</c:if>
                     				</c:otherwise>
                     			</c:choose>
                     		</c:otherwise>
-                    		
                     	</c:choose>
                     </div>
                     <div class="d-flex flex-column align-self-center">
