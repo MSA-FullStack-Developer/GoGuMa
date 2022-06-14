@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +37,7 @@ public class OrderServiceImpl implements OrderService{
 
 	@Transactional
 	@Override
-	public void paytransaction(TransactionDTO transactionDTO, long memberId) throws Exception {
+	public void paytransaction(TransactionDTO transactionDTO, long memberId , int pointPercent) throws Exception {
 		log.info("transactionDTO : " + transactionDTO);
 		
 		//1. 결제 상세 테이블에 구매정보가 저장된다.
@@ -67,7 +68,10 @@ public class OrderServiceImpl implements OrderService{
 		//2-1. 포인트 이벤트에 주문 상세 번호 별로 적립된 포인트가 적립예정인 상태로 저장된다.
 		//주문 상세에서 포인트 적입 예정인 상품들을 담는다.
 		List<PointDTO> pointList = orderMapper.getBeforePoint(memberId, receiptKey);
-		orderMapper.savePointEvent(pointList);
+		//포인트 적립률이 0%가 아니라면 저장한다.
+		if(pointPercent != 0) {
+			orderMapper.savePointEvent(pointList);
+		}
 		//2-2. 포인트를 사용한 경우 포인트 이벤트에 주문상세번호 없이 차감 데이터를 저장한다.
 		if(transactionDTO.getUsagePoint() != 0) {
 			log.info("포인트를 사용한 경우");
