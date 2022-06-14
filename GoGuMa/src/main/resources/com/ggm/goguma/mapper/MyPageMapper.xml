@@ -327,6 +327,16 @@
 		]]>
 	</select>
 	
+	<select id="getOrderPerformanceAll" resultType="OrderPerformanceDTO">
+		select memberid, sum(ordercount) as ordercount, sum(orderamount) as orderamount
+		from orderperformance
+		<![CDATA[
+			where orderdate >= TRUNC(sysdate, 'MM')
+			and orderdate <= LAST_DAY(sysdate)
+		]]>
+        group by memberid
+	</select>
+	
 	<resultMap type="MemberGradeDTO" id="MemberGradeMap">
 		<result property="id" column="gradeId" />
 		<result property="name" column="gradeName" />
@@ -339,4 +349,8 @@
 	<select id="getMemberGrade" resultMap="MemberGradeMap">
 		select * from membergrade order by gradeid
 	</select>
+	
+	<update id="updateMemberGrade">
+		update member set grade = #{gradeId} where memberid = #{memberId}
+	</update>
 </mapper>

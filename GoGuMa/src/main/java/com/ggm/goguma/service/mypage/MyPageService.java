@@ -73,4 +73,6 @@ public interface MyPageService {
 	OrderPerformanceDTO getOrderPerformance(long memberId) throws Exception;
 
 	List<MemberGradeDTO> getMemberGrade() throws Exception;
+
+	void updateMemberGrade() throws Exception;
 }

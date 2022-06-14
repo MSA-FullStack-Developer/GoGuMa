@@ -94,6 +94,11 @@ public class MyPageController {
 	@Autowired
 	private ProductService productService;
 	
+	// 저번달 실적에 따라서 이번달에 회원의 등급을 승급하거나 강등시키는 메소드
+	public void updateMemberGrade() throws Exception {
+		service.updateMemberGrade();
+	}
+	
 	// 쿠키에 저장된 상품ID의 개수를 반환하는 메소드
 	public int getSeenProductCount(HttpServletRequest request) throws UnsupportedEncodingException {
 		Cookie[] cookies = request.getCookies();
@@ -779,7 +784,7 @@ public class MyPageController {
 			for(MemberGradeDTO dto : memberGradeList) {
 				if(orderPerformanceDTO.getOrderCount() >= dto.getOrderCriteria() && orderPerformanceDTO.getOrderAmount() >= dto.getPriceCriteria()) {
 					MemberGradeDTO expectedGrade = dto;
-					orderPerformanceDTO = new OrderPerformanceDTO(orderPerformanceDTO.getOrderCount()-dto.getOrderCriteria(),
+					orderPerformanceDTO = new OrderPerformanceDTO(memberDTO.getId(), orderPerformanceDTO.getOrderCount()-dto.getOrderCriteria(),
 						orderPerformanceDTO.getOrderAmount()-dto.getPriceCriteria());
 					model.addAttribute("expectedGrade", expectedGrade);
 				}
