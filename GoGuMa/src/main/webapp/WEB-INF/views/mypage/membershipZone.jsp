@@ -47,18 +47,33 @@
                     <div class="d-flex flex-column align-self-center">
                     	<span style="font-size: 18pt">다음달 예상 등급 : <b>${expectedGrade.name}</b></span>
                     	<c:choose>
-                    		<c:when test="${expectedGrade.name eq '실버'}">
-                    			<span style="font-size: 10pt">다음달에 <b>${targetGrade.name}</b> 등급이 되시려면,</span>
-                        		<span style="font-size: 10pt">이번달에 <b>${targetGrade.orderCriteria - orderPerformanceDTO.orderCount}회</b> 이상의 구매실적이 필요합니다.</span>
-                    		</c:when>
                     		<c:when test="${expectedGrade.name eq '다이아몬드'}">
-                    			<span style="font-size: 10pt">다음달에 <b>${memberDTO.grade.name}</b> 등급을 유지하려면,</span>
-                    			<span style="font-size: 10pt">이번달에 <b>${targetGrade.orderCriteria - orderPerformanceDTO.orderCount}회</b> & <b>${targetGrade.priceCriteria - orderPerformanceDTO.orderAmount}원</b> 이상의 구매실적이 필요합니다.</span>
+                    			<span style="font-size: 10pt">축하합니다! 다음달에 다이아몬드 등급 혜택을 받으실 수 있습니다!</span>
+                    			<span style="font-size: 10pt">상품을 구매하실 때마다 <b>${expectedGrade.discountPercent}%</b>의 할인 및 <b>${expectedGrade.pointPercent}%</b>의 포인트 적립이 적용됩니다.</span>
                     		</c:when>
                     		<c:otherwise>
-                    			<span style="font-size: 10pt">다음달에 <b>${targetGrade.name}</b> 등급이 되시려면,</span>
-                        		<span style="font-size: 10pt">이번달에 <b>${targetGrade.orderCriteria - orderPerformanceDTO.orderCount}회</b> & <b>${targetGrade.priceCriteria - orderPerformanceDTO.orderAmount}원</b> 이상의 구매실적이 필요합니다.</span>
+                    			<c:choose>
+                    				<c:when test="${memberDTO.grade.name eq '다이아몬드'}">
+                    					<c:if test="${memberDTO.grade.orderCriteria > orderPerformanceDTO.orderCount && memberDTO.grade.priceCriteria > orderPerformanceDTO.orderAmount}">
+                   							<span style="font-size: 10pt">다음달에 <b>${memberDTO.grade.name}</b> 등급을 유지하려면,</span>
+                 							<span style="font-size: 10pt">이번달에 <b>${memberDTO.grade.orderCriteria - orderPerformanceDTO.orderCount}회</b> & <b>${memberDTO.grade.priceCriteria - orderPerformanceDTO.orderAmount}원</b> 이상의 구매실적이 필요합니다.</span>
+                   						</c:if>
+                   						<c:if test="${membdrDTO.grade.orderCriteria > orderPerformanceDTO.orderCount && memberDTO.grade.priceCriteria <= orderPerformanceDTO.orderAmount}">
+                   							<span style="font-size: 10pt">다음달에 <b>${memberDTO.grade.name}</b> 등급을 유지하려면,</span>
+                   							<span style="font-size: 10pt">이번달에 <b>${memberDTO.grade.orderCriteria - orderPerformanceDTO.orderCount}회</b> 이상의 구매실적이 필요합니다.</span>
+                   						</c:if>
+                   						<c:if test="${membdrDTO.grade.orderCriteria <= orderPerformanceDTO.orderCount && memberDTO.grade.priceCriteria > orderPerformanceDTO.orderAmount}">
+                   							<span style="font-size: 10pt">다음달에 <b>${memberDTO.grade.name}</b> 등급을 유지하려면,</span>
+                   							<span style="font-size: 10pt">이번달에 <b>${memberDTO.grade.priceCriteria - orderPerformanceDTO.orderAmount}원</b> 이상의 구매실적이 필요합니다.</span>
+                   						</c:if>
+                    				</c:when>
+                    				<c:otherwise>
+                    					<span style="font-size: 10pt">다음달에 <b>${targetGrade.name}</b> 등급이 되시려면,</span>
+	                        			<span style="font-size: 10pt">이번달에 <b>${targetGrade.orderCriteria - orderPerformanceDTO.orderCount}회</b> & <b>${targetGrade.priceCriteria - orderPerformanceDTO.orderAmount}원</b> 이상의 구매실적이 필요합니다.</span>
+                    				</c:otherwise>
+                    			</c:choose>
                     		</c:otherwise>
+                    		
                     	</c:choose>
                     </div>
                     <div class="d-flex flex-column align-self-center">
