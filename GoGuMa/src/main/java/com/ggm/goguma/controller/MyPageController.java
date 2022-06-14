@@ -781,19 +781,20 @@ public class MyPageController {
 			OrderPerformanceDTO orderPerformanceDTO = service.getOrderPerformance(memberDTO.getId());
 			
 			List<MemberGradeDTO> memberGradeList = service.getMemberGrade();
+			MemberGradeDTO expectedGrade = memberGradeList.get(0);
+			MemberGradeDTO targetGrade = memberGradeList.get(1);
 			for(MemberGradeDTO dto : memberGradeList) {
 				if(orderPerformanceDTO.getOrderCount() >= dto.getOrderCriteria() && orderPerformanceDTO.getOrderAmount() >= dto.getPriceCriteria()) {
-					MemberGradeDTO expectedGrade = dto;
-					orderPerformanceDTO = new OrderPerformanceDTO(memberDTO.getId(), orderPerformanceDTO.getOrderCount()-dto.getOrderCriteria(),
-						orderPerformanceDTO.getOrderAmount()-dto.getPriceCriteria());
-					model.addAttribute("expectedGrade", expectedGrade);
+					orderPerformanceDTO = new OrderPerformanceDTO(memberDTO.getId(), orderPerformanceDTO.getOrderCount()-dto.getOrderCriteria(), orderPerformanceDTO.getOrderAmount()-dto.getPriceCriteria());
+					expectedGrade = dto;
 				}
 				else if(orderPerformanceDTO.getOrderCount() < dto.getOrderCriteria() || orderPerformanceDTO.getOrderAmount() < dto.getPriceCriteria()) {
-					MemberGradeDTO targetGrade = dto;
-					model.addAttribute("targetGrade", targetGrade);
+					targetGrade = dto;
 					break;
 				}
 			}
+			model.addAttribute("expectedGrade", expectedGrade);
+			model.addAttribute("targetGrade", targetGrade);
 			model.addAttribute("orderPerformanceDTO", orderPerformanceDTO);
 		} catch(Exception e) {
 			log.info(e.getMessage());
