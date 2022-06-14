@@ -34,35 +34,33 @@
 
   });
 </script>
-<main class="cmain customer" role="main" id="mainContents">
-
-        <div class="container">
-        	<!-- .side-menu-list -->
-        	<div class="side-content">
-                <h2 class="side-menu-title" onclick='javascript:location.href="${contextPath}/serviceclient/"' style="cursor:pointer;">고객센터</h2>
-                <div class="side-menu-list">
-                    <ul>
-                        <li><a href="${contextPath}/serviceclient/">자주 묻는 질문</a></li>
-                        <li><a href="#" onclick="openCnslPup(); return false;">1:1 문의하기</a></li>
-                        <li><a href="${contextPath}/serviceclient/myService/1">내 상담내역 조회</a></li>
-                        <li><a href="https://www.hmall.com/p/ccb/noticeList.do">공지사항</a></li>
-                    </ul>
-                </div>
-                <!-- // .side-menu-list -->
-		</div>
-		<div class="contents">
-			<!--search : 자주 묻는 질문-->
-			<div class="cus-wrap">
-				<h3>자주 묻는 질문</h3>
-				<div class="search-area">
-					<form id="searchForm" action="">
-						<div class="inputbox">
-							<label class="inplabel icon-find"><input type="text" name="ancmCntn" placeholder="질문을 검색해보세요" title="검색어 입력" value=""></label>
-							<button type="button" class="btn btn-find searchBtn" onclick="searchCntn();" style="height: auto;"></button>
-						</div>
-					</form>
+	<main class="cmain customer" role="main" id="mainContents">
+		<div class="container">
+	    	<!-- .side-menu-list -->
+       		<div class="side-content">
+	            <h2 class="side-menu-title" onclick='javascript:location.href="${contextPath}/serviceclient/"' style="cursor:pointer;">고객센터</h2>
+	            <div class="side-menu-list">
+	                   <ul>
+	                       <li><a href="${contextPath}/serviceclient/faqList/1">자주 묻는 질문</a></li>
+	                       <li><a href="#" onclick="openCnslPup(); return false;">1:1 문의하기</a></li>
+	                       <li><a href="${contextPath}/serviceclient/myService/1">내 상담내역 조회</a></li>
+	                       <li><a href="https://www.hmall.com/p/ccb/noticeList.do">공지사항</a></li>
+	                   </ul>
+	               </div>
+	         </div>
+		 	<div class="contents">
+				<!--search : 자주 묻는 질문-->
+				<div class="cus-wrap">
+					<h3>자주 묻는 질문</h3>
+					<div class="search-area">
+						<form id="searchForm" action="${contextPath}/serviceclient/faqList/1" method="get">
+							<div class="inputbox">
+								<label class="inplabel icon-find"><input type="text" name="keyword" placeholder="질문을 검색해보세요" title="검색어 입력" value=""></label>
+								<button type="submit" class="btn btn-find searchBtn" style="height: auto;"></button>
+							</div>
+						</form>
+					</div>
 				</div>
-			</div>
 			<!--//search : 자주 묻는 질문-->
 			<!--베스트 FAQ 10-->
 			<div class="cus-wrap">

@@ -29,7 +29,9 @@
 	
 	<link rel="stylesheet"
 		href="${contextPath}/webjars/jquery-ui/1.13.0/jquery-ui.css">
-		
+
+	<link rel="stylesheet" href="${contextPath}/resources/css/serviceclient.css">
+	
 	<script type="text/javascript"
 		src="${contextPath}/webjars/jquery/3.6.0/dist/jquery.js"></script>
 		
@@ -119,61 +121,71 @@
                     </ul>
                 </div>
 	         </div>
-	         <div class="contents" style="height: auto%;">
-	         	<div class="cus-wrap">
-                    <h3>내 상담내역 조회</h3>
-                    <p style="font-size: 10pt; color: #ccc;">제목을 누르면 상담 내용을 확인할 수 있습니다.</p>
-                </div>
+	         <div class="contents" style="height: auto;">
+				<!--search : 자주 묻는 질문-->
+				<div class="cus-wrap">
+					<h3>자주 묻는 질문</h3>
+					<div class="search-area">
+						<form id="searchForm" action="${contextPath}/serviceclient/faqList/1" method="get">
+							<div class="inputbox">
+								<label class="inplabel icon-find"><input type="text" name="keyword" placeholder="질문을 검색해보세요" title="검색어 입력" value="${faqKeyword}"></label>
+								<button type="submit" class="btn btn-find searchBtn" style="height: auto;"></button>
+							</div>
+						</form>
+					</div>
+				</div>
+                <p style="font-size: 10pt; margin-top: 20px; color: #ccc;">제목을 누르면 상담 내용을 확인할 수 있습니다.</p>
                 <div style="margin-top: 20px;">
-                	
 					<table class="table table-sm">
 				 		<thead>
 					    	<tr>
 					      		<th width="10%">NO</th>
 					      		<th>문의 유형</th>
+					      		<th>이름</th>
 					      		<th>제목</th>
 					    		<th>문의일</th>
 					    		<th>문의상태</th>
 					    	</tr>
 				 		</thead>
 				 		<tbody>
-				 			<c:if test="${myQnaList.size() < 1}">
+				 			<c:if test="${faqList.size() < 1}">
 		                		<tr style="text-align: center;" >
-		                			<td colspan="5">
+		                			<td colspan="6">
 			   						<img class="no-review-img" src="https://image.hmall.com/p/img/co/icon/ico-nodata-type12-1x.svg" />
-			   						<h5 class="no_result">상담내역이 없습니다.</h5>
+			   						<h5 class="no_result">검색 결과가 없습니다.</h5>
 			   						</td>
 		   						</tr>
                 			</c:if>
-				 			<c:forEach items="${myQnaList}" var="qna" varStatus="status">
+				 			<c:forEach items="${faqList}" var="faq" varStatus="status">
 						   		<tr>
 						      		<th scope="row">${status.count+((pg-1)*10)}</th>
-						      		<td>${qna.categoryName}</td>
-						      		<td><a class="showmore">${qna.qnaTitle}</a></td>
-						      		<td><fmt:formatDate value="${qna.createdAt}" pattern="yyyy-MM-dd" /></td>
+						      		<td>${faq.categoryName}</td>
+						      		<td>${faq.nickName}</td>
+						      		<td><a class="showmore">${faq.qnaTitle}</a></td>
+						      		<td><fmt:formatDate value="${faq.createdAt}" pattern="yyyy-MM-dd" /></td>
 						      		<td>
-						      			<c:if test="${qna.answerStatus == 0}">
+						      			<c:if test="${faq.answerStatus == 0}">
 						      				처리중
 						      			</c:if>
-						      			<c:if test="${qna.answerStatus == 1}">
+						      			<c:if test="${faq.answerStatus == 1}">
 						      				답변완료
 						      			</c:if>
 					      			</td>
 						    	</tr>
 						    	<tr class="detail">
 						    		<th>내용</th>
-						    		<td colspan="4">
-						    			<div>${qna.qnaContent}</div>
+						    		<td colspan="5">
+						    			<div>${faq.qnaContent}</div>
 						    		</td>
 						    	</tr>
 					    	</c:forEach>
 						</tbody>
 					</table>
 				</div>
-				<ul class="pagination justify-content-center" style="margin-top: 30px;">
+				<ul class="pagination justify-content-center" style="margin-top: 30px; margin-bottom: 30px;">
                 	<c:if test="${startPage != 1}">
                 		<li class="page-item">
-                			<a class="page-link" href="${contextPath}/serviceclient/myService/${startPage-1}" aria-label="Previous">
+                			<a class="page-link" href="${contextPath}/serviceclient/faqList/${startPage-1}" aria-label="Previous">
 	                			<span aria-hidden="true">&laquo;</span>
 	                		</a>
                 		</li>
@@ -186,13 +198,13 @@
 						</c:if>
 						<c:if test="${p != pg}">
 							<li class="page-item">
-								<a class="page-link" href="${contextPath}/serviceclient/myService/${p}">${p}</a>
+								<a class="page-link" href="${contextPath}/serviceclient/faqList/${p}?keyword=${faqKeyword}">${p}</a>
 							</li>
 						</c:if>
 					</c:forEach>
                 	<c:if test="${endPage != pageCount}">
                 		<li class="page-item">
-                			<a class="page-link" href="${contextPath}/serviceclient/myService/${endPage+1}">
+                			<a class="page-link" href="${contextPath}/serviceclient/faqList/${endPage+1}">
 					    		<span aria-hidden="true">&raquo;</span>
 					    	</a>
                 		</li>
