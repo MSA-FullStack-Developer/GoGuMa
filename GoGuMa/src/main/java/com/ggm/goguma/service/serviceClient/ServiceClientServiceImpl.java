@@ -36,14 +36,39 @@ public class ServiceClientServiceImpl implements ServiceClientService{
 	}
 
 	@Override
-	public long getQnaCount(long id) throws Exception {
-		return serviceClientMapper.getQnaCount(id);
+	public long getQnaCount(long memberID) throws Exception {
+		return serviceClientMapper.getQnaCount(memberID);
 	}
 
 	@Override
 	public void insertQna(ServiceClientDTO serviceClientDTO) throws Exception {
 		serviceClientMapper.insertQna(serviceClientDTO);
 		
+	}
+
+	@Override
+	public List<ServiceClientDTO> getFaqList(long pg) throws Exception {
+		long startNum = (pg - 1) * pageSize + 1;
+		long endNum = pg * pageSize;
+		
+		return serviceClientMapper.getFaqList(startNum, endNum);
+	}
+
+	@Override
+	public long getFaqCount() throws Exception {
+		return serviceClientMapper.getFaqCount();
+	}
+
+	@Override
+	public List<ServiceClientDTO> searchKeyword(String keyword, long pg) throws Exception {
+		long startNum = (pg - 1) * pageSize + 1;
+		long endNum = pg * pageSize;
+		return serviceClientMapper.searchKeyword(keyword, startNum, endNum);
+	}
+
+	@Override
+	public long keywordCount(String keyword) throws Exception {
+		return serviceClientMapper.keywordCount(keyword);
 	}
 	
 }

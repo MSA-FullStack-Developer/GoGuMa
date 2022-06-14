@@ -213,10 +213,13 @@ public class OrderController {
 		long memberId = memberDTO.getId();
 		
 		String impUid = transactionDTO.getImpUid();
+		
+		//멤버 실버라면 포인트 적립 없음
+		int pointPercent = memberDTO.getGrade().getPointPercent();
 		log.info("주문 컨트롤러에서 아임포트 결제 번호 : " + impUid);
 		// 상품 결제 완료 후 DB에서 필요한 작업 실행
 		log.info("주문에서 카트 정보 리스트: " +transactionDTO);
-		orderService.paytransaction(transactionDTO, memberId);
+		orderService.paytransaction(transactionDTO, memberId, pointPercent);
 		log.info("컨트롤러에서 모든 결제 트랜잭션 처리가 완료됨");
 	}
 	

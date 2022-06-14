@@ -102,7 +102,7 @@
         xhr.setRequestHeader(header, token);
       },
       success : function(result) {
-        if (result.length > 1) {
+        if (result.length > 0) {
           $('#coupon-all *').remove();
           for (var i = 0; i < result.length; i++) {
             console.log("쿠폰 정보: " + result[i].couponName);
@@ -123,6 +123,11 @@
           }
         } else {
           console.log("보유한 쿠폰이 없습니다.");
+          $('#coupon-all *').remove();
+          str = "<div class='noCoupon'>";
+		  str += "<span>보유한 쿠폰이 없습니다.</span>";
+          str += "</div>";
+          $('#coupon-all').append(str);
         }
       }
       });
@@ -243,30 +248,30 @@
     	//사용 가능한 최대 포인트(최종 결제 금액)
     	var bound = total - membershipDiscount - coupon_discount;
     	if(numFormatComma(point) != "NaN"){
-    	  	console.log("여기!!!");
     	  	if (point < 0){
-    	  	  alert("포인트는 0 이상 사용해야 합니다.");
     	  	  $('#g-point').val(0);
     	  	  $('#point-discount').text(0);
 	      	  $('#GPoint').attr('value', 0);
 	      	  calDisPrice();
+	      	  alert("포인트는 0 이상 사용해야 합니다.");
     	  	}
+    	  	//가진 포인트보다 많이 사용하려는 경우
+  	    	else if(point > limitpoint){
+  	  	  	  $('#g-point').val(limitpoint);
+  	      	  $('#point-discount').text(numFormatComma(limitpoint));
+  	      	  $('#GPoint').attr('value', parseInt(limitpoint));
+  	      	  calDisPrice();
+  	      	  alert("보유 포인트를 넘길 수 없습니다. 모든 포인트를 사용합니다.");
+  	  	  	}
 	    	//포인트를 최종 결제 금액보다 많이 사용하려는 경우
 	    	else if (point > bound){
+	    	  console.log("결제 금액보다 많이 사용할 수 없음");
 	    	  $('#g-point').val(bound);
 	      	  $('#point-discount').text(numFormatComma(bound));
 	      	  $('#GPoint').attr('value', parseInt(bound));
 	      	  calDisPrice();
 	      	  alert("결제 금액보다 많이 사용할 수 없습니다.");
 	      	}
-    	  	//가진 포인트보다 많이 사용하려는 경우
-	    	else if(point > limitpoint){
-	  	  	  alert("보유 포인트를 넘길 수 없습니다. 모든 포인트를 사용합니다.");
-	  	  	  $('#g-point').val(limitpoint);
-	      	  $('#point-discount').text(numFormatComma(limitpoint));
-	      	  $('#GPoint').attr('value', parseInt(limitpoint));
-	      	  calDisPrice();
-	  	  	}
 	    	else{
 	    	  $('#g-point').val(point);
 	      	  $('#point-discount').text(numFormatComma(point));
@@ -424,7 +429,7 @@
 		var addr = {
 		    nickName: $('#addressNickName').text(),
 			recipient: $('#name').text(),
-			address: $('#addressName').text(),
+			address: $('#addressName').text() + " " + $('#addressDetail').text(),
 			contact: $('#phonenumber').text()
 		  };
 		var req = $('#requirement').val();
@@ -794,6 +799,9 @@
 										</div>
 										<div class="modal-body">
 											<div class="delivery-All-address">
+												<c:if test="${empty addressList }">
+													등록된 배송지가 없습니다.
+												</c:if>
 												<c:forEach var="i" items="${addressList }" begin="0" step="1" varStatus="status">
 													<div class="address-list-box">
 														<div class="row">

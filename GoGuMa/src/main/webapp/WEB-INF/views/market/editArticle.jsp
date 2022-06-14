@@ -92,7 +92,7 @@
 
     $(document).ready(function () {
     	
-    	var html = '${article.articleContent}';
+    	var html = `${article.articleContent}`;
     	
         $('#summernote').summernote({
             toolbar: [

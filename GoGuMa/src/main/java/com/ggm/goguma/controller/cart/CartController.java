@@ -64,6 +64,7 @@ public class CartController {
 				//사용자 정보 가져오기
 				MemberDTO memberDTO = memberService.getMember(memberEmail);
 				log.info("장바구니에서 사용될 사용자 정보: " + memberDTO);
+				
 				// 회원이 담은 카트 리스트를 불러온다.
 				long memberId = memberDTO.getId();
 				List<CartItemDTO> list = cartService.getCartList(memberId);

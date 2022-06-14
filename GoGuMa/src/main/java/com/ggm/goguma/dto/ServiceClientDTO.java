@@ -8,6 +8,7 @@ import lombok.Data;
 public class ServiceClientDTO {
 	long qnaID;
 	long memberID;
+	String nickName;
 	long categoryID;
 	String categoryName;
 	String qnaTitle;
