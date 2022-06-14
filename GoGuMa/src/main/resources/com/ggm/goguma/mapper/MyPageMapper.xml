@@ -91,7 +91,7 @@
 	</select>
 	
 	<select id="getEarnedPoint" resultType="int">
-		select sum(pointvalue) from pointevent 
+		select nvl(sum(pointvalue), 0) from pointevent 
 		where memberid = #{memberId}
 		and pointtype = 'earn'
 		and inquirable = 1
@@ -102,7 +102,7 @@
 	</select>
 	
 	<select id="getPurchaseAmount" resultType="int">
-		select sum(o.price) from receipt r, orderview o
+		select nvl(sum(o.price), 0) from receipt r, orderview o
 		where r.receiptid = o.receiptid 
 		and r.memberid = #{memberId}
 		and o.status = 'F'
@@ -113,7 +113,7 @@
 	</select>
 	
 	<select id="getDiscountAmount" resultType="int">
-		select sum(r.membershipdiscount) from receipt r, orderview o
+		select nvl(sum(r.membershipdiscount), 0) from receipt r, orderview o
 		where r.receiptid = o.receiptid
 		and r.memberid = #{memberId}
 		and o.status = 'F'
@@ -324,7 +324,7 @@
 	</update>
 	
 	<select id="getOrderPerformance" resultType="OrderPerformanceDTO">
-		select sum(ordercount) as ordercount, sum(orderamount) as orderamount
+		select nvl(sum(ordercount), 0) as ordercount, sum(orderamount) as orderamount
 		from orderperformance where memberid = #{memberId}
 		<![CDATA[
 			and orderdate >= TRUNC(sysdate, 'MM')
