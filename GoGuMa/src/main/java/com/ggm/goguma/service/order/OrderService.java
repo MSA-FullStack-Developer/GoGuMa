@@ -13,7 +13,7 @@ public interface OrderService {
 
 	List<MemberCouponOrderDTO> getMemberCoupon(long memberId) throws Exception;
 
-	void paytransaction(TransactionDTO transactionDTO, long memberId) throws Exception;
+	void paytransaction(TransactionDTO transactionDTO, long memberId, int pointPercent) throws Exception;
 
 	List<CartItemDTO> getOrder(List<CartOrderListDTO> dtoList) throws Exception;
 
