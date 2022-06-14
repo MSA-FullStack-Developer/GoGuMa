@@ -34,18 +34,7 @@
 <div class="header">
 	<div class="market-main">
 		<a id="market-goguma" href="${contextPath}/market/main.do">
-			<i class="fa-solid fa-g"></i>
-			<i class="fa-solid fa-o"></i>
-			<i class="fa-solid fa-g"></i>
-			<i class="fa-solid fa-u"></i>
-			<i class="fa-solid fa-m"></i>
-			<i class="fa-solid fa-a"></i><br>
-			<i class="fa-solid fa-m"></i>&nbsp;&nbsp;
-			<i class="fa-solid fa-a"></i>&nbsp;&nbsp;
-			<i class="fa-solid fa-r"></i>&nbsp;&nbsp;
-			<i class="fa-solid fa-k"></i>&nbsp;&nbsp;
-			<i class="fa-solid fa-e"></i>&nbsp;&nbsp;
-			<i class="fa-solid fa-t"></i>
+			<img src="https://hd-goguma.s3.ap-northeast-2.amazonaws.com/upload/1655184559434%E1%84%80%E1%85%A9%E1%84%80%E1%85%AE%E1%84%86%E1%85%A1%E1%84%86%E1%85%A1%E1%84%8F%E1%85%A6%E1%86%BA.png" style="width: 350px;">
 		</a>
 	</div>
 </div>
