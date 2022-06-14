@@ -324,7 +324,7 @@
 	</update>
 	
 	<select id="getOrderPerformance" resultType="OrderPerformanceDTO">
-		select nvl(sum(ordercount), 0) as ordercount, nvl(sum(orderamount), 0) as orderamount
+		select nvl(sum(ordercount), 0) as ordercount, sum(orderamount) as orderamount
 		from orderperformance where memberid = #{memberId}
 		<![CDATA[
 			and orderdate >= TRUNC(sysdate, 'MM')
