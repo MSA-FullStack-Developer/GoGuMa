@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <html>
@@ -102,7 +103,9 @@
 </head>
 
 <body>
+
 	<%@ include file="../market/marketHeader.jsp" %>
+	<spring:eval var="domain" expression="@config.getProperty('kakao.domain')"/>
 	<script type="text/javascript">
 	
 		$(document).ready(function(){
@@ -125,17 +128,16 @@
 						description : "${article.market.category.categoryName}",
 						imageUrl : "${article.thumbnail.imagePath}",
 						link : {
-							mobileWebUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
-							webUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
+							mobileWebUrl : "${domain}/goguma/market/article/${article.articleId}/show.do",
+							webUrl : "${domain}/goguma/market/article/${article.articleId}/show.do"
 						},
 					  },
-					 
 					  buttons : [
 						{
 							title : '웹으로 보기',
 							link : {
-								mobileWebUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
-								webUrl : "http://localhost:8090/goguma/market/article/${article.articleId}/show.do",
+								mobileWebUrl : "${domain}/goguma/market/article/${article.articleId}/show.do",
+								webUrl : "${domain}/goguma/market/article/${article.articleId}/show.do"
 							},
 						}]
 				});
@@ -512,6 +514,8 @@
 		});
 	</script>
 	<section class="container">
+		
+	
 		<div class="w-50 m-auto p-4" style="min-width: 970px;">
 
 			<div class="d-flex justify-content-between">
@@ -628,7 +632,7 @@
 						<div class="row mb-4">
 							<!-- 프로필 영역 시작 -->
 							<div class="col-1">
-								<img class="rounded-circle bg-success border border-light" src="${reply.member.profileImage}"
+								<img class="rounded-circle border border-light" src="${reply.member.profileImage}"
 									style="object-fit: cover; width: 53px; height: 53px;" />
 							</div>
 							<div class="col" style="padding-top: 5px;">
@@ -680,7 +684,7 @@
 									<div class="row mb-4">
 										<!-- 프로필 영역 시작 -->
 										<div class="col-1">
-											<img class="rounded-circle bg-success" src="${childReply.member.profileImage}"
+											<img class="rounded-circle" src="${childReply.member.profileImage}"
 												style="object-fit: cover; width: 53px; height: 53px;" />
 										</div>
 										<div class="col" style="padding-top: 5px;">

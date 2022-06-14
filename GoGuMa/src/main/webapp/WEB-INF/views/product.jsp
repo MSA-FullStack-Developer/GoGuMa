@@ -46,13 +46,13 @@
 	    	console.log("옵션 아이디 : " + optionID);
 	    	$('.selectedOption').text(optionName);
 	    	$('#product-id').val(optionID);
-	    	$('#product-price').val(optionPrice);	//전달할 상품가격
+	    	$('#product-price').val(optionPrice); // 전달할 상품가격
 	    	var disPrice = optionPrice * "${memberDTO.grade.discountPercent / 100}";
 	    	console.log("할인 가격" + disPrice);
 	    	var totPrc = optionPrice - disPrice;
 	    	
-	    	$('#product-discount').val(parseInt(disPrice));	//전달할 할인가격
-	    	$('#tot-prc').val(totPrc); //전체 넘길 가격
+	    	$('#product-discount').val(parseInt(disPrice));	// 전달할 할인가격
+	    	$('#tot-prc').val(totPrc); // 전체 넘길 가격
 	    	$('.total_price').text(optionPrice.format() + "원"); // 초기화
 	    }
 	    
@@ -148,42 +148,47 @@
             
             $('#cartBtn').on("click", function() { // 장바구니 담기
             	var optionName = $("#option option:selected").text(); // 옵션 상품 이름
+            	var stock = $("#option option:selected").val();
             	
             	if (optionName != "선택 없음") {
-	            	var token = $("meta[name='_csrf']").attr("content");
-	        		var header = $("meta[name='_csrf_header']").attr("content");
-	
-	                var optionID = $("#option option:selected").data("id");
-	                var cartAmount = $("#numBox").val();
-	                
-	        		var data = {
-	        			"productId" : optionID,
-	        			"cartAmount" : cartAmount
-	        		};
-	        		$.ajax({
-	        			type : "POST",
-	        			url : "${contextPath}/cart/api/insertCart",
-	        			data : data,
-	        			beforeSend : function(xhr) {
-	        				xhr.setRequestHeader(header, token);
-	        			},
-	        			success : function(result) {
-	        				if (result){
-	        					if (confirm("장바구니에 상품이 담겼습니다. 장바구니로 이동하시겠습니까?")) {
-	        						location.href = "${contextPath}/cart/"	
-	        					}
-	        				} else {
-	        					alert("이미 장바구니에 담겨있는 상품입니다.")
-	        				}
-	        			},
-	        			error : function(xhr, status, error) {
-	        				var errorResponse = JSON.parse(xhr.responseText);
-	        				var errorCode = errorResponse.code;
-	        				var message = errorResponse.message;
-	
-	        				alert(message);
-	        			}
-	        		});
+            		if (stock < 1) {
+            			alert("품절된 상품은 장바구니에 담으실 수 없습니다.");
+            		} else {
+            			var token = $("meta[name='_csrf']").attr("content");
+    	        		var header = $("meta[name='_csrf_header']").attr("content");
+    	
+    	                var optionID = $("#option option:selected").data("id");
+    	                var cartAmount = $("#numBox").val();
+    	                
+    	        		var data = {
+    	        			"productId" : optionID,
+    	        			"cartAmount" : cartAmount
+    	        		};
+    	        		$.ajax({
+    	        			type : "POST",
+    	        			url : "${contextPath}/cart/api/insertCart",
+    	        			data : data,
+    	        			beforeSend : function(xhr) {
+    	        				xhr.setRequestHeader(header, token);
+    	        			},
+    	        			success : function(result) {
+    	        				if (result){
+    	        					if (confirm("장바구니에 상품이 담겼습니다. 장바구니로 이동하시겠습니까?")) {
+    	        						location.href = "${contextPath}/cart/"	
+    	        					}
+    	        				} else {
+    	        					alert("이미 장바구니에 담겨있는 상품입니다.")
+    	        				}
+    	        			},
+    	        			error : function(xhr, status, error) {
+    	        				var errorResponse = JSON.parse(xhr.responseText);
+    	        				var errorCode = errorResponse.code;
+    	        				var message = errorResponse.message;
+    	
+    	        				alert(message);
+    	        			}
+    	        		});
+            		}
             	} else {
                 	alert("옵션을 선택하세요.");
                 }
@@ -222,6 +227,19 @@
         		} else {
         			return;
         		}
+        	});
+            
+            $('#buyBtn').on("click", function() { // 바로구매
+            	var stock = $("#option option:selected").val();
+           		if (stock == '') {
+           			alert("옵션을 선택하세요.");
+           			return false;
+           		} else if (stock == 0) {
+           			alert("품절된 상품입니다.");
+           			return false;
+           		} else {
+           			return true;
+           		}
         	});
         });
     </script>
@@ -270,10 +288,11 @@
 	                            <select class="option" id="option" name="option" onchange="javascript:selectOption(this.options[this.selectedIndex].value);">
 	                            	<option value="" data-price="${productInfo.productPrice}">선택 없음</option>
 	                            	<c:forEach items="${optionList}" var="option">
-                                	<option value="${option.stock}" 
-                                			data-id="${option.productID}" 
-                                			data-price="${option.productPrice}">
-                                			${option.productName} - <fmt:formatNumber value="${option.productPrice}" pattern="#,###" />
+	                                	<option value="${option.stock}" 
+	                                			data-id="${option.productID}" 
+	                                			data-price="${option.productPrice}">
+	                                			${option.productName} - <fmt:formatNumber value="${option.productPrice}" pattern="#,###" />
+	                                			<c:if test="${option.stock < 1}">[품절]</c:if>
                               			</option>
 	                                </c:forEach>
 	                            </select>

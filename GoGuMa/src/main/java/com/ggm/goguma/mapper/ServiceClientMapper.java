@@ -22,4 +22,14 @@ public interface ServiceClientMapper {
 	long getQnaCount(long memberID) throws Exception;
 
 	void insertQna(@Param("serviceClientDTO") ServiceClientDTO serviceClientDTO)throws Exception;
+
+	// 자주 하는 질문
+	List<ServiceClientDTO> getFaqList(@Param("startNum") long startNum, @Param("endNum") long endNum);
+
+	// 자주 하는 질문 개수
+	long getFaqCount() throws Exception;
+
+	List<ServiceClientDTO> searchKeyword(@Param("keyword") String keyword, @Param("startNum") long startNum, @Param("endNum") long endNum) throws Exception;
+
+	long keywordCount(@Param("keyword") String keyword)throws Exception;
 }

@@ -440,7 +440,11 @@
 								</ol>
 							</div>
 							<div class="cart-bottom">
-								${memberDTO.name } 고객님의 회원등급: <span> ${memberDTO.grade.name } <i class="bi bi-trophy"></i></span>
+								${memberDTO.name } 고객님의 회원등급:
+								<c:if test="${memberDTO.grade.name == '실버'}"><span style="color: #495e78"> ${memberDTO.grade.name }</span></c:if>
+								<c:if test="${memberDTO.grade.name == '골드'}"><span style="color: #E3A950"> ${memberDTO.grade.name }</span></c:if>
+								<c:if test="${memberDTO.grade.name == '플래티넘'}"><span style="color: #27E2A4"> ${memberDTO.grade.name }</span></c:if>
+								<c:if test="${memberDTO.grade.name == '다이아몬드'}"><span style="color: #56B2F6"> ${memberDTO.grade.name }</span></c:if>
 								G.Point: <span><fmt:formatNumber value="${point}"
 																type="currency" currencySymbol="" /></span>원
 								<div class="btngroup">
