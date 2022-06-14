@@ -102,7 +102,7 @@
         xhr.setRequestHeader(header, token);
       },
       success : function(result) {
-        if (result.length > 1) {
+        if (result.length > 0) {
           $('#coupon-all *').remove();
           for (var i = 0; i < result.length; i++) {
             console.log("쿠폰 정보: " + result[i].couponName);
@@ -123,6 +123,11 @@
           }
         } else {
           console.log("보유한 쿠폰이 없습니다.");
+          $('#coupon-all *').remove();
+          str = "<div class='noCoupon'>";
+		  str += "<span>보유한 쿠폰이 없습니다.</span>";
+          str += "</div>";
+          $('#coupon-all').append(str);
         }
       }
       });
@@ -794,6 +799,9 @@
 										</div>
 										<div class="modal-body">
 											<div class="delivery-All-address">
+												<c:if test="${empty addressList }">
+													등록된 배송지가 없습니다.
+												</c:if>
 												<c:forEach var="i" items="${addressList }" begin="0" step="1" varStatus="status">
 													<div class="address-list-box">
 														<div class="row">
