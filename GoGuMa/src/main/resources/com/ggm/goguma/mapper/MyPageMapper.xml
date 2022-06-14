@@ -58,6 +58,14 @@
 							WHERE receiptid = #{receiptId}   
 							)
 	</update>
+	
+	<insert id="refundAllPoint">
+		INSERT INTO pointevent(memberid, receiptid, pointtype, pointvalue, inquirable)
+		SELECT memberid, receiptid, 'refund', pointvalue, 1
+		FROM pointevent
+		WHERE receiptid = #{receiptid} and pointtype='usage'
+	</insert>
+	
 	<!-- 
 		@작성자: 문석호
 		@기능:  사용자의 현재 포인트를 조회한다.
@@ -77,12 +85,39 @@
 		FROM DUAL
 	</select>
 	
-	<insert id="refundAllPoint">
-		INSERT INTO pointevent(memberid, receiptid, pointtype, pointvalue, inquirable)
-		SELECT memberid, receiptid, 'refund', pointvalue, 1
-		FROM pointevent
-		WHERE receiptid = #{receiptid} and pointtype='usage'
-	</insert>
+	<select id="getEarnedPoint" resultType="int">
+		select sum(pointvalue) from pointevent 
+		where memberid = #{memberId}
+		and pointtype = 'earn'
+		and inquirable = 1
+		<![CDATA[
+			and pointcreateddate >= to_char(add_months(sysdate,-12),'yyyy-mm-dd')
+			and pointcreateddate <= sysdate
+		]]>
+	</select>
+	
+	<select id="getPurchaseAmount" resultType="int">
+		select sum(o.price) from receipt r, orderview o
+		where r.receiptid = o.receiptid 
+		and r.memberid = #{memberId}
+		and o.status = 'F'
+		<![CDATA[
+			and r.orderdate >= to_char(add_months(sysdate,-12),'yyyy-mm-dd')
+			and r.orderdate <= sysdate
+		]]>
+	</select>
+	
+	<select id="getDiscountAmount" resultType="int">
+		select sum(r.membershipdiscount) from receipt r, orderview o
+		where r.receiptid = o.receiptid
+		and r.memberid = #{memberId}
+		and o.status = 'F'
+		<![CDATA[
+			and orderdate >= to_char(add_months(sysdate,-12),'yyyy-mm-dd')
+			and orderdate <= sysdate
+		]]>
+	</select>
+	
 	<!-- 
 		@작성자 : 문석호
 		@작성내용 : 주문별 예상 적립 포인트 조회
@@ -282,4 +317,26 @@
 	<update id="disableMember">
 		update member set disabled=1 where memberid = #{memberId}
 	</update>
+	
+	<select id="getOrderPerformance" resultType="OrderPerformanceDTO">
+		select sum(ordercount) as ordercount, sum(orderamount) as orderamount
+		from orderperformance where memberid = #{memberId}
+		<![CDATA[
+			and orderdate >= TRUNC(sysdate, 'MM')
+			and orderdate <= LAST_DAY(sysdate)
+		]]>
+	</select>
+	
+	<resultMap type="MemberGradeDTO" id="MemberGradeMap">
+		<result property="id" column="gradeId" />
+		<result property="name" column="gradeName" />
+		<result property="pointPercent" column="pointPercent" />
+		<result property="discountPercent" column="discountPercent" />
+		<result property="orderCriteria" column="orderCriteria" />
+		<result property="priceCriteria" column="priceCriteria" />
+	</resultMap>
+	
+	<select id="getMemberGrade" resultMap="MemberGradeMap">
+		select * from membergrade order by gradeid
+	</select>
 </mapper>

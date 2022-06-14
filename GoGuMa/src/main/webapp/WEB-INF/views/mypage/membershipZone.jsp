@@ -42,67 +42,60 @@
                 <div>
                     <h4><b>멤버십존</b></h4>
                 </div>
-                <div class="d-flex flex-row justify-content-evenly border border-2 rounded p-3 mb-2">
-                	<div class="d-flex flex-row align-items-center">
-                		<div class="me-2">
-                            <a href="${contextPath}/mypage/membershipZone" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-offset="0,10" title="${memberDTO.grade.name}">
-                            	<c:choose>
-                            		<c:when test="${memberDTO.grade.name eq '실버'}">
-				        				<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-silver.png" style="width: 50px; height: 50px; object-fit: contain;">
-				        			</c:when>
-				        			<c:when test="${memberDTO.grade.name eq '골드'}">
-				        				<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-gold.png" style="width: 50px; height: 50px; object-fit: contain;">
-				        			</c:when>
-				        			<c:when test="${memberDTO.grade.name eq '플래티넘'}">
-				        				<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-platinum.png" style="width: 50px; height: 50px; object-fit: contain;">
-				        			</c:when>
-				        			<c:when test="${memberDTO.grade.name eq '다이아몬드'}">
-				        				<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-diamond.png" style="width: 50px; height: 50px; object-fit: contain;">
-				        			</c:when>
-                            	</c:choose>
-                            </a>
-                        </div>
-                        <div class="lh-sm" align="center">
-	                    	<div>
-	                    		<a href="${contextPath}/mypage/confirmPassword/changeInfo" style="font-size: 20px">
-	                    			<b>${memberDTO.name}님</b>
-	                   			</a>
-	                   		</div>
-	                   		<a href="${contextPath}/mypage/membershipZone" class="btn btn-sm border" style="font-size: 10pt; padding:1px 8px 1px 8px">${memberDTO.grade.name}</a>
-	                    </div>
+                <%@ include file="../mypage/quickMenu.jsp" %>
+                <div class="d-flex flex-row justify-content-evenly align-items-center border border-2 rounded p-5 mb-3">
+                    <div class="d-flex flex-column align-self-center">
+                    	<span style="font-size: 18pt">다음달 예상 등급 : <b>${expectedGrade.name}</b></span>
+                    	<c:choose>
+                    		<c:when test="${expectedGrade.name eq '다이아몬드'}">
+                    			<span style="font-size: 10pt">축하합니다! 다음달에 다이아몬드 등급 혜택을 받으실 수 있습니다!</span>
+                    			<span style="font-size: 10pt">상품을 구매하실 때마다 <b>${expectedGrade.discountPercent}%</b>의 할인 및 <b>${expectedGrade.pointPercent}%</b>의 포인트 적립이 적용됩니다.</span>
+                    		</c:when>
+                    		<c:otherwise>
+                    			<c:choose>
+                    				<c:when test="${memberDTO.grade.name eq '다이아몬드'}">
+                    					<c:if test="${memberDTO.grade.orderCriteria > orderPerformanceDTO.orderCount && memberDTO.grade.priceCriteria > orderPerformanceDTO.orderAmount}">
+                   							<span style="font-size: 10pt">다음달에 <b>${memberDTO.grade.name}</b> 등급을 유지하려면,</span>
+                 							<span style="font-size: 10pt">이번달에 <b>${memberDTO.grade.orderCriteria - orderPerformanceDTO.orderCount}회</b> & <b>${memberDTO.grade.priceCriteria - orderPerformanceDTO.orderAmount}원</b> 이상의 구매실적이 필요합니다.</span>
+                   						</c:if>
+                   						<c:if test="${membdrDTO.grade.orderCriteria > orderPerformanceDTO.orderCount && memberDTO.grade.priceCriteria <= orderPerformanceDTO.orderAmount}">
+                   							<span style="font-size: 10pt">다음달에 <b>${memberDTO.grade.name}</b> 등급을 유지하려면,</span>
+                   							<span style="font-size: 10pt">이번달에 <b>${memberDTO.grade.orderCriteria - orderPerformanceDTO.orderCount}회</b> 이상의 구매실적이 필요합니다.</span>
+                   						</c:if>
+                   						<c:if test="${membdrDTO.grade.orderCriteria <= orderPerformanceDTO.orderCount && memberDTO.grade.priceCriteria > orderPerformanceDTO.orderAmount}">
+                   							<span style="font-size: 10pt">다음달에 <b>${memberDTO.grade.name}</b> 등급을 유지하려면,</span>
+                   							<span style="font-size: 10pt">이번달에 <b>${memberDTO.grade.priceCriteria - orderPerformanceDTO.orderAmount}원</b> 이상의 구매실적이 필요합니다.</span>
+                   						</c:if>
+                    				</c:when>
+                    				<c:otherwise>
+                    					<span style="font-size: 10pt">다음달에 <b>${targetGrade.name}</b> 등급이 되시려면,</span>
+	                        			<span style="font-size: 10pt">이번달에 <b>${targetGrade.orderCriteria - orderPerformanceDTO.orderCount}회</b> & <b>${targetGrade.priceCriteria - orderPerformanceDTO.orderAmount}원</b> 이상의 구매실적이 필요합니다.</span>
+                    				</c:otherwise>
+                    			</c:choose>
+                    		</c:otherwise>
+                    		
+                    	</c:choose>
                     </div>
-                    <a href="${contextPath}/mypage/pointHistory/all?page=1" class="d-flex flex-column align-items-center align-self-center lh-sm">
-                        <span>포인트</span>
-                        <span><fmt:formatNumber value="${memberPoint}"/>P</span>
-                    </a>
-                    <a href="${contextPath}/mypage/couponHistory/available?page=1" class="d-flex flex-column align-items-center align-self-center lh-sm">
-                        <span>쿠폰</span>
-                        <span>${couponCount}장</span>
-                    </a>
-                    <a href="${contextPath}/mypage/writeableReview" class="d-flex flex-column align-items-center align-self-center lh-sm">
-                        <span>작성 가능한 상품평</span>
-                        <span>${writeableCount}건</span>
-                    </a>
-                </div>
-                <div class="d-flex flex-row justify-content-evenly border border-2 rounded p-5 mb-3">
-                    <div class="d-flex flex-column">
-                        <span>다음달 <b>플래티넘</b> 등급이 되시려면,</span>
-                        <span>이번달 <b>4회</b> 이상 <b>400,000원</b> 이상의 구매실적이 필요합니다.</span>
-                    </div>
-                    <div class="d-flex flex-column">
+                    <div class="d-flex flex-column align-self-center">
                         <div>
-                            <span>1년 간 나의 구매 금액 : </span>
+                            <span>1년 간 나의 구매 금액 :</span>
                         </div>
                         <div>
-                            <span>1년 간 내가 받은 혜택 : </span>
+                            <span>1년 간 내가 받은 할인 :</span>
+                        </div>
+                        <div>
+                            <span>1년 간 내가 적립한 포인트 :</span>
                         </div>
                     </div>
-                    <div class="d-flex flex-column align-items-end">
+                    <div class="d-flex flex-column align-items-end align-self-center">
                         <div>
-                            <span><b>100,000</b>원</span>
+                            <span><b><fmt:formatNumber value="${purchaseAmount - discountAmount}" /></b>원</span>
                         </div>
                         <div>
-                            <span><b>20,000</b>원</span>
+                            <span><b><fmt:formatNumber value="${discountAmount}" /></b>원</span>
+                        </div>
+                        <div>
+                            <span><b><fmt:formatNumber value="${earnedPoint}" /></b>P</span>
                         </div>
                     </div>
                 </div>

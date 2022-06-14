@@ -10,10 +10,12 @@ import com.ggm.goguma.amazons3.AmazonS3Utils;
 import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
+import com.ggm.goguma.dto.OrderPerformanceDTO;
 import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
 import com.ggm.goguma.dto.UpdateMemberDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
+import com.ggm.goguma.dto.member.MemberGradeDTO;
 import com.ggm.goguma.mapper.MyPageMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -78,6 +80,21 @@ public class MyPageServiceImpl implements MyPageService {
 	@Override
 	public int getMemberPoint(long memberId) throws Exception {
 		return mapper.getMemberPoint(memberId);
+	}
+
+	@Override
+	public int getEarnedPoint(long memberId) throws Exception {
+		return mapper.getEarnedPoint(memberId);
+	}
+
+	@Override
+	public int getPurchaseAmount(long memberId) throws Exception {
+		return mapper.getPurchaseAmount(memberId);
+	}
+
+	@Override
+	public int getDiscountAmount(long memberId) throws Exception {
+		return mapper.getDiscountAmount(memberId);
 	}
 	
 	@Override
@@ -152,6 +169,15 @@ public class MyPageServiceImpl implements MyPageService {
 	public void updateAddress(DeliveryAddressDTO dto) throws Exception {
 		if(dto.getIsDefault()==1) mapper.cancelDefault(dto.getMemberId()); // 기본 배송지가 설정돼있으면 제거
 		mapper.updateAddress(dto);
+	}
+	
+	@Override
+	@Transactional
+	public void updateAllOrderStatus(long receiptId, String status) throws Exception {
+		mapper.updateAllOrderStatus(receiptId, status);
+		if(status.equals("F")) mapper.makeAllInquirable(receiptId);
+		//구매 취소한경우 사용 포인트 돌력주기
+		if(status.equals("C")) mapper.refundAllPoint(receiptId);
 	}
 	
 	@Override
@@ -230,11 +256,12 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 
 	@Override
-	@Transactional
-	public void updateAllOrderStatus(long receiptId, String status) throws Exception {
-		mapper.updateAllOrderStatus(receiptId, status);
-		if(status.equals("F")) mapper.makeAllInquirable(receiptId);
-		//구매 취소한경우 사용 포인트 돌력주기
-		if(status.equals("C")) mapper.refundAllPoint(receiptId);
+	public OrderPerformanceDTO getOrderPerformance(long memberId) throws Exception {
+		return mapper.getOrderPerformance(memberId);
+	}
+
+	@Override
+	public List<MemberGradeDTO> getMemberGrade() throws Exception {
+		return mapper.getMemberGrade();
 	}
 }

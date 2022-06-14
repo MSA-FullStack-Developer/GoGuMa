@@ -35,12 +35,14 @@ import com.ggm.goguma.dto.CategoryDTO;
 import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.ImageAttachDTO;
+import com.ggm.goguma.dto.OrderPerformanceDTO;
 import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ProductDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
 import com.ggm.goguma.dto.ReviewDTO;
 import com.ggm.goguma.dto.UpdateMemberDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
+import com.ggm.goguma.dto.member.MemberGradeDTO;
 import com.ggm.goguma.service.member.MemberService;
 import com.ggm.goguma.service.mypage.MyPageService;
 import com.ggm.goguma.service.product.CategoryService;
@@ -761,6 +763,33 @@ public class MyPageController {
 			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
 			model.addAttribute("writeableList", writeableList);
 			model.addAttribute("writeableCount", writeableList.size());
+			
+			int purchaseAmount = service.getPurchaseAmount(memberDTO.getId());
+			model.addAttribute("purchaseAmount", purchaseAmount);
+			
+			int discountAmount = service.getDiscountAmount(memberDTO.getId());
+			model.addAttribute("discountAmount", discountAmount);
+			
+			int earnedPoint = service.getEarnedPoint(memberDTO.getId());
+			model.addAttribute("earnedPoint", earnedPoint);
+			
+			OrderPerformanceDTO orderPerformanceDTO = service.getOrderPerformance(memberDTO.getId());
+			
+			List<MemberGradeDTO> memberGradeList = service.getMemberGrade();
+			for(MemberGradeDTO dto : memberGradeList) {
+				if(orderPerformanceDTO.getOrderCount() >= dto.getOrderCriteria() && orderPerformanceDTO.getOrderAmount() >= dto.getPriceCriteria()) {
+					MemberGradeDTO expectedGrade = dto;
+					orderPerformanceDTO = new OrderPerformanceDTO(orderPerformanceDTO.getOrderCount()-dto.getOrderCriteria(),
+						orderPerformanceDTO.getOrderAmount()-dto.getPriceCriteria());
+					model.addAttribute("expectedGrade", expectedGrade);
+				}
+				else if(orderPerformanceDTO.getOrderCount() < dto.getOrderCriteria() || orderPerformanceDTO.getOrderAmount() < dto.getPriceCriteria()) {
+					MemberGradeDTO targetGrade = dto;
+					model.addAttribute("targetGrade", targetGrade);
+					break;
+				}
+			}
+			model.addAttribute("orderPerformanceDTO", orderPerformanceDTO);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}
