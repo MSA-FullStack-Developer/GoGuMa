@@ -317,4 +317,26 @@
 	<update id="disableMember">
 		update member set disabled=1 where memberid = #{memberId}
 	</update>
+	
+	<select id="getOrderPerformance" resultType="OrderPerformanceDTO">
+		select sum(ordercount) as ordercount, sum(orderamount) as orderamount
+		from orderperformance where memberid = #{memberId}
+		<![CDATA[
+			and orderdate >= TRUNC(sysdate, 'MM')
+			and orderdate <= LAST_DAY(sysdate)
+		]]>
+	</select>
+	
+	<resultMap type="MemberGradeDTO" id="MemberGradeMap">
+		<result property="id" column="gradeId" />
+		<result property="name" column="gradeName" />
+		<result property="pointPercent" column="pointPercent" />
+		<result property="discountPercent" column="discountPercent" />
+		<result property="orderCriteria" column="orderCriteria" />
+		<result property="priceCriteria" column="priceCriteria" />
+	</resultMap>
+	
+	<select id="getMemberGrade" resultMap="MemberGradeMap">
+		select * from membergrade order by gradeid
+	</select>
 </mapper>

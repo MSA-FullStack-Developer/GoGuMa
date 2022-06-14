@@ -5,10 +5,12 @@ import java.util.List;
 import com.ggm.goguma.dto.CouponDTO;
 import com.ggm.goguma.dto.DeliveryAddressDTO;
 import com.ggm.goguma.dto.OrderDTO;
+import com.ggm.goguma.dto.OrderPerformanceDTO;
 import com.ggm.goguma.dto.PointDTO;
 import com.ggm.goguma.dto.ReceiptDTO;
 import com.ggm.goguma.dto.UpdateMemberDTO;
 import com.ggm.goguma.dto.member.MemberDTO;
+import com.ggm.goguma.dto.member.MemberGradeDTO;
 
 public interface MyPageService {
 	List<ReceiptDTO> getReceiptHistory(long memberId, long page) throws Exception;
@@ -20,6 +22,8 @@ public interface MyPageService {
 	ReceiptDTO getReceiptDetail(long receiptId) throws Exception;
 	
 	void updateOrderStatus(long orderId, String status) throws Exception;
+	
+	void updateAllOrderStatus(long receiptId, String status)throws Exception;
 	
 	int getMemberPoint(long memberId) throws Exception;
 
@@ -65,6 +69,8 @@ public interface MyPageService {
 
 	//고객센터에서 불러올 주문내역
 	List<ReceiptDTO> getReceiptHistoryPages(long memberId, int pages) throws Exception;
+	
+	OrderPerformanceDTO getOrderPerformance(long memberId) throws Exception;
 
-	void updateAllOrderStatus(long receiptId, String status)throws Exception;
+	List<MemberGradeDTO> getMemberGrade() throws Exception;
 }
