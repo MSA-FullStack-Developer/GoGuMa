@@ -97,5 +97,11 @@ public interface MyPageMapper {
 
 	OrderPerformanceDTO getOrderPerformance(long memberId) throws Exception;
 
+	List<OrderPerformanceDTO> getOrderPerformanceAll() throws Exception;
+	
 	List<MemberGradeDTO> getMemberGrade() throws Exception;
+
+	void updateMemberGrade(long memberId, long gradeId) throws Exception;
+
+	
 }

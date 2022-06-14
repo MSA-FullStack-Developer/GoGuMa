@@ -155,11 +155,11 @@
                     <tbody>
                         <tr>
                             <th class="col-2 table-active">반영 시기</th>
-                            <td>매월 1일</td>
+                            <td>매월 마지막 날짜</td>
                         </tr>
                         <tr>
                             <th class="col-2 table-active">등급 기준</th>
-                            <td>최근 1개월 고구마몰에서 주문한 횟수와 금액 기준</td>
+                            <td>1개월 간 고구마몰에서 주문한 횟수와 금액 기준</td>
                         </tr>
                         <tr>
                             <th class="col-2 table-active">대상 고객</th>

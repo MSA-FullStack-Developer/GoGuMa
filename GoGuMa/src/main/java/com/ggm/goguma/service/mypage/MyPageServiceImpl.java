@@ -243,7 +243,6 @@ public class MyPageServiceImpl implements MyPageService {
 		}
 		
 		List<ReceiptDTO> receiptList = mapper.getReceiptHistoryPages(memberId, startPages);
-		
 		for(ReceiptDTO receipt : receiptList) {
 			try {
 				List<OrderDTO> orderList = getOrderList(receipt.getReceiptId());
@@ -263,5 +262,23 @@ public class MyPageServiceImpl implements MyPageService {
 	@Override
 	public List<MemberGradeDTO> getMemberGrade() throws Exception {
 		return mapper.getMemberGrade();
+	}
+
+	@Override
+	@Transactional
+	public void updateMemberGrade() throws Exception {
+		List<MemberGradeDTO> memberGradeList = getMemberGrade();
+		List<OrderPerformanceDTO> orderPerformanceList = mapper.getOrderPerformanceAll();
+		for(OrderPerformanceDTO orderPerformanceDTO : orderPerformanceList) {
+			MemberGradeDTO updateGrade = memberGradeList.get(0);
+			for(MemberGradeDTO dto : memberGradeList) {
+				if(orderPerformanceDTO.getOrderCount() >= dto.getOrderCriteria() && orderPerformanceDTO.getOrderAmount() >= dto.getPriceCriteria()) {
+					orderPerformanceDTO.setOrderAmount(orderPerformanceDTO.getOrderAmount()-dto.getPriceCriteria());
+					orderPerformanceDTO.setOrderCount(orderPerformanceDTO.getOrderCount()-dto.getOrderCriteria());
+					updateGrade = dto;
+				}
+			}
+			mapper.updateMemberGrade(orderPerformanceDTO.getMemberId(), updateGrade.getId());
+		}
 	}
 }
