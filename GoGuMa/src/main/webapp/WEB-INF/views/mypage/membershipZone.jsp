@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -56,7 +57,7 @@
                     				<c:when test="${memberDTO.grade.name eq '다이아몬드'}">
                     					<c:if test="${memberDTO.grade.orderCriteria > orderPerformanceDTO.orderCount && memberDTO.grade.priceCriteria > orderPerformanceDTO.orderAmount}">
                    							<span style="font-size: 10pt">다음달에 <b>${memberDTO.grade.name}</b> 등급을 유지하려면,</span>
-                 							<span style="font-size: 10pt">이번달에 <b>${memberDTO.grade.orderCriteria - orderPerformanceDTO.orderCount}회</b> & <b>${memberDTO.grade.priceCriteria - orderPerformanceDTO.orderAmount}원</b> 이상의 구매실적이 필요합니다.</span>
+                 							<span style="font-size: 10pt">이번달에 <b>${memberDTO.grade.orderCriteria - orderPerformanceDTO.orderCount}회</b> & <b><fmt:formatNumber value="${memberDTO.grade.priceCriteria - orderPerformanceDTO.orderAmount}" />원</b> 이상의 구매실적이 필요합니다.</span>
                    						</c:if>
                    						<c:if test="${membdrDTO.grade.orderCriteria > orderPerformanceDTO.orderCount && memberDTO.grade.priceCriteria <= orderPerformanceDTO.orderAmount}">
                    							<span style="font-size: 10pt">다음달에 <b>${memberDTO.grade.name}</b> 등급을 유지하려면,</span>
@@ -64,13 +65,13 @@
                    						</c:if>
                    						<c:if test="${membdrDTO.grade.orderCriteria <= orderPerformanceDTO.orderCount && memberDTO.grade.priceCriteria > orderPerformanceDTO.orderAmount}">
                    							<span style="font-size: 10pt">다음달에 <b>${memberDTO.grade.name}</b> 등급을 유지하려면,</span>
-                   							<span style="font-size: 10pt">이번달에 <b>${memberDTO.grade.priceCriteria - orderPerformanceDTO.orderAmount}원</b> 이상의 구매실적이 필요합니다.</span>
+                   							<span style="font-size: 10pt">이번달에 <b><fmt:formatNumber value="${memberDTO.grade.priceCriteria - orderPerformanceDTO.orderAmount}" />원</b> 이상의 구매실적이 필요합니다.</span>
                    						</c:if>
                     				</c:when>
                     				<c:otherwise>
                     					<c:if test="${targetGrade.orderCriteria > orderPerformanceDTO.orderCount && targetGrade.priceCriteria > orderPerformanceDTO.orderAmount}">
                     						<span style="font-size: 10pt">다음달에 <b>${targetGrade.name}</b> 등급이 되시려면,</span>
-	                        				<span style="font-size: 10pt">이번달에 <b>${targetGrade.orderCriteria - orderPerformanceDTO.orderCount}회</b> & <b>${targetGrade.priceCriteria - orderPerformanceDTO.orderAmount}원</b> 이상의 구매실적이 필요합니다.</span>
+	                        				<span style="font-size: 10pt">이번달에 <b>${targetGrade.orderCriteria - orderPerformanceDTO.orderCount}회</b> & <b><fmt:formatNumber value="${targetGrade.priceCriteria - orderPerformanceDTO.orderAmount}" />원</b> 이상의 구매실적이 필요합니다.</span>
                     					</c:if>
                     					<c:if test="${targetGrade.orderCriteria > orderPerformanceDTO.orderCount && targetGrade.priceCriteria <= orderPerformanceDTO.orderAmount}">
                     						<span style="font-size: 10pt">다음달에 <b>${targetGrade.name}</b> 등급이 되시려면,</span>
@@ -78,7 +79,7 @@
                     					</c:if>
                     					<c:if test="${targetGrade.orderCriteria <= orderPerformanceDTO.orderCount && targetGrade.priceCriteria > orderPerformanceDTO.orderAmount}">
                     						<span style="font-size: 10pt">다음달에 <b>${targetGrade.name}</b> 등급이 되시려면,</span>
-	                        				<span style="font-size: 10pt">이번달에 <b>${targetGrade.priceCriteria - orderPerformanceDTO.orderAmount}원</b> 이상의 구매실적이 필요합니다.</span>
+	                        				<span style="font-size: 10pt">이번달에 <b><fmt:formatNumber value="${targetGrade.priceCriteria - orderPerformanceDTO.orderAmount}" />원</b> 이상의 구매실적이 필요합니다.</span>
                     					</c:if>
                     				</c:otherwise>
                     			</c:choose>

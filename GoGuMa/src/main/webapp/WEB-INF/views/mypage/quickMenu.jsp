@@ -34,15 +34,15 @@
     </div>
     <a href="${contextPath}/mypage/pointHistory/all?page=1" class="d-flex flex-column align-items-center align-self-center lh-sm">
     	<span>포인트</span>
-       	<span><fmt:formatNumber value="${memberPoint}"/>P</span>
+       	<span><fmt:formatNumber value="${memberPoint}" />P</span>
     </a>
     <a href="${contextPath}/mypage/couponHistory/available?page=1" class="d-flex flex-column align-items-center align-self-center lh-sm">
     	<span>쿠폰</span>
-     	<span>${couponCount}장</span>
+     	<span><fmt:formatNumber value="${couponCount}" />장</span>
     </a>
     <a href="${contextPath}/mypage/writeableReview" class="d-flex flex-column align-items-center align-self-center lh-sm">
     	<span>작성 가능한 상품평</span>
-      	<span>${writeableCount}건</span>
+      	<span><fmt:formatNumber value="${writeableCount}" />건</span>
     </a>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
