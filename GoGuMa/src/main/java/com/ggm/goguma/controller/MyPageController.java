@@ -781,8 +781,8 @@ public class MyPageController {
 			OrderPerformanceDTO orderPerformanceDTO = service.getOrderPerformance(memberDTO.getId());
 			
 			List<MemberGradeDTO> memberGradeList = service.getMemberGrade();
-			MemberGradeDTO expectedGrade = memberGradeList.get(0);
-			MemberGradeDTO targetGrade = memberGradeList.get(1);
+			MemberGradeDTO expectedGrade = memberGradeList.get(0); // 실버 등급
+			MemberGradeDTO targetGrade = memberGradeList.get(1); // 골드 등급
 			for(MemberGradeDTO dto : memberGradeList) {
 				if(orderPerformanceDTO.getOrderCount() >= dto.getOrderCriteria() && orderPerformanceDTO.getOrderAmount() >= dto.getPriceCriteria()) {
 					orderPerformanceDTO = new OrderPerformanceDTO(memberDTO.getId(), orderPerformanceDTO.getOrderCount()-dto.getOrderCriteria(), orderPerformanceDTO.getOrderAmount()-dto.getPriceCriteria());
@@ -793,9 +793,9 @@ public class MyPageController {
 					break;
 				}
 			}
+			model.addAttribute("orderPerformanceDTO", orderPerformanceDTO);
 			model.addAttribute("expectedGrade", expectedGrade);
 			model.addAttribute("targetGrade", targetGrade);
-			model.addAttribute("orderPerformanceDTO", orderPerformanceDTO);
 		} catch(Exception e) {
 			log.info(e.getMessage());
 		}
