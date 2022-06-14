@@ -162,7 +162,7 @@
                 </table>
                 <div align="center">
                     <button type="button" class="btn btn-dark" onclick="changeInfo()">변경</button>
-                    <button type="button" class="btn btn-secondary">취소</button>
+                    <button type="button" class="btn btn-secondary" onclick="location.href='${contextPath}/mypage/confirmPassword/${type}'">취소</button>
                 </div>
             </div>
         </div>

@@ -9,16 +9,16 @@
         	<a href="${contextPath}/mypage/membershipZone" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-offset="0,10" title="${memberDTO.grade.name}">
         		<c:choose>
         			<c:when test="${memberDTO.grade.name eq '실버'}">
-        				<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-silver.png" style="width: 50px; height: 50px; object-fit: contain;">
+        				<img src="https://cdn.discordapp.com/attachments/971211040215933013/985510241137459250/unknown.png" style="width: 50px; height: 50px; object-fit: contain;">
         			</c:when>
         			<c:when test="${memberDTO.grade.name eq '골드'}">
-        				<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-gold.png" style="width: 50px; height: 50px; object-fit: contain;">
+        				<img src="https://cdn.discordapp.com/attachments/971211040215933013/985510618863919134/diamond_5.png" style="width: 50px; height: 50px; object-fit: contain;">
         			</c:when>
         			<c:when test="${memberDTO.grade.name eq '플래티넘'}">
-        				<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-platinum.png" style="width: 50px; height: 50px; object-fit: contain;">
+        				<img src="https://cdn.discordapp.com/attachments/971211040215933013/985512254550192148/diamond_4.png" style="width: 50px; height: 50px; object-fit: contain;">
         			</c:when>
         			<c:when test="${memberDTO.grade.name eq '다이아몬드'}">
-        				<img src="https://image.hmall.com/p/img/mp/icon/ico-rating-diamond.png" style="width: 50px; height: 50px; object-fit: contain;">
+        				<img src="https://cdn.discordapp.com/attachments/971211040215933013/985510240898408528/unknown.png" style="width: 50px; height: 50px; object-fit: contain;">
         			</c:when>
         		</c:choose>
         	</a>
