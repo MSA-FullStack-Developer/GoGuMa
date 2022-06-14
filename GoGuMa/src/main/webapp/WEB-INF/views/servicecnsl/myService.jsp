@@ -72,6 +72,10 @@
 		    cursor: pointer;
 		    color: #FF493C;
 		}
+		
+		.pagination {
+			--bs-pagination-color: black;
+		}
 	</style>
 	<script>
 		function openCnslPup() {

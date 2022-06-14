@@ -92,7 +92,7 @@
 		                                    	</a>
 		                                    </td>
 		                                    <td class="border-end border-bottom">
-		                                        <div class="col m-auto" style="width: 100px" align="center">
+		                                        <div class="col m-auto" style="width: 100px; text-align: center;">
 		                                            <div>
 		                                                <fmt:formatNumber value="${orderDTO.price}" />원
 		                                            </div>
@@ -116,7 +116,7 @@
 						                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="configAllBtn(${receiptDTO.receiptId})">구매확정</button>
 						                                            </div>
 						                                            <div class="mt-2">
-						                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="cancelAllBtn(${receiptDTO.receiptId}, ${receiptDTO.membershipDiscount}, ${receiptDTO.couponDiscount}, ${receiptDTO.usagePoint})">주문취소</button>
+						                                                <button type="button" class="btn btn-sm btn-outline-dark" onclick="cancelAllBtn(${receiptDTO.receiptId}, ${receiptDTO.totalPrice }, ${receiptDTO.membershipDiscount}, ${receiptDTO.couponDiscount}, ${receiptDTO.usagePoint})">주문취소</button>
 						                                            </div>
 				                                        		</c:when>
 				                                        		<c:when test="${orderDTO.status eq 'F'}">
@@ -223,6 +223,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 <script type="text/javascript" src="<c:url value='/webjars/jquery/3.6.0/dist/jquery.js' />"></script>
 <script type="text/javascript">
+	$(document).ready(function(){
+	  console.log("${receiptHistory}");
+	});
 	function configBtn(orderId) {
 		if(confirm("구매확정 하시겠습니까?")) {
 			let token = $("meta[name='_csrf']").attr("content");
@@ -294,7 +297,6 @@
 	function cancelPay(receiptId, orderId, membershipDiscount) {
 	  	let token = $("meta[name='_csrf']").attr("content");
     	let header = $("meta[name='_csrf_header']").attr("content");
-    	console.log();
 		$.ajax({
 			url : "${contextPath}/mypage/api/payment/cancel",
 			type : "POST",
@@ -342,7 +344,8 @@
 				  		}
 				  		alert("주문하신 상품이 취소되었습니다. 빠른 시일 이내에 환불 처리 됩니다.");
 						window.location.href = "${contextPath}/mypage/orderHistory";
-					} else {
+					} 
+					else {
 						alert('주문을 취소하는 과정에서 오류가 발생했습니다.');
 					}
 				},
@@ -363,16 +366,16 @@
 	 * @수정일자 :
 	 * @수정내용 : 
 	 */
-	 function cancelAllPay(receiptId, membershipDiscount, couponDiscount, usagePoint) {
+	 function cancelAllPay(receiptId, totalPrice, membershipDiscount, couponDiscount, usagePoint) {
 	  	let token = $("meta[name='_csrf']").attr("content");
    		let header = $("meta[name='_csrf_header']").attr("content");
-
-		 $.ajax({
+   		console.log("총 금액 : " + (totalPrice - couponDiscount) );
+		$.ajax({
 			url : "${contextPath}/mypage/api/payment/cancel",
 			type : "POST",
 			data : {
 			    uid : $("#impUid"+receiptId).val(),
-			  	cancelAmount : //여기 넣어줘! (tot - couponDiscount - usagePoint),
+			  	cancelAmount : 0, //(totalPrice - couponDiscount)총결제 금액 없다면 전체환불,
 			  	reason : "",
 			  	refundBank : "",
 			  	refundHolder : "",
@@ -393,7 +396,7 @@
        });
 	}
 	//전체 상품 취소 버튼 
-	function cancelAllBtn(receiptId, membershipDiscount, couponDiscount, usagePoint) {
+	function cancelAllBtn(receiptId, totalPrice, membershipDiscount, couponDiscount, usagePoint) {
 		if(confirm("주문을 전체 취소하시겠습니까?")) {
 			let token = $("meta[name='_csrf']").attr("content");
 		    let header = $("meta[name='_csrf_header']").attr("content");
@@ -409,7 +412,7 @@
 	            },
 				success:function(result) {
 					if(result==1) {
-				  		cancelAllPay(receiptId, membershipDiscount, couponDiscount, usagePoint);
+				  		cancelAllPay(receiptId, totalPrice, membershipDiscount, couponDiscount, usagePoint);
 				  		alert("주문하신 상품이 전체 취소되었습니다. 빠른 시일 이내에 환불 처리 됩니다.");
 						window.location.href = "${contextPath}/mypage/orderHistory";
 					} else {
