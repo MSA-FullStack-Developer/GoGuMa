@@ -637,6 +637,15 @@ public class MyPageController {
 			String phoneNum = memberDTO.getPhone().substring(0, 3) + "-"
 				+ memberDTO.getPhone().substring(3, 7) + "-" + memberDTO.getPhone().substring(7);
 			
+			List<CategoryDTO> parentCategory = categoryService.showCategoryMenu();
+			model.addAttribute("parentCategory", parentCategory);
+			
+			long memberPoint = service.getMemberPoint(memberDTO.getId());
+			model.addAttribute("memberPoint", memberPoint);
+			
+			long couponCount = service.getCouponCount(memberDTO.getId(), "available");
+			model.addAttribute("couponCount", couponCount);
+			
 			// 작성 가능한 상품평 개수 불러오기
 			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
 			model.addAttribute("writeableList", writeableList);
@@ -666,12 +675,6 @@ public class MyPageController {
 		@RequestParam("newPassword") String newPassword, Principal principal, Model model) throws Exception {
 		try {
 			MemberDTO memberDTO = memberService.getMember(principal.getName());
-			
-			// 작성 가능한 상품평 개수 불러오기
-			List<ProductDTO> writeableList = reviewService.getWriteableReview(memberDTO.getId());
-			model.addAttribute("writeableList", writeableList);
-			model.addAttribute("writeableCount", writeableList.size());
-			
 			if(service.changePassword(curPassword, newPassword, memberDTO)) {
 				model.addAttribute("memberDTO", memberDTO);
 				return "1";
