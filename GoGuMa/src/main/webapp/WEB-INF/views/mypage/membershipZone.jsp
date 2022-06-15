@@ -57,11 +57,11 @@
                     				<c:when test="${memberDTO.grade.name eq '다이아몬드'}">
                     					<c:if test="${memberDTO.grade.orderCriteria > orderPerformanceDTO.orderCount && memberDTO.grade.priceCriteria > orderPerformanceDTO.orderAmount}">
                    							<span style="font-size: 10pt">다음달에 <b>${memberDTO.grade.name}</b> 등급을 유지하려면,</span>
-                 							<span style="font-size: 10pt">이번달에 <b>${memberDTO.grade.orderCriteria - orderPerformanceDTO.orderCount}회</b> & <b><fmt:formatNumber value="${memberDTO.grade.priceCriteria - orderPerformanceDTO.orderAmount}" />원</b> 이상의 구매실적이 필요합니다.</span>
+                 							<span style="font-size: 10pt">이번달에 <b>상품 ${memberDTO.grade.orderCriteria - orderPerformanceDTO.orderCount}개</b> & <b><fmt:formatNumber value="${memberDTO.grade.priceCriteria - orderPerformanceDTO.orderAmount}" />원</b> 이상의 구매실적이 필요합니다.</span>
                    						</c:if>
                    						<c:if test="${membdrDTO.grade.orderCriteria > orderPerformanceDTO.orderCount && memberDTO.grade.priceCriteria <= orderPerformanceDTO.orderAmount}">
                    							<span style="font-size: 10pt">다음달에 <b>${memberDTO.grade.name}</b> 등급을 유지하려면,</span>
-                   							<span style="font-size: 10pt">이번달에 <b>${memberDTO.grade.orderCriteria - orderPerformanceDTO.orderCount}회</b> 이상의 구매실적이 필요합니다.</span>
+                   							<span style="font-size: 10pt">이번달에 <b>상품 ${memberDTO.grade.orderCriteria - orderPerformanceDTO.orderCount}개</b> 이상의 구매실적이 필요합니다.</span>
                    						</c:if>
                    						<c:if test="${membdrDTO.grade.orderCriteria <= orderPerformanceDTO.orderCount && memberDTO.grade.priceCriteria > orderPerformanceDTO.orderAmount}">
                    							<span style="font-size: 10pt">다음달에 <b>${memberDTO.grade.name}</b> 등급을 유지하려면,</span>
@@ -71,11 +71,11 @@
                     				<c:otherwise>
                     					<c:if test="${targetGrade.orderCriteria > orderPerformanceDTO.orderCount && targetGrade.priceCriteria > orderPerformanceDTO.orderAmount}">
                     						<span style="font-size: 10pt">다음달에 <b>${targetGrade.name}</b> 등급이 되시려면,</span>
-	                        				<span style="font-size: 10pt">이번달에 <b>${targetGrade.orderCriteria - orderPerformanceDTO.orderCount}회</b> & <b><fmt:formatNumber value="${targetGrade.priceCriteria - orderPerformanceDTO.orderAmount}" />원</b> 이상의 구매실적이 필요합니다.</span>
+	                        				<span style="font-size: 10pt">이번달에 <b>상품 ${targetGrade.orderCriteria - orderPerformanceDTO.orderCount}개</b> & <b><fmt:formatNumber value="${targetGrade.priceCriteria - orderPerformanceDTO.orderAmount}" />원</b> 이상의 구매실적이 필요합니다.</span>
                     					</c:if>
                     					<c:if test="${targetGrade.orderCriteria > orderPerformanceDTO.orderCount && targetGrade.priceCriteria <= orderPerformanceDTO.orderAmount}">
                     						<span style="font-size: 10pt">다음달에 <b>${targetGrade.name}</b> 등급이 되시려면,</span>
-	                        				<span style="font-size: 10pt">이번달에 <b>${targetGrade.orderCriteria - orderPerformanceDTO.orderCount}회</b> 이상의 구매실적이 필요합니다.</span>
+	                        				<span style="font-size: 10pt">이번달에 <b>상품 ${targetGrade.orderCriteria - orderPerformanceDTO.orderCount}개</b> 이상의 구매실적이 필요합니다.</span>
                     					</c:if>
                     					<c:if test="${targetGrade.orderCriteria <= orderPerformanceDTO.orderCount && targetGrade.priceCriteria > orderPerformanceDTO.orderAmount}">
                     						<span style="font-size: 10pt">다음달에 <b>${targetGrade.name}</b> 등급이 되시려면,</span>
@@ -138,10 +138,10 @@
                         <tr class="lh-base" align="center">
                             <th class="col-2 align-middle">등급 기준</th>
                             <td class="align-middle">미주문</td>
-                            <td class="align-middle">1회 이상 구매</td>
+                            <td class="align-middle">상품 1개 이상 구매</td>
                             <td class="align-middle">
                                 <div>
-                                    5회 & 50만원
+                                    상품 5개 & 50만원
                                 </div>
                                 <div>
                                     이상 구매
@@ -149,7 +149,7 @@
                             </td>
                             <td class="align-middle">
                                 <div>
-                                    10회 & 100만원
+                                    상품 10개 & 100만원
                                 </div>
                                 <div>
                                     이상 구매
@@ -169,7 +169,7 @@
                         </tr>
                         <tr>
                             <th class="col-2 table-active">등급 기준</th>
-                            <td>1개월 간 고구마몰에서 주문한 횟수와 금액 기준</td>
+                            <td>1개월 간 고구마몰에서 구매확정한 상품 개수와 금액 기준</td>
                         </tr>
                         <tr>
                             <th class="col-2 table-active">대상 고객</th>
