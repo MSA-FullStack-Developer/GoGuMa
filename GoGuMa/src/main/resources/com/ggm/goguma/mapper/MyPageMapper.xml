@@ -42,7 +42,7 @@
 	</update>
 	
 	<update id="makeInquirable">
-		update pointevent set inquirable = 1 where orderid = #{orderId}
+		update pointevent set inquirable = 1, pointcreateddate = sysdate where orderid = #{orderId}
 	</update>
 	
 	
@@ -52,7 +52,7 @@
 	 -->
 	<update id="makeAllInquirable">
 		UPDATE pointevent 
-		SET inquirable = 1 
+		SET inquirable = 1, pointcreateddate = sysdate
 		WHERE orderid IN (SELECT orderid
 							FROM pointevent
 							WHERE receiptid = #{receiptId}   
