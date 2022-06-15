@@ -132,7 +132,7 @@ public class MyPageController {
 					String[] productIdArr = (URLDecoder.decode(cookie.getValue(), "utf-8")).split(",");
 					// 상품ID들을 통해서 가져온 ProductInfo들을 productList에 각각 저장
 					for(int i=(int)startNum; i<=endNum; i++) {
-						productList.add(productService.getProductInfo(Long.parseLong(productIdArr[i])));
+						productList.add(0,productService.getProductInfo(Long.parseLong(productIdArr[i])));
 					}
 				}
 			}
@@ -176,6 +176,7 @@ public class MyPageController {
 			if(endPage > pageCount) endPage = pageCount;
 			
 			List<ProductDTO> productList = setSeenProducts(page, productCount, request);
+			
 			model.addAttribute("productList", productList);
 			model.addAttribute("page", page);
 			model.addAttribute("startPage", startPage);
