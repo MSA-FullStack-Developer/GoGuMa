@@ -1,14 +1,16 @@
-#  GoGuMa - 고객이 구성하는 마켓 🏬
+#  고구마 - 고객이 구성하는 마켓 🏬
 
-## 📚 About GoGuMa
+## 💡 About GOGUMA
 - **GOGUMA**는 고객이 구매한 상품들을 바탕으로 정보를 공유하고, 상품을 추천하는 커뮤니티 커머스입니다.
+
+## 🎲 Functions
 - 고객이 구매한 상품들을 전시하고, 해당 상품들에 대해 블로그 형식으로 사용후기를 작성할 수 있습니다.
 - 고객이 게시한 글에 다른 고객들이 댓글과 답글을 남겨서 서로 소통할 수 있습니다.
 - 관심있는 카테고리의 마켓을 팔로우하고 취향에 맞는 정보를 받아볼 수 있습니다.
 - 고객은 장바구니에 추가한 상품들을 다양한 결제수단을 통해서 주문하고 환불할 수 있습니다.
 - 고객은 주문한 상품들을 '구매확정' 또는 '주문취소'할 수 있고, 상품평을 작성할 수 있습니다.
 
-## 👨‍💻 Language & Framework
+## 📚 Tech Stacks
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white)
 ![Oracle](https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white)
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
@@ -16,10 +18,12 @@
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 
-## 🖥 Collaboration Tools
-- Jira & Confluence
-- Discord
-- GitHub
+## 🛠 Collaboration Tools
+- Jira & Confluence : 일일 스크럼과 총 3번의 스프린트를 통해서 프로젝트에 Agile 방법론 적용
+- Discord : 음성 및 영상을 통한 프로젝트 회의를 위해서 사용
+- GitHub : 프로젝트 형상관리를 위해서 사용
+
+## 📄 PPT
 
 ## ✅ Commit Message
 - `[Add] 🌟 소스코드가 담긴 파일을 새로 추가합니다.`
@@ -45,3 +49,7 @@
 <a href = "https://github.com/sth4881">
   <img src="https://avatars.githubusercontent.com/u/46771903?v=4" alt="sth4881" width="80" style="max-width:100%" />
 </a>
+
+---
+
+Made By <a href = "https://github.com/sth4881">송진호</a>
