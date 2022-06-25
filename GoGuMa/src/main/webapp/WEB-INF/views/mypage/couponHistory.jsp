@@ -42,7 +42,7 @@
             <div class="col">
                 <%@ include file="quickMenu.jsp" %>
                 <div>
-                    <h5><b>쿠폰</b></h5>
+                    <h5><b>쿠폰 내역 조회</b></h5>
                 </div>
                 <div class="d-flex flex-row border">
                 	<c:choose>
