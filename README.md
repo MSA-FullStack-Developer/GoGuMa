@@ -22,9 +22,10 @@
 ![jQuery](https://img.shields.io/badge/jquery-%230769AD.svg?style=for-the-badge&logo=jquery&logoColor=white)
 
 ## 🛠 Collaboration Tools
-- Jira & Confluence : 일일 스크럼과 총 3번의 스프린트를 통해서 프로젝트에 Agile 방법론 적용
-- Discord : 음성 및 영상을 통한 프로젝트 회의를 위해서 사용
-- GitHub : 프로젝트 형상관리를 위해서 사용
+- **Jira** : 일일 스크럼과 총 3번의 스프린트를 통해서 프로젝트에 Agile 방법론 적용
+- **Confluence** : 회의록 및 조사한 자료를 공유하고 정리하기 위해서 사용
+- **Discord** : 음성 및 영상을 통한 프로젝트 회의 진행
+- **GitHub** : 프로젝트 형상관리에 사용
 
 ## ✅ Commit Message
 - `[Add] 🌟 소스코드가 담긴 파일을 새로 추가합니다.`
