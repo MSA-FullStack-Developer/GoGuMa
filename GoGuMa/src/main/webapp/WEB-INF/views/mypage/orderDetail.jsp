@@ -51,7 +51,7 @@
                         <div class="col">
                             <h5><b><fmt:formatDate pattern="yyyy-MM-dd" value="${receiptDTO.orderDate}" /></b></h5>
                             <div class="d-flex justify-content-between mb-2">
-	                        	<span>주문번호 : ${fn:split(receiptDTO.impUid,'_')[1]}</span>
+	                        	<span>결제번호 : ${fn:split(receiptDTO.impUid,'_')[1]}</span>
 	                        </div>
                         </div>
                     </div>
